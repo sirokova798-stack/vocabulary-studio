@@ -392,6 +392,87 @@
   .office-clip-header { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
   .office-clip-subhead { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
 
+  /* ── Dialogue mode ── */
+  .dlg-list { display: flex; flex-direction: column; gap: 14px; padding: 8px 0; }
+  .dlg-card {
+    background: var(--card); border-radius: 16px; padding: 20px;
+    border: 1.5px solid var(--border); cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
+    transition: box-shadow .18s, transform .18s, border-color .18s;
+  }
+  .dlg-card:hover { border-color: var(--sage); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .dlg-card-emoji { font-size: 2rem; flex-shrink: 0; }
+  .dlg-card-body { flex: 1; }
+  .dlg-card-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 2px; }
+  .dlg-card-sub { font-size: .82rem; color: var(--muted); }
+  .dlg-scenario-bar {
+    background: var(--cream); border-radius: 12px; padding: 13px 16px;
+    margin-bottom: 18px; font-size: .88rem; color: var(--ink);
+    border-left: 3px solid var(--sage);
+  }
+  .dlg-scenario-bar em { display: block; font-style: normal; color: var(--muted); font-size: .82rem; margin-top: 3px; }
+  .dlg-chat { display: flex; flex-direction: column; gap: 14px; }
+  .dlg-bubble-wrap { display: flex; flex-direction: column; gap: 4px; }
+  .dlg-speaker { font-size: .75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 0 4px; }
+  .dlg-bubble {
+    background: var(--card); border-radius: 14px; padding: 13px 16px;
+    border: 1.5px solid var(--border); font-size: .95rem; color: var(--ink);
+    max-width: 85%;
+  }
+  .dlg-bubble.is-receptionist { border-radius: 4px 14px 14px 14px; }
+  .dlg-student-turn {
+    background: var(--cream); border-radius: 14px 4px 14px 14px;
+    padding: 14px 16px; border: 1.5px solid var(--border);
+    align-self: flex-end; width: 100%; max-width: 100%; box-sizing: border-box;
+  }
+  .dlg-prompt-ru {
+    font-size: .82rem; color: var(--sage); font-style: italic;
+    margin-bottom: 10px; line-height: 1.45;
+  }
+  .dlg-input-row { display: flex; gap: 8px; align-items: flex-start; }
+  .dlg-input {
+    flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 10px 13px; font-family: 'DM Sans', sans-serif; font-size: .93rem;
+    background: #fff; color: var(--ink); resize: none; min-height: 44px;
+    outline: none; transition: border-color .15s;
+  }
+  .dlg-input:focus { border-color: var(--sage); }
+  .dlg-input.is-correct { border-color: #6abf69; background: #f2fbf2; }
+  .dlg-input.is-wrong  { border-color: #e07070; background: #fff6f6; }
+  .dlg-check-btn {
+    background: var(--ink); color: #fff; border: none; border-radius: 10px;
+    padding: 10px 18px; font-size: .88rem; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; font-weight: 600; white-space: nowrap; flex-shrink: 0;
+    transition: background .15s;
+  }
+  .dlg-check-btn:hover { background: #3a3631; }
+  .dlg-reveal {
+    margin-top: 10px; padding: 10px 13px; border-radius: 10px;
+    font-size: .88rem; line-height: 1.5; display: none;
+  }
+  .dlg-reveal.is-correct { background: #eaf7ea; color: #2d7a2d; border: 1px solid #b5e0b5; }
+  .dlg-reveal.is-wrong   { background: #fdf0f0; color: #b03030; border: 1px solid #f0c0c0; }
+  .dlg-reveal .dlg-model { margin-top: 5px; color: var(--ink); font-weight: 500; }
+  .dlg-continue-btn {
+    margin-top: 10px; background: transparent; border: 1.5px solid var(--sage);
+    color: var(--sage); border-radius: 10px; padding: 8px 18px;
+    font-size: .88rem; font-family: 'DM Sans', sans-serif; font-weight: 600;
+    cursor: pointer; transition: background .15s, color .15s;
+  }
+  .dlg-continue-btn:hover { background: var(--sage); color: #fff; }
+  .dlg-results-card { background: var(--card); border-radius: 16px; padding: 22px; border: 1.5px solid var(--border); }
+  .dlg-results-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 16px; text-align: center; }
+  .dlg-result-item { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .dlg-result-item:last-child { border-bottom: none; margin-bottom: 0; }
+  .dlg-result-ru { font-size: .8rem; color: var(--muted); font-style: italic; margin-bottom: 4px; }
+  .dlg-result-typed { font-size: .9rem; margin-bottom: 3px; }
+  .dlg-result-typed.ok  { color: #2d7a2d; }
+  .dlg-result-typed.bad { color: #b03030; }
+  .dlg-result-model { font-size: .85rem; color: var(--muted); }
+  .dlg-score-row { text-align: center; margin-bottom: 18px; }
+  .dlg-score-num { font-family: 'DM Serif Display', serif; font-size: 2.4rem; color: var(--ink); }
+  .dlg-score-label { font-size: .85rem; color: var(--muted); }
+
   @media (max-width: 420px) {
     .quiz-options { grid-template-columns: 1fr; }
     .mode-grid { grid-template-columns: 1fr; }
@@ -480,6 +561,11 @@
         <span class="mode-icon">📺</span>
         <div class="mode-name">The Office</div>
         <div class="mode-desc">Watch a real clip · vocabulary challenge · authentic English</div>
+      </div>
+      <div class="mode-card" onclick="openDialogueScreen()" style="grid-column:1/-1;">
+        <span class="mode-icon">💬</span>
+        <div class="mode-name">Dialogue Practice</div>
+        <div class="mode-desc">Real-life situations · translate the line · compare with the model answer</div>
       </div>
     </div>
 
@@ -643,6 +729,24 @@
         <button class="btn btn-primary btn-full" onclick="pickGapLevel()">Try again</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: DIALOGUE PRACTICE ── -->
+<div class="screen" id="screen-dialogue">
+  <button class="back-btn" id="dlg-back-btn" onclick="endDialogue()">← Back to practice</button>
+  <h2 class="section-title" id="dlg-screen-title">Dialogue Practice</h2>
+
+  <!-- Dialogue list -->
+  <div id="dlg-list-wrap">
+    <div class="dlg-list" id="dlg-list"></div>
+  </div>
+
+  <!-- Active dialogue -->
+  <div id="dlg-active-wrap" style="display:none;">
+    <div class="dlg-scenario-bar" id="dlg-scenario-bar"></div>
+    <div class="dlg-chat" id="dlg-chat"></div>
+    <div id="dlg-results" style="display:none; margin-top:20px;"></div>
   </div>
 </div>
 
@@ -1404,6 +1508,288 @@ function teacherDeleteWord(sid, wid) {
   if (s) s.words = s.words.filter(w => w.id !== wid);
   save(data);
   renderTeacher();
+}
+
+// ─────────────────────────────────────────────────────────────
+// DIALOGUES
+// ─────────────────────────────────────────────────────────────
+const DIALOGUES = [
+  {
+    id: 'hotel-checkin',
+    emoji: '🏨',
+    title: 'Hotel Check-in',
+    scenario: 'You arrive at the Grand Hotel in London. You have a reservation.',
+    scenario_ru: 'Вы приезжаете в отель в Лондоне. У вас есть бронь.',
+    character: 'Receptionist',
+    turns: [
+      { speaker: 'receptionist', line: 'Good afternoon! Welcome to the Grand Hotel. How can I help you?' },
+      { speaker: 'student',
+        prompt_ru: 'Скажите, что хотите зарегистрироваться. У вас есть бронь на имя Каримов.',
+        answer: "I'd like to check in, please. I have a reservation under the name Karimov.",
+        alts: [
+          "I would like to check in. I have a reservation under the name Karimov.",
+          "I'd like to check in. I have a booking under the name Karimov.",
+          "I want to check in please. I have a reservation under Karimov.",
+          "I'd like to check in. My reservation is under Karimov."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Of course. Let me find your booking… Yes, here it is. A single room for three nights. Is that correct?' },
+      { speaker: 'student',
+        prompt_ru: 'Скажите «да, всё верно». Добавьте, что вам удалось забронировать номер онлайн.',
+        answer: "Yes, that's correct. I managed to book it online.",
+        alts: [
+          "Yes, that is correct. I managed to book online.",
+          "Yes, that's right. I managed to book it online.",
+          "Yes, correct. I managed to book the room online.",
+          "Yes, that's correct. I managed to book the room online."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Perfect. Could I see your passport, please?' },
+      { speaker: 'student',
+        prompt_ru: 'Скажите «конечно» и отдайте паспорт.',
+        answer: "Certainly. Here you go.",
+        alts: [
+          "Certainly, here it is.",
+          "Of course. Here you go.",
+          "Sure. Here you go.",
+          "Certainly. Here you are.",
+          "Of course, here you go."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Thank you. Do you fancy a room with a city view? We have one available on the fifth floor.' },
+      { speaker: 'student',
+        prompt_ru: 'Скажите, что это было бы отлично. Спросите, есть ли в номере кондиционер.',
+        answer: "That would be great. Is there air conditioning in the room?",
+        alts: [
+          "That sounds great. Is there air conditioning in the room?",
+          "That would be lovely. Does the room have air conditioning?",
+          "That would be perfect. Is there air conditioning in the room?",
+          "That sounds wonderful. Is there air conditioning?"
+        ]
+      },
+      { speaker: 'receptionist', line: 'Yes, of course. Breakfast is also included — served from 7 to 10 in the restaurant on the ground floor. We can also provide you with a map of the city.' },
+      { speaker: 'student',
+        prompt_ru: 'Поблагодарите и скажите, что карта города вам очень пригодится.',
+        answer: "Thank you. A map of the city would be very helpful.",
+        alts: [
+          "Thank you, a map would be very helpful.",
+          "Thank you. A city map would be great.",
+          "Thank you. I'd love a map of the city.",
+          "Thank you very much. A map would be really helpful."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Here is your key card. Room 512, on the fifth floor. Enjoy your stay!' },
+      { speaker: 'student',
+        prompt_ru: 'Поблагодарите. Спросите, где находится лифт.',
+        answer: "Thank you very much. Could you tell me where the lift is?",
+        alts: [
+          "Thank you. Where is the lift?",
+          "Thanks a lot. Where can I find the lift?",
+          "Thank you. Could you tell me where the elevator is?",
+          "Thank you very much. Where is the lift please?",
+          "Thank you. Where is the lift, please?"
+        ]
+      }
+    ]
+  }
+];
+
+// ─────────────────────────────────────────────────────────────
+// DIALOGUE JS
+// ─────────────────────────────────────────────────────────────
+let dlgCurrentIdx = null;
+let dlgTurnIndex  = 0;
+let dlgAnswers    = [];   // {prompt_ru, typed, correct, match}
+
+function normAnswer(s) {
+  return s.toLowerCase()
+    .replace(/[.,!?;:'"]/g, '')
+    .replace(/\bi'd\b/g,       'i would')
+    .replace(/\bi'm\b/g,       'i am')
+    .replace(/\bi've\b/g,      'i have')
+    .replace(/\bdon't\b/g,     'do not')
+    .replace(/\bcan't\b/g,     'cannot')
+    .replace(/\bwon't\b/g,     'will not')
+    .replace(/\bdoesn't\b/g,   'does not')
+    .replace(/\bthere's\b/g,   'there is')
+    .replace(/\bthat's\b/g,    'that is')
+    .replace(/\bit's\b/g,      'it is')
+    .replace(/\byou're\b/g,    'you are')
+    .replace(/\bwe're\b/g,     'we are')
+    .replace(/\bhere's\b/g,    'here is')
+    .replace(/\bthanks\b/g,    'thank you')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function dlgIsMatch(typed, turn) {
+  const n = normAnswer(typed);
+  const all = [turn.answer, ...(turn.alts || [])].map(normAnswer);
+  return all.includes(n);
+}
+
+function renderDialogueList() {
+  const el = document.getElementById('dlg-list');
+  el.innerHTML = '';
+  DIALOGUES.forEach((d, i) => {
+    const card = document.createElement('div');
+    card.className = 'dlg-card';
+    card.innerHTML = `<div class="dlg-card-emoji">${d.emoji}</div>
+      <div class="dlg-card-body">
+        <div class="dlg-card-title">${d.title}</div>
+        <div class="dlg-card-sub">${d.scenario}</div>
+      </div>`;
+    card.onclick = () => beginDialogue(i);
+    el.appendChild(card);
+  });
+}
+
+function beginDialogue(idx) {
+  dlgCurrentIdx = idx;
+  dlgTurnIndex  = 0;
+  dlgAnswers    = [];
+  const d = DIALOGUES[idx];
+  document.getElementById('dlg-screen-title').textContent = d.title;
+  document.getElementById('dlg-scenario-bar').innerHTML =
+    `${d.emoji} <strong>${d.scenario}</strong><em>${d.scenario_ru}</em>`;
+  document.getElementById('dlg-list-wrap').style.display  = 'none';
+  document.getElementById('dlg-active-wrap').style.display = '';
+  document.getElementById('dlg-results').style.display    = 'none';
+  document.getElementById('dlg-chat').innerHTML           = '';
+  dlgAdvance();
+}
+
+function dlgAdvance() {
+  const d = DIALOGUES[dlgCurrentIdx];
+  // Append all consecutive receptionist turns
+  while (dlgTurnIndex < d.turns.length && d.turns[dlgTurnIndex].speaker === 'receptionist') {
+    dlgAppendReceptionist(d.turns[dlgTurnIndex], d.character);
+    dlgTurnIndex++;
+  }
+  if (dlgTurnIndex >= d.turns.length) {
+    showDialogueResults(); return;
+  }
+  // Now it's a student turn
+  dlgAppendStudentInput(d.turns[dlgTurnIndex], dlgTurnIndex);
+}
+
+function dlgAppendReceptionist(turn, name) {
+  const chat = document.getElementById('dlg-chat');
+  const wrap = document.createElement('div');
+  wrap.className = 'dlg-bubble-wrap';
+  wrap.innerHTML = `<div class="dlg-speaker">${name}</div>
+    <div class="dlg-bubble is-receptionist">${turn.line}</div>`;
+  chat.appendChild(wrap);
+  wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function dlgAppendStudentInput(turn, turnIdx) {
+  const chat = document.getElementById('dlg-chat');
+  const wrap = document.createElement('div');
+  wrap.className = 'dlg-bubble-wrap';
+  const inputId   = 'dlg-inp-' + turnIdx;
+  const revealId  = 'dlg-rev-' + turnIdx;
+  const continueId = 'dlg-cont-' + turnIdx;
+  wrap.innerHTML = `
+    <div class="dlg-speaker" style="text-align:right;">You</div>
+    <div class="dlg-student-turn">
+      <div class="dlg-prompt-ru">${turn.prompt_ru}</div>
+      <div class="dlg-input-row">
+        <textarea class="dlg-input" id="${inputId}" rows="2" placeholder="Type your answer in English…"></textarea>
+        <button class="dlg-check-btn" onclick="dlgCheck(${turnIdx})">Check</button>
+      </div>
+      <div class="dlg-reveal" id="${revealId}">
+        <div class="dlg-model"></div>
+      </div>
+      <button class="dlg-continue-btn" id="${continueId}" style="display:none;" onclick="dlgContinue(${turnIdx})">Continue →</button>
+    </div>`;
+  chat.appendChild(wrap);
+  setTimeout(() => {
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById(inputId).focus();
+  }, 80);
+  // Allow Enter key (Shift+Enter for newline)
+  document.getElementById(inputId).addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); dlgCheck(turnIdx); }
+  });
+}
+
+function dlgCheck(turnIdx) {
+  const d    = DIALOGUES[dlgCurrentIdx];
+  const turn = d.turns[turnIdx];
+  const inp  = document.getElementById('dlg-inp-' + turnIdx);
+  const rev  = document.getElementById('dlg-rev-' + turnIdx);
+  const cont = document.getElementById('dlg-cont-' + turnIdx);
+  if (!inp || inp.disabled) return;
+  const typed = inp.value.trim();
+  if (!typed) { inp.focus(); return; }
+  const match = dlgIsMatch(typed, turn);
+  inp.disabled = true;
+  inp.classList.add(match ? 'is-correct' : 'is-wrong');
+  rev.classList.add(match ? 'is-correct' : 'is-wrong');
+  rev.querySelector('.dlg-model').innerHTML = match
+    ? `✅ Great! Model answer: <em>${turn.answer}</em>`
+    : `❌ Not quite. Model answer: <em>${turn.answer}</em>`;
+  rev.style.display = '';
+  cont.style.display = '';
+  cont.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  dlgAnswers.push({ prompt_ru: turn.prompt_ru, typed, correct: turn.answer, match });
+}
+
+function dlgContinue(turnIdx) {
+  dlgTurnIndex = turnIdx + 1;
+  dlgAdvance();
+}
+
+function showDialogueResults() {
+  const chat    = document.getElementById('dlg-chat');
+  const results = document.getElementById('dlg-results');
+  chat.style.display = 'none';
+  const correct = dlgAnswers.filter(a => a.match).length;
+  const total   = dlgAnswers.length;
+  const emoji   = correct === total ? '🏆' : correct >= total / 2 ? '💪' : '📖';
+  let itemsHtml = dlgAnswers.map(a => `
+    <div class="dlg-result-item">
+      <div class="dlg-result-ru">${a.prompt_ru}</div>
+      <div class="dlg-result-typed ${a.match ? 'ok' : 'bad'}">${a.match ? '✅' : '❌'} ${a.typed}</div>
+      ${!a.match ? `<div class="dlg-result-model">→ ${a.correct}</div>` : ''}
+    </div>`).join('');
+  results.innerHTML = `
+    <div class="dlg-results-card">
+      <div class="dlg-results-title">${emoji} Dialogue complete!</div>
+      <div class="dlg-score-row">
+        <div class="dlg-score-num">${correct}/${total}</div>
+        <div class="dlg-score-label">lines matched</div>
+      </div>
+      ${itemsHtml}
+      <button class="btn" style="width:100%;margin-top:16px;" onclick="beginDialogue(${dlgCurrentIdx})">Try again</button>
+    </div>`;
+  results.style.display = '';
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function openDialogueScreen() {
+  renderDialogueList();
+  // Reset to list view
+  document.getElementById('dlg-list-wrap').style.display = '';
+  document.getElementById('dlg-active-wrap').style.display = 'none';
+  document.getElementById('dlg-screen-title').textContent = 'Dialogue Practice';
+  show('dialogue');
+}
+
+function endDialogue() {
+  const wrap = document.getElementById('dlg-active-wrap');
+  const listWrap = document.getElementById('dlg-list-wrap');
+  if (wrap && wrap.style.display !== 'none') {
+    // Back to dialogue list
+    wrap.style.display = 'none';
+    document.getElementById('dlg-chat').style.display = '';
+    document.getElementById('dlg-results').style.display = 'none';
+    document.getElementById('dlg-screen-title').textContent = 'Dialogue Practice';
+    listWrap.style.display = '';
+  } else {
+    show('student');
+    switchTab('practice');
+  }
 }
 
 // ─────────────────────────────────────────────────────────────
