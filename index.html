@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocabulary Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #f6f4f0;
+    --card:         #ffffff;
+    --cream:        #efe9df;
+    --cream-dark:   #e5ddd1;
+    --sage:         #a8b5a2;
+    --sage-light:   #ecefeb;
+    --sage-dark:    #6b7d67;
+    --pink:         #ddc9c4;
+    --pink-light:   #f5efed;
+    --pink-dark:    #9e7971;
+    --text:         #1c1a18;
+    --text-2:       #524d48;
+    --muted:        #9e9890;
+    --border:       #e2dbd1;
+    --border-light: #eae5dd;
+    --white:        #ffffff;
+    --shadow-sm:    0 1px 4px rgba(48,38,28,0.04), 0 4px 16px rgba(48,38,28,0.05);
+    --shadow-md:    0 4px 12px rgba(48,38,28,0.05), 0 12px 36px rgba(48,38,28,0.07);
+    --shadow-lg:    0 16px 48px rgba(48,38,28,0.10), 0 32px 72px rgba(48,38,28,0.06);
+    --radius:       22px;
+    --radius-sm:    14px;
+    --radius-xs:    9px;
+    --transition:   all 0.24s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 32px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 0 var(--border-light), var(--shadow-sm);
+  }
+  .header-brand { display: flex; align-items: center; gap: 13px; }
+  .header-logo {
+    width: 38px; height: 38px;
+    background: linear-gradient(145deg, var(--sage), var(--sage-dark));
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(107,125,103,0.25);
+  }
+  .header-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.05rem; color: var(--text); letter-spacing: -0.1px; }
+  .header-sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.2px; }
+  .header-pill {
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--text-2); padding: 8px 18px; border-radius: 99px;
+    font-size: 0.78rem; font-weight: 500; cursor: pointer;
+    transition: var(--transition); letter-spacing: 0.1px;
+  }
+  .header-pill:hover { background: var(--sage-light); border-color: var(--sage); color: var(--sage-dark); }
+
+  /* ── SCREENS ── */
+  .screen { display: none; padding: 36px 22px; max-width: 580px; margin: 0 auto; }
+  .screen.active { display: block; }
+
+  /* ── PAGE TITLES ── */
+  .page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.75rem; color: var(--text); line-height: 1.2; margin-bottom: 7px; letter-spacing: -0.6px; }
+  .page-sub { font-size: 0.875rem; color: var(--muted); margin-bottom: 30px; line-height: 1.6; }
+
+  /* ── CARDS ── */
+  .card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); padding: 30px; margin-bottom: 14px; }
+  .card-sm { padding: 18px 22px; }
+
+  /* ── STUDENT CARDS ── */
+  .student-card {
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 18px 22px; margin-bottom: 11px;
+    cursor: pointer; display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--shadow-sm); transition: var(--transition);
+  }
+  .student-card:hover { border-color: var(--sage); box-shadow: 0 8px 28px rgba(107,125,103,0.12); transform: translateY(-2px); }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: linear-gradient(145deg, var(--sage-light), #dce6da);
+    color: var(--sage-dark); font-weight: 600; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; border: 1px solid rgba(168,181,162,0.3);
+    font-family: 'DM Serif Display', serif;
+  }
+  .avatar-lg { width: 56px; height: 56px; border-radius: 16px; font-size: 1.15rem; }
+  .student-info { flex: 1; }
+  .student-name { font-weight: 600; font-size: 0.97rem; color: var(--text); }
+  .student-meta { font-size: 0.76rem; color: var(--muted); margin-top: 3px; }
+  .chevron { color: var(--border); font-size: 0.85rem; transition: var(--transition); }
+  .student-card:hover .chevron { color: var(--sage); transform: translateX(3px); }
+
+  /* ── WORD ITEMS ── */
+  .word-item {
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm); padding: 17px 20px; margin-bottom: 9px;
+    transition: var(--transition); position: relative;
+  }
+  .word-item:hover { box-shadow: var(--shadow-md); border-color: var(--border); transform: translateY(-1px); }
+  .word-en { font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 2px; font-family: 'DM Serif Display', serif; letter-spacing: -0.2px; }
+  .word-ipa { font-size: 0.73rem; color: var(--muted); font-style: italic; margin-bottom: 5px; letter-spacing: 0.3px; }
+  .word-ru { font-size: 0.83rem; color: var(--pink-dark); margin-bottom: 6px; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+  .word-ex { font-size: 0.8rem; color: var(--muted); font-style: italic; line-height: 1.6; }
+  .word-delete {
+    position: absolute; top: 14px; right: 14px;
+    background: none; border: none; cursor: pointer;
+    color: var(--border); font-size: 0.8rem;
+    padding: 5px 7px; border-radius: 7px; transition: var(--transition);
+  }
+  .word-delete:hover { color: var(--pink-dark); background: var(--pink-light); }
+
+  /* ── LESSON BADGE ── */
+  .lesson-badge {
+    display: inline-block; padding: 2px 9px; border-radius: 99px;
+    font-size: 0.67rem; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase;
+    background: var(--cream); color: var(--text-2); border: 1px solid var(--border);
+    margin-bottom: 6px;
+  }
+
+  /* ── LESSON FILTER ── */
+  .lesson-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .lesson-pill {
+    padding: 7px 16px; border-radius: 99px; font-size: 0.78rem; font-weight: 500;
+    cursor: pointer; border: 1.5px solid var(--border); background: var(--white);
+    color: var(--text-2); transition: var(--transition); white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .lesson-pill.active { background: var(--sage); border-color: var(--sage); color: white; box-shadow: 0 3px 10px rgba(122,158,126,0.3); }
+  .lesson-pill:hover:not(.active) { border-color: var(--sage); color: var(--sage-dark); background: var(--sage-light); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 13px 24px; border-radius: 99px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500;
+    cursor: pointer; border: none; transition: var(--transition); letter-spacing: 0.1px; white-space: nowrap;
+  }
+  .btn-primary { background: var(--sage-dark); color: var(--white); box-shadow: 0 2px 10px rgba(107,125,103,0.22); }
+  .btn-primary:hover { background: #596a56; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(107,125,103,0.28); }
+  .btn-ghost { background: transparent; color: var(--text-2); border: 1.5px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--sage); color: var(--sage-dark); background: var(--sage-light); }
+  .btn-pink { background: var(--pink); color: var(--text); box-shadow: 0 2px 10px rgba(221,201,196,0.4); }
+  .btn-pink:hover { background: var(--pink-dark); color: white; transform: translateY(-1px); }
+  .btn-danger { background: var(--pink-light); color: var(--pink-dark); border: 1px solid var(--pink); }
+  .btn-danger:hover { background: var(--pink); color: var(--text); }
+  .btn-sm { padding: 7px 15px; font-size: 0.77rem; }
+  .btn-full { width: 100%; }
+  .btn:disabled { opacity: 0.38; cursor: not-allowed; transform: none !important; }
+
+  /* ── FORMS ── */
+  .form-group { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 0.69rem; font-weight: 600; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.9px; }
+  input, textarea, select {
+    width: 100%; padding: 13px 16px; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; background: var(--bg); color: var(--text);
+    outline: none; transition: var(--transition); -webkit-appearance: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--sage); background: var(--white); box-shadow: 0 0 0 4px rgba(168,181,162,0.12); }
+  textarea { min-height: 90px; resize: vertical; line-height: 1.6; }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239e9890' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 38px; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 4px; background: var(--cream); border-radius: 99px; padding: 5px; margin-bottom: 26px; border: 1px solid var(--border); }
+  .tab { flex: 1; text-align: center; padding: 9px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: 500; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: var(--transition); letter-spacing: 0.1px; }
+  .tab.active { background: var(--white); color: var(--text); box-shadow: var(--shadow-sm); font-weight: 600; }
+
+  /* ── MODE CARDS ── */
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mode-card {
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: var(--radius); padding: 26px 18px 22px;
+    text-align: center; cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm);
+  }
+  .mode-card:hover { border-color: var(--sage); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .mode-icon { font-size: 1.8rem; margin-bottom: 13px; display: block; }
+  .mode-name { font-weight: 600; font-size: 0.92rem; color: var(--text); margin-bottom: 5px; letter-spacing: -0.1px; }
+  .mode-desc { color: var(--muted); font-size: 0.73rem; line-height: 1.5; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+  .progress-track { background: var(--cream); border-radius: 99px; height: 5px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sage), var(--sage-dark)); border-radius: 99px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  /* ── FLASHCARD ── */
+  .flashcard-scene { perspective: 1400px; margin: 8px 0 28px; }
+  .flashcard {
+    width: 100%; min-height: 256px; position: relative;
+    transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.35,0,0.15,1); cursor: pointer;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: var(--radius); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 40px 36px; text-align: center;
+  }
+  .fc-front { background: var(--white); border: 1px solid var(--border-light); box-shadow: var(--shadow-md); }
+  .fc-back {
+    background: linear-gradient(150deg, #8a9e85 0%, var(--sage-dark) 100%);
+    transform: rotateY(180deg);
+    box-shadow: 0 16px 48px rgba(107,125,103,0.28);
+  }
+  .fc-front .fc-word { font-family: 'DM Serif Display', Georgia, serif; font-size: 2.2rem; color: var(--text); margin-bottom: 6px; letter-spacing: -0.6px; }
+  .fc-front .fc-ipa { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-bottom: 16px; letter-spacing: 0.4px; }
+  .fc-front .fc-tap-hint { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 5px; opacity: 0.8; }
+  .fc-back .fc-translation { font-size: 1.5rem; font-weight: 600; color: white; margin-bottom: 14px; line-height: 1.3; }
+  .fc-back .fc-example { font-size: 0.84rem; color: rgba(255,255,255,0.78); font-style: italic; line-height: 1.65; max-width: 300px; }
+  .fc-nav { display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+  /* ── QUIZ ── */
+  .quiz-word-wrap { background: var(--white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 34px 26px; text-align: center; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+  .quiz-word { font-family: 'DM Serif Display', Georgia, serif; font-size: 2.15rem; color: var(--text); letter-spacing: -0.6px; margin-bottom: 5px; }
+  .quiz-ipa { font-size: 0.8rem; color: var(--muted); font-style: italic; margin-bottom: 10px; letter-spacing: 0.4px; }
+  .quiz-prompt { font-size: 0.72rem; color: var(--muted); font-weight: 600; letter-spacing: 0.7px; text-transform: uppercase; }
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .quiz-opt {
+    padding: 16px 13px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--white); cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-2); text-align: center;
+    transition: var(--transition); line-height: 1.45; box-shadow: var(--shadow-sm);
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--sage); background: var(--sage-light); color: var(--sage-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+  .quiz-opt.correct { background: var(--sage-light); border-color: var(--sage); color: var(--sage-dark); font-weight: 600; }
+  .quiz-opt.wrong { background: var(--pink-light); border-color: var(--pink); color: var(--pink-dark); }
+  .quiz-opt:disabled { cursor: default; transform: none; }
+
+  /* ── FEEDBACK BANNERS ── */
+  .praise-box { background: var(--sage-light); border: 1px solid rgba(168,181,162,0.35); border-radius: var(--radius-sm); padding: 16px 20px; text-align: center; margin: 16px 0; animation: fadeUp 0.28s ease; }
+  .praise-emoji { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+  .praise-text { font-weight: 600; color: var(--sage-dark); font-size: 0.92rem; letter-spacing: -0.1px; }
+  .oops-box { background: var(--pink-light); border: 1px solid rgba(221,201,196,0.6); border-radius: var(--radius-sm); padding: 14px 18px; margin: 16px 0; animation: fadeUp 0.28s ease; }
+  .oops-title { font-weight: 600; color: var(--pink-dark); font-size: 0.86rem; margin-bottom: 4px; }
+  .oops-answer { color: var(--text-2); font-size: 0.83rem; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── SCORE SCREEN ── */
+  .score-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border-light); box-shadow: var(--shadow-md); padding: 44px 30px; text-align: center; }
+  .score-ring { width: 104px; height: 104px; border-radius: 50%; background: linear-gradient(145deg, var(--sage-light), #d8e4d6); border: 2.5px solid var(--sage); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 22px; box-shadow: 0 4px 20px rgba(168,181,162,0.2); }
+  .score-num { font-family: 'DM Serif Display', serif; font-size: 1.9rem; color: var(--sage-dark); line-height: 1; }
+  .score-of { font-size: 0.68rem; color: var(--muted); margin-top: 3px; letter-spacing: 0.2px; }
+  .score-pct { font-size: 0.95rem; color: var(--muted); margin-bottom: 30px; font-weight: 500; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(28,26,24,0.3); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--white); border-radius: var(--radius); padding: 34px 30px; width: 100%; max-width: 400px; box-shadow: var(--shadow-lg); animation: slideUp 0.26s cubic-bezier(0.4,0,0.2,1); border: 1px solid var(--border-light); }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.3rem; margin-bottom: 7px; color: var(--text); letter-spacing: -0.3px; }
+  .modal-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 22px; line-height: 1.6; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
+
+  /* ── TAGS ── */
+  .tag { display: inline-block; padding: 3px 11px; border-radius: 99px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+  .tag-teacher { background: var(--sage-light); color: var(--sage-dark); border: 1px solid rgba(122,158,126,0.3); }
+
+  /* ── BACK BUTTON ── */
+  .back-btn { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 0.82rem; font-weight: 500; cursor: pointer; border: none; background: none; padding: 0; margin-bottom: 24px; transition: var(--transition); letter-spacing: 0.2px; }
+  .back-btn:hover { color: var(--sage-dark); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+  .empty-icon { font-size: 2.8rem; margin-bottom: 16px; opacity: 0.7; }
+  .empty-title { font-size: 1rem; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
+  .empty-sub { font-size: 0.83rem; line-height: 1.5; }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border-light); margin: 22px 0; }
+
+  /* ── CONFETTI ── */
+  #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+
+  /* ── DASH HEADER ── */
+  .dash-header { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); padding: 20px 22px; display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+
+  /* ── TEACHER STUDENT CARD ── */
+  .t-student-card { background: var(--white); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+  .t-student-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .t-word-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid var(--border-light); }
+  .t-word-row .word-en { font-size: 0.92rem; margin-bottom: 0; }
+  .t-word-row .word-ru { font-size: 0.78rem; margin-bottom: 0; }
+
+  /* ── QUIZ HISTORY in teacher panel ── */
+  .quiz-hist { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-light); }
+  .quiz-hist-label { font-size: 0.69rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px; }
+  .quiz-scores { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  .quiz-score-chip { padding: 3px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 600; background: var(--sage-light); color: var(--sage-dark); border: 1px solid rgba(122,158,126,0.25); }
+  .quiz-last { font-size: 0.75rem; color: var(--muted); margin-top: 7px; }
+
+  /* ── NOTICE ── */
+  .notice { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px 18px; font-size: 0.81rem; color: var(--text-2); line-height: 1.55; margin-bottom: 20px; }
+
+  /* ── DASH HEADER ── */
+  .dash-header { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border-light); box-shadow: var(--shadow-sm); padding: 20px 24px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+
+  /* ── LEVEL SELECTOR ── */
+  .level-card {
+    background: var(--white); border: 1.5px solid var(--border-light);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px;
+    cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .level-card:hover { border-color: var(--sage); box-shadow: 0 6px 24px rgba(122,158,126,0.15); transform: translateY(-2px); }
+  .level-badge {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--sage-light), #d4e8d4);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.82rem; color: var(--sage-dark);
+    border: 1.5px solid rgba(122,158,126,0.25); letter-spacing: 0.3px;
+  }
+  .level-label { font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 3px; }
+  .level-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+  /* ── GAP FILL ── */
+  .gap-sentence-card {
+    background: var(--white); border: 1.5px solid var(--border-light);
+    border-radius: var(--radius); padding: 32px 24px; text-align: center;
+    margin-bottom: 20px; box-shadow: var(--shadow-sm);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.35rem; line-height: 1.7; color: var(--text);
+  }
+  .gap-blank {
+    display: inline-block; min-width: 72px; border-bottom: 2.5px solid var(--sage);
+    margin: 0 4px; vertical-align: bottom; color: var(--sage-dark);
+    font-weight: 600; transition: var(--transition);
+  }
+  .explanation-box {
+    background: var(--cream); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 18px; margin: 12px 0;
+    font-size: 0.84rem; color: var(--text-2); line-height: 1.6;
+    animation: fadeUp 0.28s ease;
+  }
+  .explanation-box strong { color: var(--text); }
+
+  .section-label {
+    font-size: 0.69rem; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 14px;
+  }
+
+  /* ── OFFICE MODE ── */
+  .office-clip-card {
+    background: var(--white); border: 1px solid var(--border-light);
+    border-radius: var(--radius); overflow: hidden; margin-bottom: 14px;
+    cursor: pointer; transition: var(--transition); box-shadow: var(--shadow-sm);
+  }
+  .office-clip-card:hover { border-color: var(--sage); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .office-thumb {
+    width: 100%; aspect-ratio: 16/9; background: #1c1a18;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .office-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .office-play-btn {
+    position: absolute; width: 52px; height: 52px; border-radius: 50%;
+    background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.3); pointer-events: none;
+  }
+  .office-clip-info { padding: 16px 20px 18px; }
+  .office-clip-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--text); margin-bottom: 5px; letter-spacing: -0.2px; }
+  .office-clip-focus { font-size: 0.75rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .office-video-wrap {
+    width: 100%; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden;
+    margin-bottom: 20px; box-shadow: var(--shadow-md); background: #000;
+  }
+  .office-video-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+  .office-clip-header { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
+  .office-clip-subhead { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+
+  @media (max-width: 420px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .mode-grid { grid-template-columns: 1fr; }
+    .screen { padding: 24px 14px; }
+    .fc-front .fc-word { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-brand">
+    <div class="header-logo">🌿</div>
+    <div>
+      <div class="header-title">Vocabulary Studio</div>
+      <div class="header-sub" id="header-sub">Your personal word collection</div>
+    </div>
+  </div>
+  <button class="header-pill" id="teacher-btn" onclick="showTeacherLogin()">Teacher ↗</button>
+</header>
+
+<!-- ── SCREEN: HOME ── -->
+<div class="screen active" id="screen-home">
+  <div class="page-title">Hello! 👋</div>
+  <div class="page-sub">Choose your profile to start practising.</div>
+  <div id="student-list"></div>
+  <div id="add-self-wrap" style="margin-top:8px;">
+    <div id="add-self-closed" style="text-align:center; padding:12px 0;">
+      <button class="btn btn-ghost btn-full" style="border-style:dashed;" onclick="toggleAddSelf(true)">
+        + I'm not on the list — add me
+      </button>
+    </div>
+    <div id="add-self-open" class="card" style="display:none;">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:16px;">What's your name?</div>
+      <div class="form-group">
+        <label class="form-label">Your name</label>
+        <input type="text" id="self-name" placeholder="e.g. Anna" onkeydown="if(event.key==='Enter')addSelf()">
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-ghost btn-full" onclick="toggleAddSelf(false)">Cancel</button>
+        <button class="btn btn-primary btn-full" onclick="addSelf()">Join →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: STUDENT DASHBOARD ── -->
+<div class="screen" id="screen-student">
+  <button class="back-btn" onclick="goHome()">← All students</button>
+  <div class="dash-header">
+    <div class="avatar avatar-lg" id="dash-avatar"></div>
+    <div>
+      <div class="student-name" id="dash-name" style="font-size:1.1rem;"></div>
+      <div class="student-meta" id="dash-wordcount"></div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('words')">Words</button>
+    <button class="tab" onclick="switchTab('practice')">Practise</button>
+    <button class="tab" onclick="switchTab('add')">Add Word</button>
+  </div>
+
+  <div id="tab-words">
+    <div id="word-list"></div>
+    <div id="words-empty" class="empty-state" style="display:none;">
+      <div class="empty-icon">📖</div>
+      <div class="empty-title">No words yet</div>
+      <div class="empty-sub">Your first word is just a tap away.<br>Go to Add Word to get started.</div>
+    </div>
+  </div>
+
+  <div id="tab-practice" style="display:none;">
+
+    <!-- General practice modes — always available -->
+    <div class="section-label">General practice</div>
+    <div class="mode-grid" style="margin-bottom:22px;">
+      <div class="mode-card" onclick="startGap()">
+        <span class="mode-icon">📝</span>
+        <div class="mode-name">Fill the Gap</div>
+        <div class="mode-desc">Choose your level · complete the sentence · get an explanation</div>
+      </div>
+      <div class="mode-card" onclick="startOffice()">
+        <span class="mode-icon">📺</span>
+        <div class="mode-name">The Office</div>
+        <div class="mode-desc">Watch a real clip · vocabulary challenge · authentic English</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:4px;">Your words</div>
+    <div id="practice-empty" class="empty-state" style="display:none;padding:28px 0;">
+      <div class="empty-icon">🌱</div>
+      <div class="empty-title">Not enough words yet</div>
+      <div class="empty-sub">Add at least 2 words to unlock Flashcards and Quiz.</div>
+    </div>
+    <div id="practice-modes" style="display:none;">
+      <div id="lesson-filter-wrap"></div>
+      <div class="notice" id="practice-notice">Choose how you'd like to practise today.</div>
+      <div class="mode-grid">
+        <div class="mode-card" onclick="startFlashcards()">
+          <span class="mode-icon">🃏</span>
+          <div class="mode-name">Flashcards</div>
+          <div class="mode-desc">Tap to flip and reveal translation & example</div>
+        </div>
+        <div class="mode-card" onclick="startQuiz()">
+          <span class="mode-icon">✏️</span>
+          <div class="mode-name">Quiz</div>
+          <div class="mode-desc">Multiple choice — test your memory</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-add" style="display:none;">
+    <div class="card">
+      <div style="margin-bottom:20px;">
+        <div style="font-family:'DM Serif Display',serif; font-size:1.2rem; margin-bottom:4px;">New word</div>
+        <div class="student-meta">Add a word from your lesson today.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Word or phrase</label>
+        <input type="text" id="new-word" placeholder="e.g. thorough">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pronunciation (IPA) — optional</label>
+        <input type="text" id="new-ipa" placeholder="e.g. /ˈθʌrə/">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Russian translation</label>
+        <input type="text" id="new-translation" placeholder="e.g. тщательный">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Example sentence</label>
+        <textarea id="new-example" placeholder="e.g. She did a thorough check before leaving."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="addWord()">Save word</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: FLASHCARDS ── -->
+<div class="screen" id="screen-flashcards">
+  <button class="back-btn" onclick="endPractice()">← Back to practice</button>
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="fc-lesson-label">Flashcards</span>
+      <span id="fc-counter"></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="fc-progress"></div></div>
+  </div>
+  <div class="flashcard-scene">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="fc-face fc-front">
+        <div class="fc-word" id="fc-word"></div>
+        <div class="fc-ipa" id="fc-ipa"></div>
+        <div class="fc-tap-hint"><span>↻</span><span>Tap to reveal translation</span></div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-translation" id="fc-translation"></div>
+        <div class="fc-example" id="fc-example"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-nav">
+    <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Previous</button>
+    <button class="btn btn-primary btn-sm" onclick="fcNext()">Next →</button>
+  </div>
+</div>
+
+<!-- ── SCREEN: QUIZ ── -->
+<div class="screen" id="screen-quiz">
+  <button class="back-btn" onclick="endPractice()">← Back to practice</button>
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="quiz-lesson-label">Quiz</span>
+      <span id="quiz-counter"></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="quiz-progress"></div></div>
+  </div>
+  <div id="quiz-content">
+    <div class="quiz-word-wrap">
+      <div class="quiz-word" id="quiz-word"></div>
+      <div class="quiz-ipa" id="quiz-ipa"></div>
+      <div class="quiz-prompt">WHAT IS THE RUSSIAN TRANSLATION?</div>
+    </div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div id="quiz-feedback"></div>
+    <div id="quiz-next-wrap" style="display:none; margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="quizNext()">Next question →</button>
+    </div>
+  </div>
+  <div id="quiz-results" style="display:none;">
+    <div class="score-card">
+      <div id="result-emoji" style="font-size:2rem; margin-bottom:16px;"></div>
+      <div class="score-ring">
+        <div class="score-num" id="score-num"></div>
+        <div class="score-of" id="score-of"></div>
+      </div>
+      <div class="score-pct" id="score-pct"></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-ghost btn-full" onclick="endPractice()">Done</button>
+        <button class="btn btn-primary btn-full" onclick="startQuiz()">Try again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: FILL THE GAP ── -->
+<div class="screen" id="screen-gap">
+  <button class="back-btn" onclick="endGap()">← Back to practice</button>
+
+  <!-- Level selector -->
+  <div id="gap-level-select">
+    <div class="page-title">Fill the Gap</div>
+    <div class="page-sub">Choose your level to begin.</div>
+    <div id="level-cards"></div>
+  </div>
+
+  <!-- Question -->
+  <div id="gap-question" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="gap-level-label">Fill the Gap</span>
+        <span id="gap-counter"></span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="gap-progress"></div></div>
+    </div>
+    <div class="gap-sentence-card" id="gap-sentence"></div>
+    <div class="quiz-options" id="gap-options"></div>
+    <div id="gap-feedback"></div>
+    <div id="gap-next-wrap" style="display:none; margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="gapNext()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="gap-results" style="display:none;">
+    <div class="score-card">
+      <div id="gap-result-emoji" style="font-size:2rem; margin-bottom:16px;"></div>
+      <div class="score-ring">
+        <div class="score-num" id="gap-score-num"></div>
+        <div class="score-of" id="gap-score-of"></div>
+      </div>
+      <div class="score-pct" id="gap-score-pct"></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-ghost btn-full" onclick="endGap()">Done</button>
+        <button class="btn btn-primary btn-full" onclick="pickGapLevel()">Try again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: THE OFFICE ── -->
+<div class="screen" id="screen-office">
+  <button class="back-btn" onclick="endOffice()">← Back to practice</button>
+
+  <!-- Clip selector -->
+  <div id="office-clip-select">
+    <div class="page-title">The Office 📺</div>
+    <div class="page-sub">Watch an official clip, then complete the vocabulary challenge below.</div>
+    <div id="office-clips-list"></div>
+  </div>
+
+  <!-- Active clip + questions -->
+  <div id="office-active" style="display:none;">
+    <div class="office-video-wrap">
+      <iframe id="office-iframe" src="" allowfullscreen allow="fullscreen"></iframe>
+    </div>
+    <div class="office-clip-header" id="office-active-title"></div>
+    <div class="office-clip-subhead" id="office-active-focus"></div>
+    <div class="notice" style="margin-bottom:20px;">👆 Watch the clip above, then fill in the gaps below.</div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Vocabulary Challenge</span>
+        <span id="office-counter"></span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="office-progress"></div></div>
+    </div>
+    <div class="gap-sentence-card" id="office-sentence"></div>
+    <div class="quiz-options" id="office-options"></div>
+    <div id="office-feedback"></div>
+    <div id="office-next-wrap" style="display:none; margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="officeNext()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="office-results" style="display:none;">
+    <div class="score-card">
+      <div id="office-result-emoji" style="font-size:2rem; margin-bottom:16px;"></div>
+      <div class="score-ring">
+        <div class="score-num" id="office-score-num"></div>
+        <div class="score-of" id="office-score-of"></div>
+      </div>
+      <div class="score-pct" id="office-score-pct"></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-ghost btn-full" onclick="endOffice()">Done</button>
+        <button class="btn btn-primary btn-full" onclick="renderOfficeClips()">Try another clip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCREEN: TEACHER ── -->
+<div class="screen" id="screen-teacher">
+  <button class="back-btn" onclick="exitTeacher()">← Exit teacher view</button>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+    <div class="page-title" style="margin-bottom:0;">Teacher Panel</div>
+    <span class="tag tag-teacher">Admin</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTeacherTab('students')">Students</button>
+    <button class="tab" onclick="switchTeacherTab('add-student')">New Student</button>
+    <button class="tab" onclick="switchTeacherTab('add-word')">Add Word</button>
+  </div>
+
+  <div id="tt-students">
+    <div id="teacher-list"></div>
+    <div id="teacher-empty" class="empty-state" style="display:none;">
+      <div class="empty-icon">👩‍🎓</div>
+      <div class="empty-title">No students yet</div>
+      <div class="empty-sub">Go to New Student to add your first student.</div>
+    </div>
+  </div>
+
+  <div id="tt-add-student" style="display:none;">
+    <div class="card">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:18px;">Add a student</div>
+      <div class="form-group">
+        <label class="form-label">Student's name</label>
+        <input type="text" id="t-student-name" placeholder="e.g. Anna">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="addStudent()">Create profile</button>
+    </div>
+  </div>
+
+  <div id="tt-add-word" style="display:none;">
+    <div class="card">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:18px;">Add a word for a student</div>
+      <div class="form-group">
+        <label class="form-label">Student</label>
+        <select id="t-word-student"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Word or phrase</label>
+        <input type="text" id="t-word" placeholder="e.g. thorough">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pronunciation (IPA) — optional</label>
+        <input type="text" id="t-ipa" placeholder="e.g. /ˈθʌrə/">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Russian translation</label>
+        <input type="text" id="t-translation" placeholder="e.g. тщательный">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Example sentence</label>
+        <textarea id="t-example" placeholder="e.g. She did a thorough check before leaving."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lesson / topic label — optional</label>
+        <input type="text" id="t-lesson" placeholder="e.g. Appearance, June 3rd, IELTS Vocab">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="teacherAddWord()">Add word</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: TEACHER LOGIN ── -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <div class="modal-title">Teacher login</div>
+    <div class="modal-sub">Enter your password to access the teacher panel.</div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" id="teacher-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:-10px;">Default: <strong>karina123</strong></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-full" onclick="closeModal('modal-login')">Cancel</button>
+      <button class="btn btn-primary btn-full" onclick="checkLogin()">Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: DELETE CONFIRM ── -->
+<div class="modal-overlay" id="modal-del">
+  <div class="modal">
+    <div class="modal-title">Delete this word?</div>
+    <div class="modal-sub">This action cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-full" onclick="closeModal('modal-del')">Keep it</button>
+      <button class="btn btn-danger btn-full" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────
+const PASS = 'karina123';
+const uid = () => Math.random().toString(36).slice(2,9) + Date.now().toString(36);
+
+function db() {
+  try { return JSON.parse(localStorage.getItem('vs2') || '{"students":[]}'); }
+  catch { return {students:[]}; }
+}
+function save(d) { localStorage.setItem('vs2', JSON.stringify(d)); }
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let currentStudent = null;
+let isTeacher = false;
+let fcWords = [], fcIndex = 0, fcFlipped = false;
+let qWords = [], qIndex = 0, qScore = 0, qAnswered = false;
+let deleteWordId = null;
+let practiceLesson = null; // null = all words
+
+// ─────────────────────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+function goHome() {
+  currentStudent = null;
+  practiceLesson = null;
+  document.getElementById('header-sub').textContent = 'Your personal word collection';
+  document.getElementById('teacher-btn').style.display = '';
+  show('home');
+  renderHome();
+}
+function exitTeacher() {
+  isTeacher = false;
+  document.getElementById('teacher-btn').style.display = '';
+  goHome();
+}
+function endPractice() {
+  show('student');
+  switchTab('practice');
+}
+
+// ─────────────────────────────────────────────────────────────
+// HOME
+// ─────────────────────────────────────────────────────────────
+function renderHome() {
+  const data = db();
+  const list = document.getElementById('student-list');
+  list.innerHTML = '';
+  data.students.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'student-card';
+    el.onclick = () => openStudent(s.id);
+    el.innerHTML =
+      '<div class="avatar">' + s.name[0].toUpperCase() + '</div>' +
+      '<div class="student-info">' +
+        '<div class="student-name">' + s.name + '</div>' +
+        '<div class="student-meta">' + s.words.length + ' word' + (s.words.length !== 1 ? 's' : '') + ' collected</div>' +
+      '</div>' +
+      '<div class="chevron">›</div>';
+    list.appendChild(el);
+  });
+}
+
+function toggleAddSelf(open) {
+  document.getElementById('add-self-closed').style.display = open ? 'none' : '';
+  document.getElementById('add-self-open').style.display = open ? '' : 'none';
+  if (open) setTimeout(() => document.getElementById('self-name').focus(), 80);
+  else document.getElementById('self-name').value = '';
+}
+
+function addSelf() {
+  const name = document.getElementById('self-name').value.trim();
+  if (!name) { document.getElementById('self-name').focus(); return; }
+  const data = db();
+  const existing = data.students.find(s => s.name.toLowerCase() === name.toLowerCase());
+  if (existing) { toggleAddSelf(false); openStudent(existing.id); return; }
+  const newS = { id: uid(), name, words: [], quizHistory: [] };
+  data.students.push(newS);
+  save(data);
+  toggleAddSelf(false);
+  renderHome();
+  openStudent(newS.id);
+}
+
+function openStudent(id) {
+  const data = db();
+  const s = data.students.find(x => x.id === id);
+  if (!s) return;
+  currentStudent = id;
+  practiceLesson = null;
+  document.getElementById('dash-avatar').textContent = s.name[0].toUpperCase();
+  document.getElementById('dash-name').textContent = s.name;
+  document.getElementById('header-sub').textContent = s.name + "'s vocabulary";
+  document.getElementById('teacher-btn').style.display = 'none';
+  switchTab('words');
+  show('student');
+}
+
+// ─────────────────────────────────────────────────────────────
+// STUDENT TABS
+// ─────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  ['words','practice','add'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('#screen-student .tab').forEach((el, i) => {
+    el.classList.toggle('active', ['words','practice','add'][i] === tab);
+  });
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (s) document.getElementById('dash-wordcount').textContent = s.words.length + ' word' + (s.words.length !== 1 ? 's' : '') + ' in your list';
+  if (tab === 'words') renderWords();
+  if (tab === 'practice') renderPractice();
+  if (tab === 'add') { ['new-word','new-ipa','new-translation','new-example'].forEach(id => document.getElementById(id).value = ''); }
+}
+
+function renderWords() {
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  const list = document.getElementById('word-list');
+  const empty = document.getElementById('words-empty');
+  list.innerHTML = '';
+  if (!s || !s.words.length) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  [...s.words].reverse().forEach(w => {
+    const el = document.createElement('div');
+    el.className = 'word-item';
+    el.innerHTML =
+      (w.lesson ? '<div class="lesson-badge">' + esc(w.lesson) + '</div>' : '') +
+      '<div class="word-en">' + esc(w.word) + '</div>' +
+      (w.ipa ? '<div class="word-ipa">' + esc(w.ipa) + '</div>' : '') +
+      '<div class="word-ru">🇷🇺 ' + esc(w.translation) + '</div>' +
+      (w.example ? '<div class="word-ex">"' + esc(w.example) + '"</div>' : '') +
+      (isTeacher ? '<button class="word-delete" title="Delete" onclick="promptDelete(\'' + w.id + '\')">✕</button>' : '');
+    list.appendChild(el);
+  });
+}
+
+function renderPractice() {
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  const ok = s && s.words.length >= 2;
+  document.getElementById('practice-empty').style.display = ok ? 'none' : '';
+  document.getElementById('practice-modes').style.display = ok ? '' : 'none';
+  if (ok) { renderLessonFilter(s); updatePracticeNotice(s); }
+}
+
+function getLessons(s) {
+  const set = new Set();
+  s.words.forEach(w => { if (w.lesson) set.add(w.lesson); });
+  return [...set];
+}
+
+function renderLessonFilter(s) {
+  const lessons = getLessons(s);
+  const wrap = document.getElementById('lesson-filter-wrap');
+  if (!lessons.length) { wrap.innerHTML = ''; return; }
+  let html = '<div class="lesson-filter">';
+  html += '<button class="lesson-pill' + (practiceLesson === null ? ' active' : '') + '" onclick="setPracticeLesson(null)">All words</button>';
+  lessons.forEach(l => {
+    html += '<button class="lesson-pill' + (practiceLesson === l ? ' active' : '') + '" onclick="setPracticeLesson(\'' + esc(l) + '\')">' + esc(l) + '</button>';
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+}
+
+function setPracticeLesson(lesson) {
+  practiceLesson = lesson;
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  renderLessonFilter(s);
+  updatePracticeNotice(s);
+}
+
+function updatePracticeNotice(s) {
+  const words = getFilteredWords(s);
+  const notice = document.getElementById('practice-notice');
+  if (practiceLesson) {
+    notice.textContent = words.length + ' word' + (words.length !== 1 ? 's' : '') + ' in "' + practiceLesson + '". Choose a mode below.';
+  } else {
+    notice.textContent = 'Choose how you\'d like to practise today.';
+  }
+}
+
+function getFilteredWords(s) {
+  if (!practiceLesson) return s.words;
+  return s.words.filter(w => w.lesson === practiceLesson);
+}
+
+// ─────────────────────────────────────────────────────────────
+// ADD WORD (student)
+// ─────────────────────────────────────────────────────────────
+function addWord() {
+  const word = document.getElementById('new-word').value.trim();
+  const ipa = document.getElementById('new-ipa').value.trim();
+  const translation = document.getElementById('new-translation').value.trim();
+  const example = document.getElementById('new-example').value.trim();
+  if (!word || !translation) { alert('Please enter a word and its translation.'); return; }
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (!s) return;
+  s.words.push({ id: uid(), word, ipa, translation, example, by: 'student' });
+  save(data);
+  switchTab('words');
+}
+
+// ─────────────────────────────────────────────────────────────
+// DELETE
+// ─────────────────────────────────────────────────────────────
+function promptDelete(id) { deleteWordId = id; openModal('modal-del'); }
+function confirmDelete() {
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (s) s.words = s.words.filter(w => w.id !== deleteWordId);
+  save(data);
+  deleteWordId = null;
+  closeModal('modal-del');
+  renderWords();
+}
+
+// ─────────────────────────────────────────────────────────────
+// FLASHCARDS
+// ─────────────────────────────────────────────────────────────
+function startFlashcards() {
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (!s) return;
+  const words = getFilteredWords(s);
+  if (!words.length) return;
+  fcWords = [...words].sort(() => Math.random() - 0.5);
+  fcIndex = 0; fcFlipped = false;
+  document.getElementById('fc-lesson-label').textContent = practiceLesson ? 'Flashcards — ' + practiceLesson : 'Flashcards';
+  show('flashcards');
+  renderFC();
+}
+function renderFC() {
+  const w = fcWords[fcIndex];
+  document.getElementById('fc-word').textContent = w.word;
+  document.getElementById('fc-ipa').textContent = w.ipa || '';
+  document.getElementById('fc-ipa').style.display = w.ipa ? '' : 'none';
+  document.getElementById('fc-translation').textContent = '🇷🇺 ' + w.translation;
+  document.getElementById('fc-example').textContent = w.example ? '"' + w.example + '"' : '';
+  document.getElementById('fc-counter').textContent = (fcIndex + 1) + ' of ' + fcWords.length;
+  document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcWords.length * 100) + '%';
+  const card = document.getElementById('flashcard');
+  card.classList.remove('flipped'); fcFlipped = false;
+}
+function flipCard() { fcFlipped = !fcFlipped; document.getElementById('flashcard').classList.toggle('flipped', fcFlipped); }
+function fcNext() { if (fcIndex < fcWords.length - 1) { fcIndex++; renderFC(); } else endPractice(); }
+function fcPrev() { if (fcIndex > 0) { fcIndex--; renderFC(); } }
+
+// ─────────────────────────────────────────────────────────────
+// QUIZ
+// ─────────────────────────────────────────────────────────────
+function startQuiz() {
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (!s) return;
+  const words = getFilteredWords(s);
+  if (words.length < 2) return;
+  qWords = [...words].sort(() => Math.random() - 0.5);
+  qIndex = 0; qScore = 0;
+  document.getElementById('quiz-lesson-label').textContent = practiceLesson ? 'Quiz — ' + practiceLesson : 'Quiz';
+  document.getElementById('quiz-results').style.display = 'none';
+  document.getElementById('quiz-content').style.display = '';
+  show('quiz');
+  renderQ();
+}
+
+function renderQ() {
+  if (qIndex >= qWords.length) { showResults(); return; }
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  const correct = qWords[qIndex];
+  const pool = s.words.filter(w => w.id !== correct.id);
+  const others = pool.sort(() => Math.random() - 0.5).slice(0, 3);
+  const opts = [correct, ...others].sort(() => Math.random() - 0.5);
+
+  document.getElementById('quiz-word').textContent = correct.word;
+  const ipaEl = document.getElementById('quiz-ipa');
+  ipaEl.textContent = correct.ipa || '';
+  ipaEl.style.display = correct.ipa ? '' : 'none';
+  document.getElementById('quiz-counter').textContent = (qIndex + 1) + ' of ' + qWords.length;
+  document.getElementById('quiz-progress').style.width = (qIndex / qWords.length * 100) + '%';
+  document.getElementById('quiz-feedback').innerHTML = '';
+  document.getElementById('quiz-next-wrap').style.display = 'none';
+  qAnswered = false;
+
+  const wrap = document.getElementById('quiz-options');
+  wrap.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt.translation;
+    btn.onclick = () => answerQ(btn, opt.id === correct.id, correct);
+    wrap.appendChild(btn);
+  });
+}
+
+const PRAISE_DATA = [
+  { emoji: '🌟', text: 'Excellent!' },
+  { emoji: '✨', text: 'Brilliant!' },
+  { emoji: '🌿', text: 'Perfect!' },
+  { emoji: '🎯', text: 'Spot on!' },
+  { emoji: '💚', text: 'Well done!' },
+  { emoji: '🏆', text: 'Outstanding!' },
+];
+
+function answerQ(btn, isCorrect, correct) {
+  if (qAnswered) return;
+  qAnswered = true;
+  const wrap = document.getElementById('quiz-options');
+  Array.from(wrap.children).forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct.translation) b.classList.add('correct');
+  });
+  const fb = document.getElementById('quiz-feedback');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    qScore++;
+    const p = PRAISE_DATA[Math.floor(Math.random() * PRAISE_DATA.length)];
+    fb.innerHTML = '<div class="praise-box"><span class="praise-emoji">' + p.emoji + '</span><div class="praise-text">' + p.text + '</div></div>';
+    launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    fb.innerHTML = '<div class="oops-box"><div class="oops-title">Not quite this time.</div><div class="oops-answer">The answer is: <strong>' + esc(correct.translation) + '</strong>' + (correct.example ? '<br><em>"' + esc(correct.example) + '"</em>' : '') + '</div></div>';
+  }
+  document.getElementById('quiz-next-wrap').style.display = '';
+}
+
+function quizNext() { qIndex++; renderQ(); }
+
+function showResults() {
+  document.getElementById('quiz-content').style.display = 'none';
+  document.getElementById('quiz-results').style.display = '';
+  const pct = Math.round(qScore / qWords.length * 100);
+  document.getElementById('score-num').textContent = qScore;
+  document.getElementById('score-of').textContent = 'of ' + qWords.length;
+  document.getElementById('score-pct').textContent = pct + '% correct';
+  document.getElementById('result-emoji').textContent = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '💚' : '💪';
+  if (pct === 100) launchConfetti();
+
+  // Save to quiz history
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (s) {
+    if (!s.quizHistory) s.quizHistory = [];
+    s.quizHistory.push({ date: new Date().toISOString(), score: qScore, total: qWords.length, lesson: practiceLesson });
+    if (s.quizHistory.length > 20) s.quizHistory = s.quizHistory.slice(-20);
+    save(data);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// TEACHER
+// ─────────────────────────────────────────────────────────────
+function showTeacherLogin() {
+  document.getElementById('teacher-pw').value = '';
+  openModal('modal-login');
+  setTimeout(() => document.getElementById('teacher-pw').focus(), 120);
+}
+function checkLogin() {
+  const pw = document.getElementById('teacher-pw').value;
+  if (pw === PASS) {
+    isTeacher = true;
+    closeModal('modal-login');
+    document.getElementById('teacher-btn').style.display = 'none';
+    document.getElementById('header-sub').textContent = 'Teacher view';
+    show('teacher');
+    switchTeacherTab('students');
+  } else {
+    const inp = document.getElementById('teacher-pw');
+    inp.style.borderColor = 'var(--pink)';
+    inp.style.boxShadow = '0 0 0 4px rgba(201,160,165,0.15)';
+    setTimeout(() => { inp.style.borderColor = ''; inp.style.boxShadow = ''; }, 1400);
+  }
+}
+
+function switchTeacherTab(tab) {
+  ['students','add-student','add-word'].forEach(t => {
+    document.getElementById('tt-' + t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('#screen-teacher .tab').forEach((el, i) => {
+    el.classList.toggle('active', ['students','add-student','add-word'][i] === tab);
+  });
+  if (tab === 'students') renderTeacher();
+  if (tab === 'add-word') populateSelect();
+}
+
+function renderTeacher() {
+  const data = db();
+  const list = document.getElementById('teacher-list');
+  const empty = document.getElementById('teacher-empty');
+  list.innerHTML = '';
+  if (!data.students.length) { empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  data.students.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 't-student-card';
+    const words3 = s.words.slice(-3).reverse();
+    const hist = s.quizHistory || [];
+    const recent = hist.slice(-5).reverse();
+    const lastDate = hist.length ? new Date(hist[hist.length - 1].date) : null;
+    const lastStr = lastDate ? timeAgo(lastDate) : 'Never';
+
+    let histHtml = '';
+    if (hist.length) {
+      const chips = recent.map(h => {
+        const p = Math.round(h.score / h.total * 100);
+        const label = h.lesson ? h.score + '/' + h.total + ' (' + h.lesson + ')' : h.score + '/' + h.total;
+        const style = p >= 80 ? '' : p >= 60 ? 'background:var(--cream);color:var(--text-2);border-color:var(--border);' : 'background:var(--pink-light);color:var(--pink-dark);border-color:rgba(201,160,165,0.3);';
+        return '<span class="quiz-score-chip" style="' + style + '">' + label + '</span>';
+      }).join('');
+      histHtml = '<div class="quiz-hist"><div class="quiz-hist-label">Quiz history</div><div class="quiz-scores">' + chips + '</div><div class="quiz-last">Last practised: ' + lastStr + '</div></div>';
+    } else {
+      histHtml = '<div class="quiz-hist"><div class="quiz-last" style="color:var(--muted);">Has not taken a quiz yet.</div></div>';
+    }
+
+    el.innerHTML =
+      '<div class="t-student-head">' +
+        '<div style="display:flex;align-items:center;gap:12px;">' +
+          '<div class="avatar">' + s.name[0].toUpperCase() + '</div>' +
+          '<div><div class="student-name">' + esc(s.name) + '</div><div class="student-meta">' + s.words.length + ' word' + (s.words.length !== 1 ? 's' : '') + '</div></div>' +
+        '</div>' +
+        '<button class="btn btn-danger btn-sm" onclick="removeStudent(\'' + s.id + '\')">Remove</button>' +
+      '</div>' +
+      words3.map(w =>
+        '<div class="t-word-row">' +
+          '<div><div class="word-en">' + esc(w.word) + '</div>' +
+          (w.ipa ? '<div style="font-size:0.72rem;color:var(--muted);font-style:italic;">' + esc(w.ipa) + '</div>' : '') +
+          '<div class="word-ru" style="margin-top:2px;">🇷🇺 ' + esc(w.translation) + '</div></div>' +
+          '<button class="word-delete" style="position:static;" onclick="teacherDeleteWord(\'' + s.id + '\',\'' + w.id + '\')">✕</button>' +
+        '</div>'
+      ).join('') +
+      (s.words.length > 3 ? '<div style="font-size:0.75rem;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid var(--border-light);">+ ' + (s.words.length - 3) + ' more word' + (s.words.length - 3 !== 1 ? 's' : '') + '</div>' : '') +
+      histHtml;
+    list.appendChild(el);
+  });
+}
+
+function timeAgo(date) {
+  const secs = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (secs < 60) return 'just now';
+  if (secs < 3600) return Math.floor(secs / 60) + ' min ago';
+  if (secs < 86400) return Math.floor(secs / 3600) + 'h ago';
+  const days = Math.floor(secs / 86400);
+  return days === 1 ? 'yesterday' : days + ' days ago';
+}
+
+function addStudent() {
+  const name = document.getElementById('t-student-name').value.trim();
+  if (!name) { alert('Please enter a name.'); return; }
+  const data = db();
+  if (data.students.find(s => s.name.toLowerCase() === name.toLowerCase())) { alert('A student with that name already exists.'); return; }
+  data.students.push({ id: uid(), name, words: [], quizHistory: [] });
+  save(data);
+  document.getElementById('t-student-name').value = '';
+  switchTeacherTab('students');
+}
+
+function removeStudent(id) {
+  if (!confirm('Remove this student and all their words?')) return;
+  const data = db();
+  data.students = data.students.filter(s => s.id !== id);
+  save(data);
+  renderTeacher();
+}
+
+function populateSelect() {
+  const data = db();
+  const sel = document.getElementById('t-word-student');
+  if (!data.students.length) { sel.innerHTML = '<option>No students — add one first</option>'; return; }
+  sel.innerHTML = data.students.map(s => '<option value="' + s.id + '">' + esc(s.name) + '</option>').join('');
+}
+
+function teacherAddWord() {
+  const sid = document.getElementById('t-word-student').value;
+  const word = document.getElementById('t-word').value.trim();
+  const ipa = document.getElementById('t-ipa').value.trim();
+  const translation = document.getElementById('t-translation').value.trim();
+  const example = document.getElementById('t-example').value.trim();
+  const lesson = document.getElementById('t-lesson').value.trim();
+  if (!word || !translation) { alert('Please enter a word and translation.'); return; }
+  const data = db();
+  const s = data.students.find(x => x.id === sid);
+  if (!s) { alert('Please select a student.'); return; }
+  s.words.push({ id: uid(), word, ipa, translation, example, lesson, by: 'teacher' });
+  save(data);
+  ['t-word','t-ipa','t-translation','t-example','t-lesson'].forEach(id => document.getElementById(id).value = '');
+  switchTeacherTab('students');
+}
+
+function teacherDeleteWord(sid, wid) {
+  if (!confirm('Delete this word?')) return;
+  const data = db();
+  const s = data.students.find(x => x.id === sid);
+  if (s) s.words = s.words.filter(w => w.id !== wid);
+  save(data);
+  renderTeacher();
+}
+
+// ─────────────────────────────────────────────────────────────
+// THE OFFICE
+// ─────────────────────────────────────────────────────────────
+const OFFICE_SCENES = [
+  {
+    id: 'fire-drill',
+    title: 'The Fire Drill',
+    youtubeId: 'gO8N3L_aERg',
+    focus: 'Emergency vocabulary · action verbs · imperatives',
+    questions: [
+      {
+        sentence: 'In an emergency, you must _____ the building immediately and move to the assembly point.',
+        answer: 'evacuate',
+        options: ['evacuate', 'escape', 'exit', 'abandon'],
+        explanation: '"Evacuate a building" — официальный термин для организованного экстренного покидания здания. "Exit" — это существительное (выход). "Escape" и "abandon" слишком неформальны или имеют другие значения в данном контексте.'
+      },
+      {
+        sentence: 'The fire alarm went _____, and everyone rushed towards the nearest exit.',
+        answer: 'off',
+        options: ['off', 'on', 'out', 'up'],
+        explanation: '"Go off" — фразовый глагол, означающий "сработать" (о сигнализации или будильнике). Не путайте с "go on" (продолжаться) или "go out" (выйти). "The alarm went off" — стандартная конструкция в английском.'
+      },
+      {
+        sentence: 'The situation got out of _____ very quickly once people started to panic.',
+        answer: 'hand',
+        options: ['hand', 'control', 'order', 'reach'],
+        explanation: '"Get out of hand" — фиксированный идиом, означающий выйти из-под контроля. Хотя "out of control" тоже верно, "out of hand" — это отдельное устойчивое выражение, которое нельзя заменить другими словами.'
+      },
+      {
+        sentence: 'Dwight blocked the exits to force his colleagues to _____ the emergency protocol.',
+        answer: 'follow',
+        options: ['follow', 'obey', 'respect', 'use'],
+        explanation: '"Follow the protocol / rules" — наиболее естественное сочетание в деловом английском. "Obey" звучит жёстче и подходит для законов и прямых приказов. "Respect the rules" используется реже в разговорном английском.'
+      },
+      {
+        sentence: 'Everyone _____ into a panic when smoke started filling the hallway.',
+        answer: 'fell',
+        options: ['fell', 'broke', 'went', 'burst'],
+        explanation: '"Fall into a panic" — устойчивое словосочетание. Сравните: "burst into tears" (расплакаться), "break into a sweat" (покрыться потом), "go into shock" (войти в шок). Каждый глагол фиксирован со своим существительным.'
+      }
+    ]
+  },
+  {
+    id: 'pyramid',
+    title: 'Michael\'s Pyramid Scheme',
+    youtubeId: 'lC5lsemxaJo',
+    focus: 'Business vocabulary · persuasive language · financial idioms',
+    questions: [
+      {
+        sentence: 'The scheme promises a high _____ on your investment — but in reality, most people lose money.',
+        answer: 'return',
+        options: ['return', 'profit', 'income', 'reward'],
+        explanation: '"Return on investment" (ROI) — ключевой термин делового английского. "High return" означает большую прибыль относительно вложенных средств. "Profit" — прибыль в целом, но не в данном устойчивом сочетании.'
+      },
+      {
+        sentence: 'Jim used a simple diagram to _____ apart Michael\'s entire business model.',
+        answer: 'tear',
+        options: ['tear', 'pull', 'break', 'take'],
+        explanation: '"Tear apart an argument" — фразовый глагол, означающий разгромить аргумент, разобрать его по кусочкам. "Pull apart" тоже возможно, но "tear apart" звучит ярче и употребляется чаще в данном контексте.'
+      },
+      {
+        sentence: 'He claimed to be an _____ contractor, working entirely for himself.',
+        answer: 'independent',
+        options: ['independent', 'individual', 'self-run', 'private'],
+        explanation: '"Independent contractor" — стандартный деловой термин для фрилансера или самозанятого специалиста. Это фиксированное сочетание в деловом и юридическом английском.'
+      },
+      {
+        sentence: 'Michael was incredibly _____ — he made the scheme sound like a guaranteed success.',
+        answer: 'persuasive',
+        options: ['persuasive', 'convincing', 'charming', 'confident'],
+        explanation: '"Persuasive" описывает человека, умеющего убеждать других принять его точку зрения. Хотя "convincing" похоже по смыслу, "persuasive" — более точное прилагательное для описания риторических способностей человека.'
+      },
+      {
+        sentence: 'When the diagram revealed the structure, it was obvious the plan was a classic _____ scheme.',
+        answer: 'pyramid',
+        options: ['pyramid', 'Ponzi', 'chain', 'network'],
+        explanation: '"Pyramid scheme" — фиксированное словосочетание, обозначающее финансовую пирамиду. "Ponzi scheme" — похожий термин, но для другого вида мошенничества. "Network" — нейтральное слово, не несущее негативного смысла.'
+      }
+    ]
+  },
+  {
+    id: 'iconic',
+    title: 'Most Iconic Moments',
+    youtubeId: 'y5jchMm0Ae8',
+    focus: 'Idioms · humour vocabulary · conversational expressions',
+    questions: [
+      {
+        sentence: 'Jim often reacts to Dwight\'s behaviour with a _____ expression — serious face, zero emotion.',
+        answer: 'deadpan',
+        options: ['deadpan', 'blank', 'poker', 'straight'],
+        explanation: '"Deadpan" описывает стиль юмора без малейшей улыбки или эмоции на лице. Это ключевое слово для понимания британского и американского юмора. "Poker-faced" означает скрывать эмоции в целом, а не специально подавать шутку с серьёзным видом.'
+      },
+      {
+        sentence: 'The show\'s humour is very _____ — the jokes land because nobody on screen laughs at them.',
+        answer: 'dry',
+        options: ['dry', 'dark', 'black', 'sharp'],
+        explanation: '"Dry humour" — юмор без эмоций, подаваемый с абсолютно серьёзным лицом. Это устойчивое сочетание. "Dark / black humour" означает мрачный юмор на тяжёлые темы — это совершенно другое значение.'
+      },
+      {
+        sentence: 'Michael constantly puts his _____ in his mouth — he says exactly the wrong thing at the wrong moment.',
+        answer: 'foot',
+        options: ['foot', 'hand', 'head', 'nose'],
+        explanation: '"Put your foot in your mouth" — идиом, означающий случайно сказать что-то неловкое или обидное. Это очень распространённое выражение в разговорном английском. Только "foot" работает в этом идиоме.'
+      },
+      {
+        sentence: 'Dwight\'s expressions during Michael\'s speeches often _____ volumes without a single word.',
+        answer: 'speak',
+        options: ['speak', 'say', 'tell', 'show'],
+        explanation: '"Speak volumes" — идиом, означающий "красноречиво говорить о чём-то" без слов. "Her silence spoke volumes" = её молчание сказало о многом. Только глагол "speak" используется в этом устойчивом выражении — "say" или "tell" здесь невозможны.'
+      },
+      {
+        sentence: 'The awkward silences are not accidental — they are a key part of the show\'s _____ comedy.',
+        answer: 'cringe',
+        options: ['cringe', 'dark', 'dry', 'absurd'],
+        explanation: '"Cringe comedy" — жанр, в котором юмор возникает из неловких, болезненных ситуаций. "Cringe" означает внутренне содрогнуться от стыда или неловкости за кого-то. Это слово очень активно используется в современном разговорном английском.'
+      }
+    ]
+  }
+];
+
+let officeScene = null, officeQIndex = 0, officeScore = 0, officeAnswered = false, officeQuestions = [];
+
+function startOffice() { show('office'); renderOfficeClips(); }
+
+function endOffice() {
+  const iframe = document.getElementById('office-iframe');
+  if (iframe) iframe.src = '';
+  show('student');
+  switchTab('practice');
+}
+
+function renderOfficeClips() {
+  const iframe = document.getElementById('office-iframe');
+  if (iframe) iframe.src = '';
+  document.getElementById('office-clip-select').style.display = '';
+  document.getElementById('office-active').style.display = 'none';
+  document.getElementById('office-results').style.display = 'none';
+
+  const wrap = document.getElementById('office-clips-list');
+  wrap.innerHTML = OFFICE_SCENES.map((sc, i) =>
+    '<div class="office-clip-card" onclick="startOfficeScene(' + i + ')">' +
+      '<div class="office-thumb">' +
+        '<img src="https://img.youtube.com/vi/' + sc.youtubeId + '/hqdefault.jpg" alt="' + esc(sc.title) + '" loading="lazy">' +
+        '<div class="office-play-btn">▶</div>' +
+      '</div>' +
+      '<div class="office-clip-info">' +
+        '<div class="office-clip-title">' + esc(sc.title) + '</div>' +
+        '<div class="office-clip-focus">Focus: ' + esc(sc.focus) + '</div>' +
+        '<div class="btn btn-primary btn-sm" style="pointer-events:none;">Watch &amp; practise →</div>' +
+      '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function startOfficeScene(index) {
+  officeScene = OFFICE_SCENES[index];
+  officeQuestions = [...officeScene.questions].sort(() => Math.random() - 0.5);
+  officeQIndex = 0; officeScore = 0;
+  document.getElementById('office-clip-select').style.display = 'none';
+  document.getElementById('office-active').style.display = '';
+  document.getElementById('office-results').style.display = 'none';
+  document.getElementById('office-iframe').src = 'https://www.youtube-nocookie.com/embed/' + officeScene.youtubeId + '?rel=0&modestbranding=1';
+  document.getElementById('office-active-title').textContent = officeScene.title;
+  document.getElementById('office-active-focus').textContent = 'Focus: ' + officeScene.focus;
+  renderOfficeQ();
+}
+
+function renderOfficeQ() {
+  if (officeQIndex >= officeQuestions.length) { showOfficeResults(); return; }
+  const q = officeQuestions[officeQIndex];
+  document.getElementById('office-sentence').innerHTML = esc(q.sentence).replace('_____', '<span class="gap-blank" id="office-blank-span"></span>');
+  document.getElementById('office-counter').textContent = (officeQIndex + 1) + ' of ' + officeQuestions.length;
+  document.getElementById('office-progress').style.width = (officeQIndex / officeQuestions.length * 100) + '%';
+  document.getElementById('office-feedback').innerHTML = '';
+  document.getElementById('office-next-wrap').style.display = 'none';
+  officeAnswered = false;
+  const wrap = document.getElementById('office-options');
+  wrap.innerHTML = '';
+  [...q.options].sort(() => Math.random() - 0.5).forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerOffice(btn, opt === q.answer, q);
+    wrap.appendChild(btn);
+  });
+}
+
+function answerOffice(btn, isCorrect, q) {
+  if (officeAnswered) return;
+  officeAnswered = true;
+  Array.from(document.getElementById('office-options').children).forEach(b => {
+    b.disabled = true;
+    if (b.textContent === q.answer) b.classList.add('correct');
+  });
+  const blank = document.getElementById('office-blank-span');
+  if (blank) {
+    blank.textContent = q.answer;
+    blank.style.borderColor = isCorrect ? 'var(--sage)' : 'var(--pink)';
+    blank.style.color = isCorrect ? 'var(--sage-dark)' : 'var(--pink-dark)';
+  }
+  const fb = document.getElementById('office-feedback');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    officeScore++;
+    const p = PRAISE_DATA[Math.floor(Math.random() * PRAISE_DATA.length)];
+    fb.innerHTML = '<div class="praise-box"><span class="praise-emoji">' + p.emoji + '</span><div class="praise-text">' + p.text + '</div></div><div class="explanation-box"><strong>Why "' + esc(q.answer) + '"?</strong> ' + esc(q.explanation) + '</div>';
+    launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    fb.innerHTML = '<div class="oops-box"><div class="oops-title">The answer is <strong>' + esc(q.answer) + '</strong>.</div></div><div class="explanation-box"><strong>Why "' + esc(q.answer) + '"?</strong> ' + esc(q.explanation) + '</div>';
+  }
+  document.getElementById('office-next-wrap').style.display = '';
+}
+
+function officeNext() { officeQIndex++; renderOfficeQ(); }
+
+function showOfficeResults() {
+  document.getElementById('office-active').style.display = 'none';
+  document.getElementById('office-results').style.display = '';
+  const pct = Math.round(officeScore / officeQuestions.length * 100);
+  document.getElementById('office-score-num').textContent = officeScore;
+  document.getElementById('office-score-of').textContent = 'of ' + officeQuestions.length;
+  document.getElementById('office-score-pct').textContent = pct + '% correct';
+  document.getElementById('office-result-emoji').textContent = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '💚' : '💪';
+  if (pct === 100) launchConfetti();
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (s) {
+    if (!s.quizHistory) s.quizHistory = [];
+    s.quizHistory.push({ date: new Date().toISOString(), score: officeScore, total: officeQuestions.length, lesson: 'The Office — ' + officeScene.title, type: 'office' });
+    if (s.quizHistory.length > 20) s.quizHistory = s.quizHistory.slice(-20);
+    save(data);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// FILL THE GAP
+// ─────────────────────────────────────────────────────────────
+let gapLevel = null, gapQuestions = [], gapIndex = 0, gapScore = 0, gapAnswered = false;
+
+const GAP_BANK = {
+  A2: [
+    { sentence: 'She _____ a mistake in her homework.', answer: 'made', options: ['made','did','had','took'], explanation: '"Make a mistake" — устойчивое словосочетание. По-английски ошибки всегда делают через make, а не do.' },
+    { sentence: 'Can you _____ me a favour?', answer: 'do', options: ['do','make','give','take'], explanation: '"Do someone a favour" — фиксированная фраза. Услуги делают (do), а обещания и решения принимают (make).' },
+    { sentence: 'He _____ a photo of the sunset.', answer: 'took', options: ['took','made','did','had'], explanation: '"Take a photo" — стандартное словосочетание. Фотографии всегда делают через take, никогда через make или do.' },
+    { sentence: "Don't _____ fun of other people — it's unkind.", answer: 'make', options: ['make','do','have','take'], explanation: '"Make fun of someone" — фиксированная фраза, означающая насмехаться над кем-то. Другие глаголы здесь не подходят.' },
+    { sentence: 'She _____ care of her younger brother after school.', answer: 'took', options: ['took','had','made','gave'], explanation: '"Take care of" — устойчивый фразовый глагол, означающий заботиться о ком-то или чём-то.' },
+    { sentence: 'He _____ asleep on the sofa watching TV.', answer: 'fell', options: ['fell','went','got','became'], explanation: '"Fall asleep" — стандартное словосочетание. Засыпают через fall, а просыпаются через wake up.' },
+    { sentence: 'She _____ her best on the exam.', answer: 'did', options: ['did','made','tried','gave'], explanation: '"Do your best" — фиксированное выражение, означающее стараться изо всех сил.' },
+    { sentence: 'He _____ a joke and everyone laughed.', answer: 'told', options: ['told','said','spoke','talked'], explanation: '"Tell a joke" — устойчивое словосочетание. Анекдоты и истории рассказывают (tell), а слова говорят (say).' },
+    { sentence: 'She _____ good progress in her English lessons.', answer: 'made', options: ['made','did','had','achieved'], explanation: '"Make progress" — устойчивое словосочетание. Прогресс делают через make.' },
+    { sentence: 'Can you _____ the music down? It\'s too loud.', answer: 'turn', options: ['turn','put','take','bring'], explanation: '"Turn down" — фразовый глагол, означающий уменьшить громкость. "Turn up" означает увеличить.' },
+    { sentence: 'She _____ a headache and went to bed early.', answer: 'had', options: ['had','got','felt','made'], explanation: '"Have a headache" — устойчивое словосочетание. Боль и недомогание обычно описываются через have.' },
+    { sentence: 'He _____ his mind about going to the party.', answer: 'changed', options: ['changed','made','lost','did'], explanation: '"Change your mind" — фиксированная фраза, означающая передумать или изменить решение.' },
+    { sentence: 'She _____ a shower and got ready for work.', answer: 'had', options: ['had','took','made','did'], explanation: 'В британском английском говорят "have a shower". Это более типичный вариант, чем американское "take a shower".' },
+    { sentence: 'The children _____ a lot of noise during the lesson.', answer: 'made', options: ['made','did','had','created'], explanation: '"Make noise" — устойчивое словосочетание. Шум производят через make.' },
+    { sentence: 'She _____ a decision and bought the dress.', answer: 'made', options: ['made','took','did','had'], explanation: '"Make a decision" — устойчивое словосочетание. Решения принимают через make.' },
+    { sentence: 'He _____ his homework before going out.', answer: 'did', options: ['did','made','finished','completed'], explanation: '"Do homework" — устойчивое словосочетание. Домашнее задание делают через do, как и спорт, и покупки.' },
+  ],
+  B1: [
+    { sentence: 'He completely _____ his temper during the argument.', answer: 'lost', options: ['lost','missed','dropped','broke'], explanation: '"Lose your temper" — фиксированный идиом, означающий внезапно выйти из себя. Глаголы "break" или "drop" здесь невозможны.' },
+    { sentence: 'The concert was _____ off due to the storm.', answer: 'called', options: ['called','put','set','taken'], explanation: '"Call off" означает отменить. "Put off" означает перенести на другое время. Эти фразовые глаголы не взаимозаменяемы.' },
+    { sentence: 'She _____ a deep breath and walked into the room.', answer: 'took', options: ['took','made','had','gave'], explanation: '"Take a deep breath" — фиксированное словосочетание. Также используем take с рисками, перерывами и шагами.' },
+    { sentence: 'She _____ up her mind to move abroad.', answer: 'made', options: ['made','set','got','had'], explanation: '"Make up your mind" — фиксированный идиом, означающий принять решение. Никакой другой глагол здесь невозможен.' },
+    { sentence: 'He _____ forward to the holidays all month.', answer: 'looked', options: ['looked','waited','expected','hoped'], explanation: '"Look forward to" — фиксированный фразовый глагол, выражающий приятное ожидание. После него всегда следует существительное или глагол с -ing.' },
+    { sentence: 'She _____ track of time and arrived an hour late.', answer: 'lost', options: ['lost','missed','forgot','dropped'], explanation: '"Lose track of time" — фиксированное выражение. Также говорят "lose track of" о человеке или разговоре.' },
+    { sentence: "I couldn't _____ out what he was saying — he spoke too fast.", answer: 'make', options: ['make','take','give','put'], explanation: '"Make out" означает с трудом расслышать или понять что-то. Часто используется для речи или текста, который сложно разобрать.' },
+    { sentence: 'Prices have _____ up sharply over the past year.', answer: 'gone', options: ['gone','come','got','turned'], explanation: '"Go up" — стандартный фразовый глагол для цен, температур или чисел, которые растут. "Come up" означает возникать или упоминаться.' },
+    { sentence: 'She _____ into tears when she heard the news.', answer: 'burst', options: ['burst','broke','fell','went'], explanation: '"Burst into tears" — фиксированный идиом, означающий внезапно расплакаться. Также: "burst into laughter" — расхохотаться.' },
+    { sentence: 'He _____ up with a great idea during the meeting.', answer: 'came', options: ['came','thought','got','made'], explanation: '"Come up with" — фразовый глагол, означающий придумать или предложить идею. Нельзя заменить другими глаголами.' },
+    { sentence: 'The meeting was _____ off until next week.', answer: 'put', options: ['put','called','set','pushed'], explanation: '"Put off" означает отложить на потом. "Call off" означает полностью отменить мероприятие.' },
+    { sentence: 'He _____ his breath when he dived into the cold water.', answer: 'held', options: ['held','kept','stopped','took'], explanation: '"Hold your breath" — фиксированное словосочетание, означающее задержать дыхание.' },
+    { sentence: 'The new restaurant _____ out to be excellent.', answer: 'turned', options: ['turned','came','proved','found'], explanation: '"Turn out" — фразовый глагол, означающий оказаться (иметь определённый результат).' },
+    { sentence: 'She _____ her shoulders and said she did not know.', answer: 'shrugged', options: ['shrugged','raised','lifted','moved'], explanation: '"Shrug your shoulders" — устойчивое словосочетание, означающее пожать плечами в знак незнания или безразличия.' },
+    { sentence: 'He _____ a living as a freelance designer.', answer: 'makes', options: ['makes','earns','does','gets'], explanation: '"Make a living" — устойчивое словосочетание, означающее зарабатывать на жизнь.' },
+    { sentence: 'She _____ out of the habit of exercising regularly.', answer: 'got', options: ['got','fell','came','went'], explanation: '"Get out of the habit" — устойчивое выражение, означающее перестать делать что-то регулярно.' },
+  ],
+  B2: [
+    { sentence: 'We need to _____ into account the cost of transport.', answer: 'take', options: ['take','bring','put','keep'], explanation: '"Take into account" — устойчивое словосочетание, означающее принимать что-то во внимание. Похожее выражение: "bear in mind".' },
+    { sentence: 'The new law will _____ into effect from January.', answer: 'come', options: ['come','go','get','take'], explanation: '"Come into effect" означает вступить в силу. "Take effect" тоже правильно, но имеет другую структуру.' },
+    { sentence: 'She _____ the courage to speak up at the meeting.', answer: 'plucked', options: ['plucked','found','got','gathered'], explanation: '"Pluck up the courage" — фиксированный идиом, означающий заставить себя решиться на что-то трудное.' },
+    { sentence: 'He _____ a lot of effort into making the event a success.', answer: 'put', options: ['put','made','did','gave'], explanation: '"Put effort into something" — стандартное словосочетание. С существительными time, energy и effort используется put.' },
+    { sentence: 'The decision had far-_____ consequences for the whole industry.', answer: 'reaching', options: ['reaching','going','coming','ranging'], explanation: '"Far-reaching" — фиксированное составное прилагательное, означающее имеющий широкие последствия. Всегда пишется через дефис.' },
+    { sentence: 'She tends to _____ things out of proportion.', answer: 'blow', options: ['blow','take','put','make'], explanation: '"Blow things out of proportion" — фиксированный идиом, означающий преувеличивать важность чего-либо.' },
+    { sentence: 'The new evidence _____ his earlier conclusions into question.', answer: 'called', options: ['called','brought','threw','put'], explanation: '"Call something into question" — фиксированное выражение, означающее заставить усомниться в чём-то.' },
+    { sentence: 'She was completely _____ aback by his reaction.', answer: 'taken', options: ['taken','put','set','caught'], explanation: '"Taken aback" — фиксированное выражение, означающее быть застигнутым врасплох. Уходит корнями в морскую терминологию.' },
+    { sentence: 'She _____ a blind eye to her son\'s bad behaviour.', answer: 'turned', options: ['turned','closed','kept','made'], explanation: '"Turn a blind eye to something" — фиксированный идиом, означающий намеренно игнорировать что-то нежелательное.' },
+    { sentence: 'The company has _____ under fire for its environmental record.', answer: 'come', options: ['come','fallen','gone','been'], explanation: '"Come under fire" — устойчивое выражение, означающее подвергнуться критике или нападкам.' },
+    { sentence: 'She _____ her heart out to him about her problems.', answer: 'poured', options: ['poured','spilled','told','opened'], explanation: '"Pour your heart out" — фиксированный идиом, означающий откровенно рассказать кому-то о своих чувствах и проблемах.' },
+    { sentence: 'He _____ strings to get his son into the best school.', answer: 'pulled', options: ['pulled','used','moved','pushed'], explanation: '"Pull strings" — идиом, означающий использовать связи или влияние для достижения нужного результата.' },
+    { sentence: 'The project _____ behind schedule and missed the deadline.', answer: 'fell', options: ['fell','went','got','ran'], explanation: '"Fall behind schedule" — устойчивое выражение, означающее отставать от графика.' },
+    { sentence: 'She _____ the nail on the head with her analysis.', answer: 'hit', options: ['hit','struck','caught','got'], explanation: '"Hit the nail on the head" — фиксированный идиом, означающий сказать или сделать что-то абсолютно точно и метко.' },
+    { sentence: 'He _____ the opportunity to study abroad with both hands.', answer: 'seized', options: ['seized','took','grabbed','used'], explanation: '"Seize the opportunity" — формальное устойчивое сочетание, означающее воспользоваться возможностью. Более книжный вариант, чем "grab".' },
+    { sentence: 'The company decided to _____ back on spending this year.', answer: 'cut', options: ['cut','pull','scale','hold'], explanation: '"Cut back on" — фразовый глагол, означающий сократить расходы или потребление чего-либо.' },
+  ],
+  C1: [
+    { sentence: 'Her speech _____ a chord with everyone in the audience.', answer: 'struck', options: ['struck','hit','touched','caught'], explanation: '"Strike a chord" — фиксированный идиом, означающий найти эмоциональный отклик у людей. Только "struck" работает здесь — "hit" или "touch" невозможны.' },
+    { sentence: 'She fell _____ of the high standards she had set herself.', answer: 'short', options: ['short','low','behind','below'], explanation: '"Fall short of" — фиксированный фразовый глагол, означающий не достичь необходимого уровня или ожиданий.' },
+    { sentence: 'The charity relies _____ on public donations to function.', answer: 'heavily', options: ['heavily','strongly','greatly','largely'], explanation: '"Rely heavily on" — наиболее естественное сочетание. "Heavily" — стандартное наречие, сочетающееся с "rely" и "depend".' },
+    { sentence: 'His argument was _____ with contradictions.', answer: 'riddled', options: ['riddled','filled','packed','loaded'], explanation: '"Riddled with" подразумевает, что недостатки пронизывают что-то насквозь. Несёт более сильный негативный оттенок, чем "filled with".' },
+    { sentence: "The new policy runs _____ to the company's core values.", answer: 'counter', options: ['counter','opposite','contrary','against'], explanation: '"Run counter to" — формальное устойчивое выражение, означающее противоречить чему-то. "Go against" — более разговорный эквивалент.' },
+    { sentence: 'She has an _____ grasp of the political situation.', answer: 'intimate', options: ['intimate','intense','inner','internal'], explanation: '"An intimate grasp/knowledge of something" означает очень детальное, глубокое понимание. В данном контексте "intimate" — это формальное словосочетание, не имеющее личного значения.' },
+    { sentence: 'He was _____ at pains to make his position clear.', answer: 'great', options: ['great','much','strong','extreme'], explanation: '"At great pains to do something" — формальное выражение, означающее прилагать тщательные, намеренные усилия.' },
+    { sentence: 'The scandal was quietly _____ under the carpet.', answer: 'swept', options: ['swept','pushed','put','hidden'], explanation: '"Sweep something under the carpet" — фиксированный идиом, означающий скрыть проблему и притвориться, что её не существует.' },
+    { sentence: 'His behaviour throughout the crisis was _____ reproach.', answer: 'beyond', options: ['beyond','above','past','without'], explanation: '"Beyond reproach" — формальное выражение, означающее безупречный, не заслуживающий никакой критики.' },
+    { sentence: 'She _____ the initiative and reorganised the entire department.', answer: 'took', options: ['took','made','had','seized'], explanation: '"Take the initiative" — устойчивое словосочетание, означающее взять инициативу в свои руки и действовать первым.' },
+    { sentence: 'The scandal _____ his political career in ruins.', answer: 'left', options: ['left','put','made','set'], explanation: '"Leave something in ruins" — устойчивое сочетание, означающее полностью разрушить репутацию или карьеру.' },
+    { sentence: 'She _____ light of the criticism and continued her work.', answer: 'made', options: ['made','took','gave','kept'], explanation: '"Make light of something" — устойчивое выражение, означающее не воспринимать всерьёз, преуменьшать важность чего-либо.' },
+    { sentence: 'The two sides finally _____ common ground on the issue.', answer: 'found', options: ['found','reached','made','gained'], explanation: '"Find common ground" — устойчивое выражение, означающее найти точки соприкосновения, прийти к взаимопониманию.' },
+    { sentence: 'His remarks were taken _____ of context by the media.', answer: 'out', options: ['out','away','off','outside'], explanation: '"Taken out of context" — устойчивое выражение, означающее вырванный из контекста и потому неправильно истолкованный.' },
+    { sentence: 'She _____ the brunt of the criticism after the failed launch.', answer: 'bore', options: ['bore','took','faced','got'], explanation: '"Bear the brunt of something" — устойчивое выражение, означающее принять на себя основной удар или тяжесть чего-либо неприятного.' },
+    { sentence: 'The new strategy _____ dividends within the first quarter.', answer: 'paid', options: ['paid','brought','gave','made'], explanation: '"Pay dividends" — устойчивое выражение (изначально финансовый термин), означающее принести ощутимые результаты или выгоду.' },
+  ],
+  C2: [
+    { sentence: 'His meteoric _____ to the top surprised everyone in the industry.', answer: 'rise', options: ['rise','climb','ascent','leap'], explanation: '"Meteoric rise" — устойчивое словосочетание, означающее стремительный и впечатляющий взлёт к успеху. "Meteoric" почти исключительно сочетается с "rise".' },
+    { sentence: 'The talks reached an _____ and no agreement was possible.', answer: 'impasse', options: ['impasse','obstacle','standstill','deadlock'], explanation: '"Reach an impasse" — наиболее устойчивое сочетание. Тупик (impasse) подразумевает полное отсутствие пути вперёд — это сильнее, чем временная "остановка" (standstill).' },
+    { sentence: 'She has an uncanny _____ for spotting emerging talent.', answer: 'knack', options: ['knack','gift','talent','flair'], explanation: '"Have a knack for" подчёркивает природную, почти мистическую лёгкость в чём-то сложном. "Knack" наиболее устойчиво сочетается с "uncanny".' },
+    { sentence: "The prosecution's case began to _____ apart under cross-examination.", answer: 'fall', options: ['fall','break','come','tear'], explanation: '"Fall apart" означает рассыпаться или потерять связность. В юридическом контексте — аргументы перестают держаться вместе.' },
+    { sentence: 'His remarks were _____ in cheek — he did not mean to offend.', answer: 'tongue', options: ['tongue','cheek','lip','teeth'], explanation: '"Tongue in cheek" — фиксированный идиом, означающий сказанное с юмором или иронией. Пропуск — это первое слово трёхсловного выражения.' },
+    { sentence: 'The new evidence _____ a very different picture of events.', answer: 'painted', options: ['painted','drew','showed','gave'], explanation: '"Paint a picture of something" — устойчивое словосочетание, означающее описывать ситуацию наглядно и выразительно.' },
+    { sentence: 'She could not _____ but admire his determination.', answer: 'help', options: ['help','stop','avoid','resist'], explanation: '"Cannot help but do something" — устойчивое выражение, означающее не мочь удержаться от чего-то. Изощрённая конструкция с двойным отрицанием.' },
+    { sentence: 'The policy has been _____ with controversy since its introduction.', answer: 'dogged', options: ['dogged','followed','chased','troubled'], explanation: '"Dogged by controversy" — формальное словосочетание, означающее постоянно преследуемый чем-то негативным. Здесь "dogged" — причастие, а не прилагательное со значением "упорный".' },
+    { sentence: "The politician's carefully _____ image began to crumble.", answer: 'crafted', options: ['crafted','built','made','created'], explanation: '"Carefully crafted" — устойчивое сочетание, означающее тщательно выстроенный, продуманный. "Crafted" подчёркивает намеренность и искусность.' },
+    { sentence: 'The report laid _____ the systemic failures in the organisation.', answer: 'bare', options: ['bare','open','out','down'], explanation: '"Lay bare" — формальное устойчивое выражение, означающее полностью обнажить или раскрыть что-то скрытое.' },
+    { sentence: 'Her speech _____ the gauntlet to the established political order.', answer: 'threw', options: ['threw','laid','dropped','cast'], explanation: '"Throw down the gauntlet" — идиом, означающий бросить вызов. Восходит к рыцарской традиции бросать перчатку как вызов на поединок.' },
+    { sentence: "The company's fortunes _____ on the outcome of the trial.", answer: 'hinged', options: ['hinged','depended','rested','turned'], explanation: '"Hinge on something" — формальный фразовый глагол, означающий полностью зависеть от чего-либо. Более книжный вариант, чем "depend on".' },
+    { sentence: 'The negotiators were _____ in their refusal to compromise.', answer: 'adamant', options: ['adamant','firm','fixed','certain'], explanation: '"Adamant" — книжное прилагательное, означающее непреклонный, категорически отказывающийся менять позицию. Значительно сильнее, чем "firm".' },
+    { sentence: 'The reforms were _____ through despite fierce opposition.', answer: 'pushed', options: ['pushed','forced','driven','pressed'], explanation: '"Push something through" — фразовый глагол, означающий провести решение или закон вопреки сопротивлению.' },
+    { sentence: 'Her debut novel _____ critical acclaim from reviewers worldwide.', answer: 'garnered', options: ['garnered','received','gained','attracted'], explanation: '"Garner acclaim/support" — формальное книжное словосочетание, означающее заслужить или собрать похвалу. Более изысканный вариант, чем "receive" или "gain".' },
+    { sentence: 'She has an _____ ability to read other people\'s emotions.', answer: 'uncanny', options: ['uncanny','unusual','unique','unnatural'], explanation: '"Uncanny ability" — устойчивое сочетание. "Uncanny" описывает способность, которая кажется почти сверхъестественной, выходящей за пределы нормального.' },
+  ],
+};
+
+function startGap() { show('gap'); pickGapLevel(); }
+function endGap() { show('student'); switchTab('practice'); }
+
+function pickGapLevel() {
+  document.getElementById('gap-level-select').style.display = '';
+  document.getElementById('gap-question').style.display = 'none';
+  document.getElementById('gap-results').style.display = 'none';
+  const levels = [
+    { code: 'A2', label: 'Elementary',         desc: 'Everyday collocations and set phrases' },
+    { code: 'B1', label: 'Intermediate',        desc: 'Common idioms and phrasal verbs' },
+    { code: 'B2', label: 'Upper Intermediate',  desc: 'Advanced collocations' },
+    { code: 'C1', label: 'Advanced',            desc: 'Formal expressions and nuanced usage' },
+    { code: 'C2', label: 'Proficient',          desc: 'Sophisticated idiomatic language' },
+  ];
+  document.getElementById('level-cards').innerHTML = levels.map(l =>
+    '<div class="level-card" onclick="startGapLevel(\'' + l.code + '\')">' +
+      '<div class="level-badge">' + l.code + '</div>' +
+      '<div><div class="level-label">' + l.label + '</div><div class="level-desc">' + l.desc + '</div></div>' +
+    '</div>'
+  ).join('');
+}
+
+function startGapLevel(level) {
+  gapLevel = level;
+  gapQuestions = [...GAP_BANK[level]].sort(() => Math.random() - 0.5);
+  gapIndex = 0; gapScore = 0;
+  document.getElementById('gap-level-select').style.display = 'none';
+  document.getElementById('gap-question').style.display = '';
+  document.getElementById('gap-results').style.display = 'none';
+  document.getElementById('gap-level-label').textContent = 'Fill the Gap — ' + level;
+  renderGapQ();
+}
+
+function renderGapQ() {
+  if (gapIndex >= gapQuestions.length) { showGapResults(); return; }
+  const q = gapQuestions[gapIndex];
+  document.getElementById('gap-sentence').innerHTML = esc(q.sentence).replace('_____', '<span class="gap-blank" id="gap-blank-span"></span>');
+  document.getElementById('gap-counter').textContent = (gapIndex + 1) + ' of ' + gapQuestions.length;
+  document.getElementById('gap-progress').style.width = (gapIndex / gapQuestions.length * 100) + '%';
+  document.getElementById('gap-feedback').innerHTML = '';
+  document.getElementById('gap-next-wrap').style.display = 'none';
+  gapAnswered = false;
+  const wrap = document.getElementById('gap-options');
+  wrap.innerHTML = '';
+  [...q.options].sort(() => Math.random() - 0.5).forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerGap(btn, opt === q.answer, q);
+    wrap.appendChild(btn);
+  });
+}
+
+function answerGap(btn, isCorrect, q) {
+  if (gapAnswered) return;
+  gapAnswered = true;
+  Array.from(document.getElementById('gap-options').children).forEach(b => {
+    b.disabled = true;
+    if (b.textContent === q.answer) b.classList.add('correct');
+  });
+  const blank = document.getElementById('gap-blank-span');
+  if (blank) { blank.textContent = q.answer; blank.style.borderColor = isCorrect ? 'var(--sage)' : 'var(--pink)'; blank.style.color = isCorrect ? 'var(--sage-dark)' : 'var(--pink-dark)'; }
+  const fb = document.getElementById('gap-feedback');
+  if (isCorrect) {
+    btn.classList.add('correct');
+    gapScore++;
+    const p = PRAISE_DATA[Math.floor(Math.random() * PRAISE_DATA.length)];
+    fb.innerHTML = '<div class="praise-box"><span class="praise-emoji">' + p.emoji + '</span><div class="praise-text">' + p.text + '</div></div><div class="explanation-box"><strong>Why ' + esc(q.answer) + '?</strong> ' + esc(q.explanation) + '</div>';
+    launchConfetti();
+  } else {
+    btn.classList.add('wrong');
+    fb.innerHTML = '<div class="oops-box"><div class="oops-title">The answer is <strong>' + esc(q.answer) + '</strong>.</div></div><div class="explanation-box"><strong>Why ' + esc(q.answer) + '?</strong> ' + esc(q.explanation) + '</div>';
+  }
+  document.getElementById('gap-next-wrap').style.display = '';
+}
+
+function gapNext() { gapIndex++; renderGapQ(); }
+
+function showGapResults() {
+  document.getElementById('gap-question').style.display = 'none';
+  document.getElementById('gap-results').style.display = '';
+  const pct = Math.round(gapScore / gapQuestions.length * 100);
+  document.getElementById('gap-score-num').textContent = gapScore;
+  document.getElementById('gap-score-of').textContent = 'of ' + gapQuestions.length;
+  document.getElementById('gap-score-pct').textContent = pct + '% correct';
+  document.getElementById('gap-result-emoji').textContent = pct === 100 ? '🏆' : pct >= 80 ? '🌟' : pct >= 60 ? '💚' : '💪';
+  if (pct === 100) launchConfetti();
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (s) {
+    if (!s.quizHistory) s.quizHistory = [];
+    s.quizHistory.push({ date: new Date().toISOString(), score: gapScore, total: gapQuestions.length, lesson: 'Gap Fill ' + gapLevel, type: 'gap' });
+    if (s.quizHistory.length > 20) s.quizHistory = s.quizHistory.slice(-20);
+    save(data);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// MODALS
+// ─────────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONFETTI
+// ─────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const cv = document.getElementById('confetti-canvas');
+  const ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const colors = ['#7a9e7e','#c9a0a5','#b5c9b5','#e8d5b7','#d4a5a5','#a8c5aa'];
+  const pieces = Array.from({length:55}, () => ({
+    x: Math.random() * cv.width, y: -12,
+    r: Math.random() * 6 + 3,
+    c: colors[Math.floor(Math.random()*colors.length)],
+    vx: (Math.random() - 0.5) * 3.5,
+    vy: Math.random() * 2.5 + 2,
+    rot: Math.random() * 360,
+    spin: (Math.random() - 0.5) * 6,
+    shape: Math.random() > 0.5 ? 'rect' : 'circle'
+  }));
+  let t = 0;
+  (function draw() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    pieces.forEach(p => {
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI/180);
+      ctx.fillStyle = p.c + 'dd';
+      if (p.shape === 'rect') ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r * 1.7);
+      else { ctx.beginPath(); ctx.arc(0, 0, p.r/2, 0, Math.PI*2); ctx.fill(); }
+      ctx.restore();
+      p.x += p.vx; p.y += p.vy; p.rot += p.spin; p.vy += 0.07;
+    });
+    if (++t < 90) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, cv.width, cv.height);
+  })();
+}
+
+// ─────────────────────────────────────────────────────────────
+// INIT — seed Rustam's words; top-up on return visits
+// ─────────────────────────────────────────────────────────────
+const RUSTAM_WORDS = [
+  { word: 'thorough',              ipa: '/ˈθʌrə/',              translation: 'тщательный',                     example: 'She did a thorough check of all the documents.' },
+  { word: 'subtle',               ipa: '/ˈsʌtl/',              translation: 'тонкий, едва заметный',          example: 'There was a subtle difference in her accent.' },
+  { word: 'eloquent',             ipa: '/ˈeləkwənt/',          translation: 'красноречивый',                  example: 'He gave an eloquent speech at the ceremony.' },
+  { word: 'resilient',            ipa: '/rɪˈzɪlɪənt/',         translation: 'устойчивый, гибкий',             example: 'She remained resilient despite all the challenges.' },
+  { word: 'narrow',       ipa: '/ˈn\xe6rəʊ/',             translation: 'узкий',                    example: 'The path through the forest was narrow and difficult to walk along.' },
+  { word: 'wide',         ipa: '/waɪd/',               translation: 'широкий',                  example: 'She has a wide range of interests, from music to science.' },
+  { word: 'surface',      ipa: '/ˈsɜːfɪs/',            translation: 'поверхность',              example: 'On the surface, everything seemed fine, but she was worried inside.' },
+  { word: 'self-esteem',  ipa: '/ˌself ɪˈstiːm/',       translation: 'самооценка',               example: 'Praise from a teacher can greatly boost a student\'s self-esteem.' },
+  { word: 'drawbacks',    ipa: '/ˈdrɔːb\xe6ks/',          translation: 'недостатки, минусы',       example: 'One of the drawbacks of living in a city is the noise.' },
+  { word: 'superficial',  ipa: '/ˌsuːpəˈfɪʃəl/',    translation: 'поверхностный',            example: 'Their friendship was superficial - they never talked about anything serious.' },
+  { word: 'prevent from', ipa: '/prɪˈvent frɒm/',      translation: 'мешать, не давать (делать что-либо)', example: 'His fear of failure prevented him from trying new things.' },
+  { word: 'heat',         ipa: '/hiːt/',               translation: 'жара, тепло',              example: 'The heat in the classroom made it hard to concentrate.' },
+  { word: 'straw',        ipa: '/strɔː/',              translation: 'соломинка',                example: 'That was the last straw - she finally decided to speak up.' },
+  { word: 'vanity',                ipa: '/ˈvænɪti/',            translation: 'тщеславие',                      example: 'His vanity made him check his appearance in every mirror he passed.' },
+  { word: 'the day before yesterday', ipa: '/ðə deɪ bɪˈfɔː ˈjestədeɪ/', translation: 'позавчера',              example: 'I saw him the day before yesterday at the coffee shop.' },
+  { word: 'the year before last',  ipa: '/ðə jɪə bɪˈfɔː lɑːst/', translation: 'позапрошлый год',            example: 'We visited Italy the year before last and it was wonderful.' },
+  { word: 'manage to do',         ipa: '/ˈmænɪdʒ tə duː/',     translation: 'суметь сделать, успевать',       example: 'She finally managed to finish the report before the deadline.' },
+  { word: 'pace of life',         ipa: '/peɪs əv laɪf/',       translation: 'темп жизни',                    example: 'The pace of life in the city can be exhausting.' },
+  { word: 'frantic',              ipa: '/ˈfræntɪk/',           translation: 'суматошный, безумный',           example: 'The last few weeks at work have been absolutely frantic.' },
+  { word: 'to deal with',         ipa: '/tə diːl wɪð/',        translation: 'справляться, иметь дело с',      example: 'She had to deal with several difficult clients on Monday.' },
+  { word: 'pear',                 ipa: '/peə/',                translation: 'груша',                          example: 'She added a ripe pear to her morning salad.' },
+  { word: 'to tick off',          ipa: '/tə tɪk ɒf/',          translation: 'отмечать галочкой; раздражать',  example: 'He ticked off each task as he completed it.' },
+  { word: 'tackle the problem',   ipa: '/ˈtækl ðə ˈprɒbləm/', translation: 'браться за проблему, решать её', example: 'It is important to tackle the problem early before it gets worse.' },
+  { word: 'leisure time',         ipa: '/ˈleʒə taɪm/',         translation: 'свободное время, досуг',         example: 'How do you spend your leisure time at weekends?' },
+  { word: 'keep in touch',        ipa: '/kiːp ɪn tʌtʃ/',       translation: 'оставаться на связи',            example: 'We promised to keep in touch after the course ended.' },
+  { word: 'get in touch',         ipa: '/ɡet ɪn tʌtʃ/',        translation: 'связаться (с кем-то)',            example: 'Please get in touch if you have any questions.' },
+  { word: 'rise and shine',      ipa: '/raɪz ənd ʃaɪn/',       translation: 'вставай и сияй (пора вставать)', example: 'Rise and shine! We\'ve got a big day ahead of us.',                          lesson: 'Body & Clothes' },
+  { word: 'achieve',             ipa: '/əˈtʃiːv/',             translation: 'достигать, добиваться',          example: 'She worked hard to achieve her fitness goals.',                             lesson: 'Body & Clothes' },
+  { word: 'just what the doctor ordered', ipa: '/dʒʌst wɒt ðə ˈdɒktər ˈɔːdəd/', translation: 'именно то, что нужно', example: 'A long walk in the fresh air — just what the doctor ordered.',         lesson: 'Body & Clothes' },
+  { word: 'awake',               ipa: '/əˈweɪk/',              translation: 'бодрствующий, не спящий',        example: 'She was barely awake when her alarm went off at six in the morning.',         lesson: 'Body & Clothes' },
+  { word: 'alert',               ipa: '/əˈlɜːt/',              translation: 'бдительный, собранный',          example: 'Coffee helps him stay alert during long morning meetings.',                   lesson: 'Body & Clothes' },
+  { word: 'as the day progresses', ipa: '/æz ðə deɪ prəˈɡresɪz/', translation: 'по мере того как день идёт', example: 'As the day progresses, her energy levels tend to drop.',                  lesson: 'Body & Clothes' },
+  { word: 'to perform',          ipa: '/tə pəˈfɔːm/',          translation: 'выполнять, функционировать',     example: 'Your brain performs much better when you have had a good night\'s sleep.',   lesson: 'Body & Clothes' },
+  { word: 'pleasure',            ipa: '/ˈpleʒə/',              translation: 'удовольствие',                   example: 'It is a real pleasure to wake up without an alarm at the weekend.',          lesson: 'Body & Clothes' },
+  { word: 'to have a nap',       ipa: '/tə hæv ə næp/',        translation: 'вздремнуть',                     example: 'He likes to have a nap after lunch to recharge before the afternoon.',       lesson: 'Body & Clothes' },
+  { word: 'certainly',           ipa: '/ˈsɜːtənli/',           translation: 'конечно, безусловно',            example: 'Getting enough sleep certainly improves your mood and focus.',                lesson: 'Body & Clothes' },
+  { word: 'hit the gym',         ipa: '/hɪt ðə dʒɪm/',         translation: 'идти в зал, тренироваться',      example: 'She hits the gym every morning before work — it sets her up for the day.',    lesson: 'Body & Clothes' },
+  { word: 'to warm up',          ipa: '/tə wɔːm ʌp/',          translation: 'разминаться',                    example: 'Always warm up for at least five minutes before any exercise.',               lesson: 'Body & Clothes' },
+  { word: 'lungs',               ipa: '/lʌŋz/',                translation: 'лёгкие',                         example: 'Running regularly strengthens your lungs and improves your breathing.',       lesson: 'Body & Clothes' },
+  { word: 'to provide sb with sth', ipa: '/tə prəˈvaɪd ˈsʌmwʌn wɪð/', translation: 'обеспечивать кого-то чем-то', example: 'A good breakfast provides your body with the energy it needs for the day.', lesson: 'Body & Clothes' },
+  { word: 'fancy',               ipa: '/ˈfænsi/',              translation: 'хотеть (разг.) — do you fancy?', example: 'Do you fancy a drink after the gym? There\'s a nice café nearby.',           lesson: 'Body & Clothes' },
+  { word: 'as the evening advances', ipa: '/æz ðə ˈiːvnɪŋ ədˈvɑːnsɪz/', translation: 'по мере того как наступает вечер', example: 'As the evening advances, your body naturally starts to slow down and prepare for sleep.', lesson: 'Body & Clothes' },
+  { word: 'to cloud your mind',  ipa: '/tə klaʊd jɔː maɪnd/', translation: 'затуманивать сознание',           example: 'Too much screen time before bed can cloud your mind and make it hard to sleep.', lesson: 'Body & Clothes' },
+  { word: 'break down fatty foods', ipa: '/breɪk daʊn ˈfæti fuːdz/', translation: 'расщеплять жирную пищу',  example: 'Your digestive system works overtime to break down fatty foods in the evening.',  lesson: 'Body & Clothes' },
+  { word: 'put on weight',       ipa: '/pʊt ɒn weɪt/',         translation: 'набирать вес',                   example: 'It is easy to put on weight if you stop exercising and eat late at night.',    lesson: 'Body & Clothes' },
+  { word: 'as bedtime approaches', ipa: '/æz ˈbedtaɪm əˈprəʊtʃɪz/', translation: 'по мере приближения времени сна', example: 'As bedtime approaches, try to avoid caffeine and bright screens.',    lesson: 'Body & Clothes' },
+];
+
+const ANASTASIA_WORDS = [
+  { word: 'superior',                ipa: '/suːˈpɪərɪə/',            translation: 'превосходящий, высший',              example: 'She felt superior to everyone else in the room.' },
+  { word: 'inferior',                ipa: '/ɪnˈfɪərɪə/',             translation: 'низший, уступающий',                 example: 'He made her feel inferior with his constant criticism.' },
+  { word: 'accomplish',              ipa: '/əˈkʌmplɪʃ/',             translation: 'достигать, выполнять',               example: 'She managed to accomplish all her goals by the end of the year.' },
+  { word: 'insecurity',              ipa: '/ˌɪnsɪˈkjʊərɪti/',        translation: 'неуверенность в себе',               example: 'His insecurity made it hard for him to accept compliments.' },
+  { word: 'attain',                  ipa: '/əˈteɪn/',                translation: 'достигать, добиваться',              example: 'It takes years of practice to attain fluency in a language.' },
+  { word: 'show off',                ipa: '/ʃəʊ ɒf/',                translation: 'хвастаться, выпендриваться',         example: 'He always shows off his new clothes at school.' },
+  { word: 'stunning',                ipa: '/ˈstʌnɪŋ/',               translation: 'потрясающий, ошеломительный',        example: 'The view from the top of the mountain was absolutely stunning.' },
+  { word: 'incredible',              ipa: '/ɪnˈkredɪbl/',            translation: 'невероятный, удивительный',          example: 'She gave an incredible performance on stage.' },
+  { word: 'entertainment',           ipa: '/ˌentəˈteɪnmənt/',        translation: 'развлечение',                        example: 'Social media has become the main source of entertainment for teenagers.' },
+  { word: 'spectacular',             ipa: '/spekˈtækjʊlə/',          translation: 'впечатляющий, зрелищный',            example: 'The fireworks display was truly spectacular.' },
+  { word: 'insult',                  ipa: '/ˈɪnsʌlt/',               translation: 'оскорбление (сущ.)',                 example: 'That comment was a real insult.' },
+  { word: 'insult someone',          ipa: '/ɪnˈsʌlt ˈsʌmwʌn/',       translation: 'оскорблять кого-то (гл.)',           example: 'He did not mean to insult her with his joke.' },
+  { word: 'to be accused of sth',    ipa: '/tə biː əˈkjuːzd əv/',    translation: 'быть обвинённым в чём-то',           example: 'He was accused of cheating on the exam.' },
+  { word: 'to be sentenced to',      ipa: '/tə biː ˈsentənst tə/',   translation: 'быть приговорённым к',               example: 'She was sentenced to two years in prison.' },
+  { word: 'jealous',                 ipa: '/ˈdʒeləs/',               translation: 'ревнивый; завидующий',               example: 'She felt jealous when her friend got the promotion she wanted.' },
+  { word: 'jealousy',                ipa: '/ˈdʒeləsi/',              translation: 'ревность, зависть',                  example: 'Jealousy can destroy even the strongest friendships.' },
+  { word: 'trial',                   ipa: '/ˈtraɪəl/',               translation: 'судебный процесс',                   example: 'The trial lasted three weeks before a verdict was reached.' },
+  { word: 'bless',                   ipa: '/bles/',                  translation: 'благословлять',                      example: 'She felt truly blessed to have such a supportive family.' },
+  { word: 'don\'t bother me',        ipa: '/dəʊnt ˈbɒðə miː/',       translation: 'не беспокой меня, не мешай мне',     example: 'I am trying to concentrate — please do not bother me.' },
+  { word: 'brief',                   ipa: '/briːf/',                 translation: 'краткий, короткий',                  example: 'Please keep your answer brief and to the point.' },
+  { word: 'down to earth',           ipa: '/ˌdaʊn tʊ ˈɜːθ/',         translation: 'простой в общении, без понтов',      example: 'Despite her fame, she remains down to earth and easy to talk to.' },
+  { word: 'grounded',                ipa: '/ˈɡraʊndɪd/',             translation: 'уравновешенный, со стержнем',        example: 'Meditation helps her stay grounded during stressful times.' },
+  { word: 'to sleep like a log',     ipa: '/tə sliːp laɪk ə lɒɡ/',   translation: 'спать без задних ног',               example: 'After the long flight, she slept like a log all night.' },
+  { word: 'self-centered',           ipa: '/ˌself ˈsentəd/',         translation: 'эгоцентричный',                      example: 'He is so self-centered that he never asks how others are feeling.' },
+  { word: 'lion\'s mane',            ipa: '/ˈlaɪənz meɪn/',          translation: 'грива льва',                         example: 'Her long curly hair looked just like a lion\'s mane.' },
+];
+
+const TROFIM_WORDS = [
+  // Personality & Emotions
+  { word: 'personality',              ipa: '/ˌpɜːsəˈnælɪti/',       translation: 'личность, характер',              example: 'She has such a warm personality — everyone loves spending time with her.',              lesson: 'Personality & Emotions' },
+  { word: 'calm',                     ipa: '/kɑːm/',                translation: 'спокойный',                       example: 'Try to stay calm during the interview — nerves are completely normal.',                  lesson: 'Personality & Emotions' },
+  { word: 'peace and quiet',          ipa: '/piːs ənd ˈkwaɪət/',    translation: 'покой и тишина',                  example: 'After a long week, all she wanted was some peace and quiet.',                            lesson: 'Personality & Emotions' },
+  { word: 'superstitious',            ipa: '/ˌsuːpəˈstɪʃəs/',       translation: 'суеверный',                       example: 'He is quite superstitious — he never walks under ladders.',                             lesson: 'Personality & Emotions' },
+  { word: 'pleased (with)',           ipa: '/pliːzd/',              translation: 'довольный',                       example: 'She was very pleased with her exam results.',                                           lesson: 'Personality & Emotions' },
+  { word: 'patient',                  ipa: '/ˈpeɪʃənt/',            translation: 'терпеливый',                      example: 'Good teachers need to be patient with all their students.',                             lesson: 'Personality & Emotions' },
+  { word: 'patience',                 ipa: '/ˈpeɪʃəns/',            translation: 'терпение',                        example: 'Learning a language requires a great deal of patience.',                                lesson: 'Personality & Emotions' },
+  { word: 'lonely',                   ipa: '/ˈləʊnli/',             translation: 'одинокий',                        example: 'Moving to a new city can feel lonely at first.',                                        lesson: 'Personality & Emotions' },
+  { word: 'loneliness',               ipa: '/ˈləʊnlinəs/',          translation: 'одиночество',                     example: 'Loneliness is one of the most common issues in modern society.',                        lesson: 'Personality & Emotions' },
+  { word: 'foreign',                  ipa: '/ˈfɒrən/',              translation: 'иностранный',                     example: 'She has always been fascinated by foreign cultures and languages.',                      lesson: 'Personality & Emotions' },
+  { word: 'authentic',                ipa: '/ɔːˈθentɪk/',           translation: 'настоящий, аутентичный',          example: 'The restaurant serves authentic Italian food — not the tourist version.',                  lesson: 'Personality & Emotions' },
+  { word: 'a demanding person',       ipa: '/ə dɪˈmɑːndɪŋ ˈpɜːsən/', translation: 'требовательный человек',       example: 'She is a demanding person, but she always gets the best results from her team.',           lesson: 'Personality & Emotions' },
+  { word: 'mood',                     ipa: '/muːd/',                translation: 'настроение',                      example: 'His mood changes quickly — he was happy in the morning and upset by lunchtime.',          lesson: 'Personality & Emotions' },
+  { word: 'anxiety',                  ipa: '/æŋˈzaɪəti/',           translation: 'тревожность',                     example: 'She experiences anxiety before every public speaking event.',                            lesson: 'Personality & Emotions' },
+  { word: 'stress',                   ipa: '/stres/',               translation: 'стресс',                          example: 'Too much stress at work can seriously affect your health.',                             lesson: 'Personality & Emotions' },
+  { word: 'grief',                    ipa: '/ɡriːf/',               translation: 'горе, скорбь',                    example: 'It takes time to work through grief after losing someone you love.',                     lesson: 'Personality & Emotions' },
+  { word: 'gloomy',                   ipa: '/ˈɡluːmi/',             translation: 'мрачный',                         example: 'He was in a gloomy mood all day and did not want to talk to anyone.',                    lesson: 'Personality & Emotions' },
+  { word: 'bored',                    ipa: '/bɔːd/',                translation: 'скучающий',                       example: 'The children got bored quickly and asked to go outside.',                               lesson: 'Personality & Emotions' },
+  { word: 'boring',                   ipa: '/ˈbɔːrɪŋ/',             translation: 'скучный',                         example: 'He found the lecture so boring that he nearly fell asleep.',                            lesson: 'Personality & Emotions' },
+  { word: 'drained',                  ipa: '/dreɪnd/',              translation: 'истощённый',                      example: 'After the meeting, she felt completely drained and needed a break.',                     lesson: 'Personality & Emotions' },
+  { word: 'enjoyment',                ipa: '/ɪnˈdʒɔɪmənt/',         translation: 'удовольствие',                    example: 'She gets a lot of enjoyment from reading novels in the evenings.',                      lesson: 'Personality & Emotions' },
+  { word: 'what a shame',             ipa: '/wɒt ə ʃeɪm/',          translation: 'какая жалость',                   example: 'What a shame you could not come to the party — it was wonderful!',                       lesson: 'Personality & Emotions' },
+  // Preposition Patterns
+  { word: 'to be addicted to sth',    ipa: '/tə biː əˈdɪktɪd tuː/', translation: 'быть зависимым от чего-либо',   example: 'He admits he is addicted to social media and checks his phone constantly.',             lesson: 'Preposition Patterns' },
+  { word: 'to be allergic to sth',    ipa: '/tə biː əˈlɜːdʒɪk tuː/', translation: 'иметь аллергию на что-либо', example: 'She is allergic to cats, so she cannot visit her friend\'s flat.',                      lesson: 'Preposition Patterns' },
+  { word: 'to be grateful for sth',   ipa: '/tə biː ˈɡreɪtfʊl fɔː/', translation: 'быть благодарным за что-либо', example: 'I am truly grateful for all the support you gave me during that difficult time.',    lesson: 'Preposition Patterns' },
+  { word: 'to be interested in sth',  ipa: '/tə biː ˈɪntrəstɪd ɪn/', translation: 'интересоваться чем-либо',   example: 'She has always been interested in the history of art.',                                  lesson: 'Preposition Patterns' },
+  { word: 'to be tired of sth',       ipa: '/tə biː ˈtaɪəd ɒv/',    translation: 'устать от чего-либо',            example: 'He is tired of doing the same routine every single day.',                               lesson: 'Preposition Patterns' },
+  { word: 'to be sick of sth',        ipa: '/tə biː sɪk ɒv/',        translation: 'быть сытым по горло чем-либо', example: 'I am sick of people complaining without doing anything to change things.',              lesson: 'Preposition Patterns' },
+  { word: 'to depend on sth',         ipa: '/tə dɪˈpend ɒn/',        translation: 'зависеть от чего-либо',         example: 'The success of the project depends on everyone working together.',                      lesson: 'Preposition Patterns' },
+  { word: 'to be similar to sth',     ipa: '/tə biː ˈsɪmɪlə tuː/',  translation: 'быть похожим на что-либо',      example: 'This new model is very similar to the one they released last year.',                    lesson: 'Preposition Patterns' },
+  { word: 'to succeed in sth',        ipa: '/tə səkˈsiːd ɪn/',       translation: 'преуспевать в чём-либо',        example: 'To succeed in business, you need both talent and persistence.',                         lesson: 'Preposition Patterns' },
+  { word: 'to participate in sth',    ipa: '/tə pɑːˈtɪsɪpeɪt ɪn/',  translation: 'участвовать в чём-либо',        example: 'All students are encouraged to participate in the school debate.',                      lesson: 'Preposition Patterns' },
+  { word: 'to take part in sth',      ipa: '/tə teɪk pɑːt ɪn/',     translation: 'принимать участие в чём-либо', example: 'She was proud to take part in the charity run last weekend.',                           lesson: 'Preposition Patterns' },
+  { word: 'to listen to sth',         ipa: '/tə ˈlɪsən tuː/',        translation: 'слушать что-либо',              example: 'He likes to listen to classical music while he works.',                                 lesson: 'Preposition Patterns' },
+  { word: 'to stick to sth',          ipa: '/tə stɪk tuː/',          translation: 'придерживаться чего-либо',      example: 'If you want to see results, you need to stick to your plan.',                           lesson: 'Preposition Patterns' },
+  { word: 'to put up with sb/sth',    ipa: '/tə pʊt ʌp wɪð/',       translation: 'мириться с кем-либо/чем-либо', example: 'I do not know how she puts up with all the noise from next door.',                      lesson: 'Preposition Patterns' },
+  { word: 'to come up with sth',      ipa: '/tə kʌm ʌp wɪð/',       translation: 'придумать что-либо',            example: 'Can you come up with a better solution to this problem?',                              lesson: 'Preposition Patterns' },
+  { word: 'to move away from people', ipa: '/tə muːv əˈweɪ frɒm/', translation: 'отдаляться от людей',           example: 'He started to move away from people when he was going through a difficult period.',       lesson: 'Preposition Patterns' },
+  { word: 'to divide sth into parts', ipa: '/tə dɪˈvaɪd ˈɪntə pɑːts/', translation: 'разделять что-либо на части', example: 'Divide the project into smaller parts to make it less overwhelming.',             lesson: 'Preposition Patterns' },
+  { word: 'to be on the verge of sth',ipa: '/tə biː ɒn ðə vɜːdʒ ɒv/', translation: 'быть на грани чего-либо',  example: 'After months of stress, she felt she was on the verge of a breakdown.',                  lesson: 'Preposition Patterns' },
+  { word: 'to get rid of sth',        ipa: '/tə ɡet rɪd ɒv/',       translation: 'избавляться от чего-либо',      example: 'She decided to get rid of all the clothes she had not worn in a year.',                  lesson: 'Preposition Patterns' },
+  { word: 'to waste sth on sth',      ipa: '/tə weɪst ɒn/',          translation: 'тратить что-либо на что-либо', example: 'Do not waste your energy on people who do not appreciate you.',                        lesson: 'Preposition Patterns' },
+  { word: "someone's need for sth",   ipa: '/niːd fɔː/',             translation: 'потребность в чём-либо',        example: "A child's need for love and attention is just as important as food and shelter.",       lesson: 'Preposition Patterns' },
+  { word: 'to have influence on sb/sth', ipa: '/tə hæv ˈɪnfluəns ɒn/', translation: 'оказывать влияние на кого-либо/что-либо', example: 'Good teachers have a lasting influence on the people they teach.', lesson: 'Preposition Patterns' },
+  // Lifestyle & Habits
+  { word: 'routine',                  ipa: '/ruːˈtiːn/',             translation: 'рутина',                        example: 'Having a regular morning routine helps her start the day feeling organised.',            lesson: 'Lifestyle & Habits' },
+  { word: 'in moderation',            ipa: '/ɪn ˌmɒdəˈreɪʃən/',     translation: 'в меру',                        example: 'Most things are fine to enjoy in moderation — it is excess that causes problems.',      lesson: 'Lifestyle & Habits' },
+  { word: 'junk food',                ipa: '/dʒʌŋk fuːd/',           translation: 'вредная еда',                   example: 'He used to eat a lot of junk food until he started cooking at home more often.',        lesson: 'Lifestyle & Habits' },
+  { word: 'junkie',                   ipa: '/ˈdʒʌŋki/',              translation: 'зависимый человек',             example: 'She laughed and called herself a total coffee junkie — she cannot start the day without it.', lesson: 'Lifestyle & Habits' },
+  { word: 'to recharge',              ipa: '/tə riːˈtʃɑːdʒ/',        translation: 'восстановить силы',             example: 'She spends weekends in the countryside to recharge before another busy week.',           lesson: 'Lifestyle & Habits' },
+  // Verbs & Actions
+  { word: 'to notice',                ipa: '/tə ˈnəʊtɪs/',           translation: 'замечать',                      example: 'I noticed a small mistake in the report that no one else had spotted.',                  lesson: 'Verbs & Actions' },
+  { word: 'to gather together',       ipa: '/tə ˈɡæðə təˈɡeðə/',    translation: 'собираться вместе',             example: 'The whole family gathers together at Christmas every year.',                             lesson: 'Verbs & Actions' },
+  { word: 'to disrupt',               ipa: '/tə dɪsˈrʌpt/',          translation: 'нарушать, разрушать',           example: 'The loud noise outside began to disrupt the lesson.',                                   lesson: 'Verbs & Actions' },
+  { word: 'to avoid sth',             ipa: '/tə əˈvɔɪd/',            translation: 'избегать чего-либо',            example: 'She tries to avoid checking her phone during dinner.',                                  lesson: 'Verbs & Actions' },
+  { word: 'to put off sth',           ipa: '/tə pʊt ɒf/',            translation: 'откладывать что-либо',          example: 'He kept putting off the difficult conversation, hoping the problem would go away.',      lesson: 'Verbs & Actions' },
+  { word: 'to recall sth',            ipa: '/tə rɪˈkɔːl/',           translation: 'вспоминать что-либо',           example: 'I cannot recall where I first met her — it was so many years ago.',                      lesson: 'Verbs & Actions' },
+  { word: 'to clarify sth',           ipa: '/tə ˈklærɪfaɪ/',         translation: 'прояснять что-либо',            example: 'Could you clarify what you mean by that? I want to make sure I understand.',            lesson: 'Verbs & Actions' },
+  { word: 'to make up your mind',     ipa: '/tə meɪk ʌp jɔː maɪnd/', translation: 'принять решение',             example: 'Take your time — there is no rush to make up your mind today.',                          lesson: 'Verbs & Actions' },
+  { word: 'to take action',           ipa: '/tə teɪk ˈækʃən/',       translation: 'действовать',                   example: 'The government needs to take action on this issue before it gets worse.',                lesson: 'Verbs & Actions' },
+  { word: 'to stick with sth/sb',     ipa: '/tə stɪk wɪð/',          translation: 'оставаться верным, не бросать', example: 'Stick with your decision — you thought it through carefully.',                          lesson: 'Verbs & Actions' },
+  { word: 'to question sth',          ipa: '/tə ˈkwestʃən/',          translation: 'подвергать что-либо сомнению', example: 'It is healthy to question things rather than simply accepting everything you hear.',    lesson: 'Verbs & Actions' },
+  { word: 'to doubt myself',          ipa: '/tə daʊt maɪˈself/',     translation: 'сомневаться в себе',            example: 'She started to doubt herself after the critical feedback from her manager.',             lesson: 'Verbs & Actions' },
+  { word: 'to turn out to be',        ipa: '/tə tɜːn aʊt tə biː/',   translation: 'оказаться',                     example: 'The film turned out to be much better than we expected.',                               lesson: 'Verbs & Actions' },
+  { word: 'to take a pill',           ipa: '/tə teɪk ə pɪl/',        translation: 'принять таблетку',              example: 'She takes a vitamin pill every morning with her breakfast.',                            lesson: 'Verbs & Actions' },
+  { word: 'to carry out sth',         ipa: '/tə ˈkæri aʊt/',         translation: 'выполнять, осуществлять',       example: 'The engineers will carry out a full inspection of the building next week.',              lesson: 'Verbs & Actions' },
+  { word: 'to carry out research',    ipa: '/tə ˈkæri aʊt rɪˈsɜːtʃ/', translation: 'проводить исследование',     example: 'The team spent two years carrying out research into the effects of sleep deprivation.',   lesson: 'Verbs & Actions' },
+  { word: 'to remove sth',            ipa: '/tə rɪˈmuːv/',           translation: 'удалять что-либо',              example: 'Please remove your shoes before entering the house.',                                   lesson: 'Verbs & Actions' },
+  // Achievement & Growth
+  { word: 'developed',                ipa: '/dɪˈveləpt/',            translation: 'развитый',                      example: 'She has a well-developed sense of humour and can always make people laugh.',            lesson: 'Achievement & Growth' },
+  { word: 'feasible',                 ipa: '/ˈfiːzəbəl/',            translation: 'осуществимый',                  example: 'The plan sounds ambitious, but is it actually feasible within the budget?',             lesson: 'Achievement & Growth' },
+  { word: 'to work hard',             ipa: '/tə wɜːk hɑːd/',         translation: 'усердно работать',              example: 'She worked hard for years before finally getting the promotion she deserved.',           lesson: 'Achievement & Growth' },
+  { word: 'to do my best',            ipa: '/tə duː maɪ best/',       translation: 'делать всё возможное',          example: 'I will do my best to finish it by Friday, but I cannot make any promises.',             lesson: 'Achievement & Growth' },
+  { word: 'validation',               ipa: '/ˌvælɪˈdeɪʃən/',         translation: 'одобрение, подтверждение',      example: 'She was looking for external validation, but real confidence comes from within.',        lesson: 'Achievement & Growth' },
+  { word: 'certificate',              ipa: '/səˈtɪfɪkət/',           translation: 'сертификат',                    example: 'He received a certificate of completion after finishing the online course.',             lesson: 'Achievement & Growth' },
+  { word: 'approved',                 ipa: '/əˈpruːvd/',             translation: 'одобренный',                    example: 'The budget was finally approved by the board of directors.',                           lesson: 'Achievement & Growth' },
+  { word: 'to thrive',                ipa: '/tə θraɪv/',             translation: 'процветать, успешно развиваться', example: 'Children thrive when they feel safe, loved, and supported.',                       lesson: 'Achievement & Growth' },
+  { word: 'to develop',               ipa: '/tə dɪˈveləp/',          translation: 'развивать(ся)',                  example: 'Reading regularly helps you develop a richer vocabulary over time.',                   lesson: 'Achievement & Growth' },
+  // Communication
+  { word: 'host',                     ipa: '/həʊst/',                translation: 'ведущий, хозяин мероприятия',   example: 'She was an excellent host — she made sure every guest felt welcome.',                    lesson: 'Communication' },
+  { word: 'verbal',                   ipa: '/ˈvɜːbəl/',              translation: 'словесный',                     example: 'She has strong verbal communication skills and expresses herself very clearly.',        lesson: 'Communication' },
+  { word: 'verbally',                 ipa: '/ˈvɜːbəli/',             translation: 'устно',                         example: 'The agreement was made verbally, so there is no written record of it.',                lesson: 'Communication' },
+  { word: 'to see the difference',    ipa: '/tə siː ðə ˈdɪfrəns/',   translation: 'видеть разницу между А и Б',   example: 'Can you see the difference between these two sentences in terms of tone?',              lesson: 'Communication' },
+  { word: 'it makes sense',           ipa: '/ɪt meɪks sens/',        translation: 'в этом есть смысл',             example: 'It makes sense to prepare before the meeting rather than go in unprepared.',            lesson: 'Communication' },
+  { word: 'it may seem',              ipa: '/ɪt meɪ siːm/',          translation: 'может показаться',              example: 'It may seem difficult at first, but it becomes easier with practice.',                  lesson: 'Communication' },
+  { word: "I'm not sure",             ipa: '/aɪm nɒt ʃʊə/',          translation: 'я не уверен',                   example: "I'm not sure what the right answer is — I need some time to think.",                   lesson: 'Communication' },
+  { word: 'why bother',               ipa: '/waɪ ˈbɒðə/',            translation: 'какой смысл заморачиваться',    example: 'Why bother trying to explain if he never listens anyway?',                             lesson: 'Communication' },
+  // Cause & Effect
+  { word: 'influence',                ipa: '/ˈɪnfluəns/',            translation: 'влияние',                       example: 'Music has a powerful influence on our mood and emotions.',                             lesson: 'Cause & Effect' },
+  { word: 'to influence sb/sth',      ipa: '/tə ˈɪnfluəns/',         translation: 'влиять на кого-либо/что-либо', example: 'Her mentor influenced her greatly during the early years of her career.',               lesson: 'Cause & Effect' },
+  { word: 'to cause sth',             ipa: '/tə kɔːz/',              translation: 'вызывать что-либо',             example: 'Lack of sleep can cause serious problems with concentration and memory.',              lesson: 'Cause & Effect' },
+  { word: 'there is a high chance',   ipa: '/ðeər ɪz ə haɪ tʃɑːns/', translation: 'есть высокая вероятность',    example: 'There is a high chance of rain tomorrow, so bring an umbrella.',                         lesson: 'Cause & Effect' },
+  // Relationships
+  { word: 'nearest and dearest',      ipa: '/ˈnɪərɪst ənd ˈdɪərɪst/', translation: 'самые близкие люди',         example: 'She only wanted her nearest and dearest around her on her birthday.',                    lesson: 'Relationships' },
+  { word: 'loved ones',               ipa: '/lʌvd wʌnz/',            translation: 'близкие, родные люди',          example: 'It is important to spend quality time with your loved ones.',                           lesson: 'Relationships' },
+  { word: 'close friends',            ipa: '/kləʊs frendz/',         translation: 'близкие друзья',                example: 'She only has a few close friends, but those friendships are very deep.',                lesson: 'Relationships' },
+  // Describing the World
+  { word: 'widespread',               ipa: '/ˈwaɪdspred/',           translation: 'широко распространённый',       example: 'The use of smartphones is now widespread across all age groups.',                       lesson: 'Describing the World' },
+  { word: 'rare',                     ipa: '/reə/',                  translation: 'редкий',                        example: 'It is rare to find someone who is both highly intelligent and emotionally wise.',       lesson: 'Describing the World' },
+  { word: 'mild',                     ipa: '/maɪld/',                translation: 'мягкий, умеренный',             example: 'She prefers mild flavours — nothing too spicy or overpowering.',                       lesson: 'Describing the World' },
+  { word: 'mild climate',             ipa: '/maɪld ˈklaɪmɪt/',       translation: 'мягкий климат',                 example: 'The south of England has a surprisingly mild climate compared to the north.',           lesson: 'Describing the World' },
+  { word: 'suitable',                 ipa: '/ˈsuːtəbəl/',            translation: 'подходящий',                    example: 'This book is suitable for intermediate learners of English.',                           lesson: 'Describing the World' },
+  { word: 'indirectly',               ipa: '/ˌɪndɪˈrektli/',         translation: 'косвенно',                      example: 'The new policy will indirectly affect thousands of small businesses.',                  lesson: 'Describing the World' },
+  { word: 'confusion',                ipa: '/kənˈfjuːʒən/',          translation: 'путаница',                      example: 'There was a lot of confusion about the new timetable changes.',                        lesson: 'Describing the World' },
+  { word: 'diversity',                ipa: '/daɪˈvɜːsɪti/',          translation: 'разнообразие',                  example: 'The city is celebrated for its cultural diversity and rich history.',                   lesson: 'Describing the World' },
+  { word: 'contraction',              ipa: '/kənˈtrækʃən/',          translation: 'сокращение (слова; мышцы)',      example: '"It\'s" is a contraction of "it is" — very common in spoken English.',                  lesson: 'Describing the World' },
+  { word: 'incomprehensible',         ipa: '/ɪnˌkɒmprɪˈhensɪbəl/',   translation: 'непонятный',                   example: 'His handwriting was so bad it was almost incomprehensible.',                            lesson: 'Describing the World' },
+  { word: 'overall',                  ipa: '/ˌəʊvərˈɔːl/',           translation: 'в целом',                       example: 'Overall, I think the course was very well structured and useful.',                      lesson: 'Describing the World' },
+  { word: 'in general',               ipa: '/ɪn ˈdʒenərəl/',         translation: 'в целом',                       example: 'In general, people respond better to praise than to criticism.',                        lesson: 'Describing the World' },
+  { word: 'so-called',                ipa: '/ˌsəʊˈkɔːld/',           translation: 'так называемый',                example: 'The so-called experts turned out to know very little about the subject.',                lesson: 'Describing the World' },
+  // General Vocabulary
+  { word: 'riot',                     ipa: '/ˈraɪət/',               translation: 'бунт, беспорядки',              example: 'The controversial decision sparked a riot in the city centre.',                         lesson: 'General Vocabulary' },
+  { word: 'fur',                      ipa: '/fɜː/',                  translation: 'мех',                           example: 'She refuses to wear real fur and only buys faux alternatives.',                        lesson: 'General Vocabulary' },
+  { word: 'broth',                    ipa: '/brɒθ/',                 translation: 'бульон',                        example: 'She made a simple chicken broth to help her recover from the cold.',                   lesson: 'General Vocabulary' },
+  { word: 'society',                  ipa: '/səˈsaɪəti/',            translation: 'общество',                      example: 'Education plays a vital role in the development of a healthy society.',                lesson: 'General Vocabulary' },
+  { word: 'supplement',               ipa: '/ˈsʌplɪmənt/',           translation: 'добавка',                       example: 'He takes a vitamin D supplement every day as he does not get much sunlight.',           lesson: 'General Vocabulary' },
+  { word: 'garlic',                   ipa: '/ˈɡɑːlɪk/',              translation: 'чеснок',                        example: 'She adds fresh garlic to almost every dish she cooks.',                                 lesson: 'General Vocabulary' },
+  { word: "I don't like ... at all",  ipa: '/aɪ dəʊnt laɪk ət ɔːl/', translation: 'я это вообще не люблю',       example: 'I don\'t like spicy food at all — it is just too much for me.',                         lesson: 'General Vocabulary' },
+  { word: 'except for',               ipa: '/ɪkˈsept fɔː/',          translation: 'кроме',                         example: 'She enjoyed everything about the trip except for the long flight.',                     lesson: 'General Vocabulary' },
+  { word: 'to brush up',              ipa: '/tə brʌʃ ʌp/',           translation: 'освежить знания',               example: 'Before the job interview, she brushed up on her presentation skills.',                  lesson: 'General Vocabulary' },
+  { word: 'inconvenient',             ipa: '/ˌɪnkənˈviːniənt/',      translation: 'неудобный',                     example: 'The meeting time was inconvenient for most of the team, so it was rescheduled.',       lesson: 'General Vocabulary' },
+  { word: 'to include',               ipa: '/tə ɪnˈkluːd/',          translation: 'включать',                      example: 'The price includes breakfast, but not dinner.',                                         lesson: 'General Vocabulary' },
+  { word: 'an injury',                ipa: '/ən ˈɪndʒəri/',          translation: 'травма',                        example: 'She suffered a knee injury during training and had to rest for six weeks.',             lesson: 'General Vocabulary' },
+  { word: 'anniversary',              ipa: '/ˌænɪˈvɜːsəri/',         translation: 'годовщина',                     example: 'They celebrated their tenth wedding anniversary with a trip to Paris.',                  lesson: 'General Vocabulary' },
+  { word: 'to verify',                ipa: '/tə ˈverɪfaɪ/',          translation: 'проверять, подтверждать',       example: 'Please verify your email address by clicking the link we sent you.',                    lesson: 'General Vocabulary' },
+];
+
+(function seedDemo() {
+  const data = db();
+
+  // ── Rustam ──
+  let rustam = data.students.find(s => s.name === 'Rustam');
+  if (!rustam) {
+    rustam = { id: uid(), name: 'Rustam', words: [], quizHistory: [] };
+    data.students.unshift(rustam);
+  }
+  if (!rustam.quizHistory) rustam.quizHistory = [];
+  const rustamExisting = new Set(rustam.words.map(w => w.word.toLowerCase()));
+  RUSTAM_WORDS.forEach(w => {
+    if (!rustamExisting.has(w.word.toLowerCase())) {
+      rustam.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
+    }
+  });
+
+  // ── Trofim ──
+  let trofim = data.students.find(s => s.name === 'Trofim');
+  if (!trofim) {
+    trofim = { id: uid(), name: 'Trofim', words: [], quizHistory: [] };
+    data.students.push(trofim);
+  }
+  if (!trofim.quizHistory) trofim.quizHistory = [];
+  const trofimExisting = new Set(trofim.words.map(w => w.word.toLowerCase()));
+  TROFIM_WORDS.forEach(w => {
+    if (!trofimExisting.has(w.word.toLowerCase())) {
+      trofim.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
+    }
+  });
+
+  // ── Anastasia ──
+  let anastasia = data.students.find(s => s.name === 'Anastasia');
+  if (!anastasia) {
+    anastasia = { id: uid(), name: 'Anastasia', words: [], quizHistory: [] };
+    data.students.push(anastasia);
+  }
+  if (!anastasia.quizHistory) anastasia.quizHistory = [];
+  const anastasiaExisting = new Set(anastasia.words.map(w => w.word.toLowerCase()));
+  ANASTASIA_WORDS.forEach(w => {
+    if (!anastasiaExisting.has(w.word.toLowerCase())) {
+      anastasia.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: '', by: 'teacher' });
+    }
+  });
+
+  save(data);
+})();
+renderHome();
+</script>
+</body>
+</html>
