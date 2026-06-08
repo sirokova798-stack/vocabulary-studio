@@ -1197,7 +1197,6 @@ function renderTeacher() {
   data.students.forEach(s => {
     const el = document.createElement('div');
     el.className = 't-student-card';
-    const words3 = s.words.slice(-3).reverse();
     const hist = s.quizHistory || [];
     const recent = hist.slice(-5).reverse();
     const lastDate = hist.length ? new Date(hist[hist.length - 1].date) : null;
@@ -1216,6 +1215,10 @@ function renderTeacher() {
       histHtml = '<div class="quiz-hist"><div class="quiz-last" style="color:var(--muted);">Has not taken a quiz yet.</div></div>';
     }
 
+    const allWords = [...s.words].reverse();
+    const searchId = 'search-' + s.id;
+    const listId = 'wordlist-' + s.id;
+
     el.innerHTML =
       '<div class="t-student-head">' +
         '<div style="display:flex;align-items:center;gap:12px;">' +
@@ -1224,17 +1227,32 @@ function renderTeacher() {
         '</div>' +
         '<button class="btn btn-danger btn-sm" onclick="removeStudent(\'' + s.id + '\')">Remove</button>' +
       '</div>' +
-      words3.map(w =>
-        '<div class="t-word-row">' +
-          '<div><div class="word-en">' + esc(w.word) + '</div>' +
-          (w.ipa ? '<div style="font-size:0.72rem;color:var(--muted);font-style:italic;">' + esc(w.ipa) + '</div>' : '') +
-          '<div class="word-ru" style="margin-top:2px;">🇷🇺 ' + esc(w.translation) + '</div></div>' +
-          '<button class="word-delete" style="position:static;" onclick="teacherDeleteWord(\'' + s.id + '\',\'' + w.id + '\')">✕</button>' +
-        '</div>'
-      ).join('') +
-      (s.words.length > 3 ? '<div style="font-size:0.75rem;color:var(--muted);margin-top:10px;padding-top:8px;border-top:1px solid var(--border-light);">+ ' + (s.words.length - 3) + ' more word' + (s.words.length - 3 !== 1 ? 's' : '') + '</div>' : '') +
+      '<div style="margin-bottom:10px;">' +
+        '<input type="text" id="' + searchId + '" placeholder="Search words…" style="font-size:0.82rem;padding:9px 13px;" oninput="filterTeacherWords(\'' + s.id + '\')">' +
+      '</div>' +
+      '<div id="' + listId + '">' +
+        allWords.map(w =>
+          '<div class="t-word-row" data-word="' + esc(w.word.toLowerCase()) + '" data-sid="' + s.id + '">' +
+            '<div style="flex:1;">' +
+              (w.lesson ? '<div style="font-size:0.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">' + esc(w.lesson) + '</div>' : '') +
+              '<div class="word-en">' + esc(w.word) + '</div>' +
+              (w.ipa ? '<div style="font-size:0.72rem;color:var(--muted);font-style:italic;">' + esc(w.ipa) + '</div>' : '') +
+              '<div class="word-ru" style="margin-top:2px;">🇷🇺 ' + esc(w.translation) + '</div>' +
+            '</div>' +
+            '<button class="word-delete" style="position:static;flex-shrink:0;" onclick="teacherDeleteWord(\'' + s.id + '\',\'' + w.id + '\')">✕</button>' +
+          '</div>'
+        ).join('') +
+      '</div>' +
       histHtml;
     list.appendChild(el);
+  });
+}
+
+function filterTeacherWords(sid) {
+  const query = document.getElementById('search-' + sid).value.toLowerCase();
+  const rows = document.querySelectorAll('#wordlist-' + sid + ' .t-word-row');
+  rows.forEach(row => {
+    row.style.display = !query || row.dataset.word.includes(query) ? '' : 'none';
   });
 }
 
