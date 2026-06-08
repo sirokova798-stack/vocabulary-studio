@@ -1067,14 +1067,103 @@ function startQuiz() {
   renderQ();
 }
 
+// ── Part-of-speech detection (based on word form) ──
+function detectPOS(word) {
+  const w = (word || '').toLowerCase().trim();
+  if (w.startsWith('to ') || w.startsWith('to be ') || w.startsWith('to have ')) return 'verb';
+  if (/ly$/.test(w) && w.length > 4 && !['only','early','holy','likely','lonely','lovely','lively','elderly','friendly','deadly','ugly','wobbly','bubbly','orderly'].includes(w)) return 'adverb';
+  if (/(?:tion|sion|ness|ment|ity|ance|ence|ship|hood|ism|ist)$/.test(w) && !w.includes(' ')) return 'noun';
+  if (/(?:ful|less|ous|ive|al|ic|able|ible|ish|ent|ant)$/.test(w) && !w.includes(' ')) return 'adjective';
+  if (w.split(' ').length >= 3) return 'phrase';
+  return 'general';
+}
+
+// ── Built-in distractor pool (Russian translations by POS) ──
+const DISTRACTOR_POOL = {
+  adverb: [
+    'обычно','постепенно','внезапно','вероятно','особенно',
+    'регулярно','действительно','очевидно','возможно','полностью',
+    'серьёзно','тщательно','глубоко','точно','абсолютно',
+    'искренне','буквально','активно','постоянно','естественно',
+    'неожиданно','намеренно','примерно','осторожно','невольно'
+  ],
+  verb: [
+    'справляться с трудностями','достигать целей','избегать ошибок',
+    'принимать решение','развивать навыки','улучшать ситуацию',
+    'понимать смысл','объяснять детали','выражать мнение',
+    'поддерживать связь','придумать идею','откладывать дела',
+    'вспоминать детали','прояснять ситуацию','нарушать правила',
+    'замечать разницу','восстановить силы','предоставлять информацию',
+    'преодолевать трудности','разминаться','набирать вес','вздремнуть'
+  ],
+  noun: [
+    'решение','возможность','проблема','результат','цель',
+    'опыт','знание','способность','ситуация','отношение',
+    'развитие','изменение','влияние','уверенность','напряжение',
+    'привычка','потребность','зависимость','обязательство',
+    'достижение','образование','внимание','сознание','равновесие',
+    'тревожность','скорбь','одиночество','тщеславие','самооценка'
+  ],
+  adjective: [
+    'важный','сложный','интересный','полезный','необходимый',
+    'неожиданный','удивительный','тщательный','поверхностный',
+    'требовательный','подходящий','редкий','мягкий','устойчивый',
+    'красноречивый','подлинный','тонкий','суеверный','мрачный',
+    'истощённый','бодрствующий','собранный','широко распространённый'
+  ],
+  phrase: [
+    'в меру','в целом','на самом деле','в конце концов',
+    'иметь в виду','принять во внимание','иметь значение',
+    'оказывать влияние','оставаться на связи','выходить из себя',
+    'терять из виду','справляться со стрессом','как правило',
+    'сыграть роль','идти в ногу со временем',
+    'по мере того как день идёт','по мере приближения вечера'
+  ],
+  general: [
+    'темп жизни','покой и тишина','близкие друзья','мягкий климат',
+    'рутина','разнообразие','путаница','бульон','лёгкие','мех',
+    'травма','годовщина','общество','усердно работать','вздремнуть',
+    'идти в зал','вставай и сияй','именно то, что нужно'
+  ]
+};
+
 function renderQ() {
   if (qIndex >= qWords.length) { showResults(); return; }
   const data = db();
   const s = data.students.find(x => x.id === currentStudent);
   const correct = qWords[qIndex];
-  const pool = s.words.filter(w => w.id !== correct.id);
-  const others = pool.sort(() => Math.random() - 0.5).slice(0, 3);
-  const opts = [correct, ...others].sort(() => Math.random() - 0.5);
+
+  // ── Smart distractors: same part-of-speech first ──
+  const pos = detectPOS(correct.word);
+  const correctTrans = correct.translation.toLowerCase();
+
+  const samePOS = s.words
+    .filter(w => w.id !== correct.id && detectPOS(w.word) === pos)
+    .sort(() => Math.random() - 0.5)
+    .map(w => w.translation);
+
+  const poolList = (DISTRACTOR_POOL[pos] || DISTRACTOR_POOL.general)
+    .filter(t => t.toLowerCase() !== correctTrans)
+    .sort(() => Math.random() - 0.5);
+
+  const otherPOS = s.words
+    .filter(w => w.id !== correct.id && detectPOS(w.word) !== pos)
+    .sort(() => Math.random() - 0.5)
+    .map(w => w.translation);
+
+  // Merge without duplicates; fill 3 wrong slots: same-POS → pool → fallback
+  const seen = new Set([correctTrans]);
+  const wrongTranslations = [];
+  for (const t of [...samePOS, ...poolList, ...otherPOS]) {
+    if (wrongTranslations.length >= 3) break;
+    if (!seen.has(t.toLowerCase())) { seen.add(t.toLowerCase()); wrongTranslations.push(t); }
+  }
+
+  // Build option objects (correct word object + plain-text distractors)
+  const opts = [
+    { translation: correct.translation, _isCorrect: true },
+    ...wrongTranslations.map(t => ({ translation: t, _isCorrect: false }))
+  ].sort(() => Math.random() - 0.5);
 
   document.getElementById('quiz-word').textContent = correct.word;
   const ipaEl = document.getElementById('quiz-ipa');
@@ -1092,7 +1181,7 @@ function renderQ() {
     const btn = document.createElement('button');
     btn.className = 'quiz-opt';
     btn.textContent = opt.translation;
-    btn.onclick = () => answerQ(btn, opt.id === correct.id, correct);
+    btn.onclick = () => answerQ(btn, opt._isCorrect, correct);
     wrap.appendChild(btn);
   });
 }
