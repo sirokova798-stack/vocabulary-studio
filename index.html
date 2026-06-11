@@ -2648,7 +2648,7 @@ const TROFIM_WORDS = [
   const anastasiaExisting = new Set(anastasia.words.map(w => w.word.toLowerCase()));
   ANASTASIA_WORDS.forEach(w => {
     if (!anastasiaExisting.has(w.word.toLowerCase())) {
-      anastasia.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: '', by: 'teacher' });
+      anastasia.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
     }
   });
 
