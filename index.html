@@ -392,6 +392,26 @@
   .office-clip-header { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
   .office-clip-subhead { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
 
+  /* ── PIN pad ── */
+  .pin-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid var(--sage); background: transparent;
+    transition: background .15s;
+  }
+  .pin-dot.filled { background: var(--sage); }
+  .pin-dot.error  { border-color: #c0392b; background: #c0392b; }
+  .pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .pin-btn {
+    background: var(--cream); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 16px; font-size: 1.3rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 600; color: var(--ink);
+    cursor: pointer; transition: background .12s, transform .1s;
+  }
+  .pin-btn:hover  { background: var(--sage); color: #fff; border-color: var(--sage); }
+  .pin-btn:active { transform: scale(.93); }
+  .pin-btn-ghost  { background: transparent; color: var(--muted); font-size: 1rem; }
+  .pin-btn-ghost:hover { background: var(--cream); color: var(--ink); }
+
   /* ── Dialogue mode ── */
   .dlg-list { display: flex; flex-direction: column; gap: 14px; padding: 8px 0; }
   .dlg-card {
@@ -500,12 +520,37 @@
 <!-- ── SCREEN: HOME ── -->
 <div class="screen active" id="screen-home">
   <div class="page-title">Hello! 👋</div>
-  <div class="page-sub">Choose your profile to start practising.</div>
-  <div id="student-list"></div>
+  <div class="page-sub">Enter your PIN to start practising.</div>
+
+  <!-- PIN pad -->
+  <div class="card" style="max-width:320px;margin:0 auto 20px;">
+    <div id="pin-dots" style="display:flex;justify-content:center;gap:14px;margin-bottom:22px;">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-grid">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn pin-btn-ghost" onclick="pinClear()">⌫</button>
+      <button class="pin-btn" onclick="pinPress('0')">0</button>
+      <button class="pin-btn pin-btn-ghost" onclick="pinReset()">✕</button>
+    </div>
+    <div id="pin-error" style="text-align:center;color:#c0392b;font-size:.85rem;margin-top:12px;min-height:20px;"></div>
+  </div>
+
   <div id="add-self-wrap" style="margin-top:8px;">
     <div id="add-self-closed" style="text-align:center; padding:12px 0;">
       <button class="btn btn-ghost btn-full" style="border-style:dashed;" onclick="toggleAddSelf(true)">
-        + I'm not on the list — add me
+        + New here? Add yourself
       </button>
     </div>
     <div id="add-self-open" class="card" style="display:none;">
@@ -946,23 +991,53 @@ function endPractice() {
 // ─────────────────────────────────────────────────────────────
 // HOME
 // ─────────────────────────────────────────────────────────────
-function renderHome() {
+// ── PIN logic ──
+let pinBuffer = '';
+
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === 4) setTimeout(pinSubmit, 120);
+}
+
+function pinClear() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  updatePinDots();
+  document.getElementById('pin-error').textContent = '';
+}
+
+function pinReset() {
+  pinBuffer = '';
+  updatePinDots();
+  document.getElementById('pin-error').textContent = '';
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const d = document.getElementById('pd' + i);
+    d.classList.toggle('filled', i < pinBuffer.length);
+    d.classList.remove('error');
+  }
+}
+
+function pinSubmit() {
   const data = db();
-  const list = document.getElementById('student-list');
-  list.innerHTML = '';
-  data.students.forEach(s => {
-    const el = document.createElement('div');
-    el.className = 'student-card';
-    el.onclick = () => openStudent(s.id);
-    el.innerHTML =
-      '<div class="avatar">' + s.name[0].toUpperCase() + '</div>' +
-      '<div class="student-info">' +
-        '<div class="student-name">' + s.name + '</div>' +
-        '<div class="student-meta">' + s.words.length + ' word' + (s.words.length !== 1 ? 's' : '') + ' collected</div>' +
-      '</div>' +
-      '<div class="chevron">›</div>';
-    list.appendChild(el);
-  });
+  const match = data.students.find(s => s.pin === pinBuffer);
+  if (match) {
+    document.getElementById('pin-error').textContent = '';
+    pinBuffer = '';
+    updatePinDots();
+    openStudent(match.id);
+  } else {
+    for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.add('error');
+    document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
+    setTimeout(() => { pinBuffer = ''; updatePinDots(); document.getElementById('pin-error').textContent = ''; }, 900);
+  }
+}
+
+function renderHome() {
+  // PIN pad is static HTML — nothing to render dynamically
 }
 
 function toggleAddSelf(open) {
@@ -1412,6 +1487,7 @@ function renderTeacher() {
     const searchId = 'search-' + s.id;
     const listId = 'wordlist-' + s.id;
 
+    const pinId = 'pin-' + s.id;
     el.innerHTML =
       '<div class="t-student-head">' +
         '<div style="display:flex;align-items:center;gap:12px;">' +
@@ -1419,6 +1495,15 @@ function renderTeacher() {
           '<div><div class="student-name">' + esc(s.name) + '</div><div class="student-meta">' + s.words.length + ' word' + (s.words.length !== 1 ? 's' : '') + '</div></div>' +
         '</div>' +
         '<button class="btn btn-danger btn-sm" onclick="removeStudent(\'' + s.id + '\')">Remove</button>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 13px;background:var(--cream);border-radius:10px;">' +
+        '<span style="font-size:.83rem;color:var(--muted);white-space:nowrap;">🔑 PIN:</span>' +
+        '<input type="text" id="' + pinId + '" maxlength="4" placeholder="e.g. 1234" value="' + esc(s.pin || '') + '" ' +
+          'style="width:80px;font-size:.95rem;letter-spacing:.2em;font-weight:700;text-align:center;padding:7px 10px;" ' +
+          'oninput="this.value=this.value.replace(/[^0-9]/g,\'\')" ' +
+          'onkeydown="if(event.key===\'Enter\')savePin(\'' + s.id + '\')">' +
+        '<button class="btn btn-sm" style="padding:7px 14px;" onclick="savePin(\'' + s.id + '\')">Save</button>' +
+        '<span id="pin-saved-' + s.id + '" style="font-size:.8rem;color:var(--sage);display:none;">✓ Saved</span>' +
       '</div>' +
       '<div style="margin-bottom:10px;">' +
         '<input type="text" id="' + searchId + '" placeholder="Search words…" style="font-size:0.82rem;padding:9px 13px;" oninput="filterTeacherWords(\'' + s.id + '\')">' +
@@ -1447,6 +1532,23 @@ function filterTeacherWords(sid) {
   rows.forEach(row => {
     row.style.display = !query || row.dataset.word.includes(query) ? '' : 'none';
   });
+}
+
+function savePin(sid) {
+  const inp = document.getElementById('pin-' + sid);
+  const pin = inp.value.trim();
+  if (pin.length !== 4) { inp.focus(); return; }
+  const data = db();
+  const s = data.students.find(x => x.id === sid);
+  if (!s) return;
+  // Check for duplicate PIN
+  const conflict = data.students.find(x => x.id !== sid && x.pin === pin);
+  if (conflict) { inp.style.borderColor = 'var(--pink)'; setTimeout(() => inp.style.borderColor = '', 1200); alert('That PIN is already used by ' + conflict.name + '. Choose a different one.'); return; }
+  s.pin = pin;
+  save(data);
+  const saved = document.getElementById('pin-saved-' + sid);
+  saved.style.display = '';
+  setTimeout(() => saved.style.display = 'none', 1500);
 }
 
 function timeAgo(date) {
