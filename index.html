@@ -392,6 +392,24 @@
   .office-clip-header { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
   .office-clip-subhead { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
 
+  /* ── In Context mode ── */
+  .ctx-sentence-card { font-size: 1.05rem; line-height: 1.75; font-family: 'DM Serif Display', serif; }
+  .ctx-blank { display: inline-block; min-width: 72px; border-bottom: 2.5px solid var(--sage); background: var(--cream); border-radius: 4px; margin: 0 2px; color: transparent; vertical-align: middle; height: 1.1em; }
+  .ctx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ctx-opt {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 13px 10px; font-size: .86rem; font-family: 'DM Sans', sans-serif;
+    color: var(--ink); cursor: pointer; text-align: center; line-height: 1.35;
+    transition: border-color .14s, background .14s;
+  }
+  .ctx-opt:hover  { border-color: var(--sage); background: var(--cream); }
+  .ctx-opt.correct { background: #eaf7ea; border-color: #6abf69; color: #2d7a2d; font-weight: 600; }
+  .ctx-opt.wrong   { background: #fdf0f0; border-color: #e07070; color: #b03030; }
+  .ctx-opt:disabled { cursor: default; }
+  .ctx-fb { padding: 12px 14px; border-radius: 12px; background: var(--cream); border: 1px solid var(--border); }
+  .ctx-fb-sentence { font-style: italic; color: var(--ink); font-size: .9rem; line-height: 1.55; margin-bottom: 5px; }
+  .ctx-fb-ru { font-size: .83rem; color: var(--sage); font-weight: 500; }
+
   /* ── PIN pad ── */
   .pin-dot {
     width: 14px; height: 14px; border-radius: 50%;
@@ -634,6 +652,11 @@
           <div class="mode-name">Quiz</div>
           <div class="mode-desc">Multiple choice — test your memory</div>
         </div>
+        <div class="mode-card" onclick="startContext()" style="grid-column:1/-1;">
+          <span class="mode-icon">🔍</span>
+          <div class="mode-name">In Context</div>
+          <div class="mode-desc">Your words · hidden in real sentences · pick the right one</div>
+        </div>
       </div>
     </div>
   </div>
@@ -775,6 +798,24 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- ── SCREEN: IN CONTEXT ── -->
+<div class="screen" id="screen-context">
+  <button class="back-btn" onclick="endContext()">← Back to practice</button>
+  <div id="ctx-main">
+    <div class="progress-wrap" style="margin-bottom:4px;">
+      <div class="progress-bar"><div class="progress-fill" id="ctx-progress" style="width:0%"></div></div>
+    </div>
+    <div style="text-align:right;font-size:.8rem;color:var(--muted);margin-bottom:18px;" id="ctx-counter"></div>
+    <div class="card ctx-sentence-card" id="ctx-sentence" style="margin-bottom:16px;"></div>
+    <div id="ctx-feedback" style="margin-bottom:14px;"></div>
+    <div id="ctx-options" class="ctx-grid"></div>
+    <div id="ctx-next-wrap" style="display:none;margin-top:18px;">
+      <button class="btn btn-primary btn-full" onclick="ctxNext()">Next →</button>
+    </div>
+  </div>
+  <div id="ctx-results" style="display:none;text-align:center;padding-top:30px;"></div>
 </div>
 
 <!-- ── SCREEN: DIALOGUE PRACTICE ── -->
@@ -1246,6 +1287,133 @@ function startQuiz() {
   renderQ();
 }
 
+// ─────────────────────────────────────────────────────────────
+// IN CONTEXT MODE
+// ─────────────────────────────────────────────────────────────
+let ctxQuestions = [], ctxIndex = 0, ctxScore = 0, ctxAnswered = false;
+
+function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function getBlankTarget(word) {
+  return word
+    .replace(/^to /, '')
+    .replace(/\b(somebody|someone|sb|something|sth)\b.*/i, '')
+    .replace(/\bone's\b/g, '')
+    .trim();
+}
+
+function makeBlankSentence(word, sentence) {
+  const targets = [
+    getBlankTarget(word),
+    word.replace(/^to /, '').split(' ')[0]
+  ].filter((t, i, a) => t.length > 1 && a.indexOf(t) === i);
+  for (const t of targets) {
+    const result = sentence.replace(new RegExp(escRe(t), 'gi'), '_____');
+    if (result !== sentence) return result;
+  }
+  return null;
+}
+
+function buildContextQuestions(studentWords) {
+  const usable = studentWords.filter(w => w.example && w.word);
+  const questions = [];
+  usable.forEach(w => {
+    const blanked = makeBlankSentence(w.word, w.example);
+    if (!blanked) return;
+    const pos = detectPOS(w.word);
+    const same = usable.filter(x => x.id !== w.id && detectPOS(x.word) === pos).sort(() => Math.random() - 0.5);
+    const other = usable.filter(x => x.id !== w.id && detectPOS(x.word) !== pos).sort(() => Math.random() - 0.5);
+    const distractors = [...same, ...other]
+      .filter((x, i, a) => a.findIndex(y => y.id === x.id) === i)
+      .slice(0, 3);
+    if (distractors.length < 3) return;
+    questions.push({
+      word: w,
+      sentence: blanked,
+      options: [w, ...distractors].sort(() => Math.random() - 0.5),
+      correctId: w.id
+    });
+  });
+  return questions.sort(() => Math.random() - 0.5).slice(0, 20);
+}
+
+function shortLabel(word) {
+  return word.length > 28 ? word.slice(0, 26) + '…' : word;
+}
+
+function startContext() {
+  const data = db();
+  const s = data.students.find(x => x.id === currentStudent);
+  if (!s || s.words.length < 4) return;
+  ctxQuestions = buildContextQuestions(s.words);
+  if (ctxQuestions.length < 2) {
+    alert('Not enough words with example sentences yet.'); return;
+  }
+  ctxIndex = 0; ctxScore = 0; ctxAnswered = false;
+  document.getElementById('ctx-main').style.display = '';
+  document.getElementById('ctx-results').style.display = 'none';
+  show('context');
+  renderCtxQ();
+}
+
+function renderCtxQ() {
+  if (ctxIndex >= ctxQuestions.length) { showCtxResults(); return; }
+  const q = ctxQuestions[ctxIndex];
+  ctxAnswered = false;
+  document.getElementById('ctx-progress').style.width = (ctxIndex / ctxQuestions.length * 100) + '%';
+  document.getElementById('ctx-counter').textContent = (ctxIndex + 1) + ' of ' + ctxQuestions.length;
+  document.getElementById('ctx-sentence').innerHTML =
+    q.sentence.replace(/_____/g, '<span class="ctx-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+  document.getElementById('ctx-feedback').innerHTML = '';
+  document.getElementById('ctx-next-wrap').style.display = 'none';
+  const wrap = document.getElementById('ctx-options');
+  wrap.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'ctx-opt';
+    btn.textContent = shortLabel(opt.word);
+    btn.title = opt.word;
+    btn.onclick = () => answerCtx(btn, opt.id === q.correctId, q);
+    wrap.appendChild(btn);
+  });
+}
+
+function answerCtx(btn, isCorrect, q) {
+  if (ctxAnswered) return;
+  ctxAnswered = true;
+  if (isCorrect) ctxScore++;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  document.querySelectorAll('.ctx-opt').forEach(b => {
+    b.disabled = true;
+    if (b.title === q.word.word) b.classList.add('correct');
+  });
+  document.getElementById('ctx-feedback').innerHTML =
+    '<div class="ctx-fb">' +
+      '<div class="ctx-fb-sentence">' + q.word.example + '</div>' +
+      '<div class="ctx-fb-ru">🇷🇺 ' + q.word.translation + '</div>' +
+    '</div>';
+  document.getElementById('ctx-next-wrap').style.display = '';
+}
+
+function ctxNext() { ctxIndex++; renderCtxQ(); }
+
+function showCtxResults() {
+  document.getElementById('ctx-main').style.display = 'none';
+  const pct = Math.round(ctxScore / ctxQuestions.length * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
+  const res = document.getElementById('ctx-results');
+  res.style.display = '';
+  res.innerHTML =
+    '<div style="font-size:3rem;margin-bottom:10px;">' + emoji + '</div>' +
+    '<div style="font-family:\'DM Serif Display\',serif;font-size:2.2rem;">' + ctxScore + '/' + ctxQuestions.length + '</div>' +
+    '<div style="color:var(--muted);font-size:.9rem;margin-bottom:28px;">' + pct + '% correct</div>' +
+    '<button class="btn btn-primary btn-full" onclick="startContext()">Try again</button>' +
+    '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endContext()">← Back to practice</button>';
+}
+
+function endContext() { show('student'); switchTab('practice'); }
+
+// ─────────────────────────────────────────────────────────────
 // ── Part-of-speech detection (based on word form) ──
 function detectPOS(word) {
   const w = (word || '').toLowerCase().trim();
