@@ -3177,7 +3177,7 @@ const TROFIM_WORDS = [
     data.students.unshift(rustam);
   }
   if (!rustam.quizHistory) rustam.quizHistory = [];
-  if (!rustam.pin) rustam.pin = '1234';
+  rustam.pin = '1234';
   const rustamExisting = new Set(rustam.words.map(w => w.word.toLowerCase()));
   RUSTAM_WORDS.forEach(w => {
     if (!rustamExisting.has(w.word.toLowerCase())) {
@@ -3192,7 +3192,7 @@ const TROFIM_WORDS = [
     data.students.push(trofim);
   }
   if (!trofim.quizHistory) trofim.quizHistory = [];
-  if (!trofim.pin) trofim.pin = '4321';
+  trofim.pin = '6789';
   const trofimExisting = new Set(trofim.words.map(w => w.word.toLowerCase()));
   TROFIM_WORDS.forEach(w => {
     if (!trofimExisting.has(w.word.toLowerCase())) {
@@ -3207,7 +3207,7 @@ const TROFIM_WORDS = [
     data.students.push(anastasia);
   }
   if (!anastasia.quizHistory) anastasia.quizHistory = [];
-  if (!anastasia.pin) anastasia.pin = '6789';
+  anastasia.pin = '4321';
   const anastasiaExisting = new Set(anastasia.words.map(w => w.word.toLowerCase()));
   ANASTASIA_WORDS.forEach(w => {
     if (!anastasiaExisting.has(w.word.toLowerCase())) {
