@@ -1882,9 +1882,32 @@ const PHRASAL_VERBS = [
 
 const ALL_PHR_VERBS = [...new Set(PHRASAL_VERBS.map(p => p.verb))];
 const ALL_PHR_PARTICLES = [...new Set(PHRASAL_VERBS.map(p => p.particle))];
-// Every real verb+particle combination in the dataset — used to make sure
-// the only valid pairing shown on screen is the intended one (no ambiguity).
-const PHR_COMBO_SET = new Set(PHRASAL_VERBS.map(p => p.verb + ' ' + p.particle));
+
+// Groups of phrasal verbs that mean (almost) the same thing. If one is the
+// answer, its synonyms must NOT appear as a buildable combination on screen,
+// otherwise two answers would be correct. Includes a few real combos that
+// aren't quiz items (e.g. "get into", "fill out") because they're still valid.
+const PHR_SYNONYMS = [
+  ['find out','figure out','work out','sort out','make out'],
+  ['give up','give in'],
+  ['get in','get into'],
+  ['carry on','go on'],
+  ['turn up','show up'],
+  ['set off','set out'],
+  ['throw away','throw out'],
+  ['fill in','fill out']
+];
+// Map each phrasal verb to the set of its synonyms (excluding itself).
+const PHR_SYN_MAP = {};
+PHR_SYNONYMS.forEach(group => {
+  group.forEach(pv => {
+    PHR_SYN_MAP[pv] = PHR_SYN_MAP[pv] || new Set();
+    group.forEach(other => { if (other !== pv) PHR_SYN_MAP[pv].add(other); });
+  });
+});
+function phrSynonymsOf(correct) {
+  return PHR_SYN_MAP[correct.verb + ' ' + correct.particle] || new Set();
+}
 
 let phrQuestions = [], phrIndex = 0, phrScore = 0;
 let phrSelVerb = null, phrSelParticle = null, phrAnswered = false;
@@ -1894,28 +1917,30 @@ function shuffle(arr) { return arr.slice().sort(() => Math.random() - 0.5); }
 // Build one question with distractors that can NEVER form another real
 // phrasal verb with the correct half (so "both correct" can't happen).
 function buildPhrQuestion(correct) {
-  // Verbs that do NOT form a real PV with the correct particle.
+  const syn = phrSynonymsOf(correct);
+  // A distractor verb is unsafe if (verb + correct particle) is a synonym
+  // of the answer (e.g. "figure" when "find out" is correct).
   let verbPool = ALL_PHR_VERBS.filter(v =>
-    v !== correct.verb && !PHR_COMBO_SET.has(v + ' ' + correct.particle));
-  // Particles that do NOT form a real PV with the correct verb.
+    v !== correct.verb && !syn.has(v + ' ' + correct.particle));
+  // A distractor particle is unsafe if (correct verb + particle) is a synonym
+  // of the answer (e.g. "into" when "get in" is correct).
   let partPool = ALL_PHR_PARTICLES.filter(p =>
-    p !== correct.particle && !PHR_COMBO_SET.has(correct.verb + ' ' + p));
+    p !== correct.particle && !syn.has(correct.verb + ' ' + p));
 
-  // Try to also avoid any distractor verb+particle pair being a real PV.
+  // Also avoid two distractors together forming a synonym of the answer.
   for (let attempt = 0; attempt < 40; attempt++) {
     const verbs = shuffle(verbPool).slice(0, 3);
     const parts = shuffle(partPool).slice(0, 3);
     if (verbs.length < 3 || parts.length < 3) break;
     let conflict = false;
     for (const v of verbs) for (const p of parts) {
-      if (PHR_COMBO_SET.has(v + ' ' + p)) conflict = true;
+      if (syn.has(v + ' ' + p)) conflict = true;
     }
     if (!conflict) {
       return { correct, verbs: shuffle([correct.verb, ...verbs]),
                particles: shuffle([correct.particle, ...parts]) };
     }
   }
-  // Fallback (rare): still guarantees no pairing with the correct half.
   return { correct,
     verbs: shuffle([correct.verb, ...shuffle(verbPool).slice(0, 3)]),
     particles: shuffle([correct.particle, ...shuffle(partPool).slice(0, 3)]) };
