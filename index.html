@@ -466,6 +466,32 @@
   .phr-fb .phr-fb-pv { font-weight: 600; }
   .phr-fb .phr-fb-ex { color: var(--text-2); font-style: italic; margin-top: 5px; font-size: .86rem; }
 
+  /* ── Word Formation mode ── */
+  .wf-card { padding: 24px 26px; }
+  .wf-sentence { font-size: 1.08rem; line-height: 1.7; color: var(--text); font-family: 'DM Serif Display', Georgia, serif; }
+  .wf-blank { display: inline-block; min-width: 84px; border-bottom: 2.5px solid var(--sage); margin: 0 3px; vertical-align: bottom; height: 1.1em; }
+  .wf-base-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .wf-base-label { font-size: .8rem; color: var(--muted); }
+  .wf-base {
+    font-family: 'DM Sans', sans-serif; font-weight: 600; letter-spacing: .12em;
+    font-size: 1rem; color: var(--sage-dark); background: var(--sage-light);
+    padding: 5px 14px; border-radius: 8px; text-transform: uppercase;
+  }
+  .wf-input-row { display: flex; gap: 8px; margin-top: 16px; }
+  .wf-input {
+    flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    background: #fff; color: var(--text); outline: none; transition: border-color .15s;
+  }
+  .wf-input:focus { border-color: var(--sage); }
+  .wf-input.is-correct { border-color: #6abf69; background: #f2fbf2; }
+  .wf-input.is-wrong   { border-color: #e07070; background: #fff6f6; }
+  .wf-fb { padding: 13px 16px; border-radius: 12px; font-size: .95rem; line-height: 1.55; }
+  .wf-fb.ok  { background: #eaf7ea; color: #2d7a2d; border: 1px solid #b5e0b5; }
+  .wf-fb.bad { background: #fdf0f0; color: #b03030; border: 1px solid #f0c0c0; }
+  .wf-fb .wf-fb-ans { font-weight: 600; }
+  .wf-fb .wf-fb-full { color: var(--text-2); font-style: italic; margin-top: 5px; font-size: .88rem; }
+
   /* ── PIN pad ── */
   .pin-dot {
     width: 13px; height: 13px; border-radius: 50%;
@@ -696,6 +722,11 @@
         <span class="mode-icon">🔗</span>
         <div class="mode-name">Phrasal Verbs</div>
         <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
+      </div>
+      <div class="mode-card" onclick="startWordForm()" style="grid-column:1/-1;">
+        <span class="mode-icon">🔤</span>
+        <div class="mode-name">Word Formation</div>
+        <div class="mode-desc">Use of English · change the word in capitals to fit the sentence</div>
       </div>
     </div>
 
@@ -929,6 +960,35 @@
 
   <!-- Results -->
   <div id="phr-results" style="display:none;text-align:center;padding-top:30px;"></div>
+</div>
+
+<!-- ── SCREEN: WORD FORMATION ── -->
+<div class="screen" id="screen-wordform">
+  <button class="back-btn" onclick="endWordForm()">← Back to practice</button>
+  <div id="wf-main">
+    <div class="progress-wrap" style="margin-bottom:4px;">
+      <div class="progress-bar"><div class="progress-fill" id="wf-progress" style="width:0%"></div></div>
+    </div>
+    <div style="text-align:right;font-size:.8rem;color:var(--muted);margin-bottom:18px;" id="wf-counter"></div>
+
+    <div class="card wf-card">
+      <div class="wf-sentence" id="wf-sentence"></div>
+      <div class="wf-base-row">
+        <span class="wf-base-label">Use this word:</span>
+        <span class="wf-base" id="wf-base"></span>
+      </div>
+      <div class="wf-input-row">
+        <input type="text" id="wf-input" class="wf-input" placeholder="Type the word…" autocomplete="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault(); wfAnswered ? wfNext() : wfCheck();}">
+        <button class="btn btn-primary" id="wf-check-btn" onclick="wfCheck()">Check</button>
+      </div>
+    </div>
+
+    <div id="wf-feedback" style="margin-top:14px;"></div>
+    <div id="wf-next-wrap" style="display:none;margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="wfNext()">Next →</button>
+    </div>
+  </div>
+  <div id="wf-results" style="display:none;text-align:center;padding-top:30px;"></div>
 </div>
 
 <!-- ── SCREEN: DIALOGUE PRACTICE ── -->
@@ -2046,6 +2106,131 @@ function showPhrResults() {
 }
 
 function endPhrasal() { show('student'); switchTab('practice'); }
+
+// ─────────────────────────────────────────────────────────────
+// WORD FORMATION  (Use of English — transform the word in capitals)
+// Gap marker in each sentence is "@".
+// ─────────────────────────────────────────────────────────────
+const WORD_FORM = [
+  { s:'Her @ to detail makes her an excellent editor.',          base:'ATTEND',    answer:'attention' },
+  { s:'The new manager brought a lot of @ to the team.',         base:'MOTIVATE',  answer:'motivation' },
+  { s:'It was a totally @ decision that surprised everyone.',    base:'EXPECT',    answer:'unexpected' },
+  { s:'He spoke with great @ about his plans.',                  base:'CONFIDENT', answer:'confidence' },
+  { s:'The instructions were really @ and hard to follow.',      base:'CONFUSE',   answer:'confusing' },
+  { s:'She felt a deep sense of @ after the marathon.',          base:'ACHIEVE',   answer:'achievement' },
+  { s:'They live in a beautiful @ area near the Alps.',          base:'MOUNTAIN',  answer:'mountainous' },
+  { s:'The horror film was absolutely @.',                       base:'TERROR',    answer:'terrifying' },
+  { s:'We need to improve the @ of our service.',                base:'EFFICIENT', answer:'efficiency' },
+  { s:'His @ to help others is admirable.',                      base:'WILLING',   answer:'willingness' },
+  { s:'There has been a significant @ in sales this year.',      base:'GROW',      answer:'growth' },
+  { s:'She gave a very @ performance on stage.',                 base:'IMPRESS',   answer:'impressive' },
+  { s:'He was praised for his @ throughout the trial.',          base:'HONEST',    answer:'honesty' },
+  { s:'The @ of the new policy was a great success.',            base:'INTRODUCE', answer:'introduction' },
+  { s:'I find his behaviour completely @.',                      base:'ACCEPT',    answer:'unacceptable' },
+  { s:'The children were extremely @ during the trip.',          base:'NOISE',     answer:'noisy' },
+  { s:'Her speech was both clear and @.',                        base:'PERSUADE',  answer:'persuasive' },
+  { s:'He apologised for his @ at the meeting.',                 base:'RUDE',      answer:'rudeness' },
+  { s:'The scientist made an important @.',                      base:'DISCOVER',  answer:'discovery' },
+  { s:'This medicine is highly @ against colds.',                base:'EFFECT',    answer:'effective' },
+  { s:'The town is famous for its @ buildings.',                 base:'HISTORY',   answer:'historical' },
+  { s:'Their @ to the cause was truly inspiring.',               base:'DEVOTE',    answer:'devotion' },
+  { s:'She is well known for her @ and kindness.',               base:'GENEROUS',  answer:'generosity' },
+  { s:'The @ weather ruined our picnic plans.',                  base:'RAIN',      answer:'rainy' },
+  { s:'He made a @ recovery after the operation.',               base:'WONDER',    answer:'wonderful' },
+  { s:'The company is looking for @ employees.',                 base:'CREATE',    answer:'creative' },
+  { s:'There was a complete lack of @ in the office.',           base:'COMMUNICATE', answer:'communication' },
+  { s:'Your support has been extremely @ to us.',                base:'VALUE',     answer:'valuable' },
+  { s:'She handled the crisis with great @.',                    base:'PATIENT',   answer:'patience' },
+  { s:'The @ of the city has grown rapidly.',                    base:'POPULATE',  answer:'population' },
+  { s:'His @ remarks offended several people.',                  base:'OFFEND',    answer:'offensive' },
+  { s:'We were impressed by the @ of the hotel staff.',          base:'FRIEND',    answer:'friendliness' },
+  { s:'The @ of the instructions made the task easy.',           base:'SIMPLE',    answer:'simplicity' },
+  { s:'The team showed great @ throughout the match.',           base:'DETERMINE', answer:'determination' },
+  { s:'It is @ to park your car here.',                          base:'LEGAL',     answer:'illegal' },
+  { s:'He seemed completely @ of the danger.',                   base:'AWARE',     answer:'unaware' },
+  { s:'Several of her answers were @.',                          base:'CORRECT',   answer:'incorrect' },
+  { s:'They were very @ with the poor service.',                 base:'SATISFY',   answer:'dissatisfied' },
+  { s:'The map was @, so we got completely lost.',               base:'USE',       answer:'useless' },
+  { s:'The film was based on a @ story about real events.',      base:'TRUE',      answer:'true' },
+  { s:'He is one of the most @ players on the team.',            base:'SUCCESS',   answer:'successful' },
+  { s:'The @ between the two sisters is very close.',            base:'RELATION',  answer:'relationship', alts:['relations'] },
+  { s:'A good night’s sleep will improve your @.',               base:'CONCENTRATE', answer:'concentration' },
+  { s:'The weather here is so @ that you never know what to wear.', base:'PREDICT', answer:'unpredictable' },
+  { s:'Her @ as a leader is widely respected.',                  base:'STRONG',    answer:'strength' }
+];
+
+let wfQuestions = [], wfIndex = 0, wfScore = 0, wfAnswered = false;
+
+function wfNorm(s) {
+  return (s || '').toLowerCase().trim().replace(/[.,!?;:'"’]/g, '');
+}
+
+function startWordForm() {
+  wfQuestions = shuffle(WORD_FORM).slice(0, 12);
+  wfIndex = 0; wfScore = 0;
+  document.getElementById('wf-main').style.display = '';
+  document.getElementById('wf-results').style.display = 'none';
+  show('wordform');
+  renderWfQ();
+}
+
+function renderWfQ() {
+  if (wfIndex >= wfQuestions.length) { showWfResults(); return; }
+  const q = wfQuestions[wfIndex];
+  wfAnswered = false;
+  document.getElementById('wf-progress').style.width = (wfIndex / wfQuestions.length * 100) + '%';
+  document.getElementById('wf-counter').textContent = (wfIndex + 1) + ' of ' + wfQuestions.length;
+  document.getElementById('wf-sentence').innerHTML =
+    esc(q.s).replace('@', '<span class="wf-blank"></span>');
+  document.getElementById('wf-base').textContent = q.base;
+  document.getElementById('wf-feedback').innerHTML = '';
+  document.getElementById('wf-next-wrap').style.display = 'none';
+  const inp = document.getElementById('wf-input');
+  inp.value = ''; inp.readOnly = false;
+  inp.className = 'wf-input';
+  document.getElementById('wf-check-btn').disabled = false;
+  setTimeout(() => inp.focus(), 60);
+}
+
+function wfCheck() {
+  if (wfAnswered) return;
+  const q = wfQuestions[wfIndex];
+  const inp = document.getElementById('wf-input');
+  const typed = inp.value.trim();
+  if (!typed) { inp.focus(); return; }
+  wfAnswered = true;
+  const accepted = [q.answer, ...(q.alts || [])].map(wfNorm);
+  const ok = accepted.includes(wfNorm(typed));
+  if (ok) wfScore++;
+  inp.readOnly = true;
+  inp.classList.add(ok ? 'is-correct' : 'is-wrong');
+  document.getElementById('wf-check-btn').disabled = true;
+  const fullSentence = q.s.replace('@', q.answer);
+  document.getElementById('wf-feedback').innerHTML =
+    '<div class="wf-fb ' + (ok ? 'ok' : 'bad') + '">' +
+      (ok ? '✅ Correct!' : '❌ Answer: <span class="wf-fb-ans">' + esc(q.answer) + '</span>') +
+      '<div class="wf-fb-full">' + esc(fullSentence) + '</div>' +
+    '</div>';
+  document.getElementById('wf-next-wrap').style.display = '';
+}
+
+function wfNext() { wfIndex++; renderWfQ(); }
+
+function showWfResults() {
+  document.getElementById('wf-main').style.display = 'none';
+  const pct = Math.round(wfScore / wfQuestions.length * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
+  const res = document.getElementById('wf-results');
+  res.style.display = '';
+  res.innerHTML =
+    '<div style="font-size:3rem;margin-bottom:10px;">' + emoji + '</div>' +
+    '<div style="font-family:\'DM Serif Display\',serif;font-size:2.2rem;">' + wfScore + '/' + wfQuestions.length + '</div>' +
+    '<div style="color:var(--muted);font-size:.9rem;margin-bottom:28px;">' + pct + '% correct</div>' +
+    '<button class="btn btn-primary btn-full" onclick="startWordForm()">Try again</button>' +
+    '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endWordForm()">← Back to practice</button>';
+}
+
+function endWordForm() { show('student'); switchTab('practice'); }
 
 // ─────────────────────────────────────────────────────────────
 // ── Part-of-speech detection (based on word form) ──
