@@ -1882,11 +1882,44 @@ const PHRASAL_VERBS = [
 
 const ALL_PHR_VERBS = [...new Set(PHRASAL_VERBS.map(p => p.verb))];
 const ALL_PHR_PARTICLES = [...new Set(PHRASAL_VERBS.map(p => p.particle))];
+// Every real verb+particle combination in the dataset — used to make sure
+// the only valid pairing shown on screen is the intended one (no ambiguity).
+const PHR_COMBO_SET = new Set(PHRASAL_VERBS.map(p => p.verb + ' ' + p.particle));
 
 let phrQuestions = [], phrIndex = 0, phrScore = 0;
 let phrSelVerb = null, phrSelParticle = null, phrAnswered = false;
 
 function shuffle(arr) { return arr.slice().sort(() => Math.random() - 0.5); }
+
+// Build one question with distractors that can NEVER form another real
+// phrasal verb with the correct half (so "both correct" can't happen).
+function buildPhrQuestion(correct) {
+  // Verbs that do NOT form a real PV with the correct particle.
+  let verbPool = ALL_PHR_VERBS.filter(v =>
+    v !== correct.verb && !PHR_COMBO_SET.has(v + ' ' + correct.particle));
+  // Particles that do NOT form a real PV with the correct verb.
+  let partPool = ALL_PHR_PARTICLES.filter(p =>
+    p !== correct.particle && !PHR_COMBO_SET.has(correct.verb + ' ' + p));
+
+  // Try to also avoid any distractor verb+particle pair being a real PV.
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const verbs = shuffle(verbPool).slice(0, 3);
+    const parts = shuffle(partPool).slice(0, 3);
+    if (verbs.length < 3 || parts.length < 3) break;
+    let conflict = false;
+    for (const v of verbs) for (const p of parts) {
+      if (PHR_COMBO_SET.has(v + ' ' + p)) conflict = true;
+    }
+    if (!conflict) {
+      return { correct, verbs: shuffle([correct.verb, ...verbs]),
+               particles: shuffle([correct.particle, ...parts]) };
+    }
+  }
+  // Fallback (rare): still guarantees no pairing with the correct half.
+  return { correct,
+    verbs: shuffle([correct.verb, ...shuffle(verbPool).slice(0, 3)]),
+    particles: shuffle([correct.particle, ...shuffle(partPool).slice(0, 3)]) };
+}
 
 function startPhrasal() {
   document.getElementById('phr-levels').style.display = '';
@@ -1897,15 +1930,7 @@ function startPhrasal() {
 
 function beginPhrasal(level) {
   const pool = level === 'all' ? PHRASAL_VERBS : PHRASAL_VERBS.filter(p => p.level === level);
-  phrQuestions = shuffle(pool).slice(0, 12).map(correct => {
-    const verbDistractors = shuffle(ALL_PHR_VERBS.filter(v => v !== correct.verb)).slice(0, 3);
-    const partDistractors = shuffle(ALL_PHR_PARTICLES.filter(p => p !== correct.particle)).slice(0, 3);
-    return {
-      correct,
-      verbs: shuffle([correct.verb, ...verbDistractors]),
-      particles: shuffle([correct.particle, ...partDistractors])
-    };
-  });
+  phrQuestions = shuffle(pool).slice(0, 12).map(buildPhrQuestion);
   phrIndex = 0; phrScore = 0;
   document.getElementById('phr-levels').style.display = 'none';
   document.getElementById('phr-results').style.display = 'none';
