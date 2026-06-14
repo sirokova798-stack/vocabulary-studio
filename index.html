@@ -1125,10 +1125,15 @@ function renderHome() {
 
 // ── Vine animation (home screen background) ──
 (function vineEngine() {
+ try {
   const canvas = document.getElementById('vine-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const DPR = Math.min(2, window.devicePixelRatio || 1);
+  if (!ctx) return;
+  // Keep the canvas cheap on touch devices (iPad/iPhone) — DPR 1 halves
+  // fill-rate and memory, which Safari is sensitive to.
+  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  const DPR = isTouch ? 1 : Math.min(2, window.devicePixelRatio || 1);
   let W = 0, H = 0;
   function sizeCanvas() {
     W = window.innerWidth; H = window.innerHeight;
@@ -1369,6 +1374,13 @@ function renderHome() {
   }, {passive:true});
 
   loop();
+ } catch (err) {
+  // The vine animation is purely decorative — if anything goes wrong,
+  // hide it and let the rest of the app (login included) work normally.
+  const c = document.getElementById('vine-canvas');
+  if (c) c.style.display = 'none';
+  console.warn('vine animation disabled:', err);
+ }
 })();
 
 function toggleAddSelf(open) {
