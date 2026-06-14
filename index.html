@@ -965,7 +965,20 @@
 <!-- ── SCREEN: WORD FORMATION ── -->
 <div class="screen" id="screen-wordform">
   <button class="back-btn" onclick="endWordForm()">← Back to practice</button>
-  <div id="wf-main">
+
+  <!-- Level picker -->
+  <div id="wf-levels">
+    <div class="page-title" style="font-size:1.4rem;">Word Formation</div>
+    <div class="page-sub">Change the word in capitals so it fits the sentence. Capital letters don't matter.</div>
+    <div class="phr-level-grid">
+      <button class="phr-level-btn" onclick="beginWordForm('all')"><b>All levels</b><span>A mix of everything</span></button>
+      <button class="phr-level-btn" onclick="beginWordForm('A2-B1')"><b>A2–B1</b><span>Everyday words</span></button>
+      <button class="phr-level-btn" onclick="beginWordForm('B1-B2')"><b>B1–B2</b><span>Intermediate</span></button>
+      <button class="phr-level-btn" onclick="beginWordForm('B2-C1')"><b>B2–C1</b><span>Advanced</span></button>
+    </div>
+  </div>
+
+  <div id="wf-main" style="display:none;">
     <div class="progress-wrap" style="margin-bottom:4px;">
       <div class="progress-bar"><div class="progress-fill" id="wf-progress" style="width:0%"></div></div>
     </div>
@@ -2105,51 +2118,64 @@ function endPhrasal() { show('student'); switchTab('practice'); }
 // Gap marker in each sentence is "@".
 // ─────────────────────────────────────────────────────────────
 const WORD_FORM = [
-  { s:'Her @ to detail makes her an excellent editor.',          base:'ATTEND',    answer:'attention' },
-  { s:'The new manager brought a lot of @ to the team.',         base:'MOTIVATE',  answer:'motivation' },
-  { s:'It was a totally @ decision that surprised everyone.',    base:'EXPECT',    answer:'unexpected' },
-  { s:'He spoke with great @ about his plans.',                  base:'CONFIDENT', answer:'confidence' },
-  { s:'The instructions were really @ and hard to follow.',      base:'CONFUSE',   answer:'confusing' },
-  { s:'She felt a deep sense of @ after the marathon.',          base:'ACHIEVE',   answer:'achievement' },
-  { s:'They live in a beautiful @ area near the Alps.',          base:'MOUNTAIN',  answer:'mountainous' },
-  { s:'The horror film was absolutely @.',                       base:'TERROR',    answer:'terrifying' },
-  { s:'We need to improve the @ of our service.',                base:'EFFICIENT', answer:'efficiency' },
-  { s:'His @ to help others is admirable.',                      base:'WILLING',   answer:'willingness' },
-  { s:'There has been a significant @ in sales this year.',      base:'GROW',      answer:'growth' },
-  { s:'She gave a very @ performance on stage.',                 base:'IMPRESS',   answer:'impressive' },
-  { s:'He was praised for his @ throughout the trial.',          base:'HONEST',    answer:'honesty' },
-  { s:'The @ of the new policy was a great success.',            base:'INTRODUCE', answer:'introduction' },
-  { s:'I find his behaviour completely @.',                      base:'ACCEPT',    answer:'unacceptable' },
-  { s:'The children were extremely @ during the trip.',          base:'NOISE',     answer:'noisy' },
-  { s:'Her speech was both clear and @.',                        base:'PERSUADE',  answer:'persuasive' },
-  { s:'He apologised for his @ at the meeting.',                 base:'RUDE',      answer:'rudeness' },
-  { s:'The scientist made an important @.',                      base:'DISCOVER',  answer:'discovery' },
-  { s:'This medicine is highly @ against colds.',                base:'EFFECT',    answer:'effective' },
-  { s:'The town is famous for its @ buildings.',                 base:'HISTORY',   answer:'historical' },
-  { s:'Their @ to the cause was truly inspiring.',               base:'DEVOTE',    answer:'devotion' },
-  { s:'She is well known for her @ and kindness.',               base:'GENEROUS',  answer:'generosity' },
-  { s:'The @ weather ruined our picnic plans.',                  base:'RAIN',      answer:'rainy' },
-  { s:'He made a @ recovery after the operation.',               base:'WONDER',    answer:'wonderful' },
-  { s:'The company is looking for @ employees.',                 base:'CREATE',    answer:'creative' },
-  { s:'There was a complete lack of @ in the office.',           base:'COMMUNICATE', answer:'communication' },
-  { s:'Your support has been extremely @ to us.',                base:'VALUE',     answer:'valuable' },
-  { s:'She handled the crisis with great @.',                    base:'PATIENT',   answer:'patience' },
-  { s:'The @ of the city has grown rapidly.',                    base:'POPULATE',  answer:'population' },
-  { s:'His @ remarks offended several people.',                  base:'OFFEND',    answer:'offensive' },
-  { s:'We were impressed by the @ of the hotel staff.',          base:'FRIEND',    answer:'friendliness' },
-  { s:'The @ of the instructions made the task easy.',           base:'SIMPLE',    answer:'simplicity' },
-  { s:'The team showed great @ throughout the match.',           base:'DETERMINE', answer:'determination' },
-  { s:'It is @ to park your car here.',                          base:'LEGAL',     answer:'illegal' },
-  { s:'He seemed completely @ of the danger.',                   base:'AWARE',     answer:'unaware' },
-  { s:'Several of her answers were @.',                          base:'CORRECT',   answer:'incorrect' },
-  { s:'They were very @ with the poor service.',                 base:'SATISFY',   answer:'dissatisfied' },
-  { s:'The map was @, so we got completely lost.',               base:'USE',       answer:'useless' },
-  { s:'The film was based on a @ story about real events.',      base:'TRUE',      answer:'true' },
-  { s:'He is one of the most @ players on the team.',            base:'SUCCESS',   answer:'successful' },
-  { s:'The @ between the two sisters is very close.',            base:'RELATION',  answer:'relationship', alts:['relations'] },
-  { s:'A good night’s sleep will improve your @.',               base:'CONCENTRATE', answer:'concentration' },
-  { s:'The weather here is so @ that you never know what to wear.', base:'PREDICT', answer:'unpredictable' },
-  { s:'Her @ as a leader is widely respected.',                  base:'STRONG',    answer:'strength' }
+  // ── A2–B1 · common adjectives & negatives ──
+  { s:'The instructions were really @ and hard to follow.',      base:'CONFUSE',   answer:'confusing',  level:'A2-B1' },
+  { s:'He was praised for his @ throughout the trial.',          base:'HONEST',    answer:'honesty',    level:'A2-B1' },
+  { s:'The children were extremely @ during the trip.',          base:'NOISE',     answer:'noisy',      level:'A2-B1' },
+  { s:'The @ weather ruined our picnic plans.',                  base:'RAIN',      answer:'rainy',      level:'A2-B1' },
+  { s:'He made a @ recovery after the operation.',               base:'WONDER',    answer:'wonderful',  level:'A2-B1' },
+  { s:'Several of her answers were @.',                          base:'CORRECT',   answer:'incorrect',  level:'A2-B1' },
+  { s:'The map was @, so we got completely lost.',               base:'USE',       answer:'useless',    level:'A2-B1' },
+  { s:'She became @ after starring in the film.',                base:'FAME',      answer:'famous',     level:'A2-B1' },
+  { s:'Please be @ with those glasses.',                         base:'CARE',      answer:'careful',    level:'A2-B1' },
+  { s:'The hotel staff were extremely @.',                       base:'HELP',      answer:'helpful',    level:'A2-B1' },
+  { s:'The garden was full of @ flowers.',                       base:'COLOUR',    answer:'colourful',  level:'A2-B1', alts:['colorful'] },
+  { s:'She tries to eat a very @ diet.',                         base:'HEALTH',    answer:'healthy',    level:'A2-B1' },
+  { s:'He was very @ to win the competition.',                   base:'LUCK',      answer:'lucky',      level:'A2-B1' },
+  { s:'The sky was grey and @ all day.',                         base:'CLOUD',     answer:'cloudy',     level:'A2-B1' },
+  { s:'We watched a @ sunset over the sea.',                     base:'BEAUTY',    answer:'beautiful',  level:'A2-B1' },
+  { s:'Swimming in this river is very @.',                       base:'DANGER',    answer:'dangerous',  level:'A2-B1' },
+
+  // ── B1–B2 · intermediate noun/adjective forms ──
+  { s:'Her @ to detail makes her an excellent editor.',          base:'ATTEND',    answer:'attention',  level:'B1-B2' },
+  { s:'The new manager brought a lot of @ to the team.',         base:'MOTIVATE',  answer:'motivation', level:'B1-B2' },
+  { s:'It was a totally @ decision that surprised everyone.',    base:'EXPECT',    answer:'unexpected', level:'B1-B2' },
+  { s:'He spoke with great @ about his plans.',                  base:'CONFIDENT', answer:'confidence', level:'B1-B2' },
+  { s:'She felt a deep sense of @ after the marathon.',          base:'ACHIEVE',   answer:'achievement',level:'B1-B2' },
+  { s:'There has been a significant @ in sales this year.',      base:'GROW',      answer:'growth',     level:'B1-B2' },
+  { s:'She gave a very @ performance on stage.',                 base:'IMPRESS',   answer:'impressive', level:'B1-B2' },
+  { s:'The @ of the new policy was a great success.',            base:'INTRODUCE', answer:'introduction',level:'B1-B2' },
+  { s:'He apologised for his @ at the meeting.',                 base:'RUDE',      answer:'rudeness',   level:'B1-B2' },
+  { s:'The scientist made an important @.',                      base:'DISCOVER',  answer:'discovery',  level:'B1-B2' },
+  { s:'This medicine is highly @ against colds.',                base:'EFFECT',    answer:'effective',  level:'B1-B2' },
+  { s:'The town is famous for its @ buildings.',                 base:'HISTORY',   answer:'historical', level:'B1-B2' },
+  { s:'The company is looking for @ employees.',                 base:'CREATE',    answer:'creative',   level:'B1-B2' },
+  { s:'There was a complete lack of @ in the office.',           base:'COMMUNICATE', answer:'communication', level:'B1-B2' },
+  { s:'Your support has been extremely @ to us.',                base:'VALUE',     answer:'valuable',   level:'B1-B2' },
+  { s:'She handled the crisis with great @.',                    base:'PATIENT',   answer:'patience',   level:'B1-B2' },
+  { s:'The @ of the city has grown rapidly.',                    base:'POPULATE',  answer:'population',  level:'B1-B2' },
+  { s:'It is @ to park your car here.',                          base:'LEGAL',     answer:'illegal',    level:'B1-B2' },
+  { s:'He is one of the most @ players on the team.',            base:'SUCCESS',   answer:'successful', level:'B1-B2' },
+  { s:'The @ between the two sisters is very close.',            base:'RELATION',  answer:'relationship', alts:['relations'], level:'B1-B2' },
+  { s:'A good night’s sleep will improve your @.',               base:'CONCENTRATE', answer:'concentration', level:'B1-B2' },
+  { s:'Her @ as a leader is widely respected.',                  base:'STRONG',    answer:'strength',   level:'B1-B2' },
+
+  // ── B2–C1 · advanced transformations ──
+  { s:'They live in a beautiful @ area near the Alps.',          base:'MOUNTAIN',  answer:'mountainous',level:'B2-C1' },
+  { s:'The horror film was absolutely @.',                       base:'TERROR',    answer:'terrifying', level:'B2-C1' },
+  { s:'We need to improve the @ of our service.',                base:'EFFICIENT', answer:'efficiency', level:'B2-C1' },
+  { s:'His @ to help others is admirable.',                      base:'WILLING',   answer:'willingness',level:'B2-C1' },
+  { s:'I find his behaviour completely @.',                      base:'ACCEPT',    answer:'unacceptable',level:'B2-C1' },
+  { s:'Her speech was both clear and @.',                        base:'PERSUADE',  answer:'persuasive', level:'B2-C1' },
+  { s:'Their @ to the cause was truly inspiring.',               base:'DEVOTE',    answer:'devotion',   level:'B2-C1' },
+  { s:'She is well known for her @ and kindness.',               base:'GENEROUS',  answer:'generosity', level:'B2-C1' },
+  { s:'His @ remarks offended several people.',                  base:'OFFEND',    answer:'offensive',  level:'B2-C1' },
+  { s:'We were impressed by the @ of the hotel staff.',          base:'FRIEND',    answer:'friendliness',level:'B2-C1' },
+  { s:'The @ of the instructions made the task easy.',           base:'SIMPLE',    answer:'simplicity', level:'B2-C1' },
+  { s:'The team showed great @ throughout the match.',           base:'DETERMINE', answer:'determination',level:'B2-C1' },
+  { s:'He seemed completely @ of the danger.',                   base:'AWARE',     answer:'unaware',    level:'B2-C1' },
+  { s:'They were very @ with the poor service.',                 base:'SATISFY',   answer:'dissatisfied',level:'B2-C1' },
+  { s:'The weather here is so @ that you never know what to wear.', base:'PREDICT', answer:'unpredictable', level:'B2-C1' }
 ];
 
 let wfQuestions = [], wfIndex = 0, wfScore = 0, wfAnswered = false;
@@ -2159,11 +2185,19 @@ function wfNorm(s) {
 }
 
 function startWordForm() {
-  wfQuestions = shuffle(WORD_FORM).slice(0, 12);
-  wfIndex = 0; wfScore = 0;
-  document.getElementById('wf-main').style.display = '';
+  document.getElementById('wf-levels').style.display = '';
+  document.getElementById('wf-main').style.display = 'none';
   document.getElementById('wf-results').style.display = 'none';
   show('wordform');
+}
+
+function beginWordForm(level) {
+  const pool = level === 'all' ? WORD_FORM : WORD_FORM.filter(w => w.level === level);
+  wfQuestions = shuffle(pool).slice(0, 12);
+  wfIndex = 0; wfScore = 0;
+  document.getElementById('wf-levels').style.display = 'none';
+  document.getElementById('wf-main').style.display = '';
+  document.getElementById('wf-results').style.display = 'none';
   renderWfQ();
 }
 
@@ -2219,7 +2253,7 @@ function showWfResults() {
     '<div style="font-size:3rem;margin-bottom:10px;">' + emoji + '</div>' +
     '<div style="font-family:\'DM Serif Display\',serif;font-size:2.2rem;">' + wfScore + '/' + wfQuestions.length + '</div>' +
     '<div style="color:var(--muted);font-size:.9rem;margin-bottom:28px;">' + pct + '% correct</div>' +
-    '<button class="btn btn-primary btn-full" onclick="startWordForm()">Try again</button>' +
+    '<button class="btn btn-primary btn-full" onclick="startWordForm()">Choose another level</button>' +
     '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endWordForm()">← Back to practice</button>';
 }
 
