@@ -432,6 +432,40 @@
   .ctx-fb-sentence { font-style: italic; color: var(--ink); font-size: .9rem; line-height: 1.55; margin-bottom: 5px; }
   .ctx-fb-ru { font-size: .83rem; color: var(--sage); font-weight: 500; }
 
+  /* ── Phrasal Verbs mode ── */
+  .phr-level-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .phr-level-btn {
+    display: flex; flex-direction: column; gap: 3px; text-align: left;
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 16px 18px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: border-color .15s, transform .15s, box-shadow .15s;
+  }
+  .phr-level-btn:hover { border-color: var(--sage); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .phr-level-btn b { font-size: 1rem; color: var(--text); }
+  .phr-level-btn span { font-size: .78rem; color: var(--muted); }
+  .phr-hint-card { text-align: center; padding: 22px 24px; }
+  .phr-hint-ru { font-family: 'DM Serif Display', Georgia, serif; font-size: 1.4rem; color: var(--text); line-height: 1.3; }
+  .phr-hint-sub { font-size: .82rem; color: var(--muted); margin-top: 6px; }
+  .phr-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .phr-col-label { font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; text-align: center; }
+  .phr-opt {
+    display: block; width: 100%; margin-bottom: 9px;
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 13px 10px; font-size: .98rem; font-family: 'DM Sans', sans-serif; font-weight: 500;
+    color: var(--text); cursor: pointer; text-align: center;
+    transition: border-color .14s, background .14s, color .14s;
+  }
+  .phr-opt:hover:not(:disabled) { border-color: var(--sage); background: var(--cream); }
+  .phr-opt.selected { border-color: var(--sage-dark); background: var(--sage-light); color: var(--sage-dark); }
+  .phr-opt.correct { background: #eaf7ea; border-color: #6abf69; color: #2d7a2d; font-weight: 600; }
+  .phr-opt.wrong   { background: #fdf0f0; border-color: #e07070; color: #b03030; }
+  .phr-opt:disabled { cursor: default; }
+  .phr-fb { padding: 13px 16px; border-radius: 12px; font-size: .92rem; line-height: 1.5; }
+  .phr-fb.ok  { background: #eaf7ea; color: #2d7a2d; border: 1px solid #b5e0b5; }
+  .phr-fb.bad { background: #fdf0f0; color: #b03030; border: 1px solid #f0c0c0; }
+  .phr-fb .phr-fb-pv { font-weight: 600; }
+  .phr-fb .phr-fb-ex { color: var(--text-2); font-style: italic; margin-top: 5px; font-size: .86rem; }
+
   /* ── PIN pad ── */
   .pin-dot {
     width: 13px; height: 13px; border-radius: 50%;
@@ -658,6 +692,11 @@
         <div class="mode-name">Dialogue Practice</div>
         <div class="mode-desc">Real-life situations · translate the line · compare with the model answer</div>
       </div>
+      <div class="mode-card" onclick="startPhrasal()" style="grid-column:1/-1;">
+        <span class="mode-icon">🔗</span>
+        <div class="mode-name">Phrasal Verbs</div>
+        <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
+      </div>
     </div>
 
     <div class="section-label" style="margin-top:4px;">Your words</div>
@@ -844,6 +883,52 @@
     </div>
   </div>
   <div id="ctx-results" style="display:none;text-align:center;padding-top:30px;"></div>
+</div>
+
+<!-- ── SCREEN: PHRASAL VERBS ── -->
+<div class="screen" id="screen-phrasal">
+  <button class="back-btn" onclick="endPhrasal()">← Back to practice</button>
+
+  <!-- Level picker -->
+  <div id="phr-levels">
+    <div class="page-title" style="font-size:1.4rem;">Phrasal Verbs</div>
+    <div class="page-sub">Read the Russian hint, then choose the verb and the particle that fit together.</div>
+    <div class="phr-level-grid">
+      <button class="phr-level-btn" onclick="beginPhrasal('all')"><b>All levels</b><span>A mix of everything</span></button>
+      <button class="phr-level-btn" onclick="beginPhrasal('A2-B1')"><b>A2–B1</b><span>Everyday basics</span></button>
+      <button class="phr-level-btn" onclick="beginPhrasal('B1-B2')"><b>B1–B2</b><span>Intermediate</span></button>
+      <button class="phr-level-btn" onclick="beginPhrasal('B2-C1')"><b>B2–C1</b><span>Advanced</span></button>
+    </div>
+  </div>
+
+  <!-- Game -->
+  <div id="phr-game" style="display:none;">
+    <div class="progress-wrap" style="margin-bottom:4px;">
+      <div class="progress-bar"><div class="progress-fill" id="phr-progress" style="width:0%"></div></div>
+    </div>
+    <div style="text-align:right;font-size:.8rem;color:var(--muted);margin-bottom:16px;" id="phr-counter"></div>
+
+    <div class="card phr-hint-card" id="phr-hint" style="margin-bottom:18px;"></div>
+
+    <div class="phr-columns">
+      <div>
+        <div class="phr-col-label">Verb</div>
+        <div id="phr-verbs"></div>
+      </div>
+      <div>
+        <div class="phr-col-label">Particle</div>
+        <div id="phr-particles"></div>
+      </div>
+    </div>
+
+    <div id="phr-feedback" style="margin-top:16px;"></div>
+    <div id="phr-next-wrap" style="display:none;margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="phrNext()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="phr-results" style="display:none;text-align:center;padding-top:30px;"></div>
 </div>
 
 <!-- ── SCREEN: DIALOGUE PRACTICE ── -->
@@ -1714,6 +1799,203 @@ function showCtxResults() {
 }
 
 function endContext() { show('student'); switchTab('practice'); }
+
+// ─────────────────────────────────────────────────────────────
+// PHRASAL VERBS  (match the two halves)
+// Meanings checked against Cambridge / Oxford phrasal-verb usage.
+// ─────────────────────────────────────────────────────────────
+const PHRASAL_VERBS = [
+  // ── A2–B1 · everyday basics ──
+  { verb:'get',   particle:'up',      ru:'вставать (с постели)',                  ex:'I get up at seven every morning.',        level:'A2-B1' },
+  { verb:'wake',  particle:'up',      ru:'просыпаться',                           ex:'I woke up early today.',                  level:'A2-B1' },
+  { verb:'sit',   particle:'down',    ru:'садиться',                              ex:'Please sit down.',                        level:'A2-B1' },
+  { verb:'stand', particle:'up',      ru:'вставать (на ноги)',                    ex:'Everyone stood up when she came in.',     level:'A2-B1' },
+  { verb:'put',   particle:'on',      ru:'надевать (одежду)',                     ex:'Put on your coat, it is cold.',           level:'A2-B1' },
+  { verb:'take',  particle:'off',     ru:'снимать (одежду); взлетать',            ex:'He took off his shoes at the door.',      level:'A2-B1' },
+  { verb:'turn',  particle:'on',      ru:'включать',                              ex:'Turn on the light, please.',              level:'A2-B1' },
+  { verb:'turn',  particle:'off',     ru:'выключать',                             ex:'Turn off the TV before bed.',             level:'A2-B1' },
+  { verb:'get',   particle:'in',      ru:'садиться (в машину)',                   ex:'Get in the car, we are leaving.',         level:'A2-B1' },
+  { verb:'get',   particle:'off',     ru:'выходить (из транспорта)',              ex:'We get off at the next stop.',            level:'A2-B1' },
+  { verb:'come',  particle:'back',    ru:'возвращаться',                          ex:'Come back soon!',                         level:'A2-B1' },
+  { verb:'go',    particle:'out',     ru:'выходить (из дома), гулять',            ex:'We went out for dinner.',                 level:'A2-B1' },
+  { verb:'look',  particle:'for',     ru:'искать',                               ex:'I am looking for my keys.',               level:'A2-B1' },
+  { verb:'look',  particle:'after',   ru:'присматривать, заботиться о',           ex:'She looks after her little brother.',     level:'A2-B1' },
+  { verb:'pick',  particle:'up',      ru:'поднимать; забирать (кого-то)',         ex:'I will pick you up at six.',              level:'A2-B1' },
+  { verb:'throw', particle:'away',    ru:'выбрасывать',                           ex:"Don't throw away those papers.",          level:'A2-B1' },
+  { verb:'give',  particle:'up',      ru:'сдаваться; бросать (привычку)',         ex:'He gave up smoking last year.',           level:'A2-B1' },
+  { verb:'find',  particle:'out',     ru:'узнавать, выяснять',                    ex:'I want to find out the truth.',           level:'A2-B1' },
+  { verb:'grow',  particle:'up',      ru:'взрослеть',                             ex:'She grew up in a small town.',            level:'A2-B1' },
+  { verb:'wash',  particle:'up',      ru:'мыть посуду',                           ex:"I'll wash up after dinner.",              level:'A2-B1' },
+  { verb:'fill',  particle:'in',      ru:'заполнять (бланк, форму)',              ex:'Fill in this form, please.',              level:'A2-B1' },
+  { verb:'carry', particle:'on',      ru:'продолжать',                            ex:'Carry on with your work.',                level:'A2-B1' },
+  { verb:'run',   particle:'away',    ru:'убегать',                               ex:'The dog ran away.',                       level:'A2-B1' },
+
+  // ── B1–B2 · intermediate ──
+  { verb:'put',   particle:'off',     ru:'откладывать (на потом)',                ex:"Don't put off your homework.",            level:'B1-B2' },
+  { verb:'put',   particle:'forward', ru:'выдвигать (идею); переносить на более ранний срок', ex:'She put forward a new idea.',  level:'B1-B2' },
+  { verb:'bring', particle:'up',      ru:'воспитывать; поднимать (тему)',         ex:'They brought up three children.',         level:'B1-B2' },
+  { verb:'bring', particle:'forward', ru:'переносить на более ранний срок',       ex:'The meeting was brought forward to Monday.', level:'B1-B2' },
+  { verb:'call',  particle:'off',     ru:'отменять',                              ex:'They called off the match.',              level:'B1-B2' },
+  { verb:'turn',  particle:'down',    ru:'отклонять; убавлять (звук)',            ex:'He turned down the job offer.',           level:'B1-B2' },
+  { verb:'turn',  particle:'up',      ru:'появляться; прибавлять (звук)',         ex:'She turned up late.',                     level:'B1-B2' },
+  { verb:'break', particle:'down',    ru:'ломаться; терять самообладание',        ex:'My car broke down on the way.',           level:'B1-B2' },
+  { verb:'break', particle:'up',      ru:'расставаться',                          ex:'They broke up last month.',               level:'B1-B2' },
+  { verb:'work',  particle:'out',     ru:'заниматься спортом; находить решение',  ex:'I work out three times a week.',          level:'B1-B2' },
+  { verb:'set',   particle:'off',     ru:'отправляться (в путь)',                 ex:'We set off early in the morning.',        level:'B1-B2' },
+  { verb:'set',   particle:'up',      ru:'основывать, создавать; настраивать',    ex:'She set up her own business.',            level:'B1-B2' },
+  { verb:'take',  particle:'up',      ru:'браться за (хобби, дело)',              ex:'He took up painting.',                    level:'B1-B2' },
+  { verb:'give',  particle:'back',    ru:'возвращать (вещь)',                     ex:'Give me back my pen.',                    level:'B1-B2' },
+  { verb:'look',  particle:'up',      ru:'искать (в словаре, справочнике)',       ex:'Look up this word in the dictionary.',    level:'B1-B2' },
+  { verb:'hand',  particle:'in',      ru:'сдавать (работу, документ)',            ex:'Hand in your essays by Friday.',          level:'B1-B2' },
+  { verb:'hand',  particle:'out',     ru:'раздавать',                             ex:'The teacher handed out the tests.',       level:'B1-B2' },
+  { verb:'point', particle:'out',     ru:'указывать, отмечать',                   ex:'She pointed out my mistake.',             level:'B1-B2' },
+  { verb:'go',    particle:'off',     ru:'портиться (о еде); срабатывать (будильник)', ex:'The milk has gone off.',             level:'B1-B2' },
+  { verb:'go',    particle:'on',      ru:'продолжаться; происходить',             ex:'What is going on here?',                  level:'B1-B2' },
+  { verb:'hold',  particle:'on',      ru:'подождать',                             ex:'Hold on a moment, please.',               level:'B1-B2' },
+  { verb:'show',  particle:'up',      ru:'появляться, приходить',                 ex:"He didn't show up to the party.",         level:'B1-B2' },
+  { verb:'sort',  particle:'out',     ru:'разбираться, улаживать',                ex:'We need to sort out this problem.',       level:'B1-B2' },
+  { verb:'cut',   particle:'down',    ru:'сокращать (количество)',                ex:'You should cut down on coffee.',          level:'B1-B2' },
+  { verb:'run',   particle:'out',     ru:'заканчиваться (о запасах)',             ex:'We ran out of milk.',                     level:'B1-B2' },
+
+  // ── B2–C1 · advanced ──
+  { verb:'put',    particle:'up',     ru:'размещать (гостя на ночь); вешать',     ex:'They put us up for the night.',           level:'B2-C1' },
+  { verb:'take',   particle:'in',     ru:'усваивать (информацию); приютить',      ex:"It's a lot of information to take in.",    level:'B2-C1' },
+  { verb:'bring',  particle:'about',  ru:'вызывать, приводить к (изменениям)',    ex:'The war brought about great change.',     level:'B2-C1' },
+  { verb:'carry',  particle:'out',    ru:'выполнять, осуществлять',               ex:'They carried out the plan.',              level:'B2-C1' },
+  { verb:'come',   particle:'across', ru:'натыкаться, случайно встретить',        ex:'I came across an old photo.',             level:'B2-C1' },
+  { verb:'get',    particle:'over',   ru:'преодолеть, оправиться от',             ex:'She got over the illness quickly.',       level:'B2-C1' },
+  { verb:'look',   particle:'into',   ru:'расследовать, изучать',                 ex:'The police are looking into the case.',   level:'B2-C1' },
+  { verb:'make',   particle:'up',     ru:'мириться; выдумывать; составлять',      ex:'They kissed and made up.',                level:'B2-C1' },
+  { verb:'pull',   particle:'off',    ru:'успешно осуществить (трудное)',         ex:'They pulled off an amazing win.',         level:'B2-C1' },
+  { verb:'turn',   particle:'out',    ru:'оказываться (в итоге)',                 ex:'It turned out to be true.',               level:'B2-C1' },
+  { verb:'back',   particle:'up',     ru:'поддерживать; делать резервную копию',  ex:'Back up your files regularly.',           level:'B2-C1' },
+  { verb:'count',  particle:'on',     ru:'рассчитывать на',                       ex:'You can count on me.',                    level:'B2-C1' },
+  { verb:'figure', particle:'out',    ru:'понять, разобраться',                   ex:"I can't figure out this puzzle.",         level:'B2-C1' },
+  { verb:'put',    particle:'down',   ru:'класть (вниз); принижать',              ex:'Put down your phone.',                    level:'B2-C1' },
+  { verb:'stand',  particle:'out',    ru:'выделяться',                            ex:'Her work stands out.',                    level:'B2-C1' },
+  { verb:'take',   particle:'after',  ru:'быть похожим на (родственника)',        ex:'She takes after her mother.',             level:'B2-C1' },
+  { verb:'wear',   particle:'out',    ru:'изнашивать(ся); изматывать',            ex:'These shoes have worn out.',              level:'B2-C1' },
+  { verb:'come',   particle:'up',     ru:'возникать (о проблеме, теме)',          ex:'A problem came up.',                      level:'B2-C1' },
+  { verb:'get',    particle:'along',  ru:'ладить (с кем-то)',                     ex:'They get along well.',                    level:'B2-C1' },
+  { verb:'give',   particle:'in',     ru:'уступать, сдаваться',                   ex:'He finally gave in.',                     level:'B2-C1' }
+];
+
+const ALL_PHR_VERBS = [...new Set(PHRASAL_VERBS.map(p => p.verb))];
+const ALL_PHR_PARTICLES = [...new Set(PHRASAL_VERBS.map(p => p.particle))];
+
+let phrQuestions = [], phrIndex = 0, phrScore = 0;
+let phrSelVerb = null, phrSelParticle = null, phrAnswered = false;
+
+function shuffle(arr) { return arr.slice().sort(() => Math.random() - 0.5); }
+
+function startPhrasal() {
+  document.getElementById('phr-levels').style.display = '';
+  document.getElementById('phr-game').style.display = 'none';
+  document.getElementById('phr-results').style.display = 'none';
+  show('phrasal');
+}
+
+function beginPhrasal(level) {
+  const pool = level === 'all' ? PHRASAL_VERBS : PHRASAL_VERBS.filter(p => p.level === level);
+  phrQuestions = shuffle(pool).slice(0, 12).map(correct => {
+    const verbDistractors = shuffle(ALL_PHR_VERBS.filter(v => v !== correct.verb)).slice(0, 3);
+    const partDistractors = shuffle(ALL_PHR_PARTICLES.filter(p => p !== correct.particle)).slice(0, 3);
+    return {
+      correct,
+      verbs: shuffle([correct.verb, ...verbDistractors]),
+      particles: shuffle([correct.particle, ...partDistractors])
+    };
+  });
+  phrIndex = 0; phrScore = 0;
+  document.getElementById('phr-levels').style.display = 'none';
+  document.getElementById('phr-results').style.display = 'none';
+  document.getElementById('phr-game').style.display = '';
+  renderPhrQ();
+}
+
+function renderPhrQ() {
+  if (phrIndex >= phrQuestions.length) { showPhrResults(); return; }
+  const q = phrQuestions[phrIndex];
+  phrSelVerb = null; phrSelParticle = null; phrAnswered = false;
+
+  document.getElementById('phr-progress').style.width = (phrIndex / phrQuestions.length * 100) + '%';
+  document.getElementById('phr-counter').textContent = (phrIndex + 1) + ' of ' + phrQuestions.length;
+  document.getElementById('phr-hint').innerHTML =
+    '<div class="phr-hint-ru">' + esc(q.correct.ru) + '</div>' +
+    '<div class="phr-hint-sub">Choose the verb + particle that mean this</div>';
+  document.getElementById('phr-feedback').innerHTML = '';
+  document.getElementById('phr-next-wrap').style.display = 'none';
+
+  const vWrap = document.getElementById('phr-verbs');
+  const pWrap = document.getElementById('phr-particles');
+  vWrap.innerHTML = ''; pWrap.innerHTML = '';
+  q.verbs.forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'phr-opt'; b.textContent = v;
+    b.onclick = () => phrSelect('verb', v, b);
+    vWrap.appendChild(b);
+  });
+  q.particles.forEach(p => {
+    const b = document.createElement('button');
+    b.className = 'phr-opt'; b.textContent = p;
+    b.onclick = () => phrSelect('particle', p, b);
+    pWrap.appendChild(b);
+  });
+}
+
+function phrSelect(side, value, btn) {
+  if (phrAnswered) return;
+  const wrapId = side === 'verb' ? 'phr-verbs' : 'phr-particles';
+  document.querySelectorAll('#' + wrapId + ' .phr-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  if (side === 'verb') phrSelVerb = value; else phrSelParticle = value;
+  if (phrSelVerb !== null && phrSelParticle !== null) phrCheck();
+}
+
+function phrCheck() {
+  phrAnswered = true;
+  const q = phrQuestions[phrIndex];
+  const ok = phrSelVerb === q.correct.verb && phrSelParticle === q.correct.particle;
+  if (ok) phrScore++;
+
+  document.querySelectorAll('#phr-verbs .phr-opt').forEach(b => {
+    b.disabled = true; b.classList.remove('selected');
+    if (b.textContent === q.correct.verb) b.classList.add('correct');
+    else if (b.textContent === phrSelVerb) b.classList.add('wrong');
+  });
+  document.querySelectorAll('#phr-particles .phr-opt').forEach(b => {
+    b.disabled = true; b.classList.remove('selected');
+    if (b.textContent === q.correct.particle) b.classList.add('correct');
+    else if (b.textContent === phrSelParticle) b.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('phr-feedback');
+  fb.innerHTML =
+    '<div class="phr-fb ' + (ok ? 'ok' : 'bad') + '">' +
+      (ok ? '✅ ' : '❌ ') +
+      '<span class="phr-fb-pv">' + esc(q.correct.verb + ' ' + q.correct.particle) + '</span> — ' + esc(q.correct.ru) +
+      '<div class="phr-fb-ex">' + esc(q.correct.ex) + '</div>' +
+    '</div>';
+  document.getElementById('phr-next-wrap').style.display = '';
+}
+
+function phrNext() { phrIndex++; renderPhrQ(); }
+
+function showPhrResults() {
+  document.getElementById('phr-game').style.display = 'none';
+  const pct = Math.round(phrScore / phrQuestions.length * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
+  const res = document.getElementById('phr-results');
+  res.style.display = '';
+  res.innerHTML =
+    '<div style="font-size:3rem;margin-bottom:10px;">' + emoji + '</div>' +
+    '<div style="font-family:\'DM Serif Display\',serif;font-size:2.2rem;">' + phrScore + '/' + phrQuestions.length + '</div>' +
+    '<div style="color:var(--muted);font-size:.9rem;margin-bottom:28px;">' + pct + '% correct</div>' +
+    '<button class="btn btn-primary btn-full" onclick="startPhrasal()">Choose another level</button>' +
+    '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endPhrasal()">← Back to practice</button>';
+}
+
+function endPhrasal() { show('student'); switchTab('practice'); }
 
 // ─────────────────────────────────────────────────────────────
 // ── Part-of-speech detection (based on word form) ──
