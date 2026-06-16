@@ -793,6 +793,10 @@
       <span id="fc-counter"></span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="fc-progress"></div></div>
+    <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;">
+      <button id="fc-dir-en" onclick="fcSetDir('en')" style="padding:5px 16px;border-radius:99px;border:1.5px solid #6b7d67;background:#6b7d67;color:#fff;font-size:0.76rem;cursor:pointer;">EN → RU</button>
+      <button id="fc-dir-ru" onclick="fcSetDir('ru')" style="padding:5px 16px;border-radius:99px;border:1.5px solid #c8c0b4;background:transparent;color:#524d48;font-size:0.76rem;cursor:pointer;">RU → EN</button>
+    </div>
   </div>
   <div class="flashcard-scene">
     <div class="flashcard" id="flashcard" onclick="flipCard()">
@@ -807,15 +811,9 @@
       </div>
     </div>
   </div>
-  <div id="fc-nav-main" style="display:flex;flex-direction:column;align-items:center;gap:10px;">
-    <div style="display:flex;gap:8px;">
-      <button id="fc-dir-en" class="btn btn-sm btn-primary" onclick="fcSetDir('en')" style="font-size:0.78rem;min-width:110px;">EN → RU</button>
-      <button id="fc-dir-ru" class="btn btn-sm btn-ghost" onclick="fcSetDir('ru')" style="font-size:0.78rem;min-width:110px;">RU → EN</button>
-    </div>
-    <div style="display:flex;gap:10px;">
-      <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Previous</button>
-      <button class="btn btn-primary btn-sm" onclick="fcNext()">Next →</button>
-    </div>
+  <div class="fc-nav" id="fc-nav-main">
+    <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Previous</button>
+    <button class="btn btn-primary btn-sm" onclick="fcNext()">Next →</button>
   </div>
   <div id="fc-know-row" style="display:none;justify-content:center;gap:12px;margin-top:4px;">
     <button class="btn btn-sm" style="background:#f0faf0;border:1.5px solid #a8d5a2;color:#2d7a2d;min-width:130px;" onclick="fcMark(true)">✓ I know this</button>
