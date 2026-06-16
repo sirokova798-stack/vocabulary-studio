@@ -787,10 +787,6 @@
 <!-- ── SCREEN: FLASHCARDS ── -->
 <div class="screen" id="screen-flashcards">
   <button class="back-btn" onclick="endPractice()">← Back to practice</button>
-  <div style="display:flex;justify-content:center;gap:8px;margin-bottom:10px;">
-    <button id="fc-dir-en" class="btn btn-sm btn-primary" onclick="fcSetDir('en')" style="font-size:0.78rem;min-width:130px;">EN → RU</button>
-    <button id="fc-dir-ru" class="btn btn-sm btn-ghost" onclick="fcSetDir('ru')" style="font-size:0.78rem;min-width:130px;">RU → EN</button>
-  </div>
   <div class="progress-wrap">
     <div class="progress-label">
       <span id="fc-lesson-label">Flashcards</span>
@@ -810,6 +806,10 @@
         <div class="fc-example" id="fc-example"></div>
       </div>
     </div>
+  </div>
+  <div style="text-align:center;margin-bottom:6px;">
+    <button id="fc-dir-en" class="btn btn-sm btn-primary" onclick="fcSetDir('en')" style="font-size:0.78rem;min-width:120px;margin-right:6px;">EN → RU</button>
+    <button id="fc-dir-ru" class="btn btn-sm btn-ghost" onclick="fcSetDir('ru')" style="font-size:0.78rem;min-width:120px;">RU → EN</button>
   </div>
   <div class="fc-nav" id="fc-nav-main">
     <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Previous</button>
