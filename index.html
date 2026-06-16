@@ -2954,7 +2954,7 @@ function dlgCheck(turnIdx) {
   inp.disabled = true;
   inp.classList.add('is-checked');
   rev.querySelector('.dlg-model').innerHTML = `Model answer: <em>${turn.answer}</em>`;
-  rev.style.display = '';
+  rev.style.display = 'block';
   cont.style.display = '';
   cont.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   dlgAnswers.push({ prompt_ru: turn.prompt_ru, typed, correct: turn.answer, match });
