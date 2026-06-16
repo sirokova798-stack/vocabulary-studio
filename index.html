@@ -787,6 +787,10 @@
 <!-- ── SCREEN: FLASHCARDS ── -->
 <div class="screen" id="screen-flashcards">
   <button class="back-btn" onclick="endPractice()">← Back to practice</button>
+  <div style="display:flex;justify-content:center;gap:8px;margin-bottom:10px;">
+    <button id="fc-dir-en" class="btn btn-sm btn-primary" onclick="fcSetDir('en')" style="font-size:0.78rem;min-width:130px;">EN → RU</button>
+    <button id="fc-dir-ru" class="btn btn-sm btn-ghost" onclick="fcSetDir('ru')" style="font-size:0.78rem;min-width:130px;">RU → EN</button>
+  </div>
   <div class="progress-wrap">
     <div class="progress-label">
       <span id="fc-lesson-label">Flashcards</span>
@@ -1190,7 +1194,7 @@ function save(d) { localStorage.setItem('vs2', JSON.stringify(d)); }
 // ─────────────────────────────────────────────────────────────
 let currentStudent = null;
 let isTeacher = false;
-let fcWords = [], fcIndex = 0, fcFlipped = false, fcKnown = new Set(), fcUnknown = new Set(), fcReviewMode = false;
+let fcWords = [], fcIndex = 0, fcFlipped = false, fcKnown = new Set(), fcUnknown = new Set(), fcReviewMode = false, fcDir = 'en';
 let qWords = [], qIndex = 0, qScore = 0, qAnswered = false;
 let deleteWordId = null;
 let practiceLesson = null; // null = all words
@@ -1712,13 +1716,28 @@ function startFlashcards() {
   show('flashcards');
   renderFC();
 }
+function fcSetDir(dir) {
+  fcDir = dir;
+  document.getElementById('fc-dir-en').className = 'btn btn-sm ' + (dir === 'en' ? 'btn-primary' : 'btn-ghost');
+  document.getElementById('fc-dir-ru').className = 'btn btn-sm ' + (dir === 'ru' ? 'btn-primary' : 'btn-ghost');
+  renderFC();
+}
 function renderFC() {
   const w = fcWords[fcIndex];
-  document.getElementById('fc-word').textContent = w.word;
-  document.getElementById('fc-ipa').textContent = w.ipa || '';
-  document.getElementById('fc-ipa').style.display = w.ipa ? '' : 'none';
-  document.getElementById('fc-translation').textContent = '🇷🇺 ' + w.translation;
-  document.getElementById('fc-example').textContent = w.example ? '"' + w.example + '"' : '';
+  if (fcDir === 'ru') {
+    document.getElementById('fc-word').textContent = w.translation;
+    document.getElementById('fc-ipa').style.display = 'none';
+    document.getElementById('fc-translation').textContent = w.word;
+    document.getElementById('fc-example').textContent = w.ipa ? '/' + w.ipa + '/' : '';
+    document.getElementById('fc-tap-hint').querySelector('span:last-child').textContent = 'Tap to reveal English';
+  } else {
+    document.getElementById('fc-word').textContent = w.word;
+    document.getElementById('fc-ipa').textContent = w.ipa || '';
+    document.getElementById('fc-ipa').style.display = w.ipa ? '' : 'none';
+    document.getElementById('fc-translation').textContent = '🇷🇺 ' + w.translation;
+    document.getElementById('fc-example').textContent = w.example ? '"' + w.example + '"' : '';
+    document.getElementById('fc-tap-hint').querySelector('span:last-child').textContent = 'Tap to reveal translation';
+  }
   const label = fcReviewMode ? 'Still learning — ' : (practiceLesson ? 'Flashcards — ' + practiceLesson : 'Flashcards');
   document.getElementById('fc-lesson-label').textContent = label;
   document.getElementById('fc-counter').textContent = (fcIndex + 1) + ' of ' + fcWords.length;
