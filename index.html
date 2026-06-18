@@ -491,6 +491,15 @@
   .wf-fb.bad { background: #fdf0f0; color: #b03030; border: 1px solid #f0c0c0; }
   .wf-fb .wf-fb-ans { font-weight: 600; }
   .wf-fb .wf-fb-full { color: var(--text-2); font-style: italic; margin-top: 5px; font-size: .88rem; }
+  .gr-opt {
+    text-align: left; padding: 12px 16px; border-radius: 12px; border: 1.5px solid var(--border);
+    background: var(--white); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    color: var(--text); transition: border-color .15s, background .15s;
+  }
+  .gr-opt:hover:not(:disabled) { border-color: var(--sage); background: var(--sage-light); }
+  .gr-opt.is-correct { border-color: #6abf69; background: #f2fbf2; color: #2d7a2d; font-weight: 500; }
+  .gr-opt.is-wrong   { border-color: #e07070; background: #fff6f6; color: #b03030; }
+  .gr-opt:disabled { cursor: default; }
 
   /* ── PIN pad ── */
   .pin-dot {
@@ -725,6 +734,11 @@
         <span class="mode-icon">🔤</span>
         <div class="mode-name">Word Formation</div>
         <div class="mode-desc">Use of English · change the word in capitals to fit the sentence</div>
+      </div>
+      <div class="mode-card" onclick="startGrammar()" style="grid-column:1/-1;">
+        <span class="mode-icon">🎓</span>
+        <div class="mode-name">B1 Grammar</div>
+        <div class="mode-desc">Use of English · pick a topic or take a mixed exam · transformations, open cloze & multiple choice</div>
       </div>
     </div>
 
@@ -1011,6 +1025,52 @@
     </div>
   </div>
   <div id="wf-results" style="display:none;text-align:center;padding-top:30px;"></div>
+</div>
+
+<!-- ── SCREEN: B1 GRAMMAR (Use of English) ── -->
+<div class="screen" id="screen-grammar">
+  <button class="back-btn" onclick="endGrammar()">← Back to practice</button>
+
+  <!-- Topic picker -->
+  <div id="gr-topics">
+    <div class="page-title" style="font-size:1.4rem;">B1 Grammar</div>
+    <div class="page-sub">Choose a topic to focus on, or take a mixed exam with everything together.</div>
+    <button class="btn btn-primary btn-full" style="margin:8px 0 18px;" onclick="beginGrammar('__mixed__')">🎓 Mixed B1 exam</button>
+    <div class="phr-level-grid" id="gr-topic-grid"></div>
+  </div>
+
+  <div id="gr-main" style="display:none;">
+    <div class="progress-wrap" style="margin-bottom:4px;">
+      <div class="progress-bar"><div class="progress-fill" id="gr-progress" style="width:0%"></div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:14px;">
+      <span id="gr-topic-label"></span>
+      <span id="gr-counter"></span>
+    </div>
+
+    <div class="card wf-card">
+      <div id="gr-type-tag" style="font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:12px;"></div>
+      <div id="gr-original" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.05rem;color:var(--text-2);font-style:italic;margin-bottom:12px;display:none;"></div>
+      <div class="wf-sentence" id="gr-sentence"></div>
+      <div id="gr-key-row" class="wf-base-row" style="display:none;">
+        <span class="wf-base-label">Use this word (don't change it):</span>
+        <span class="wf-base" id="gr-key"></span>
+      </div>
+
+      <div id="gr-mc-options" style="display:none;margin-top:16px;display:none;flex-direction:column;gap:9px;"></div>
+
+      <div id="gr-input-row" class="wf-input-row" style="display:none;">
+        <input type="text" id="gr-input" class="wf-input" placeholder="Type your answer…" autocomplete="off" autocapitalize="off" spellcheck="false" onkeydown="if(event.key==='Enter'){event.preventDefault(); grAnswered ? grNext() : grCheck();}">
+        <button class="btn btn-primary" id="gr-check-btn" onclick="grCheck()">Check</button>
+      </div>
+    </div>
+
+    <div id="gr-feedback" style="margin-top:14px;"></div>
+    <div id="gr-next-wrap" style="display:none;margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="grNext()">Next →</button>
+    </div>
+  </div>
+  <div id="gr-results" style="display:none;text-align:center;padding-top:30px;"></div>
 </div>
 
 <!-- ── SCREEN: DIALOGUE PRACTICE ── -->
@@ -2322,6 +2382,234 @@ function showWfResults() {
 }
 
 function endWordForm() { show('student'); switchTab('practice'); }
+
+// ─────────────────────────────────────────────────────────────
+// B1 GRAMMAR — Use of English
+//   types: 'mc' (multiple choice), 'cloze' (open cloze), 'kwt' (key word transformation)
+//   blank marker in q is '@'
+// ─────────────────────────────────────────────────────────────
+const GRAMMAR = [
+  // ── Present Perfect / Past Simple ──
+  { topic:'Present Perfect / Past Simple', type:'mc', q:'I @ to Spain in 2019.', options:['went','have gone','have been','go'], answer:'went', note:'A finished time (2019) takes the past simple.' },
+  { topic:'Present Perfect / Past Simple', type:'mc', q:'She @ in this city since March.', options:['lives','has lived','lived','is living'], answer:'has lived', note:'"since" + a starting point → present perfect.' },
+  { topic:'Present Perfect / Past Simple', type:'cloze', q:"I've known her @ ten years.", answers:['for'], note:'"for" + a period of time.' },
+  { topic:'Present Perfect / Past Simple', type:'cloze', q:"We haven't seen each other @ last summer.", answers:['since'], note:'"since" + a point in time.' },
+  { topic:'Present Perfect / Past Simple', type:'kwt', original:'This is my first time in London.', key:'BEEN', q:'I @ to London before.', answers:["have never been","haven't been","have not been"], note:'Present perfect + never/not for life experience.' },
+
+  // ── Articles ──
+  { topic:'Articles', type:'mc', q:'She is @ honest person.', options:['a','an','the','—'], answer:'an', note:'"honest" starts with a vowel sound (the h is silent).' },
+  { topic:'Articles', type:'mc', q:'I play @ guitar every evening.', options:['a','an','the','—'], answer:'the', note:'Musical instruments take "the".' },
+  { topic:'Articles', type:'cloze', q:'My brother is @ engineer.', answers:['an'], note:'"engineer" starts with a vowel sound.' },
+  { topic:'Articles', type:'cloze', q:'@ sun rises in the east.', answers:['the'], note:'Unique things (the sun) take "the".' },
+  { topic:'Articles', type:'mc', q:'I love @ music.', options:['a','an','the','—'], answer:'—', note:'Uncountable nouns in general need no article.' },
+
+  // ── Prepositions ──
+  { topic:'Prepositions', type:'cloze', q:'It depends @ the weather.', answers:['on'], note:'"depend on" something.' },
+  { topic:'Prepositions', type:'cloze', q:"She's very good @ drawing.", answers:['at'], note:'"good at" doing something.' },
+  { topic:'Prepositions', type:'mc', q:'I am interested @ history.', options:['in','on','at','for'], answer:'in', note:'"interested in" something.' },
+  { topic:'Prepositions', type:'mc', q:'He is married @ a doctor.', options:['with','to','on','at'], answer:'to', note:'"married to" someone.' },
+  { topic:'Prepositions', type:'cloze', q:'We arrived @ the airport at six.', answers:['at'], note:'"arrive at" a place/point; "arrive in" a city/country.' },
+
+  // ── Conditionals ──
+  { topic:'Conditionals', type:'mc', q:'If it @ tomorrow, we will stay home.', options:['rains','will rain','rained','would rain'], answer:'rains', note:'First conditional: if + present simple, will + verb.' },
+  { topic:'Conditionals', type:'mc', q:'If I @ rich, I would travel the world.', options:['am','was','were','will be'], answer:'were', note:'Second conditional uses "were" for all persons.' },
+  { topic:'Conditionals', type:'cloze', q:'If you heat ice, it @.', answers:['melts'], note:'Zero conditional: present simple in both parts for facts.' },
+  { topic:'Conditionals', type:'kwt', original:'I don\'t have a car, so I can\'t drive you.', key:'WOULD', q:'If I had a car, I @ you.', answers:["would drive"], note:'Second conditional: would + base verb.' },
+  { topic:'Conditionals', type:'cloze', q:'If she @ harder, she would pass the exam.', answers:['studied','worked'], note:'Second conditional: past simple in the if-clause.' },
+
+  // ── Modals ──
+  { topic:'Modals', type:'mc', q:'You @ smoke here — it is forbidden.', options:["mustn't","don't have to","shouldn't","needn't"], answer:"mustn't", note:'"mustn\'t" = it is prohibited.' },
+  { topic:'Modals', type:'mc', q:'We @ hurry; we have plenty of time.', options:["mustn't","don't have to","can't","shouldn't"], answer:"don't have to", note:'"don\'t have to" = it is not necessary.' },
+  { topic:'Modals', type:'cloze', q:'You look tired. You @ go to bed early.', answers:['should','could','must'], note:'"should" gives advice.' },
+  { topic:'Modals', type:'kwt', original:'It is not necessary to bring food.', key:'HAVE', q:'You @ bring food.', answers:["don't have to","do not have to"], note:'"don\'t have to" = not necessary.' },
+  { topic:'Modals', type:'mc', q:'When I was a child, I @ swim very well.', options:['could','can','must','should'], answer:'could', note:'"could" for past ability.' },
+
+  // ── Passive Voice ──
+  { topic:'Passive Voice', type:'mc', q:'This bridge @ in 1890.', options:['built','was built','is built','has built'], answer:'was built', note:'Past passive: was/were + past participle.' },
+  { topic:'Passive Voice', type:'cloze', q:'English @ spoken all over the world.', answers:['is'], note:'Present passive: is/are + past participle.' },
+  { topic:'Passive Voice', type:'kwt', original:'Somebody stole my bike yesterday.', key:'WAS', q:'My bike @ yesterday.', answers:["was stolen"], note:'Passive: was + past participle.' },
+  { topic:'Passive Voice', type:'mc', q:'The report @ by next Friday.', options:['will finish','will be finished','is finishing','finishes'], answer:'will be finished', note:'Future passive: will be + past participle.' },
+  { topic:'Passive Voice', type:'cloze', q:'The Mona Lisa @ painted by Leonardo da Vinci.', answers:['was'], note:'Past passive with a known artist.' },
+
+  // ── Comparatives & Superlatives ──
+  { topic:'Comparatives', type:'cloze', q:'This book is more interesting @ that one.', answers:['than'], note:'Comparatives are followed by "than".' },
+  { topic:'Comparatives', type:'mc', q:'Today is @ day of the year.', options:['hot','hotter','the hottest','hottest'], answer:'the hottest', note:'Superlative + "the".' },
+  { topic:'Comparatives', type:'mc', q:'She runs @ than her brother.', options:['fast','faster','fastest','more fast'], answer:'faster', note:'One-syllable adjective/adverb: add -er.' },
+  { topic:'Comparatives', type:'kwt', original:'I have never read such a good book.', key:'BEST', q:'This is @ book I have ever read.', answers:["the best"], note:'Superlative for "the most ... ever".' },
+  { topic:'Comparatives', type:'cloze', q:'My new phone is @ expensive as my old one.', answers:['as'], note:'"as ... as" for equality.' },
+
+  // ── Reported Speech ──
+  { topic:'Reported Speech', type:'mc', q:'She said she @ tired.', options:['is','was','will be','has been'], answer:'was', note:'Present → past in reported speech.' },
+  { topic:'Reported Speech', type:'kwt', original:'"I will call you," he said.', key:'WOULD', q:'He said he @ me.', answers:["would call"], note:'"will" → "would" in reported speech.' },
+  { topic:'Reported Speech', type:'cloze', q:'He told @ that the shop was closed.', answers:['me','us','her','him','them'], note:'"tell" needs an object (tell someone).' },
+  { topic:'Reported Speech', type:'mc', q:'She asked me where I @.', options:['live','lived','have lived','living'], answer:'lived', note:'Present simple → past simple in reported questions.' },
+  { topic:'Reported Speech', type:'kwt', original:'"Do you speak French?" she asked me.', key:'IF', q:'She asked me @ French.', answers:["if i spoke","whether i spoke"], note:'Reported yes/no question: ask if/whether + past.' },
+
+  // ── Relative Clauses ──
+  { topic:'Relative Clauses', type:'mc', q:'The man @ lives next door is a teacher.', options:['which','who','where','whose'], answer:'who', note:'"who" for people.' },
+  { topic:'Relative Clauses', type:'mc', q:'This is the house @ I was born.', options:['which','who','where','that'], answer:'where', note:'"where" for places.' },
+  { topic:'Relative Clauses', type:'cloze', q:'That is the girl @ bag was stolen.', answers:['whose'], note:'"whose" for possession.' },
+  { topic:'Relative Clauses', type:'cloze', q:'The film @ we watched was boring.', answers:['that','which'], note:'"that/which" for things.' },
+  { topic:'Relative Clauses', type:'kwt', original:'I met a woman. Her son is a famous actor.', key:'WHOSE', q:'I met a woman @ son is a famous actor.', answers:["whose"], note:'"whose" joins two sentences showing possession.' },
+
+  // ── Gerund / Infinitive ──
+  { topic:'Gerund / Infinitive', type:'mc', q:'I enjoy @ to music.', options:['listen','to listen','listening','listened'], answer:'listening', note:'"enjoy" is followed by the -ing form.' },
+  { topic:'Gerund / Infinitive', type:'mc', q:'She decided @ a new car.', options:['buy','to buy','buying','bought'], answer:'to buy', note:'"decide" is followed by to + infinitive.' },
+  { topic:'Gerund / Infinitive', type:'cloze', q:'He is good at @ problems. (solve)', answers:['solving'], note:'After a preposition, use the -ing form.' },
+  { topic:'Gerund / Infinitive', type:'kwt', original:'"Let\'s go to the cinema," she said.', key:'SUGGESTED', q:'She @ to the cinema.', answers:["suggested going"], note:'"suggest" + -ing form.' },
+  { topic:'Gerund / Infinitive', type:'mc', q:'I want @ a doctor one day.', options:['become','to become','becoming','became'], answer:'to become', note:'"want" is followed by to + infinitive.' },
+];
+
+let grItems = [], grIndex = 0, grScore = 0, grAnswered = false, grTopicName = '';
+
+function grNorm(s) {
+  return (s || '').toLowerCase().trim()
+    .replace(/’/g, "'")
+    .replace(/\bi'm\b/g,'i am').replace(/\bisn't\b/g,'is not').replace(/\baren't\b/g,'are not')
+    .replace(/\bwasn't\b/g,'was not').replace(/\bweren't\b/g,'were not')
+    .replace(/\bdon't\b/g,'do not').replace(/\bdoesn't\b/g,'does not').replace(/\bdidn't\b/g,'did not')
+    .replace(/\bhaven't\b/g,'have not').replace(/\bhasn't\b/g,'has not').replace(/\bhadn't\b/g,'had not')
+    .replace(/\bwon't\b/g,'will not').replace(/\bwouldn't\b/g,'would not')
+    .replace(/\bcan't\b/g,'can not').replace(/\bcannot\b/g,'can not')
+    .replace(/\bcouldn't\b/g,'could not').replace(/\bshouldn't\b/g,'should not').replace(/\bmustn't\b/g,'must not')
+    .replace(/\bi've\b/g,'i have').replace(/\byou've\b/g,'you have').replace(/\bwe've\b/g,'we have').replace(/\bthey've\b/g,'they have')
+    .replace(/\bi'd\b/g,'i would').replace(/\bi'll\b/g,'i will')
+    .replace(/\bit's\b/g,'it is').replace(/\bhe's\b/g,'he is').replace(/\bshe's\b/g,'she is')
+    .replace(/\bthat's\b/g,'that is').replace(/\bthere's\b/g,'there is')
+    .replace(/[.,!?;:"]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+
+const GR_TYPE_LABEL = { mc:'Multiple choice', cloze:'Open cloze', kwt:'Key word transformation' };
+
+function startGrammar() {
+  document.getElementById('gr-topics').style.display = '';
+  document.getElementById('gr-main').style.display = 'none';
+  document.getElementById('gr-results').style.display = 'none';
+  // build topic buttons
+  const topics = [...new Set(GRAMMAR.map(g => g.topic))];
+  const grid = document.getElementById('gr-topic-grid');
+  grid.innerHTML = topics.map(t => {
+    const count = GRAMMAR.filter(g => g.topic === t).length;
+    return '<button class="phr-level-btn" onclick="beginGrammar(' + JSON.stringify(t).replace(/"/g,'&quot;') + ')"><b>' + esc(t) + '</b><span>' + count + ' tasks</span></button>';
+  }).join('');
+  show('grammar');
+}
+
+function beginGrammar(topic) {
+  let pool;
+  if (topic === '__mixed__') { pool = GRAMMAR.slice(); grTopicName = 'Mixed B1 exam'; }
+  else { pool = GRAMMAR.filter(g => g.topic === topic); grTopicName = topic; }
+  grItems = shuffle(pool).slice(0, topic === '__mixed__' ? 15 : pool.length);
+  grIndex = 0; grScore = 0;
+  document.getElementById('gr-topics').style.display = 'none';
+  document.getElementById('gr-main').style.display = '';
+  document.getElementById('gr-results').style.display = 'none';
+  renderGrQ();
+}
+
+function renderGrQ() {
+  if (grIndex >= grItems.length) { showGrResults(); return; }
+  const it = grItems[grIndex];
+  grAnswered = false;
+  document.getElementById('gr-progress').style.width = (grIndex / grItems.length * 100) + '%';
+  document.getElementById('gr-counter').textContent = (grIndex + 1) + ' of ' + grItems.length;
+  document.getElementById('gr-topic-label').textContent = grTopicName;
+  document.getElementById('gr-type-tag').textContent = GR_TYPE_LABEL[it.type];
+  document.getElementById('gr-feedback').innerHTML = '';
+  document.getElementById('gr-next-wrap').style.display = 'none';
+
+  const sentence = esc(it.q).replace('@', '<span class="wf-blank"></span>');
+  document.getElementById('gr-sentence').innerHTML = sentence;
+
+  // reset sections
+  const orig = document.getElementById('gr-original');
+  const keyRow = document.getElementById('gr-key-row');
+  const mcBox = document.getElementById('gr-mc-options');
+  const inputRow = document.getElementById('gr-input-row');
+  orig.style.display = 'none'; keyRow.style.display = 'none';
+  mcBox.style.display = 'none'; inputRow.style.display = 'none';
+
+  if (it.type === 'kwt') {
+    orig.textContent = it.original; orig.style.display = '';
+    document.getElementById('gr-key').textContent = it.key; keyRow.style.display = 'flex';
+  }
+
+  if (it.type === 'mc') {
+    mcBox.style.display = 'flex';
+    mcBox.innerHTML = shuffle(it.options.slice()).map(opt =>
+      '<button class="gr-opt" onclick="grPickMc(this, ' + JSON.stringify(opt).replace(/"/g,'&quot;') + ')">' + esc(opt) + '</button>'
+    ).join('');
+  } else {
+    inputRow.style.display = 'flex';
+    const inp = document.getElementById('gr-input');
+    inp.value = ''; inp.readOnly = false; inp.className = 'wf-input';
+    document.getElementById('gr-check-btn').disabled = false;
+    setTimeout(() => inp.focus(), 60);
+  }
+}
+
+function grShowFeedback(ok, correctText) {
+  const it = grItems[grIndex];
+  const full = it.type === 'kwt'
+    ? it.original + ' → ' + it.q.replace('@', correctText)
+    : it.q.replace('@', correctText);
+  document.getElementById('gr-feedback').innerHTML =
+    '<div class="wf-fb ' + (ok ? 'ok' : 'bad') + '">' +
+      (ok ? '✅ Correct!' : '❌ Answer: <span class="wf-fb-ans">' + esc(correctText) + '</span>') +
+      '<div class="wf-fb-full">' + esc(full) + '</div>' +
+      (it.note ? '<div class="wf-fb-full" style="font-style:normal;">💡 ' + esc(it.note) + '</div>' : '') +
+    '</div>';
+  document.getElementById('gr-next-wrap').style.display = '';
+}
+
+function grPickMc(btn, chosen) {
+  if (grAnswered) return;
+  grAnswered = true;
+  const it = grItems[grIndex];
+  const ok = grNorm(chosen) === grNorm(it.answer);
+  if (ok) grScore++;
+  document.querySelectorAll('#gr-mc-options .gr-opt').forEach(b => {
+    b.disabled = true;
+    if (grNorm(b.textContent) === grNorm(it.answer)) b.classList.add('is-correct');
+  });
+  if (!ok) btn.classList.add('is-wrong');
+  grShowFeedback(ok, it.answer);
+}
+
+function grCheck() {
+  if (grAnswered) return;
+  const it = grItems[grIndex];
+  const inp = document.getElementById('gr-input');
+  const typed = inp.value.trim();
+  if (!typed) { inp.focus(); return; }
+  grAnswered = true;
+  const accepted = (it.answers || [it.answer]).map(grNorm);
+  const ok = accepted.includes(grNorm(typed));
+  if (ok) grScore++;
+  inp.readOnly = true;
+  inp.classList.add(ok ? 'is-correct' : 'is-wrong');
+  document.getElementById('gr-check-btn').disabled = true;
+  grShowFeedback(ok, (it.answers || [it.answer])[0]);
+}
+
+function grNext() { grIndex++; renderGrQ(); }
+
+function showGrResults() {
+  document.getElementById('gr-main').style.display = 'none';
+  const pct = Math.round(grScore / grItems.length * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
+  const res = document.getElementById('gr-results');
+  res.style.display = '';
+  res.innerHTML =
+    '<div style="font-size:3rem;margin-bottom:10px;">' + emoji + '</div>' +
+    '<div style="font-family:\'Cormorant Garamond\',serif;font-size:2.2rem;">' + grScore + '/' + grItems.length + '</div>' +
+    '<div style="color:var(--muted);font-size:.9rem;margin-bottom:28px;">' + pct + '% correct</div>' +
+    '<button class="btn btn-primary btn-full" onclick="startGrammar()">Choose another topic</button>' +
+    '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endGrammar()">← Back to practice</button>';
+}
+
+function endGrammar() { show('student'); switchTab('practice'); }
 
 // ─────────────────────────────────────────────────────────────
 // ── Part-of-speech detection (based on word form) ──
