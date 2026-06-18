@@ -223,6 +223,7 @@
   .mode-icon { font-size: 1.8rem; margin-bottom: 13px; display: block; }
   .mode-name { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 1.18rem; color: var(--text); margin-bottom: 5px; letter-spacing: 0.2px; }
   .mode-desc { color: var(--muted); font-size: 0.73rem; line-height: 1.5; }
+  .mode-desc-ru { color: var(--muted); font-size: 0.72rem; line-height: 1.45; font-style: italic; margin-top: 4px; opacity: 0.85; }
 
   /* ── PROGRESS BAR ── */
   .progress-wrap { margin-bottom: 28px; }
@@ -738,31 +739,37 @@
         <span class="mode-icon">📝</span>
         <div class="mode-name">Fill the Gap</div>
         <div class="mode-desc">Choose your level · complete the sentence · get an explanation</div>
+        <div class="mode-desc-ru">Выбери уровень · заполни пропуск · получи объяснение</div>
       </div>
       <div class="mode-card" onclick="startOffice()">
         <span class="mode-icon">📺</span>
         <div class="mode-name">The Office</div>
         <div class="mode-desc">Watch a real clip · vocabulary challenge · authentic English</div>
+        <div class="mode-desc-ru">Посмотри реальный отрывок · задание на лексику · живой английский</div>
       </div>
       <div class="mode-card" onclick="openDialogueScreen()" style="grid-column:1/-1;">
         <span class="mode-icon">💬</span>
         <div class="mode-name">Dialogue Practice</div>
         <div class="mode-desc">Real-life situations · translate the line · compare with the model answer</div>
+        <div class="mode-desc-ru">Реальные ситуации · переведи реплику · сравни с образцом</div>
       </div>
       <div class="mode-card" onclick="startPhrasal()" style="grid-column:1/-1;">
         <span class="mode-icon">🔗</span>
         <div class="mode-name">Phrasal Verbs</div>
         <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
+        <div class="mode-desc-ru">Соедини две части · прочитай подсказку · собери фразовый глагол</div>
       </div>
       <div class="mode-card" onclick="startWordForm()" style="grid-column:1/-1;">
         <span class="mode-icon">🔤</span>
         <div class="mode-name">Word Formation</div>
         <div class="mode-desc">Use of English · change the word in capitals to fit the sentence</div>
+        <div class="mode-desc-ru">Use of English · измени слово из заглавных букв, чтобы оно подошло</div>
       </div>
       <div class="mode-card" onclick="startGrammar()" style="grid-column:1/-1;">
         <span class="mode-icon">🎓</span>
         <div class="mode-name">B1 Grammar</div>
         <div class="mode-desc">Use of English · pick a topic or take a mixed exam · transformations, open cloze & multiple choice</div>
+        <div class="mode-desc-ru">Грамматика · выбери тему или смешанный экзамен · трансформации, open cloze и выбор ответа</div>
       </div>
       <div class="mode-card" onclick="startLibrary()" style="grid-column:1/-1;">
         <span class="mode-icon">📖</span>
@@ -785,16 +792,19 @@
           <span class="mode-icon">🃏</span>
           <div class="mode-name">Flashcards</div>
           <div class="mode-desc">Tap to flip and reveal translation & example</div>
+          <div class="mode-desc-ru">Нажми, чтобы перевернуть карточку — перевод и пример</div>
         </div>
         <div class="mode-card" onclick="startQuiz()">
           <span class="mode-icon">✏️</span>
           <div class="mode-name">Quiz</div>
           <div class="mode-desc">Multiple choice — test your memory</div>
+          <div class="mode-desc-ru">Выбор ответа — проверь свою память</div>
         </div>
         <div class="mode-card" onclick="startContext()" style="grid-column:1/-1;">
           <span class="mode-icon">🔍</span>
           <div class="mode-name">In Context</div>
           <div class="mode-desc">Your words · hidden in real sentences · pick the right one</div>
+          <div class="mode-desc-ru">Твои слова · спрятаны в живых предложениях · выбери нужное</div>
         </div>
       </div>
     </div>
@@ -2744,9 +2754,27 @@ const GRAMMAR_LIBRARY = [
     egs:[{en:'The man who lives here is a doctor.', ru:'Мужчина, который здесь живёт, — врач.'},{en:'This is the house where I grew up.', ru:'Это дом, где я вырос.'},{en:'The girl whose bag was stolen…', ru:'Девушка, чью сумку украли…'}],
     tip:'💡 whose = «чей» — соединяет два предложения, показывая принадлежность.' },
   { cat:'Структуры', title:'Gerund vs Infinitive', title_ru:'Герундий (-ing) или инфинитив (to)',
-    rule:'После одних глаголов — <b>-ing</b> (enjoy, finish, avoid, suggest, mind), после других — <b>to + verb</b> (want, decide, hope, promise, need). После предлогов — всегда <b>-ing</b>.',
-    egs:[{en:'I enjoy reading.', ru:'Мне нравится читать.'},{en:'I decided to leave.', ru:'Я решил уйти.'},{en:'She is good at singing.', ru:'Она хорошо поёт. (после предлога at → -ing)'}],
-    tip:'💡 После предлога (at, of, about, in) — ВСЕГДА -ing форма: interested in learning.' },
+    rule:`Выбор формы зависит от <b>первого</b> глагола — его нужно просто запомнить. После предлогов (at, of, in, about, to…) — <b>всегда -ing</b>.
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;">
+  <div style="background:var(--sage-light);border-radius:10px;padding:10px 12px;">
+    <div style="font-weight:600;color:var(--sage-dark);margin-bottom:6px;">verb + <u>to</u> (инфинитив)</div>
+    <div style="font-size:0.84rem;line-height:1.75;">want — хотеть<br>would like — хотел бы<br>decide — решить<br>hope — надеяться<br>plan — планировать<br>promise — обещать<br>agree — соглашаться<br>refuse — отказываться<br>offer — предлагать<br>manage — суметь<br>afford — позволить себе<br>expect — ожидать<br>learn — учиться<br>choose — выбирать<br>need — нуждаться<br>arrange — договориться<br>pretend — притворяться<br>seem — казаться<br>tend — быть склонным<br>wish — желать<br>fail — не суметь<br>hesitate — колебаться<br>intend — намереваться<br>deserve — заслуживать<br>threaten — угрожать<br>demand — требовать</div>
+  </div>
+  <div style="background:var(--pink-light);border-radius:10px;padding:10px 12px;">
+    <div style="font-weight:600;color:var(--pink-dark);margin-bottom:6px;">verb + <u>-ing</u> (герундий)</div>
+    <div style="font-size:0.84rem;line-height:1.75;">enjoy — наслаждаться<br>finish — заканчивать<br>avoid — избегать<br>suggest — предлагать<br>mind — возражать<br>keep — продолжать<br>practise — практиковать<br>miss — скучать/упускать<br>imagine — представлять<br>admit — признавать<br>deny — отрицать<br>consider — обдумывать<br>delay — откладывать<br>postpone — откладывать<br>risk — рисковать<br>can't stand — терпеть не могу<br>can't help — не могу удержаться<br>give up — бросить<br>put off — откладывать<br>carry on — продолжать<br>feel like — хотеться<br>look forward to — ждать с нетерпением<br>be used to — быть привыкшим<br>dislike — не любить<br>fancy — хотеть<br>recommend — рекомендовать<br>appreciate — ценить</div>
+  </div>
+</div>
+<b>Меняют смысл</b> в зависимости от формы:
+<div style="background:var(--cream);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:0.86rem;line-height:1.7;">
+<b>remember</b> to do — не забыть сделать · <b>remember</b> doing — помнить, что делал<br>
+<b>forget</b> to do — забыть сделать · <b>forget</b> doing — забыть, что делал<br>
+<b>stop</b> to do — остановиться, чтобы сделать · <b>stop</b> doing — перестать делать<br>
+<b>try</b> to do — пытаться (приложить усилие) · <b>try</b> doing — попробовать (эксперимент)<br>
+<b>regret</b> to say — с сожалением сообщать · <b>regret</b> doing — сожалеть о сделанном
+</div>`,
+    egs:[{en:'I enjoy reading.', ru:'Мне нравится читать. (enjoy + -ing)'},{en:'I decided to leave.', ru:'Я решил уйти. (decide + to)'},{en:'She is good at singing.', ru:'Она хорошо поёт. (после предлога at → -ing)'},{en:'I stopped to rest. / I stopped smoking.', ru:'Я остановился, чтобы отдохнуть. / Я бросил курить.'}],
+    tip:'💡 После предлога (at, of, about, in, to) — ВСЕГДА -ing: interested in learning, look forward to seeing you.' },
 ];
 
 let libOpenId = null;
