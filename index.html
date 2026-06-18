@@ -1940,8 +1940,9 @@ function makeBlankSentence(word, sentence) {
     word.replace(/^to /, '').split(' ')[0]
   ].filter((t, i, a) => t.length > 1 && a.indexOf(t) === i);
   for (const t of targets) {
-    const result = sentence.replace(new RegExp(escRe(t), 'gi'), '_____');
-    if (result !== sentence) return result;
+    // match the word AND its common inflections as a whole word (suggest → suggested, manage → managed)
+    const re = new RegExp('\\b' + escRe(t) + '(?:es|ed|ing|s|d)?\\b', 'gi');
+    if (re.test(sentence)) return sentence.replace(re, '_____');
   }
   return null;
 }
@@ -4754,26 +4755,26 @@ const CAROLINA_WORDS = [
 ];
 
 const ALEXANDER_WORDS = [
-  { word: 'reliable', translation: 'надёжный', example: 'He is a reliable friend — he never lets me down.', lesson: 'B1 Starter' },
-  { word: 'achieve', translation: 'достигать', example: 'She worked hard to achieve her goals.', lesson: 'B1 Starter' },
-  { word: 'improve', translation: 'улучшать(ся)', example: 'I want to improve my English this year.', lesson: 'B1 Starter' },
-  { word: 'experience', translation: 'опыт', example: 'She has a lot of experience in teaching.', lesson: 'B1 Starter' },
-  { word: 'opportunity', translation: 'возможность', example: 'This job is a great opportunity for me.', lesson: 'B1 Starter' },
-  { word: 'decision', translation: 'решение', example: 'It was a difficult decision to make.', lesson: 'B1 Starter' },
-  { word: 'avoid', translation: 'избегать', example: 'Try to avoid junk food.', lesson: 'B1 Starter' },
-  { word: 'suggest', translation: 'предлагать', example: 'I suggest going to the park.', lesson: 'B1 Starter' },
-  { word: 'realise', translation: 'осознавать', example: "I didn't realise it was so late.", lesson: 'B1 Starter' },
-  { word: 'manage to', translation: 'суметь, справиться', example: 'She managed to finish the report on time.', lesson: 'B1 Starter' },
-  { word: 'recommend', translation: 'рекомендовать', example: 'Can you recommend a good restaurant?', lesson: 'B1 Starter' },
-  { word: 'confident', translation: 'уверенный', example: 'She feels confident before exams.', lesson: 'B1 Starter' },
-  { word: 'borrow', translation: 'брать взаймы', example: 'Can I borrow your pen?', lesson: 'B1 Starter' },
-  { word: 'lend', translation: 'давать взаймы', example: 'He lent me some money.', lesson: 'B1 Starter' },
-  { word: 'increase', translation: 'увеличивать(ся)', example: 'Prices have increased this year.', lesson: 'B1 Starter' },
-  { word: 'reduce', translation: 'уменьшать', example: 'We need to reduce our spending.', lesson: 'B1 Starter' },
-  { word: 'available', translation: 'доступный, в наличии', example: 'The tickets are still available.', lesson: 'B1 Starter' },
-  { word: 'crowded', translation: 'переполненный, людный', example: 'The train was very crowded this morning.', lesson: 'B1 Starter' },
-  { word: 'on purpose', translation: 'специально, нарочно', example: "I didn't do it on purpose — it was an accident.", lesson: 'B1 Starter' },
-  { word: 'get used to', translation: 'привыкать к', example: "It took me a while to get used to the new job.", lesson: 'B1 Starter' },
+  { word: 'reliable', translation: 'надёжный', example: 'You can always count on Maria — she is the most reliable person on the whole team.', lesson: 'B1 Starter' },
+  { word: 'achieve', translation: 'достигать', example: 'After two years of hard training, she finally achieved her dream of running a marathon.', lesson: 'B1 Starter' },
+  { word: 'improve', translation: 'улучшать(ся)', example: 'Reading in English every single day is the best way to improve your vocabulary.', lesson: 'B1 Starter' },
+  { word: 'experience', translation: 'опыт', example: 'The new manager has more than ten years of experience in international marketing.', lesson: 'B1 Starter' },
+  { word: 'opportunity', translation: 'возможность', example: 'Studying abroad gave me the opportunity to meet people from all over the world.', lesson: 'B1 Starter' },
+  { word: 'decision', translation: 'решение', example: 'Choosing which university to apply to was the hardest decision of my whole life.', lesson: 'B1 Starter' },
+  { word: 'avoid', translation: 'избегать', example: 'If you want to sleep well, you should avoid drinking coffee late in the evening.', lesson: 'B1 Starter' },
+  { word: 'suggest', translation: 'предлагать', example: 'It was raining, so Tom suggested watching a film at home instead of going out.', lesson: 'B1 Starter' },
+  { word: 'realise', translation: 'осознавать', example: 'It was only when I got home that I realised I had left my keys at the office.', lesson: 'B1 Starter' },
+  { word: 'manage to', translation: 'суметь, справиться', example: 'Despite the terrible traffic, we somehow managed to reach the airport on time.', lesson: 'B1 Starter' },
+  { word: 'recommend', translation: 'рекомендовать', example: 'The waiter strongly recommended the grilled salmon, and it was absolutely delicious.', lesson: 'B1 Starter' },
+  { word: 'confident', translation: 'уверенный', example: 'After weeks of rehearsing, she felt calm and confident before the big presentation.', lesson: 'B1 Starter' },
+  { word: 'borrow', translation: 'брать взаймы', example: 'I forgot my umbrella, so I had to borrow one from a colleague at work.', lesson: 'B1 Starter' },
+  { word: 'lend', translation: 'давать взаймы', example: 'My kind neighbour offered to lend me his ladder so I could paint the ceiling.', lesson: 'B1 Starter' },
+  { word: 'increase', translation: 'увеличивать(ся)', example: 'The number of online students has increased dramatically over the last five years.', lesson: 'B1 Starter' },
+  { word: 'reduce', translation: 'уменьшать', example: 'Turning off the lights when you leave a room helps to reduce your electricity bill.', lesson: 'B1 Starter' },
+  { word: 'available', translation: 'доступный, в наличии', example: 'I am very sorry, but the doctor is not available until Thursday afternoon.', lesson: 'B1 Starter' },
+  { word: 'crowded', translation: 'переполненный, людный', example: 'The beach was so crowded on Sunday that we could hardly find a place to sit.', lesson: 'B1 Starter' },
+  { word: 'on purpose', translation: 'специально, нарочно', example: "I'm sure the little boy didn't break the vase on purpose — it was just an accident.", lesson: 'B1 Starter' },
+  { word: 'get used to', translation: 'привыкать к', example: 'When I first moved to London, it took me months to get used to the rainy weather.', lesson: 'B1 Starter' },
 ];
 
 (function seedDemo() {
