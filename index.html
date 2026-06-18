@@ -2782,6 +2782,70 @@ function endGrammar() { show('student'); switchTab('practice'); }
 // GRAMMAR LIBRARY — reference, rules in Russian (shared by all students)
 // ─────────────────────────────────────────────────────────────
 const GRAMMAR_LIBRARY = [
+  // ── Для начинающих (A1) ──
+  { cat:'Для начинающих (A1)', title:'To be: am / is / are', title_ru:'Глагол «быть»: am / is / are',
+    rule:`«To be» — это глагол <b>быть</b>. В русском мы часто его не говорим («Я студент»), а в английском он <b>нужен всегда</b>.<br><br>
+<b>Какую форму выбрать:</b>
+<div style="background:var(--cream);border-radius:10px;padding:10px 13px;margin:8px 0;line-height:1.9;">
+I → <b>am</b> &nbsp;(я)<br>
+he / she / it → <b>is</b> &nbsp;(он / она / оно)<br>
+you / we / they → <b>are</b> &nbsp;(ты, вы / мы / они)
+</div>
+<b>✅ Утверждение:</b> I <b>am</b> a student. (Я студент.)<br>
+<b>❌ Отрицание</b> — добавь <b>not</b>: She <b>is not</b> (isn't) late. (Она не опоздала.)<br>
+<b>❓ Вопрос</b> — поставь be <b>в начало</b>: <b>Are</b> you a teacher? (Ты учитель?)`,
+    egs:[{en:'I am happy.', ru:'Я счастлив.'},{en:"He isn't at home.", ru:'Его нет дома.'},{en:'Are they brothers?', ru:'Они братья?'}],
+    tip:'💡 Короткие формы: I am = I\'m, he is = he\'s, you are = you\'re, is not = isn\'t, are not = aren\'t.' },
+
+  { cat:'Для начинающих (A1)', title:'Can / can\'t', title_ru:'Мочь / уметь: can',
+    rule:`<b>can</b> = <b>мочь / уметь</b>. После can всегда идёт глагол <b>без частицы to и без -s</b>.<br><br>
+<b>✅ Умение:</b> I <b>can</b> swim. (Я умею плавать.) — форма одна для всех: I can, he can, we can.<br>
+<b>❌ Отрицание:</b> She <b>can't</b> (cannot) cook. (Она не умеет готовить.)<br>
+<b>❓ Вопрос</b> — can <b>в начало</b>: <b>Can</b> you sing? (Ты умеешь петь?)`,
+    egs:[{en:'I can drive a car.', ru:'Я умею водить машину.'},{en:"He can't speak French.", ru:'Он не говорит по-французски.'},{en:'Can you play the guitar?', ru:'Ты умеешь играть на гитаре?'}],
+    tip:'⚠️ Никогда не говори «he cans» или «can to swim». Правильно: he can swim.' },
+
+  { cat:'Для начинающих (A1)', title:'Personal pronouns', title_ru:'Личные местоимения (кто делает)',
+    rule:`Это слова, которые <b>заменяют имя</b> и стоят перед глаголом — <b>кто</b> делает действие.
+<div style="background:var(--cream);border-radius:10px;padding:10px 13px;margin:8px 0;line-height:1.9;">
+<b>I</b> — я &nbsp;·&nbsp; <b>you</b> — ты / вы<br>
+<b>he</b> — он &nbsp;·&nbsp; <b>she</b> — она &nbsp;·&nbsp; <b>it</b> — оно (предмет, животное)<br>
+<b>we</b> — мы &nbsp;·&nbsp; <b>they</b> — они
+</div>`,
+    egs:[{en:'I am a student.', ru:'Я студент.'},{en:'She is my sister.', ru:'Она моя сестра.'},{en:'They are friends.', ru:'Они друзья.'}],
+    tip:'💡 «it» — для предметов и животных: Where is my bag? — It is here. (Она здесь.)' },
+
+  { cat:'Для начинающих (A1)', title:'Possessive pronouns', title_ru:'Притяжательные местоимения (чей)',
+    rule:`Эти слова показывают, <b>чей</b> предмет. Они стоят <b>перед существительным</b>: my bag, his car.
+<div style="background:var(--cream);border-radius:10px;padding:10px 13px;margin:8px 0;line-height:1.9;">
+<b>my</b> — мой &nbsp;·&nbsp; <b>your</b> — твой / ваш<br>
+<b>his</b> — его &nbsp;·&nbsp; <b>her</b> — её &nbsp;·&nbsp; <b>its</b> — его/её (для предмета, животного)<br>
+<b>our</b> — наш &nbsp;·&nbsp; <b>their</b> — их
+</div>`,
+    egs:[{en:'This is my bag.', ru:'Это моя сумка.'},{en:'Her name is Anna.', ru:'Её зовут Анна.'},{en:'Their flat is big.', ru:'Их квартира большая.'}],
+    tip:'⚠️ Не путай: he (он) → his (его); she (она) → her (её); they (они) → their (их).' },
+
+  { cat:'Для начинающих (A1)', title:'Question words', title_ru:'Вопросительные слова',
+    rule:`Эти слова стоят <b>в начале вопроса</b>:
+<div style="background:var(--cream);border-radius:10px;padding:10px 13px;margin:8px 0;line-height:1.9;">
+<b>what</b> — что / какой &nbsp;·&nbsp; <b>who</b> — кто<br>
+<b>where</b> — где / куда &nbsp;·&nbsp; <b>when</b> — когда<br>
+<b>why</b> — почему &nbsp;·&nbsp; <b>how</b> — как<br>
+<b>how old</b> — сколько лет &nbsp;·&nbsp; <b>how much</b> — сколько (цена)
+</div>`,
+    egs:[{en:'What is this?', ru:'Что это?'},{en:'Where is my bag?', ru:'Где моя сумка?'},{en:'How old are you?', ru:'Сколько тебе лет?'},{en:'How much is it?', ru:'Сколько это стоит?'}],
+    tip:'💡 Порядок: вопросительное слово + be/can + кто. → Where are you? How old is he?' },
+
+  { cat:'Для начинающих (A1)', title:'This / That / These / Those', title_ru:'Этот / тот / эти / те',
+    rule:`Эти слова показывают на предметы — <b>близко</b> или <b>далеко</b>, <b>один</b> или <b>много</b>.
+<div style="background:var(--cream);border-radius:10px;padding:10px 13px;margin:8px 0;line-height:1.9;">
+<b>this</b> — этот (один, близко) &nbsp;·&nbsp; <b>that</b> — тот (один, далеко)<br>
+<b>these</b> — эти (много, близко) &nbsp;·&nbsp; <b>those</b> — те (много, далеко)
+</div>
+Один предмет → <b>is</b>; много → <b>are</b>.`,
+    egs:[{en:'This is my photo.', ru:'Это моя фотография. (близко)'},{en:'That is your bag.', ru:'То — твоя сумка. (далеко)'},{en:'These are my keys.', ru:'Это мои ключи. (много, близко)'},{en:'Those are tall buildings.', ru:'Те — высокие здания. (много, далеко)'}],
+    tip:'💡 this/that → один предмет (is). these/those → много предметов (are).' },
+
   // ── Времена / Tenses ──
   { cat:'Времена', title:'Present Simple vs Present Continuous', title_ru:'Простое и длительное настоящее',
     rule:'<b>Present Simple</b> — для регулярных действий, привычек, фактов: I <b>work</b> every day. Маркеры: always, usually, often, every day.<br><br><b>Present Continuous</b> (am/is/are + V-ing) — для действия прямо сейчас или временного: I <b>am working</b> now. Маркеры: now, at the moment, today.',
