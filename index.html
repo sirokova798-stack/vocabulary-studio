@@ -1947,23 +1947,108 @@ function makeBlankSentence(word, sentence) {
   return null;
 }
 
+// ── Smart distractor pools for In Context (curated English, by grammatical frame) ──
+const CTX_POOLS_RAW = {
+  gerund: ['avoid','enjoy','keep','consider','finish','mind','practise','imagine','admit','deny','miss','risk','suggest','recommend','dislike','give up','put off','feel like','have a go at','look forward to','spend hours','carry on'],
+  to: ['want','decide','hope','manage','refuse','agree','learn','plan','offer','promise','expect','choose','need','pretend','prepare','afford','arrange','tend','wish','threaten','fail','deserve'],
+  noun: ['decision','opportunity','experience','memory','silence','injury','reason','result','habit','attention','distance','reputation','assumption','solution','progress','knowledge','advice','patience','confidence','pleasure','influence','diversity'],
+  adjective: ['reliable','confident','anxious','calm','curious','honest','independent','useless','decent','modern','traditional','rare','suitable','crowded','exhausted','nervous','pleased','grounded','vague','frightening','divine','superficial'],
+  adverb: ['carefully','suddenly','usually','probably','quickly','quietly','recently','badly','clearly','rarely','gradually','certainly','frantically','eventually','obviously','deliberately'],
+  phrase: ['have a go at','put on weight','give up smoking','keep in touch','take your time','make a decision','get used to','on purpose','in moderation','keep your distance','read between the lines','take a bite','stretch your legs','side with']
+};
+CTX_POOLS_RAW.verb = [...new Set([...CTX_POOLS_RAW.gerund, ...CTX_POOLS_RAW.to])];
+CTX_POOLS_RAW.general = [...new Set(Object.values(CTX_POOLS_RAW).flat())];
+const CTX_POOLS = CTX_POOLS_RAW;
+
+const CTX_SYNONYMS = [
+  ['suggest','recommend','propose','advise'],
+  ['want','need','would like','wish'],
+  ['decide','choose'],
+  ['hope','expect'],
+  ['keep','carry on','continue','go on'],
+  ['avoid','escape'],
+  ['reliable','dependable','trustworthy'],
+  ['calm','relaxed','peaceful'],
+  ['exhausted','tired','worn out'],
+  ['crowded','packed','busy'],
+  ['rare','uncommon'],
+  ['confident','self-assured'],
+  ['improve','develop','enhance'],
+  ['increase','rise','grow'],
+  ['reduce','decrease','lower']
+];
+const CTX_SYN_MAP = {};
+CTX_SYNONYMS.forEach(group => group.forEach(w => {
+  const n = ctxNorm(w);
+  CTX_SYN_MAP[n] = CTX_SYN_MAP[n] || new Set();
+  group.forEach(o => { if (o !== w) CTX_SYN_MAP[n].add(ctxNorm(o)); });
+}));
+
+function ctxNorm(s) { return (s || '').toLowerCase().replace(/^to\s+/, '').replace(/[.,!?;:'"]/g, '').trim(); }
+
+const CTX_DETERMINERS = new Set(['a','an','the','this','that','these','those','my','your','his','her','its','our','their','some','any','no','every','another']);
+const CTX_NONVERB_AFTER_TO = new Set(['a','an','the','my','your','his','her','its','our','their','this','that','these','those','me','him','them','us','you','it','school','work','bed','home','town','him','her']);
+
+function ctxFrame(blanked) {
+  const parts = blanked.split('_____');
+  const afterTokens = (parts[1] || '').trim().toLowerCase().split(/\s+/).map(t => t.replace(/[^a-z']/g, ''));
+  const beforeTokens = (parts[0] || '').trim().toLowerCase().split(/\s+/).map(t => t.replace(/[^a-z']/g, ''));
+  const next = afterTokens[0] || '';
+  const prev = beforeTokens[beforeTokens.length - 1] || '';
+  // a determiner right before the blank → it's a noun ("the ___ to meet", "a ___")
+  if (CTX_DETERMINERS.has(prev)) return 'noun';
+  // gerund: blank directly before an -ing word
+  if (/ing$/.test(next) && next.length > 4) return 'gerund';
+  // to-infinitive: "to" + a base verb (not "to the park" / "to her salad")
+  if (next === 'to') {
+    const after2 = afterTokens[1] || '';
+    if (after2 && !CTX_NONVERB_AFTER_TO.has(after2)) return 'to';
+    return 'noun'; // "added ___ to her salad" → the blank is a noun
+  }
+  // noun: a determiner sits a little before the blank ("a ripe ___")
+  if (beforeTokens.slice(-2).some(t => CTX_DETERMINERS.has(t))) return 'noun';
+  return null;
+}
+
+function ctxPickDistractors(answerWord, blanked, usable) {
+  let key = ctxFrame(blanked);
+  if (!key) {
+    const pos = detectPOS(answerWord.word);
+    key = CTX_POOLS[pos] ? pos : 'general';
+  }
+  const ansN = ctxNorm(answerWord.word);
+  const ansTargetN = ctxNorm(getBlankTarget(answerWord.word));
+  const syn = CTX_SYN_MAP[ansN] || CTX_SYN_MAP[ansTargetN] || new Set();
+  const out = [], seen = new Set([ansN, ansTargetN]);
+  const tryAdd = s => {
+    const n = ctxNorm(s);
+    if (out.length >= 3 || seen.has(n) || syn.has(n)) return;
+    seen.add(n); out.push(s);
+  };
+  // 1) curated pool for this frame (reliable grammatical fit, wrong meaning)
+  shuffle((CTX_POOLS[key] || []).slice()).forEach(tryAdd);
+  // 2) top up from the student's own same-POS words
+  if (out.length < 3) {
+    const pos = detectPOS(answerWord.word);
+    shuffle(usable.filter(x => x.id !== answerWord.id && detectPOS(x.word) === pos)).forEach(x => tryAdd(x.word));
+  }
+  // 3) last resort: general pool
+  if (out.length < 3) shuffle(CTX_POOLS.general.slice()).forEach(tryAdd);
+  return out.slice(0, 3).map(s => ({ word: s, id: 'cd-' + Math.random().toString(36).slice(2, 9) }));
+}
+
 function buildContextQuestions(studentWords) {
   const usable = studentWords.filter(w => w.example && w.word);
   const questions = [];
   usable.forEach(w => {
     const blanked = makeBlankSentence(w.word, w.example);
     if (!blanked) return;
-    const pos = detectPOS(w.word);
-    const same = usable.filter(x => x.id !== w.id && detectPOS(x.word) === pos).sort(() => Math.random() - 0.5);
-    const other = usable.filter(x => x.id !== w.id && detectPOS(x.word) !== pos).sort(() => Math.random() - 0.5);
-    const distractors = [...same, ...other]
-      .filter((x, i, a) => a.findIndex(y => y.id === x.id) === i)
-      .slice(0, 3);
+    const distractors = ctxPickDistractors(w, blanked, usable);
     if (distractors.length < 3) return;
     questions.push({
       word: w,
       sentence: blanked,
-      options: [w, ...distractors].sort(() => Math.random() - 0.5),
+      options: [{ word: w.word, id: w.id }, ...distractors].sort(() => Math.random() - 0.5),
       correctId: w.id
     });
   });
