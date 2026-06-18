@@ -1729,14 +1729,14 @@ function renderFC() {
     document.getElementById('fc-ipa').style.display = 'none';
     document.getElementById('fc-translation').textContent = w.word;
     document.getElementById('fc-example').textContent = w.ipa ? '/' + w.ipa + '/' : '';
-    document.getElementById('fc-tap-hint').querySelector('span:last-child').textContent = 'Tap to reveal English';
+    document.querySelector('#screen-flashcards .fc-tap-hint span:last-child').textContent = 'Tap to reveal English';
   } else {
     document.getElementById('fc-word').textContent = w.word;
     document.getElementById('fc-ipa').textContent = w.ipa || '';
     document.getElementById('fc-ipa').style.display = w.ipa ? '' : 'none';
     document.getElementById('fc-translation').textContent = '🇷🇺 ' + w.translation;
     document.getElementById('fc-example').textContent = w.example ? '"' + w.example + '"' : '';
-    document.getElementById('fc-tap-hint').querySelector('span:last-child').textContent = 'Tap to reveal translation';
+    document.querySelector('#screen-flashcards .fc-tap-hint span:last-child').textContent = 'Tap to reveal translation';
   }
   const label = fcReviewMode ? 'Still learning — ' : (practiceLesson ? 'Flashcards — ' + practiceLesson : 'Flashcards');
   document.getElementById('fc-lesson-label').textContent = label;
