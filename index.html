@@ -500,6 +500,14 @@
   .gr-opt.is-correct { border-color: #6abf69; background: #f2fbf2; color: #2d7a2d; font-weight: 500; }
   .gr-opt.is-wrong   { border-color: #e07070; background: #fff6f6; color: #b03030; }
   .gr-opt:disabled { cursor: default; }
+  .gr-tf-btn {
+    padding: 7px 14px; border-radius: 99px; border: 1.5px solid var(--border);
+    background: var(--white); color: var(--text-2); cursor: pointer;
+    font-family: 'Cormorant Garamond', Georgia, serif; font-size: 0.98rem; font-weight: 600;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .gr-tf-btn:hover { border-color: var(--sage); color: var(--sage-dark); }
+  .gr-tf-btn.active { background: var(--sage-dark); color: #fff; border-color: var(--sage-dark); }
 
   /* ── PIN pad ── */
   .pin-dot {
@@ -1034,8 +1042,14 @@
   <!-- Topic picker -->
   <div id="gr-topics">
     <div class="page-title" style="font-size:1.4rem;">B1 Grammar</div>
-    <div class="page-sub">Choose a topic to focus on, or take a mixed exam with everything together.</div>
-    <button class="btn btn-primary btn-full" style="margin:8px 0 18px;" onclick="beginGrammar('__mixed__')">🎓 Mixed B1 exam</button>
+    <div class="page-sub">Pick a task type to drill, then choose a topic — or take a mixed exam.</div>
+    <div id="gr-type-filter" style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px;">
+      <button class="gr-tf-btn" data-tf="all" onclick="grSetType('all')">All types</button>
+      <button class="gr-tf-btn" data-tf="mc" onclick="grSetType('mc')">Multiple choice</button>
+      <button class="gr-tf-btn" data-tf="cloze" onclick="grSetType('cloze')">Open cloze</button>
+      <button class="gr-tf-btn" data-tf="kwt" onclick="grSetType('kwt')">Transformations</button>
+    </div>
+    <button class="btn btn-primary btn-full" style="margin:0 0 18px;" onclick="beginGrammar('__mixed__')">🎓 Mixed exam (selected type)</button>
     <div class="phr-level-grid" id="gr-topic-grid"></div>
   </div>
 
@@ -2450,7 +2464,7 @@ const GRAMMAR = [
   { topic:'Relative Clauses', type:'mc', q:'This is the house @ I was born.', options:['which','who','where','that'], answer:'where', note:'"where" for places.' },
   { topic:'Relative Clauses', type:'cloze', q:'That is the girl @ bag was stolen.', answers:['whose'], note:'"whose" for possession.' },
   { topic:'Relative Clauses', type:'cloze', q:'The film @ we watched was boring.', answers:['that','which'], note:'"that/which" for things.' },
-  { topic:'Relative Clauses', type:'kwt', original:'I met a woman. Her son is a famous actor.', key:'WHOSE', q:'I met a woman @ son is a famous actor.', answers:["whose"], note:'"whose" joins two sentences showing possession.' },
+  { topic:'Relative Clauses', type:'kwt', original:'I met a woman. Her son is a famous actor.', key:'WHOSE', q:'I met the woman @ a famous actor.', answers:["whose son is"], note:'"whose" joins the sentences and shows possession (whose son is).' },
 
   // ── Gerund / Infinitive ──
   { topic:'Gerund / Infinitive', type:'mc', q:'I enjoy @ to music.', options:['listen','to listen','listening','listened'], answer:'listening', note:'"enjoy" is followed by the -ing form.' },
@@ -2458,9 +2472,18 @@ const GRAMMAR = [
   { topic:'Gerund / Infinitive', type:'cloze', q:'He is good at @ problems. (solve)', answers:['solving'], note:'After a preposition, use the -ing form.' },
   { topic:'Gerund / Infinitive', type:'kwt', original:'"Let\'s go to the cinema," she said.', key:'SUGGESTED', q:'She @ to the cinema.', answers:["suggested going"], note:'"suggest" + -ing form.' },
   { topic:'Gerund / Infinitive', type:'mc', q:'I want @ a doctor one day.', options:['become','to become','becoming','became'], answer:'to become', note:'"want" is followed by to + infinitive.' },
-];
 
-let grItems = [], grIndex = 0, grScore = 0, grAnswered = false, grTopicName = '';
+  // ── Extra key word transformations (authentic 2–5 word format) ──
+  { topic:'Present Perfect / Past Simple', type:'kwt', original:'I started working here three years ago.', key:'FOR', q:'I @ three years.', answers:["have worked here for","have worked for"], note:'present perfect + "for" + period.' },
+  { topic:'Modals', type:'kwt', original:'It is forbidden to take photos here.', key:'ALLOWED', q:'You @ take photos here.', answers:["are not allowed to","aren't allowed to"], note:'"be allowed to" for permission.' },
+  { topic:'Passive Voice', type:'kwt', original:'They are building a new school in our town.', key:'BEING', q:'A new school @ in our town.', answers:["is being built"], note:'present continuous passive: is being + past participle.' },
+  { topic:'Comparatives', type:'kwt', original:'I have never seen a more boring film.', key:'MOST', q:'This is @ I have ever seen.', answers:["the most boring film"], note:'superlative for "more ... than ever".' },
+  { topic:'Reported Speech', type:'kwt', original:'"Don\'t touch the oven," Mum told me.', key:'NOT', q:'Mum told me @ the oven.', answers:["not to touch"], note:'reported command: told + object + (not) to + verb.' },
+  { topic:'Prepositions', type:'kwt', original:'She is afraid when she sees spiders.', key:'OF', q:'She @ spiders.', answers:["is afraid of"], note:'"be afraid of" something.' },
+  { topic:'Gerund / Infinitive', type:'kwt', original:'"You broke the window!" she said to him.', key:'ACCUSED', q:'She @ the window.', answers:["accused him of breaking"], note:'"accuse somebody of" + -ing.' },
+].filter(g => !g.skip);
+
+let grItems = [], grIndex = 0, grScore = 0, grAnswered = false, grTopicName = '', grTypeFilter = 'all';
 
 function grNorm(s) {
   return (s || '').toLowerCase().trim()
@@ -2482,25 +2505,41 @@ function grNorm(s) {
 
 const GR_TYPE_LABEL = { mc:'Multiple choice', cloze:'Open cloze', kwt:'Key word transformation' };
 
+function grTypePool() {
+  return grTypeFilter === 'all' ? GRAMMAR : GRAMMAR.filter(g => g.type === grTypeFilter);
+}
+
+function grSetType(t) {
+  grTypeFilter = t;
+  document.querySelectorAll('.gr-tf-btn').forEach(b => b.classList.toggle('active', b.dataset.tf === t));
+  renderGrTopics();
+}
+
+function renderGrTopics() {
+  const base = grTypePool();
+  const topics = [...new Set(base.map(g => g.topic))];
+  const grid = document.getElementById('gr-topic-grid');
+  grid.innerHTML = topics.map(t => {
+    const count = base.filter(g => g.topic === t).length;
+    return '<button class="phr-level-btn" onclick="beginGrammar(' + JSON.stringify(t).replace(/"/g,'&quot;') + ')"><b>' + esc(t) + '</b><span>' + count + (count === 1 ? ' task' : ' tasks') + '</span></button>';
+  }).join('');
+}
+
 function startGrammar() {
   document.getElementById('gr-topics').style.display = '';
   document.getElementById('gr-main').style.display = 'none';
   document.getElementById('gr-results').style.display = 'none';
-  // build topic buttons
-  const topics = [...new Set(GRAMMAR.map(g => g.topic))];
-  const grid = document.getElementById('gr-topic-grid');
-  grid.innerHTML = topics.map(t => {
-    const count = GRAMMAR.filter(g => g.topic === t).length;
-    return '<button class="phr-level-btn" onclick="beginGrammar(' + JSON.stringify(t).replace(/"/g,'&quot;') + ')"><b>' + esc(t) + '</b><span>' + count + ' tasks</span></button>';
-  }).join('');
+  document.querySelectorAll('.gr-tf-btn').forEach(b => b.classList.toggle('active', b.dataset.tf === grTypeFilter));
+  renderGrTopics();
   show('grammar');
 }
 
 function beginGrammar(topic) {
-  let pool;
-  if (topic === '__mixed__') { pool = GRAMMAR.slice(); grTopicName = 'Mixed B1 exam'; }
-  else { pool = GRAMMAR.filter(g => g.topic === topic); grTopicName = topic; }
-  grItems = shuffle(pool).slice(0, topic === '__mixed__' ? 15 : pool.length);
+  let pool = grTypePool();
+  if (topic === '__mixed__') { grTopicName = grTypeFilter === 'all' ? 'Mixed B1 exam' : 'Mixed — ' + GR_TYPE_LABEL[grTypeFilter]; }
+  else { pool = pool.filter(g => g.topic === topic); grTopicName = topic; }
+  const cap = topic === '__mixed__' ? 15 : pool.length;
+  grItems = shuffle(pool.slice()).slice(0, cap);
   grIndex = 0; grScore = 0;
   document.getElementById('gr-topics').style.display = 'none';
   document.getElementById('gr-main').style.display = '';
@@ -2544,6 +2583,7 @@ function renderGrQ() {
     inputRow.style.display = 'flex';
     const inp = document.getElementById('gr-input');
     inp.value = ''; inp.readOnly = false; inp.className = 'wf-input';
+    inp.placeholder = it.type === 'kwt' ? 'Write 2–5 words (use ' + it.key + ')…' : 'Type your answer…';
     document.getElementById('gr-check-btn').disabled = false;
     setTimeout(() => inp.focus(), 60);
   }
