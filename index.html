@@ -2838,6 +2838,194 @@ const DIALOGUES = [
         ]
       }
     ]
+  },
+
+  {
+    id: 'cafe-order',
+    emoji: '☕',
+    title: 'At the Café',
+    scenario: 'You stop at a café in London for breakfast before a busy day.',
+    scenario_ru: 'Вы заходите в кафе в Лондоне на завтрак.',
+    character: 'Waiter',
+    turns: [
+      { speaker: 'receptionist', line: 'Good morning! Welcome. Do you have a table booked, or would you like to find a seat?' },
+      { speaker: 'student',
+        prompt_ru: 'Нет, у меня нет брони. Мне бы столик на одного, пожалуйста.',
+        answer: "No, I don't have a reservation. A table for one, please.",
+        alts: [
+          "No, I don't have a booking. A table for one, please.",
+          "No, I haven't booked. A table for one, please.",
+          "No, I have no reservation. A table for one, please.",
+          "No, I don't have a reservation. Just a table for one, please.",
+          "No, I didn't book. A table for one, please.",
+          "I don't have a reservation. A table for one, please.",
+          "I don't have a booking. A table for one, please."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Of course! Right this way. Here is our menu. Can I get you something to drink while you decide?' },
+      { speaker: 'student',
+        prompt_ru: 'Да, пожалуйста. Я бы хотел капучино. И стакан воды, если можно.',
+        answer: "Yes, please. I'd like a cappuccino. And a glass of water, if possible.",
+        alts: [
+          "Yes, please. I would like a cappuccino. And a glass of water, if possible.",
+          "Yes, please. I'd like a cappuccino and a glass of water.",
+          "Yes, please. I would like a cappuccino and a glass of water.",
+          "Yes, please. A cappuccino. And a glass of water, if possible.",
+          "Yes, please. I'd like a cappuccino. And some water, if possible.",
+          "Yes, please. I'd like a cappuccino. And a glass of water, please.",
+          "Yes, please. Could I have a cappuccino? And a glass of water.",
+          "Yes, please. Could I have a cappuccino and a glass of water?"
+        ]
+      },
+      { speaker: 'receptionist', line: 'Lovely. Are you ready to order food, or do you need a few more minutes?' },
+      { speaker: 'student',
+        prompt_ru: 'Мне нужно ещё пару минут. Меню выглядит очень аппетитно.',
+        answer: "I need a few more minutes. The menu looks really appetising.",
+        alts: [
+          "I need a few more minutes. The menu looks very appetising.",
+          "I need a couple more minutes. The menu looks really appetising.",
+          "Just a couple more minutes, please. The menu looks really appetising.",
+          "A few more minutes, please. The menu looks really appetising.",
+          "I need a few more minutes. Everything looks very appetising.",
+          "I need a few more minutes. The menu looks great.",
+          "I need a few more minutes, please. The menu looks fantastic.",
+          "Could I have a few more minutes? The menu looks really appetising.",
+          "Could I have a couple more minutes? The menu looks great."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Take your time! Here is your cappuccino.' },
+      { speaker: 'student',
+        prompt_ru: 'Спасибо. Я буду яичницу с тостами и свежевыжатый апельсиновый сок.',
+        answer: "Thank you. I'll have scrambled eggs with toast and a fresh orange juice.",
+        alts: [
+          "Thank you. I will have scrambled eggs with toast and a fresh orange juice.",
+          "Thank you. I'd like scrambled eggs with toast and a fresh orange juice.",
+          "Thank you. I would like scrambled eggs with toast and a fresh orange juice.",
+          "Thank you. I'll have scrambled eggs and toast and a fresh orange juice.",
+          "Thank you. Could I have scrambled eggs with toast and a fresh orange juice?",
+          "Thank you. I'll have the scrambled eggs with toast and a fresh orange juice.",
+          "Thank you. Scrambled eggs with toast and a fresh orange juice, please."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Excellent choice. That will be with you shortly.' },
+      { speaker: 'student',
+        prompt_ru: 'Спасибо. Ещё один вопрос — есть ли у вас Wi-Fi?',
+        answer: "Thank you. One more question — do you have Wi-Fi?",
+        alts: [
+          "Thank you. One more question — is there Wi-Fi here?",
+          "Thank you. Another question — do you have Wi-Fi?",
+          "Thank you. One more thing — do you have Wi-Fi?",
+          "Thank you. Quick question — do you have Wi-Fi?",
+          "Thank you. Could I ask — do you have Wi-Fi?",
+          "Thank you. Also — do you have Wi-Fi?",
+          "Thank you. Do you have Wi-Fi, by the way?"
+        ]
+      },
+      { speaker: 'receptionist', line: 'Yes, of course! The password is on the back of your receipt. Enjoy your breakfast!' },
+      { speaker: 'student',
+        prompt_ru: 'Замечательно. Спасибо большое.',
+        answer: "Wonderful. Thank you very much.",
+        alts: [
+          "Wonderful. Thank you so much.",
+          "Great. Thank you very much.",
+          "Great. Thank you so much.",
+          "Perfect. Thank you very much.",
+          "Perfect. Thank you so much.",
+          "That's great. Thank you very much.",
+          "Brilliant. Thank you very much.",
+          "Lovely. Thank you very much.",
+          "Wonderful, thank you very much.",
+          "Wonderful. Many thanks."
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'airport-checkin',
+    emoji: '✈️',
+    title: 'Airport Check-in',
+    scenario: 'You are at London Heathrow checking in for a flight to Moscow.',
+    scenario_ru: 'Вы на стойке регистрации в аэропорту Хитроу.',
+    character: 'Agent',
+    turns: [
+      { speaker: 'receptionist', line: 'Good morning! Where are you flying to today?' },
+      { speaker: 'student',
+        prompt_ru: 'Доброе утро. Я лечу в Москву. Вот мой паспорт и посадочный талон.',
+        answer: "Good morning. I'm flying to Moscow. Here is my passport and my ticket.",
+        alts: [
+          "Good morning. I am flying to Moscow. Here is my passport and my ticket.",
+          "Good morning. I'm flying to Moscow. Here's my passport and my ticket.",
+          "Good morning. I'm flying to Moscow. Here is my passport and ticket.",
+          "Good morning. I'm flying to Moscow. Here's my passport and ticket.",
+          "Good morning. I'm flying to Moscow. Here is my passport and boarding pass.",
+          "Good morning. I'm flying to Moscow. Here's my passport and boarding pass.",
+          "Good morning. Moscow. Here is my passport and my ticket.",
+          "Good morning. I'm going to Moscow. Here is my passport and my ticket."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Thank you. Are you checking in any luggage today?' },
+      { speaker: 'student',
+        prompt_ru: 'Да, у меня один большой чемодан. И ручная кладь.',
+        answer: "Yes, I have one large suitcase. And a carry-on bag.",
+        alts: [
+          "Yes, I have one large suitcase and a carry-on bag.",
+          "Yes, one large suitcase. And a carry-on bag.",
+          "Yes, I have one big suitcase. And a carry-on bag.",
+          "Yes, I have one large suitcase. And hand luggage.",
+          "Yes, I have one large suitcase and hand luggage.",
+          "Yes, one large suitcase and a carry-on.",
+          "Yes, I have one large suitcase. And a piece of hand luggage."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Could you place your suitcase on the belt, please? … Thank you. Your bag is 22 kilograms — that is within the limit. Did you pack this bag yourself?' },
+      { speaker: 'student',
+        prompt_ru: 'Да, я упаковал его сам. В нём нет ничего запрещённого.',
+        answer: "Yes, I packed it myself. There is nothing prohibited in it.",
+        alts: [
+          "Yes, I packed it myself. There's nothing prohibited in it.",
+          "Yes, I packed it myself. There is nothing forbidden in it.",
+          "Yes, I packed it myself. There's nothing forbidden in it.",
+          "Yes, I packed it myself. There is nothing illegal in it.",
+          "Yes, I packed it myself. There's nothing dangerous in it.",
+          "Yes, I packed it myself. It contains nothing prohibited.",
+          "Yes, I packed this bag myself. There is nothing prohibited.",
+          "Yes, I packed it myself. Nothing prohibited inside."
+        ]
+      },
+      { speaker: 'receptionist', line: 'Perfect. Would you prefer a window seat or an aisle seat?' },
+      { speaker: 'student',
+        prompt_ru: 'Место у окна, пожалуйста. Если можно, подальше от двигателей.',
+        answer: "A window seat, please. Away from the engines, if possible.",
+        alts: [
+          "A window seat please. Away from the engines, if possible.",
+          "A window seat, please. If possible, away from the engines.",
+          "Window seat, please. Away from the engines if possible.",
+          "A window seat, please. Far from the engines, if possible.",
+          "A window seat please, away from the engines if possible.",
+          "A window seat if possible. Away from the engines.",
+          "I'd prefer a window seat, please. Away from the engines if possible.",
+          "I'd like a window seat. Away from the engines, if possible."
+        ]
+      },
+      { speaker: 'receptionist', line: 'I have 24A available — that is a window seat near the front. Here is your boarding pass. Boarding begins at gate 14 at 10:30. Have a pleasant flight!' },
+      { speaker: 'student',
+        prompt_ru: 'Спасибо большое. Подскажите, где выход на посадку 14?',
+        answer: "Thank you very much. Could you tell me where gate 14 is?",
+        alts: [
+          "Thank you very much. Where is gate 14?",
+          "Thank you very much. Where is gate 14, please?",
+          "Thank you so much. Could you tell me where gate 14 is?",
+          "Thank you so much. Where is gate 14?",
+          "Thank you. Could you tell me where gate 14 is?",
+          "Thank you. Where is gate 14, please?",
+          "Many thanks. Where is gate 14?",
+          "Many thanks. Could you tell me where gate 14 is?",
+          "Thanks a lot. Where is gate 14?",
+          "Thank you very much. How do I get to gate 14?"
+        ]
+      }
+    ]
   }
 ];
 
