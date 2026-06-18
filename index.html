@@ -508,6 +508,22 @@
   }
   .gr-tf-btn:hover { border-color: var(--sage); color: var(--sage-dark); }
   .gr-tf-btn.active { background: var(--sage-dark); color: #fff; border-color: var(--sage-dark); }
+  .lib-cat { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.3rem; font-weight: 600; color: var(--sage-dark); margin: 22px 0 10px; }
+  .lib-item { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+  .lib-head { padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .lib-head:hover { background: var(--sage-light); }
+  .lib-title { font-weight: 600; font-size: 0.98rem; color: var(--text); }
+  .lib-title .lib-ru { display: block; font-weight: 400; font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+  .lib-chevron { color: var(--muted); transition: transform .2s; flex-shrink: 0; }
+  .lib-item.open .lib-chevron { transform: rotate(90deg); }
+  .lib-body { display: none; padding: 4px 18px 18px; border-top: 1px solid var(--border-light); }
+  .lib-item.open .lib-body { display: block; }
+  .lib-rule { font-size: 0.95rem; line-height: 1.65; color: var(--text); margin: 12px 0; }
+  .lib-eg { background: var(--cream); border-radius: 10px; padding: 10px 13px; margin-bottom: 7px; }
+  .lib-eg-en { font-size: 0.92rem; color: var(--text); }
+  .lib-eg-ru { font-size: 0.84rem; color: var(--muted); font-style: italic; margin-top: 2px; }
+  .lib-tip { font-size: 0.88rem; line-height: 1.55; color: var(--pink-dark); background: var(--pink-light); border-radius: 10px; padding: 10px 13px; margin-top: 10px; }
+  .lib-empty { color: var(--muted); text-align: center; padding: 30px 0; }
 
   /* ── PIN pad ── */
   .pin-dot {
@@ -747,6 +763,11 @@
         <span class="mode-icon">🎓</span>
         <div class="mode-name">B1 Grammar</div>
         <div class="mode-desc">Use of English · pick a topic or take a mixed exam · transformations, open cloze & multiple choice</div>
+      </div>
+      <div class="mode-card" onclick="startLibrary()" style="grid-column:1/-1;">
+        <span class="mode-icon">📖</span>
+        <div class="mode-name">Grammar Library</div>
+        <div class="mode-desc">Справочник · все правила на русском · нажми на тему и читай объяснение с примерами</div>
       </div>
     </div>
 
@@ -1085,6 +1106,16 @@
     </div>
   </div>
   <div id="gr-results" style="display:none;text-align:center;padding-top:30px;"></div>
+</div>
+
+<!-- ── SCREEN: GRAMMAR LIBRARY ── -->
+<div class="screen" id="screen-library">
+  <button class="back-btn" onclick="endLibrary()">← Back to practice</button>
+  <div class="page-title" style="font-size:1.4rem;">Grammar Library</div>
+  <div class="page-sub">Справочник по грамматике. Нажми на тему, чтобы открыть правило и примеры.</div>
+  <input type="text" id="lib-search" placeholder="Поиск темы… (например: present perfect, артикли)" autocomplete="off"
+         style="width:100%;padding:12px 15px;margin:10px 0 18px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.95rem;" oninput="renderLibrary(this.value)">
+  <div id="lib-list"></div>
 </div>
 
 <!-- ── SCREEN: DIALOGUE PRACTICE ── -->
@@ -2650,6 +2681,126 @@ function showGrResults() {
 }
 
 function endGrammar() { show('student'); switchTab('practice'); }
+
+// ─────────────────────────────────────────────────────────────
+// GRAMMAR LIBRARY — reference, rules in Russian (shared by all students)
+// ─────────────────────────────────────────────────────────────
+const GRAMMAR_LIBRARY = [
+  // ── Времена / Tenses ──
+  { cat:'Времена', title:'Present Simple vs Present Continuous', title_ru:'Простое и длительное настоящее',
+    rule:'<b>Present Simple</b> — для регулярных действий, привычек, фактов: I <b>work</b> every day. Маркеры: always, usually, often, every day.<br><br><b>Present Continuous</b> (am/is/are + V-ing) — для действия прямо сейчас или временного: I <b>am working</b> now. Маркеры: now, at the moment, today.',
+    egs:[{en:'She drinks coffee every morning.', ru:'Она пьёт кофе каждое утро. (привычка)'},{en:'Look! She is drinking coffee.', ru:'Смотри! Она пьёт кофе. (сейчас)'}],
+    tip:'⚠️ Глаголы состояния (know, like, want, understand) обычно НЕ ставят в Continuous: "I know" (не "I am knowing").' },
+  { cat:'Времена', title:'Present Perfect vs Past Simple', title_ru:'Настоящее совершённое и простое прошедшее',
+    rule:'<b>Past Simple</b> — законченное действие в конкретном прошлом: I <b>visited</b> Rome in 2019. Есть точное время (yesterday, last week, in 2019, ago).<br><br><b>Present Perfect</b> (have/has + 3-я форма) — действие связано с настоящим: результат, опыт, или ещё продолжается. Маркеры: ever, never, already, yet, just, for, since.',
+    egs:[{en:'I visited Rome last year.', ru:'Я был в Риме в прошлом году. (когда — известно)'},{en:'I have visited Rome.', ru:'Я (уже) был в Риме. (опыт, без времени)'},{en:'She has lived here since 2019.', ru:'Она живёт здесь с 2019. (до сих пор)'}],
+    tip:'⚠️ Если есть точное прошедшее время (yesterday, ago, in 2020) — всегда Past Simple, не Present Perfect.' },
+  { cat:'Времена', title:'Past Simple vs Past Continuous', title_ru:'Простое и длительное прошедшее',
+    rule:'<b>Past Continuous</b> (was/were + V-ing) — длительное действие в прошлом, фон. <b>Past Simple</b> — короткое действие, которое прервало его.',
+    egs:[{en:'I was cooking when he called.', ru:'Я готовила, когда он позвонил.'},{en:'While she was sleeping, the phone rang.', ru:'Пока она спала, зазвонил телефон.'}],
+    tip:'💡 Длинное действие (фон) → was/were + ing. Короткое (прерывание) → Past Simple.' },
+  { cat:'Времена', title:'Future: will / going to / Present Continuous', title_ru:'Способы выражения будущего',
+    rule:'<b>will</b> — спонтанное решение, обещание, предсказание: I\'ll help you.<br><b>going to</b> — план или намерение, и предсказание по признакам: I\'m going to study tonight. Look at those clouds — it\'s going to rain.<br><b>Present Continuous</b> — договорённость с конкретным временем: I\'m meeting Tom at 5.',
+    egs:[{en:'The phone is ringing. I\'ll get it!', ru:'Телефон звонит. Я отвечу! (спонтанно)'},{en:'We are going to buy a house.', ru:'Мы собираемся купить дом. (план)'}],
+    tip:'💡 Уже договорился с кем-то на время? → Present Continuous (I\'m seeing the doctor tomorrow).' },
+
+  // ── Артикли и предлоги ──
+  { cat:'Артикли и предлоги', title:'Articles: a / an / the / —', title_ru:'Артикли',
+    rule:'<b>a / an</b> — неопределённый, с исчисляемыми в ед. числе, когда впервые или «какой-то»: a dog, an apple (an — перед гласным звуком).<br><b>the</b> — определённый, когда уже понятно о чём речь, единственный в своём роде: the sun, the book you gave me.<br><b>— (без артикля)</b> — общие понятия, неисчисляемые, мн. число в общем смысле: I like music. Dogs are friendly.',
+    egs:[{en:'I saw a cat. The cat was black.', ru:'Я увидел кота. (этот) Кот был чёрный.'},{en:'She is an honest person.', ru:'Она честный человек. (honest — гласный звук → an)'},{en:'The moon is bright tonight.', ru:'Луна яркая сегодня. (единственная → the)'}],
+    tip:'⚠️ В русском артиклей нет — это главная сложность. Правило: «впервые / какой-то» → a/an; «именно тот» → the; «вообще» → ничего.' },
+  { cat:'Артикли и предлоги', title:'Common prepositions', title_ru:'Частые предлоги (зависимые)',
+    rule:'Многие глаголы и прилагательные требуют конкретный предлог — их учат как единое целое:<br><b>depend on</b> (зависеть от), <b>good at</b> (хорош в), <b>interested in</b> (интересоваться), <b>afraid of</b> (бояться), <b>married to</b> (женат на), <b>listen to</b>, <b>wait for</b>, <b>arrive at/in</b>.',
+    egs:[{en:'It depends on the weather.', ru:'Это зависит от погоды.'},{en:'She is good at maths.', ru:'Она хороша в математике.'},{en:'I am afraid of spiders.', ru:'Я боюсь пауков.'}],
+    tip:'⚠️ Предлоги не переводятся буквально с русского. "зависеть ОТ" = depend ON (не "from").' },
+  { cat:'Артикли и предлоги', title:'in / on / at (time & place)', title_ru:'in / on / at — время и место',
+    rule:'<b>Время:</b> at — точное время (at 5, at night); on — дни и даты (on Monday, on 3 May); in — месяцы, годы, части дня (in July, in 2020, in the morning).<br><b>Место:</b> at — точка (at the door); on — поверхность (on the table); in — внутри (in the box).',
+    egs:[{en:'See you at 7 on Friday.', ru:'Увидимся в 7 в пятницу.'},{en:'The keys are in the drawer.', ru:'Ключи в ящике.'}],
+    tip:'💡 Лесенка: at (точка) → on (поверхность/день) → in (внутри/период). От меньшего к большему.' },
+
+  // ── Структуры ──
+  { cat:'Структуры', title:'Conditionals (0, 1, 2)', title_ru:'Условные предложения',
+    rule:'<b>Zero</b> (факты): If you heat ice, it melts. — If + Present, Present.<br><b>First</b> (реальное будущее): If it rains, I will stay home. — If + Present, will + V.<br><b>Second</b> (нереальное / гипотеза): If I were rich, I would travel. — If + Past, would + V.',
+    egs:[{en:'If I have time, I will call you.', ru:'Если у меня будет время, я позвоню. (реально)'},{en:'If I were you, I would rest.', ru:'На твоём месте я бы отдохнул. (гипотеза)'}],
+    tip:'⚠️ В 1-м типе после if — НЕ ставим will: "If it rains" (не "if it will rain"). Во 2-м для всех лиц — were (If I were).' },
+  { cat:'Структуры', title:'Modal verbs', title_ru:'Модальные глаголы',
+    rule:'<b>must / have to</b> — должен (обязательство). <b>mustn\'t</b> — нельзя (запрет). <b>don\'t have to</b> — не обязательно (нет необходимости — это РАЗНОЕ!). <b>should</b> — следует (совет). <b>can / could</b> — мочь, уметь, просьба. <b>may / might</b> — возможно.',
+    egs:[{en:'You mustn\'t smoke here.', ru:'Здесь нельзя курить. (запрет)'},{en:'You don\'t have to come.', ru:'Тебе не обязательно приходить. (можно не приходить)'},{en:'You should see a doctor.', ru:'Тебе стоит сходить к врачу. (совет)'}],
+    tip:'⚠️ mustn\'t (запрещено) ≠ don\'t have to (не обязательно). Частая ошибка!' },
+  { cat:'Структуры', title:'Passive Voice', title_ru:'Страдательный залог',
+    rule:'Действие важнее, чем кто его делает. Форма: <b>be + 3-я форма глагола</b>.<br>Present: is/are made. Past: was/were made. Future: will be made. Кто сделал — через <b>by</b>.',
+    egs:[{en:'This house was built in 1900.', ru:'Этот дом был построен в 1900.'},{en:'English is spoken here.', ru:'Здесь говорят по-английски.'},{en:'The Mona Lisa was painted by Leonardo.', ru:'Мону Лизу написал Леонардо.'}],
+    tip:'💡 Время показывает глагол be (is/was/will be), а смысловой глагол всегда в 3-й форме.' },
+  { cat:'Структуры', title:'Comparatives & Superlatives', title_ru:'Сравнительная и превосходная степень',
+    rule:'<b>Короткие</b> (1 слог): -er / the -est: big → bigger → the biggest.<br><b>Длинные</b> (2+ слога): more / the most: interesting → more interesting → the most interesting.<br>Сравнение с <b>than</b>; равенство — <b>as … as</b>.',
+    egs:[{en:'She is taller than me.', ru:'Она выше меня.'},{en:'It\'s the most beautiful city.', ru:'Это самый красивый город.'},{en:'He is as tall as his father.', ru:'Он такой же высокий, как отец.'}],
+    tip:'⚠️ Неправильные: good → better → the best; bad → worse → the worst; far → further.' },
+  { cat:'Структуры', title:'Reported Speech', title_ru:'Косвенная речь',
+    rule:'Когда пересказываем чужие слова, время «сдвигается на шаг назад»: Present → Past, will → would, can → could. Местоимения и время тоже меняются (now → then, today → that day).',
+    egs:[{en:'"I am tired." → She said she was tired.', ru:'«Я устала». → Она сказала, что устала.'},{en:'"I will call." → He said he would call.', ru:'«Я позвоню». → Он сказал, что позвонит.'}],
+    tip:'💡 tell нужен объект (tell me), say — нет (say that). She told me… / She said that…' },
+  { cat:'Структуры', title:'Relative Clauses', title_ru:'Придаточные с who / which / that / where / whose',
+    rule:'<b>who</b> — для людей; <b>which</b> — для вещей; <b>that</b> — для людей и вещей; <b>where</b> — для места; <b>whose</b> — принадлежность (чей).',
+    egs:[{en:'The man who lives here is a doctor.', ru:'Мужчина, который здесь живёт, — врач.'},{en:'This is the house where I grew up.', ru:'Это дом, где я вырос.'},{en:'The girl whose bag was stolen…', ru:'Девушка, чью сумку украли…'}],
+    tip:'💡 whose = «чей» — соединяет два предложения, показывая принадлежность.' },
+  { cat:'Структуры', title:'Gerund vs Infinitive', title_ru:'Герундий (-ing) или инфинитив (to)',
+    rule:'После одних глаголов — <b>-ing</b> (enjoy, finish, avoid, suggest, mind), после других — <b>to + verb</b> (want, decide, hope, promise, need). После предлогов — всегда <b>-ing</b>.',
+    egs:[{en:'I enjoy reading.', ru:'Мне нравится читать.'},{en:'I decided to leave.', ru:'Я решил уйти.'},{en:'She is good at singing.', ru:'Она хорошо поёт. (после предлога at → -ing)'}],
+    tip:'💡 После предлога (at, of, about, in) — ВСЕГДА -ing форма: interested in learning.' },
+];
+
+let libOpenId = null;
+
+function startLibrary() {
+  document.getElementById('lib-search').value = '';
+  renderLibrary('');
+  show('library');
+}
+
+function renderLibrary(filter) {
+  const f = (filter || '').toLowerCase().trim();
+  const list = document.getElementById('lib-list');
+  const matched = GRAMMAR_LIBRARY.filter(t =>
+    !f || (t.title + ' ' + t.title_ru + ' ' + t.cat + ' ' + t.rule).toLowerCase().includes(f)
+  );
+  if (!matched.length) { list.innerHTML = '<div class="lib-empty">Ничего не найдено 🔍</div>'; return; }
+  const cats = [...new Set(matched.map(t => t.cat))];
+  let html = '';
+  cats.forEach(cat => {
+    html += '<div class="lib-cat">' + esc(cat) + '</div>';
+    matched.filter(t => t.cat === cat).forEach(t => {
+      const id = GRAMMAR_LIBRARY.indexOf(t);
+      const open = (id === libOpenId) || f ? ' open' : '';
+      const egs = t.egs.map(e =>
+        '<div class="lib-eg"><div class="lib-eg-en">' + esc(e.en) + '</div><div class="lib-eg-ru">' + esc(e.ru) + '</div></div>'
+      ).join('');
+      html += '<div class="lib-item' + open + '" id="lib-item-' + id + '">' +
+        '<div class="lib-head" onclick="libToggle(' + id + ')">' +
+          '<div class="lib-title">' + esc(t.title) + '<span class="lib-ru">' + esc(t.title_ru) + '</span></div>' +
+          '<span class="lib-chevron">▶</span>' +
+        '</div>' +
+        '<div class="lib-body">' +
+          '<div class="lib-rule">' + t.rule + '</div>' +
+          egs +
+          (t.tip ? '<div class="lib-tip">' + esc(t.tip) + '</div>' : '') +
+        '</div>' +
+      '</div>';
+    });
+  });
+  list.innerHTML = html;
+}
+
+function libToggle(id) {
+  const item = document.getElementById('lib-item-' + id);
+  if (!item) return;
+  const isOpen = item.classList.contains('open');
+  // close others
+  document.querySelectorAll('.lib-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) { item.classList.add('open'); libOpenId = id; }
+  else { libOpenId = null; }
+}
+
+function endLibrary() { show('student'); switchTab('practice'); }
 
 // ─────────────────────────────────────────────────────────────
 // ── Part-of-speech detection (based on word form) ──
