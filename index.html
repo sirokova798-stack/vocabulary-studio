@@ -525,6 +525,29 @@
   .lib-eg-ru { font-size: 0.84rem; color: var(--muted); font-style: italic; margin-top: 2px; }
   .lib-tip { font-size: 0.88rem; line-height: 1.55; color: var(--pink-dark); background: var(--pink-light); border-radius: 10px; padding: 10px 13px; margin-top: 10px; }
   .lib-empty { color: var(--muted); text-align: center; padding: 30px 0; }
+  /* A1 Practice */
+  .a1-build { min-height: 52px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px; border-bottom: 2px dashed var(--border); margin-bottom: 16px; }
+  .a1-punct { margin-left: auto; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.6rem; font-weight: 600; color: var(--sage-dark); padding: 0 6px; align-self: center; }
+  .a1-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .a1-chip {
+    padding: 10px 15px; border-radius: 10px; border: 1.5px solid var(--border);
+    background: var(--white); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1rem;
+    cursor: pointer; touch-action: manipulation; -webkit-user-select: none; user-select: none; transition: transform .08s, background .12s;
+  }
+  .a1-chip:active { transform: scale(0.94); }
+  .a1-chip.in-build { background: var(--sage-light); border-color: var(--sage); }
+  .a1-chip.placed { visibility: hidden; }
+  .a1-mc-q { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.4rem; color: var(--text); line-height: 1.4; margin-bottom: 16px; text-align: center; }
+  .a1-mc-opts { display: flex; flex-direction: column; gap: 10px; }
+  .a1-mc-opt {
+    padding: 14px 16px; border-radius: 12px; border: 1.5px solid var(--border);
+    background: var(--white); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 500;
+    cursor: pointer; touch-action: manipulation; transition: border-color .12s, background .12s;
+  }
+  .a1-mc-opt:active { transform: scale(0.98); }
+  .a1-mc-opt.is-correct { border-color: #6abf69; background: #f2fbf2; color: #2d7a2d; }
+  .a1-mc-opt.is-wrong { border-color: #e07070; background: #fff6f6; color: #b03030; }
+  .a1-mc-opt:disabled { cursor: default; }
 
   /* ── PIN pad ── */
   .pin-dot {
@@ -775,6 +798,12 @@
         <span class="mode-icon">📖</span>
         <div class="mode-name">Grammar Library</div>
         <div class="mode-desc">Справочник · все правила на русском · нажми на тему и читай объяснение с примерами</div>
+      </div>
+      <div class="mode-card" id="mode-a1" onclick="startA1()" style="grid-column:1/-1;display:none;">
+        <span class="mode-icon">🌱</span>
+        <div class="mode-name">A1 Practice</div>
+        <div class="mode-desc">For beginners · build sentences & choose the right word · to be, this/that, can</div>
+        <div class="mode-desc-ru">Для начинающих · собери предложение и выбери слово · to be, this/that, can</div>
       </div>
     </div>
 
@@ -1126,6 +1155,57 @@
   <input type="text" id="lib-search" placeholder="Поиск темы… (например: present perfect, артикли)" autocomplete="off"
          style="width:100%;padding:12px 15px;margin:10px 0 18px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.95rem;" oninput="renderLibrary(this.value)">
   <div id="lib-list"></div>
+</div>
+
+<!-- ── SCREEN: A1 PRACTICE ── -->
+<div class="screen" id="screen-a1">
+  <button class="back-btn" onclick="endA1()">← Back to practice</button>
+
+  <!-- Topic picker -->
+  <div id="a1-topics">
+    <div class="page-title" style="font-size:1.4rem;">A1 Practice</div>
+    <div class="page-sub">Выбери тему. 15 заданий за подход.</div>
+    <div class="phr-level-grid" style="margin-top:14px;">
+      <button class="phr-level-btn" onclick="a1Begin('tobe')"><b>To be</b><span>am / is / are · собери предложение</span></button>
+      <button class="phr-level-btn" onclick="a1Begin('thisthat')"><b>This / That</b><span>this · that · these · those · выбери слово</span></button>
+      <button class="phr-level-btn" onclick="a1Begin('can')"><b>Can</b><span>can / can't · собери предложение</span></button>
+    </div>
+  </div>
+
+  <!-- Active session -->
+  <div id="a1-main" style="display:none;">
+    <div class="progress-wrap" style="margin-bottom:4px;">
+      <div class="progress-bar"><div class="progress-fill" id="a1-progress" style="width:0%"></div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:14px;">
+      <span id="a1-topic-label"></span>
+      <span id="a1-counter"></span>
+    </div>
+
+    <div class="card" style="padding:22px 20px;">
+      <div id="a1-prompt-ru" style="font-size:.82rem;color:var(--muted);margin-bottom:12px;"></div>
+
+      <!-- Jumble game -->
+      <div id="a1-jumble" style="display:none;">
+        <div class="a1-build" id="a1-build"></div>
+        <div class="a1-chips" id="a1-chips"></div>
+        <button class="btn btn-primary btn-full" id="a1-check-btn" style="margin-top:16px;" onclick="a1CheckJumble()">Check</button>
+      </div>
+
+      <!-- Multiple choice game -->
+      <div id="a1-mc" style="display:none;">
+        <div class="a1-mc-q" id="a1-mc-q"></div>
+        <div class="a1-mc-opts" id="a1-mc-opts"></div>
+      </div>
+    </div>
+
+    <div id="a1-feedback" style="margin-top:14px;"></div>
+    <div id="a1-next-wrap" style="display:none;margin-top:16px;">
+      <button class="btn btn-primary btn-full" onclick="a1Next()">Next →</button>
+    </div>
+  </div>
+
+  <div id="a1-results" style="display:none;text-align:center;padding-top:30px;"></div>
 </div>
 
 <!-- ── SCREEN: DIALOGUE PRACTICE ── -->
@@ -1733,9 +1813,14 @@ function renderWords() {
   });
 }
 
+const A1_STUDENTS = ['Misha', 'Ilya'];
+
 function renderPractice() {
   const data = db();
   const s = data.students.find(x => x.id === currentStudent);
+  // A1 Practice is only for beginner students
+  const a1card = document.getElementById('mode-a1');
+  if (a1card) a1card.style.display = (s && A1_STUDENTS.includes(s.name)) ? '' : 'none';
   const ok = s && s.words.length >= 2;
   document.getElementById('practice-empty').style.display = ok ? 'none' : '';
   document.getElementById('practice-modes').style.display = ok ? '' : 'none';
@@ -2979,6 +3064,258 @@ function libToggle(id) {
 }
 
 function endLibrary() { show('student'); switchTab('practice'); }
+
+// ─────────────────────────────────────────────────────────────
+// A1 PRACTICE — beginner games (Misha & Ilya only)
+//   'jumble' = tap words into order · 'mc' = choose the right word
+// ─────────────────────────────────────────────────────────────
+const A1_DATA = {
+  tobe: { label: 'To be', type: 'jumble', items: [
+    { answer: 'I am happy.', ru: 'I → am' },
+    { answer: 'She is a teacher.', ru: 'she → is' },
+    { answer: 'They are students.', ru: 'they → are' },
+    { answer: 'He is my brother.', ru: 'he → is' },
+    { answer: 'We are friends.', ru: 'we → are' },
+    { answer: 'My name is Tom.', ru: 'name (один) → is' },
+    { answer: 'The cat is black.', ru: 'cat (один) → is' },
+    { answer: 'You are my friend.', ru: 'you → are' },
+    { answer: 'Is she a doctor?', ru: 'вопрос: is в начало' },
+    { answer: 'Are you a student?', ru: 'вопрос: are в начало' },
+    { answer: 'Is he a pilot?', ru: 'вопрос: is в начало' },
+    { answer: 'Are they married?', ru: 'вопрос: are в начало' },
+    { answer: 'It is a big city.', ru: 'it → is' },
+    { answer: 'The keys are here.', ru: 'keys (много) → are' },
+    { answer: 'He is a doctor.', ru: 'he → is' },
+    { answer: 'She is my mother.', ru: 'she → is' },
+    { answer: 'We are in the city.', ru: 'we → are' },
+    { answer: 'The bag is red.', ru: 'bag (один) → is' },
+    { answer: 'They are my friends.', ru: 'they → are' },
+    { answer: 'My father is a pilot.', ru: 'father (один) → is' },
+    { answer: 'The dogs are friendly.', ru: 'dogs (много) → are' },
+    { answer: 'Is it your bag?', ru: 'вопрос: is в начало' },
+    { answer: 'Are you happy?', ru: 'вопрос: are в начало' },
+    { answer: 'Are we late?', ru: 'вопрос: are в начало' },
+    { answer: 'Is she a student?', ru: 'вопрос: is в начало' }
+  ]},
+  can: { label: 'Can', type: 'jumble', items: [
+    { answer: 'I can swim.', ru: 'can + глагол' },
+    { answer: 'She can cook.', ru: 'can одинаково для всех' },
+    { answer: 'He can drive a car.', ru: 'can + глагол без -s' },
+    { answer: 'We can dance.', ru: 'can + глагол' },
+    { answer: 'I can play tennis.', ru: 'can + глагол' },
+    { answer: 'You can sit here.', ru: 'can + глагол' },
+    { answer: 'He can speak French.', ru: 'can + глагол' },
+    { answer: 'Can you help me?', ru: 'вопрос: can в начало' },
+    { answer: 'Can she sing?', ru: 'вопрос: can в начало' },
+    { answer: 'Can they swim?', ru: 'вопрос: can в начало' },
+    { answer: 'Can you play the guitar?', ru: 'вопрос: can в начало' },
+    { answer: 'I can help you.', ru: 'can + глагол' },
+    { answer: 'She can run fast.', ru: 'can + глагол' },
+    { answer: 'Can he read?', ru: 'вопрос: can в начало' },
+    { answer: 'I can cook dinner.', ru: 'can + глагол' },
+    { answer: 'She can play tennis.', ru: 'can + глагол' },
+    { answer: 'We can help you.', ru: 'can + глагол' },
+    { answer: 'He can sing well.', ru: 'can + глагол' },
+    { answer: 'They can run fast.', ru: 'can + глагол' },
+    { answer: 'You can read this.', ru: 'can + глагол' },
+    { answer: 'I can speak English.', ru: 'can + глагол' },
+    { answer: 'Can you cook?', ru: 'вопрос: can в начало' },
+    { answer: 'Can she drive?', ru: 'вопрос: can в начало' },
+    { answer: 'Can we sit here?', ru: 'вопрос: can в начало' },
+    { answer: 'Can he swim?', ru: 'вопрос: can в начало' }
+  ]},
+  thisthat: { label: 'This / That', type: 'mc', items: [
+    { q: '____ is my book. (один, рядом)', options: ['This', 'These', 'Those'], answer: 'This', ru: 'один предмет рядом → this' },
+    { q: '____ are my keys. (много, рядом)', options: ['These', 'This', 'That'], answer: 'These', ru: 'много предметов рядом → these' },
+    { q: '____ is your bag over there. (один, далеко)', options: ['That', 'This', 'These'], answer: 'That', ru: 'один предмет далеко → that' },
+    { q: '____ are tall buildings over there. (много, далеко)', options: ['Those', 'This', 'That'], answer: 'Those', ru: 'много, далеко → those' },
+    { q: 'Is ____ your pen? (один, рядом)', options: ['this', 'these', 'those'], answer: 'this', ru: 'один рядом → this' },
+    { q: 'Are ____ your shoes? (много)', options: ['these', 'this', 'that'], answer: 'these', ru: 'много → these' },
+    { q: 'Look at ____ dog here. (один, рядом)', options: ['this', 'these', 'those'], answer: 'this', ru: 'один рядом → this' },
+    { q: 'Look at ____ stars in the sky. (много, далеко)', options: ['those', 'that', 'this'], answer: 'those', ru: 'много далеко → those' },
+    { q: '____ is my sister.', options: ['This', 'These', 'Those'], answer: 'This', ru: 'один человек рядом → this' },
+    { q: '____ are my parents.', options: ['These', 'This', 'That'], answer: 'These', ru: 'много → these' },
+    { q: 'I like ____ shoes over there. (много, далеко)', options: ['those', 'this', 'that'], answer: 'those', ru: 'много далеко → those' },
+    { q: 'Give me ____ book here. (один, рядом)', options: ['this', 'these', 'those'], answer: 'this', ru: 'один рядом → this' },
+    { q: '____ are big houses far away.', options: ['Those', 'This', 'These'], answer: 'Those', ru: 'много далеко → those' },
+    { q: 'Is ____ a cat over there? (один, далеко)', options: ['that', 'these', 'those'], answer: 'that', ru: 'один далеко → that' },
+    { q: '____ is my pen. (один, рядом)', options: ['This', 'These', 'Those'], answer: 'This', ru: 'один рядом → this' },
+    { q: '____ are my books. (много, рядом)', options: ['These', 'This', 'That'], answer: 'These', ru: 'много рядом → these' },
+    { q: '____ is a house over there. (один, далеко)', options: ['That', 'This', 'These'], answer: 'That', ru: 'один далеко → that' },
+    { q: '____ are birds in the sky. (много, далеко)', options: ['Those', 'This', 'That'], answer: 'Those', ru: 'много далеко → those' },
+    { q: 'Is ____ your phone? (один, рядом)', options: ['this', 'these', 'those'], answer: 'this', ru: 'один рядом → this' },
+    { q: 'Are ____ your books? (много)', options: ['these', 'this', 'that'], answer: 'these', ru: 'много → these' },
+    { q: 'Look at ____ cat over there. (один, далеко)', options: ['that', 'this', 'these'], answer: 'that', ru: 'один далеко → that' },
+    { q: '____ is my father.', options: ['This', 'These', 'Those'], answer: 'This', ru: 'один человек рядом → this' },
+    { q: '____ are my friends.', options: ['These', 'This', 'That'], answer: 'These', ru: 'много → these' },
+    { q: 'I want ____ apple here. (один, рядом)', options: ['this', 'these', 'those'], answer: 'this', ru: 'один рядом → this' },
+    { q: 'Look at ____ mountains far away. (много, далеко)', options: ['those', 'this', 'that'], answer: 'those', ru: 'много далеко → those' }
+  ]}
+};
+
+let a1Topic = '', a1Type = '', a1Items = [], a1Index = 0, a1Score = 0, a1Answered = false;
+let a1Order = [], a1Chips = [], a1Punct = ''; // for jumble
+
+function a1Norm(s) { return (s || '').toLowerCase().replace(/[.?!,]/g, '').replace(/\s+/g, ' ').trim(); }
+
+function startA1() {
+  document.getElementById('a1-topics').style.display = '';
+  document.getElementById('a1-main').style.display = 'none';
+  document.getElementById('a1-results').style.display = 'none';
+  show('a1');
+}
+
+function a1Begin(topic) {
+  a1Topic = topic;
+  const d = A1_DATA[topic];
+  a1Type = d.type;
+  a1Items = shuffle(d.items.slice()).slice(0, 15);
+  a1Index = 0; a1Score = 0;
+  document.getElementById('a1-topics').style.display = 'none';
+  document.getElementById('a1-main').style.display = '';
+  document.getElementById('a1-results').style.display = 'none';
+  document.getElementById('a1-topic-label').textContent = d.label;
+  renderA1Q();
+}
+
+function renderA1Q() {
+  if (a1Index >= a1Items.length) { showA1Results(); return; }
+  a1Answered = false;
+  const it = a1Items[a1Index];
+  document.getElementById('a1-progress').style.width = (a1Index / a1Items.length * 100) + '%';
+  document.getElementById('a1-counter').textContent = (a1Index + 1) + ' / ' + a1Items.length;
+  document.getElementById('a1-feedback').innerHTML = '';
+  document.getElementById('a1-next-wrap').style.display = 'none';
+  document.getElementById('a1-prompt-ru').textContent = '';
+
+  const jumble = document.getElementById('a1-jumble');
+  const mc = document.getElementById('a1-mc');
+  if (a1Type === 'jumble') {
+    mc.style.display = 'none'; jumble.style.display = '';
+    a1Order = [];
+    const bare = it.answer.replace(/[.?!]+$/, '');
+    a1Punct = it.answer.slice(bare.length); // "?" or "." shown as a fixed marker
+    a1Chips = shuffle(bare.split(' ').map((w, i) => ({ w, i })));
+    // reshuffle if it accidentally equals the answer order
+    if (a1Chips.map(c => c.w).join(' ') === bare && a1Chips.length > 1) a1Chips.reverse();
+    document.getElementById('a1-prompt-ru').textContent = 'Собери предложение:';
+    renderA1Jumble();
+  } else {
+    jumble.style.display = 'none'; mc.style.display = '';
+    document.getElementById('a1-mc-q').textContent = it.q;
+    const opts = document.getElementById('a1-mc-opts');
+    opts.innerHTML = '';
+    shuffle(it.options.slice()).forEach(opt => {
+      const b = document.createElement('button');
+      b.className = 'a1-mc-opt';
+      b.textContent = opt;
+      b.onclick = () => a1PickMC(b, opt, it);
+      opts.appendChild(b);
+    });
+  }
+}
+
+function renderA1Jumble() {
+  const build = document.getElementById('a1-build');
+  const chips = document.getElementById('a1-chips');
+  build.innerHTML = ''; chips.innerHTML = '';
+  a1Order.forEach((c, pos) => {
+    const el = document.createElement('button');
+    el.className = 'a1-chip in-build';
+    el.textContent = c.w;
+    el.onclick = () => a1Unpick(pos);
+    build.appendChild(el);
+  });
+  // fixed end punctuation ("?" for questions, "." for statements) — a clue, not tappable
+  if (a1Punct) {
+    const p = document.createElement('span');
+    p.className = 'a1-punct';
+    p.textContent = a1Punct;
+    build.appendChild(p);
+  }
+  a1Chips.forEach(c => {
+    const used = a1Order.some(o => o.i === c.i);
+    const el = document.createElement('button');
+    el.className = 'a1-chip' + (used ? ' placed' : '');
+    el.textContent = c.w;
+    el.disabled = used;
+    el.onclick = () => a1Pick(c);
+    chips.appendChild(el);
+  });
+  const checkBtn = document.getElementById('a1-check-btn');
+  checkBtn.disabled = a1Order.length !== a1Chips.length;
+}
+
+function a1Pick(c) {
+  if (a1Answered) return;
+  if (a1Order.some(o => o.i === c.i)) return;
+  a1Order.push(c);
+  renderA1Jumble();
+}
+
+function a1Unpick(pos) {
+  if (a1Answered) return;
+  a1Order.splice(pos, 1);
+  renderA1Jumble();
+}
+
+function a1CheckJumble() {
+  if (a1Answered || a1Order.length !== a1Chips.length) return;
+  a1Answered = true;
+  const it = a1Items[a1Index];
+  const built = a1Order.map(c => c.w).join(' ');
+  const ok = a1Norm(built) === a1Norm(it.answer);
+  if (ok) a1Score++;
+  document.getElementById('a1-check-btn').disabled = true;
+  document.querySelectorAll('#a1-build .a1-chip, #a1-chips .a1-chip').forEach(b => b.disabled = true);
+  a1ShowFeedback(ok, it.answer, it.ru);
+}
+
+function a1PickMC(btn, opt, it) {
+  if (a1Answered) return;
+  a1Answered = true;
+  const ok = opt === it.answer;
+  if (ok) a1Score++;
+  document.querySelectorAll('#a1-mc-opts .a1-mc-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === it.answer) b.classList.add('is-correct');
+  });
+  if (!ok) btn.classList.add('is-wrong');
+  a1ShowFeedback(ok, it.q.replace('____', it.answer), it.ru);
+}
+
+function a1ShowFeedback(ok, correctText, ru) {
+  document.getElementById('a1-feedback').innerHTML =
+    '<div class="wf-fb ' + (ok ? 'ok' : 'bad') + '">' +
+      (ok ? '✅ Верно!' : '❌ Правильно: <span class="wf-fb-ans">' + esc(correctText) + '</span>') +
+      (ru ? '<div class="wf-fb-full" style="font-style:normal;">💡 ' + esc(ru) + '</div>' : '') +
+    '</div>';
+  document.getElementById('a1-next-wrap').style.display = '';
+}
+
+function a1Next() { a1Index++; renderA1Q(); }
+
+function showA1Results() {
+  document.getElementById('a1-main').style.display = 'none';
+  const pct = Math.round(a1Score / a1Items.length * 100);
+  const emoji = pct >= 80 ? '🏆' : pct >= 50 ? '💪' : '🌱';
+  const res = document.getElementById('a1-results');
+  res.style.display = '';
+  res.innerHTML =
+    '<div style="font-size:3rem;margin-bottom:10px;">' + emoji + '</div>' +
+    '<div style="font-family:\'Cormorant Garamond\',serif;font-size:2.4rem;">' + a1Score + ' / ' + a1Items.length + '</div>' +
+    '<div style="color:var(--muted);font-size:.9rem;margin-bottom:28px;">' + pct + '% верно</div>' +
+    '<button class="btn btn-primary btn-full" onclick="a1Begin(\'' + a1Topic + '\')">↻ Начать заново</button>' +
+    '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="startA1()">Следующая тема →</button>';
+}
+
+function endA1() {
+  if (document.getElementById('a1-main').style.display !== 'none' || document.getElementById('a1-results').style.display !== 'none') {
+    startA1(); // back to topic picker first
+  } else {
+    show('student'); switchTab('practice');
+  }
+}
 
 // ─────────────────────────────────────────────────────────────
 // ── Part-of-speech detection (based on word form) ──
@@ -5103,6 +5440,15 @@ const MISHA_WORDS = [
       misha.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
     }
   });
+
+  // ── Ilya (beginner, A1) ──
+  let ilya = data.students.find(s => s.name === 'Ilya');
+  if (!ilya) {
+    ilya = { id: uid(), name: 'Ilya', words: [], quizHistory: [] };
+    data.students.push(ilya);
+  }
+  if (!ilya.quizHistory) ilya.quizHistory = [];
+  ilya.pin = '2222';
 
   save(data);
 })(); // v2
