@@ -1288,6 +1288,17 @@
     <button class="tab active" onclick="switchTeacherTab('students')">Students</button>
     <button class="tab" onclick="switchTeacherTab('add-student')">New Student</button>
     <button class="tab" onclick="switchTeacherTab('add-word')">Add Word</button>
+    <button class="tab" onclick="switchTeacherTab('activity')">Activity</button>
+  </div>
+
+  <div id="tt-activity" style="display:none;">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+      <select id="act-filter" onchange="renderActivityList()" style="padding:9px 13px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.85rem;background:var(--white);">
+        <option value="">Все студенты</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" onclick="renderTeacherActivity()">↻ Обновить</button>
+    </div>
+    <div id="teacher-activity-list"></div>
   </div>
 
   <div id="tt-students">
@@ -1371,7 +1382,42 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
+// ─────────────────────────────────────────────────────────────
+// FIREBASE — activity log (fails silently, never breaks the app)
+// ─────────────────────────────────────────────────────────────
+let fbdb = null;
+try {
+  firebase.initializeApp({
+    apiKey: "AIzaSyB1DrjUyLp572SxThGEk4b1yRShgdFf2QI",
+    authDomain: "english-sounds-72fef.firebaseapp.com",
+    projectId: "english-sounds-72fef",
+    storageBucket: "english-sounds-72fef.firebasestorage.app",
+    messagingSenderId: "784740869905",
+    appId: "1:784740869905:web:3df0ecdae2542d4a674eb0"
+  });
+  fbdb = firebase.firestore();
+} catch (e) { fbdb = null; }
+
+function logActivity(mode, detail, score, total) {
+  try {
+    if (!fbdb || !currentStudent) return;
+    const s = db().students.find(x => x.id === currentStudent);
+    if (!s) return;
+    fbdb.collection('activity').add({
+      student: s.name,
+      mode: mode,
+      detail: detail || '',
+      score: (score === undefined || score === null) ? null : score,
+      total: (total === undefined || total === null) ? null : total,
+      ts: Date.now(),
+      date: new Date().toISOString()
+    }).catch(function(){});
+  } catch (e) {}
+}
+
 // ─────────────────────────────────────────────────────────────
 // DATA
 // ─────────────────────────────────────────────────────────────
@@ -1462,6 +1508,7 @@ function pinSubmit() {
     pinBuffer = '';
     updatePinDots();
     openStudent(match.id);
+    logActivity('Вход', '');
   } else {
     for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.add('error');
     document.getElementById('pin-error').textContent = 'Wrong PIN — try again';
@@ -1965,6 +2012,7 @@ function fcMark(known) {
   if (fcIndex < fcWords.length - 1) { fcIndex++; renderFC(); }
   else {
     // end of deck
+    logActivity('Flashcards', (fcReviewMode ? 'повтор незнакомых' : (practiceLesson || '')), fcKnown.size, fcWords.length);
     if (fcUnknown.size > 0) {
       document.getElementById('fc-review-btn').style.display = '';
       document.getElementById('fc-review-btn').textContent = 'Review ' + fcUnknown.size + ' still learning →';
@@ -1983,7 +2031,7 @@ function fcStartReview() {
   show('flashcards');
   renderFC();
 }
-function fcNext() { if (fcIndex < fcWords.length - 1) { fcIndex++; renderFC(); } else endPractice(); }
+function fcNext() { if (fcIndex < fcWords.length - 1) { fcIndex++; renderFC(); } else { logActivity('Flashcards', practiceLesson || '', null, fcWords.length); endPractice(); } }
 function fcPrev() { if (fcIndex > 0) { fcIndex--; renderFC(); } }
 
 // ─────────────────────────────────────────────────────────────
@@ -2202,6 +2250,7 @@ function ctxNext() { ctxIndex++; renderCtxQ(); }
 
 function showCtxResults() {
   document.getElementById('ctx-main').style.display = 'none';
+  logActivity('In Context', practiceLesson || '', ctxScore, ctxQuestions.length);
   const pct = Math.round(ctxScore / ctxQuestions.length * 100);
   const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
   const res = document.getElementById('ctx-results');
@@ -2449,6 +2498,7 @@ function phrNext() { phrIndex++; renderPhrQ(); }
 
 function showPhrResults() {
   document.getElementById('phr-game').style.display = 'none';
+  logActivity('Phrasal Verbs', '', phrScore, phrQuestions.length);
   const pct = Math.round(phrScore / phrQuestions.length * 100);
   const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
   const res = document.getElementById('phr-results');
@@ -2595,6 +2645,7 @@ function wfNext() { wfIndex++; renderWfQ(); }
 
 function showWfResults() {
   document.getElementById('wf-main').style.display = 'none';
+  logActivity('Word Formation', '', wfScore, wfQuestions.length);
   const pct = Math.round(wfScore / wfQuestions.length * 100);
   const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
   const res = document.getElementById('wf-results');
@@ -2849,6 +2900,7 @@ function grNext() { grIndex++; renderGrQ(); }
 
 function showGrResults() {
   document.getElementById('gr-main').style.display = 'none';
+  logActivity('B1 Grammar', grTopicName || '', grScore, grItems.length);
   const pct = Math.round(grScore / grItems.length * 100);
   const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
   const res = document.getElementById('gr-results');
@@ -3297,6 +3349,7 @@ function a1Next() { a1Index++; renderA1Q(); }
 
 function showA1Results() {
   document.getElementById('a1-main').style.display = 'none';
+  logActivity('A1 Practice', (A1_DATA[a1Topic] || {}).label || a1Topic, a1Score, a1Items.length);
   const pct = Math.round(a1Score / a1Items.length * 100);
   const emoji = pct >= 80 ? '🏆' : pct >= 50 ? '💪' : '🌱';
   const res = document.getElementById('a1-results');
@@ -3486,6 +3539,7 @@ function showResults() {
   if (s) {
     if (!s.quizHistory) s.quizHistory = [];
     s.quizHistory.push({ date: new Date().toISOString(), score: qScore, total: qWords.length, lesson: practiceLesson });
+    logActivity('Quiz', practiceLesson || '', qScore, qWords.length);
     if (s.quizHistory.length > 20) s.quizHistory = s.quizHistory.slice(-20);
     save(data);
   }
@@ -3525,14 +3579,68 @@ function checkLogin() {
 }
 
 function switchTeacherTab(tab) {
-  ['students','add-student','add-word'].forEach(t => {
+  ['students','add-student','add-word','activity'].forEach(t => {
     document.getElementById('tt-' + t).style.display = t === tab ? '' : 'none';
   });
   document.querySelectorAll('#screen-teacher .tab').forEach((el, i) => {
-    el.classList.toggle('active', ['students','add-student','add-word'][i] === tab);
+    el.classList.toggle('active', ['students','add-student','add-word','activity'][i] === tab);
   });
   if (tab === 'students') renderTeacher();
   if (tab === 'add-word') populateSelect();
+  if (tab === 'activity') renderTeacherActivity();
+}
+
+// ── Teacher: activity log (from Firebase) ──
+let actRows = [];
+
+function renderTeacherActivity() {
+  const el = document.getElementById('teacher-activity-list');
+  if (!fbdb) { el.innerHTML = '<div class="lib-empty">База данных недоступна (нет интернета или Firebase не загрузился).</div>'; return; }
+  el.innerHTML = '<div class="lib-empty">Загрузка…</div>';
+  fbdb.collection('activity').orderBy('ts', 'desc').limit(400).get().then(snap => {
+    actRows = [];
+    snap.forEach(d => actRows.push(d.data()));
+    // fill student filter
+    const sel = document.getElementById('act-filter');
+    const keep = sel.value;
+    const names = [...new Set(actRows.map(r => r.student))].sort();
+    sel.innerHTML = '<option value="">Все студенты</option>' + names.map(n => '<option value="' + esc(n) + '">' + esc(n) + '</option>').join('');
+    sel.value = names.includes(keep) ? keep : '';
+    renderActivityList();
+  }).catch(err => {
+    el.innerHTML = '<div class="lib-empty">Не удалось загрузить журнал: ' + esc(String(err && err.message || err)) + '</div>';
+  });
+}
+
+function renderActivityList() {
+  const el = document.getElementById('teacher-activity-list');
+  const filter = document.getElementById('act-filter').value;
+  const rows = filter ? actRows.filter(r => r.student === filter) : actRows;
+  if (!rows.length) {
+    el.innerHTML = '<div class="lib-empty">Пока нет записей — они появятся, как только студенты начнут заниматься.</div>';
+    return;
+  }
+  const days = {};
+  rows.forEach(r => {
+    const d = new Date(r.ts);
+    const key = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+    (days[key] = days[key] || []).push(r);
+  });
+  let html = '';
+  Object.keys(days).forEach(day => {
+    html += '<div style="font-family:\'Cormorant Garamond\',Georgia,serif;font-size:1.15rem;font-weight:600;color:var(--sage-dark);margin:18px 0 8px;">' + esc(day) + '</div>';
+    days[day].forEach(r => {
+      const t = new Date(r.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+      const score = (r.score !== null && r.total !== null) ? '<span style="font-weight:600;color:var(--sage-dark);">' + r.score + '/' + r.total + '</span>' : '';
+      html += '<div style="display:flex;gap:10px;align-items:baseline;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:7px;font-size:0.88rem;">' +
+        '<span style="color:var(--muted);font-size:0.78rem;min-width:38px;">' + t + '</span>' +
+        '<span style="font-weight:600;min-width:80px;">' + esc(r.student) + '</span>' +
+        '<span>' + esc(r.mode) + (r.detail ? ' <span style="color:var(--muted);">· ' + esc(r.detail) + '</span>' : '') + '</span>' +
+        '<span style="margin-left:auto;">' + score + '</span>' +
+      '</div>';
+    });
+  });
+  el.innerHTML = html;
 }
 
 function renderTeacher() {
@@ -4183,6 +4291,7 @@ function showDialogueResults() {
   chat.style.display = 'none';
   const correct = dlgAnswers.filter(a => a.match).length;
   const total   = dlgAnswers.length;
+  logActivity('Dialogue', (DIALOGUES[dlgCurrentIdx] || {}).title || '', correct, total);
   const emoji   = correct === total ? '🏆' : correct >= total / 2 ? '💪' : '📖';
   let itemsHtml = dlgAnswers.map(a => `
     <div class="dlg-result-item">
@@ -4459,6 +4568,7 @@ function showOfficeResults() {
   if (s) {
     if (!s.quizHistory) s.quizHistory = [];
     s.quizHistory.push({ date: new Date().toISOString(), score: officeScore, total: officeQuestions.length, lesson: 'The Office — ' + officeScene.title, type: 'office' });
+    logActivity('The Office', officeScene.title, officeScore, officeQuestions.length);
     if (s.quizHistory.length > 20) s.quizHistory = s.quizHistory.slice(-20);
     save(data);
   }
@@ -4654,6 +4764,7 @@ function showGapResults() {
   if (s) {
     if (!s.quizHistory) s.quizHistory = [];
     s.quizHistory.push({ date: new Date().toISOString(), score: gapScore, total: gapQuestions.length, lesson: 'Gap Fill ' + gapLevel, type: 'gap' });
+    logActivity('Fill the Gap', gapLevel || '', gapScore, gapQuestions.length);
     if (s.quizHistory.length > 20) s.quizHistory = s.quizHistory.slice(-20);
     save(data);
   }
