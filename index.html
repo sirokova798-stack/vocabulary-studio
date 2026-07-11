@@ -5694,6 +5694,15 @@ const ALEXEI_WORDS = [
     }
   });
 
+  // ── Karina (teacher's own cabinet — French) ──
+  let karina = data.students.find(s => s.name === 'Karina');
+  if (!karina) {
+    karina = { id: uid(), name: 'Karina', words: [], quizHistory: [] };
+    data.students.push(karina);
+  }
+  if (!karina.quizHistory) karina.quizHistory = [];
+  karina.pin = '7777';
+
   save(data);
 })(); // v2
 renderHome();
