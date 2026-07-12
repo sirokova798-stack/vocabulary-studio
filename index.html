@@ -1961,6 +1961,7 @@ function startFlashcards() {
   document.getElementById('fc-lesson-label').textContent = practiceLesson ? 'Flashcards — ' + practiceLesson : 'Flashcards';
   document.getElementById('fc-review-btn').style.display = 'none';
   show('flashcards');
+  logActivity('Flashcards (начал)', practiceLesson || '', null, fcWords.length);
   renderFC();
 }
 function fcSetDir(dir) {
@@ -2049,6 +2050,7 @@ function startQuiz() {
   document.getElementById('quiz-results').style.display = 'none';
   document.getElementById('quiz-content').style.display = '';
   show('quiz');
+  logActivity('Quiz (начал)', practiceLesson || '', null, qWords.length);
   renderQ();
 }
 
@@ -2204,6 +2206,7 @@ function startContext() {
   document.getElementById('ctx-main').style.display = '';
   document.getElementById('ctx-results').style.display = 'none';
   show('context');
+  logActivity('In Context (начал)', practiceLesson || '', null, ctxQuestions.length);
   renderCtxQ();
 }
 
@@ -2425,6 +2428,7 @@ function beginPhrasal(level) {
   document.getElementById('phr-levels').style.display = 'none';
   document.getElementById('phr-results').style.display = 'none';
   document.getElementById('phr-game').style.display = '';
+  logActivity('Phrasal Verbs (начал)', level, null, phrQuestions.length);
   renderPhrQ();
 }
 
@@ -2598,6 +2602,7 @@ function beginWordForm(level) {
   document.getElementById('wf-levels').style.display = 'none';
   document.getElementById('wf-main').style.display = '';
   document.getElementById('wf-results').style.display = 'none';
+  logActivity('Word Formation (начал)', level, null, wfQuestions.length);
   renderWfQ();
 }
 
@@ -2807,6 +2812,7 @@ function beginGrammar(topic) {
   document.getElementById('gr-topics').style.display = 'none';
   document.getElementById('gr-main').style.display = '';
   document.getElementById('gr-results').style.display = 'none';
+  logActivity('B1 Grammar (начал)', grTopicName || '', null, grItems.length);
   renderGrQ();
 }
 
@@ -3227,6 +3233,7 @@ function a1Begin(topic) {
   document.getElementById('a1-main').style.display = '';
   document.getElementById('a1-results').style.display = 'none';
   document.getElementById('a1-topic-label').textContent = d.label;
+  logActivity('A1 Practice (начал)', d.label, null, a1Items.length);
   renderA1Q();
 }
 
@@ -4193,6 +4200,7 @@ function beginDialogue(idx) {
   document.getElementById('dlg-active-wrap').style.display = '';
   document.getElementById('dlg-results').style.display    = 'none';
   document.getElementById('dlg-chat').innerHTML           = '';
+  logActivity('Dialogue (начал)', d.title, null, null);
   dlgAdvance();
 }
 
@@ -4502,6 +4510,7 @@ function startOfficeScene(index) {
   document.getElementById('office-iframe').src = 'https://www.youtube-nocookie.com/embed/' + officeScene.youtubeId + '?rel=0&modestbranding=1';
   document.getElementById('office-active-title').textContent = officeScene.title;
   document.getElementById('office-active-focus').textContent = 'Focus: ' + officeScene.focus;
+  logActivity('The Office (начал)', officeScene.title, null, officeQuestions.length);
   renderOfficeQ();
 }
 
@@ -4702,6 +4711,7 @@ function startGapLevel(level) {
   document.getElementById('gap-question').style.display = '';
   document.getElementById('gap-results').style.display = 'none';
   document.getElementById('gap-level-label').textContent = 'Fill the Gap — ' + level;
+  logActivity('Fill the Gap (начал)', level, null, gapQuestions.length);
   renderGapQ();
 }
 
