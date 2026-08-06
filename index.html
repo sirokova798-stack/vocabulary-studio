@@ -946,7 +946,7 @@
 
 <!-- ── SCREEN: FILL THE GAP ── -->
 <div class="screen" id="screen-gap">
-  <button class="back-btn" onclick="endGap()">← Back to practice</button>
+  <button class="back-btn" id="gap-back-btn" onclick="endGap()">← Back to practice</button>
 
   <!-- Level selector -->
   <div id="gap-level-select">
@@ -1009,7 +1009,7 @@
 
 <!-- ── SCREEN: PHRASAL VERBS ── -->
 <div class="screen" id="screen-phrasal">
-  <button class="back-btn" onclick="endPhrasal()">← Back to practice</button>
+  <button class="back-btn" id="phr-back-btn" onclick="endPhrasal()">← Back to practice</button>
 
   <!-- Level picker -->
   <div id="phr-levels">
@@ -1055,7 +1055,7 @@
 
 <!-- ── SCREEN: WORD FORMATION ── -->
 <div class="screen" id="screen-wordform">
-  <button class="back-btn" onclick="endWordForm()">← Back to practice</button>
+  <button class="back-btn" id="wf-back-btn" onclick="endWordForm()">← Back to practice</button>
 
   <!-- Level picker -->
   <div id="wf-levels">
@@ -1073,7 +1073,10 @@
     <div class="progress-wrap" style="margin-bottom:4px;">
       <div class="progress-bar"><div class="progress-fill" id="wf-progress" style="width:0%"></div></div>
     </div>
-    <div style="text-align:right;font-size:.8rem;color:var(--muted);margin-bottom:18px;" id="wf-counter"></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:.8rem;color:var(--muted);margin-bottom:18px;">
+      <span id="wf-level-label" style="font-weight:600;letter-spacing:.04em;text-transform:uppercase;"></span>
+      <span id="wf-counter"></span>
+    </div>
 
     <div class="card wf-card">
       <div class="wf-sentence" id="wf-sentence"></div>
@@ -1097,7 +1100,7 @@
 
 <!-- ── SCREEN: B1 GRAMMAR (Use of English) ── -->
 <div class="screen" id="screen-grammar">
-  <button class="back-btn" onclick="endGrammar()">← Back to practice</button>
+  <button class="back-btn" id="gr-back-btn" onclick="endGrammar()">← Back to practice</button>
 
   <!-- Topic picker -->
   <div id="gr-topics">
@@ -2418,6 +2421,7 @@ function startPhrasal() {
   document.getElementById('phr-levels').style.display = '';
   document.getElementById('phr-game').style.display = 'none';
   document.getElementById('phr-results').style.display = 'none';
+  document.getElementById('phr-back-btn').textContent = '← Back to practice';
   show('phrasal');
 }
 
@@ -2428,6 +2432,7 @@ function beginPhrasal(level) {
   document.getElementById('phr-levels').style.display = 'none';
   document.getElementById('phr-results').style.display = 'none';
   document.getElementById('phr-game').style.display = '';
+  document.getElementById('phr-back-btn').textContent = '← Change level';
   logActivity('Phrasal Verbs (начал)', level, null, phrQuestions.length);
   renderPhrQ();
 }
@@ -2501,6 +2506,7 @@ function phrCheck() {
 function phrNext() { phrIndex++; renderPhrQ(); }
 
 function showPhrResults() {
+  document.getElementById('phr-back-btn').textContent = '← Back to practice';
   document.getElementById('phr-game').style.display = 'none';
   logActivity('Phrasal Verbs', '', phrScore, phrQuestions.length);
   const pct = Math.round(phrScore / phrQuestions.length * 100);
@@ -2515,7 +2521,11 @@ function showPhrResults() {
     '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endPhrasal()">← Back to practice</button>';
 }
 
-function endPhrasal() { show('student'); switchTab('practice'); }
+function endPhrasal() {
+  // Mid-round the back button returns to the level picker, not out of the mode.
+  if (document.getElementById('phr-game').style.display !== 'none') { startPhrasal(); return; }
+  show('student'); switchTab('practice');
+}
 
 // ─────────────────────────────────────────────────────────────
 // WORD FORMATION  (Use of English — transform the word in capitals)
@@ -2540,15 +2550,15 @@ const WORD_FORM = [
   { s:'We watched a @ sunset over the sea.',                     base:'BEAUTY',    answer:'beautiful',  level:'A2-B1' },
   { s:'Swimming in this river is very @.',                       base:'DANGER',    answer:'dangerous',  level:'A2-B1' },
   { s:'The soup tasted @ without any salt.',                     base:'TASTE',     answer:'tasteless',  level:'A2-B1' },
-  { s:'She gave a @ smile when she saw the gift.',                base:'HAPPY',     answer:'happy',      level:'A2-B1' },
-  { s:'It was @ of him to leave without saying goodbye.',         base:'RUDE',      answer:'rude',       level:'A2-B1' },
+  { s:'She gave a @ smile when she saw the gift.',                base:'HAPPINESS', answer:'happy',      level:'A2-B1' },
+  { s:'It was @ of him to leave without saying goodbye.',         base:'RUDENESS',  answer:'rude',       level:'A2-B1' },
   { s:'The old bridge looked @ and no one used it anymore.',      base:'SAFE',      answer:'unsafe',     level:'A2-B1' },
   { s:'This exercise is @ — even beginners can do it.',           base:'EASE',      answer:'easy',       level:'A2-B1' },
   { s:'His jokes are always so @.',                                base:'FUN',       answer:'funny',      level:'A2-B1' },
   { s:'The kitten looked @ sitting alone in the rain.',            base:'HELP',      answer:'helpless',   level:'A2-B1' },
-  { s:'We had a @ time at the beach yesterday.',                   base:'WONDER',    answer:'wonderful',  level:'A2-B1' },
+  { s:'The team played @ well in the second half.',                base:'WONDER',    answer:'wonderfully', level:'A2-B1' },
   { s:'It would be @ to leave without thanking her.',              base:'POLITE',    answer:'impolite',   level:'A2-B1' },
-  { s:'The teacher was @ when explaining the new rules.',          base:'PATIENT',   answer:'patient',    level:'A2-B1' },
+  { s:'The teacher waited @ for everyone to settle down.',         base:'PATIENT',   answer:'patiently',  level:'A2-B1' },
   { s:'He felt @ after losing the match.',                         base:'HAPPY',     answer:'unhappy',    level:'A2-B1' },
   { s:'The instructions on the box were @.',                       base:'CLEAR',     answer:'unclear',    level:'A2-B1' },
   { s:'She is @ about starting her new job next week.',            base:'EXCITE',    answer:'excited',    level:'A2-B1' },
@@ -2567,7 +2577,7 @@ const WORD_FORM = [
   { s:'He apologised for his @ at the meeting.',                 base:'RUDE',      answer:'rudeness',   level:'B1-B2' },
   { s:'The scientist made an important @.',                      base:'DISCOVER',  answer:'discovery',  level:'B1-B2' },
   { s:'This medicine is highly @ against colds.',                base:'EFFECT',    answer:'effective',  level:'B1-B2' },
-  { s:'The town is famous for its @ buildings.',                 base:'HISTORY',   answer:'historical', level:'B1-B2' },
+  { s:'The town is famous for its @ buildings.',                 base:'HISTORY',   answer:'historical', alts:['historic'], level:'B1-B2' },
   { s:'The company is looking for @ employees.',                 base:'CREATE',    answer:'creative',   level:'B1-B2' },
   { s:'There was a complete lack of @ in the office.',           base:'COMMUNICATE', answer:'communication', level:'B1-B2' },
   { s:'Your support has been extremely @ to us.',                base:'VALUE',     answer:'valuable',   level:'B1-B2' },
@@ -2578,13 +2588,13 @@ const WORD_FORM = [
   { s:'The @ between the two sisters is very close.',            base:'RELATION',  answer:'relationship', alts:['relations'], level:'B1-B2' },
   { s:'A good night’s sleep will improve your @.',               base:'CONCENTRATE', answer:'concentration', level:'B1-B2' },
   { s:'Her @ as a leader is widely respected.',                  base:'STRONG',    answer:'strength',   level:'B1-B2' },
-  { s:'The @ of the meeting was postponed until Friday.',        base:'ARRANGE',   answer:'arrangement',level:'B1-B2' },
-  { s:'He gave a @ answer instead of a direct one.',             base:'CONFUSE',   answer:'confusing',  level:'B1-B2' },
-  { s:'The company announced a major @ in strategy.',            base:'CHANGE',    answer:'change',     level:'B1-B2' },
+  { s:'The @ for the conference are almost complete.',           base:'ARRANGE',   answer:'arrangements',level:'B1-B2' },
+  { s:'His vague reply only added to the @.',                    base:'CONFUSE',   answer:'confusion',  level:'B1-B2' },
+  { s:'The weather in the mountains is extremely @ in spring.',  base:'CHANGE',    answer:'changeable', level:'B1-B2' },
   { s:'She was praised for her @ during the crisis.',            base:'LEADER',    answer:'leadership', level:'B1-B2' },
-  { s:'His @ made the whole team feel welcome.',                 base:'FRIEND',    answer:'friendliness',level:'B1-B2' },
+  { s:'His @ made the whole team feel welcome.',                 base:'FRIEND',    answer:'friendliness',alts:['friendship'], level:'B1-B2' },
   { s:'The report gives a detailed @ of the results.',           base:'EXPLAIN',   answer:'explanation',level:'B1-B2' },
-  { s:'They showed great @ in handling the negotiations.',       base:'SKILL',     answer:'skill',      level:'B1-B2' },
+  { s:'They handled the difficult negotiations very @.',         base:'SKILL',     answer:'skilfully',  alts:['skillfully'], level:'B1-B2' },
   { s:'The @ between the two companies lasted ten years.',       base:'COOPERATE', answer:'cooperation',level:'B1-B2' },
   { s:'It is @ to finish the project by tomorrow.',              base:'POSSIBLE',  answer:'impossible', level:'B1-B2' },
   { s:'She showed real @ when she stayed calm under pressure.',  base:'MATURE',    answer:'maturity',   level:'B1-B2' },
@@ -2595,44 +2605,44 @@ const WORD_FORM = [
   { s:'The children were full of @ before the trip.',            base:'EXCITE',    answer:'excitement', level:'B1-B2' },
   { s:'He showed no @ for the feelings of others.',              base:'CONSIDER',  answer:'consideration',level:'B1-B2' },
   { s:'The @ of the old building took over a year.',             base:'RESTORE',   answer:'restoration',level:'B1-B2' },
-  { s:'Her @ helped her win the debate easily.',                 base:'ARGUE',     answer:'argument',   level:'B1-B2' },
+  { s:'Her @ helped her win the debate easily.',                 base:'ARGUE',     answer:'argument',   alts:['arguments'], level:'B1-B2' },
   { s:'The teacher gave clear @ before the exam.',               base:'INSTRUCT',  answer:'instructions',level:'B1-B2' },
-  { s:'His constant @ annoyed everyone in the office.',          base:'COMPLAIN',  answer:'complaining',level:'B1-B2' },
-  { s:'The company values @ and hard work.',                     base:'HONEST',    answer:'honesty',    level:'B1-B2' },
+  { s:'His constant @ annoyed everyone in the office.',          base:'COMPLAIN',  answer:'complaining',alts:['complaints'], level:'B1-B2' },
+  { s:'It would be @ to pretend the project was a success.',     base:'HONEST',    answer:'dishonest',  level:'B1-B2' },
 
   // ── B2–C1 · advanced transformations ──
   { s:'They live in a beautiful @ area near the Alps.',          base:'MOUNTAIN',  answer:'mountainous',level:'B2-C1' },
   { s:'The horror film was absolutely @.',                       base:'TERROR',    answer:'terrifying', level:'B2-C1' },
   { s:'We need to improve the @ of our service.',                base:'EFFICIENT', answer:'efficiency', level:'B2-C1' },
   { s:'His @ to help others is admirable.',                      base:'WILLING',   answer:'willingness',level:'B2-C1' },
-  { s:'I find his behaviour completely @.',                      base:'ACCEPT',    answer:'unacceptable',level:'B2-C1' },
+  { s:'I find his behaviour completely @ and I intend to complain.', base:'ACCEPT', answer:'unacceptable',level:'B2-C1' },
   { s:'Her speech was both clear and @.',                        base:'PERSUADE',  answer:'persuasive', level:'B2-C1' },
   { s:'Their @ to the cause was truly inspiring.',               base:'DEVOTE',    answer:'devotion',   level:'B2-C1' },
   { s:'She is well known for her @ and kindness.',               base:'GENEROUS',  answer:'generosity', level:'B2-C1' },
   { s:'His @ remarks offended several people.',                  base:'OFFEND',    answer:'offensive',  level:'B2-C1' },
-  { s:'We were impressed by the @ of the hotel staff.',          base:'FRIEND',    answer:'friendliness',level:'B2-C1' },
+  { s:'The two countries signed a treaty of lasting @.',         base:'FRIEND',    answer:'friendship', level:'B2-C1' },
   { s:'The @ of the instructions made the task easy.',           base:'SIMPLE',    answer:'simplicity', level:'B2-C1' },
   { s:'The team showed great @ throughout the match.',           base:'DETERMINE', answer:'determination',level:'B2-C1' },
   { s:'He seemed completely @ of the danger.',                   base:'AWARE',     answer:'unaware',    level:'B2-C1' },
-  { s:'They were very @ with the poor service.',                 base:'SATISFY',   answer:'dissatisfied',level:'B2-C1' },
+  { s:'They were very @ with the poor service.',                 base:'SATISFY',   answer:'dissatisfied',alts:['unsatisfied'], level:'B2-C1' },
   { s:'The weather here is so @ that you never know what to wear.', base:'PREDICT', answer:'unpredictable', level:'B2-C1' },
   { s:'His @ of the situation turned out to be completely wrong.', base:'ASSESS',   answer:'assessment', level:'B2-C1' },
-  { s:'The senator gave a long and @ speech.',                    base:'PERSUADE',  answer:'persuasive', level:'B2-C1' },
-  { s:'Her @ to detail is what makes her such a great editor.',   base:'METICULOUS',answer:'meticulousness', level:'B2-C1' },
+  { s:'It took a great deal of @ to make him change his mind.',   base:'PERSUADE',  answer:'persuasion', level:'B2-C1' },
+  { s:'She checks every single line with extraordinary @.',       base:'METICULOUS',answer:'meticulousness', level:'B2-C1' },
   { s:'The negotiations ended in complete @.',                    base:'FAIL',      answer:'failure',    level:'B2-C1' },
-  { s:'His behaviour at the meeting was utterly @.',               base:'PROFESSION',answer:'unprofessional', level:'B2-C1' },
-  { s:'The novel explores the @ of memory and identity.',         base:'COMPLEX',   answer:'complexity', level:'B2-C1' },
+  { s:'His behaviour at the meeting was utterly @ and he was later suspended.', base:'PROFESSION',answer:'unprofessional', level:'B2-C1' },
+  { s:'The novel explores the @ of memory and identity.',         base:'COMPLEX',   answer:'complexity', alts:['complexities'], level:'B2-C1' },
   { s:'Her @ analysis impressed the whole committee.',            base:'INSIGHT',   answer:'insightful', level:'B2-C1' },
-  { s:'The court found him @ of any wrongdoing.',                 base:'INNOCENT',  answer:'innocent',   level:'B2-C1' },
+  { s:'The court was finally convinced of his @.',                base:'INNOCENT',  answer:'innocence',  level:'B2-C1' },
   { s:"The company's @ has grown steadily over the decade.",       base:'PROFIT',    answer:'profitability', level:'B2-C1' },
   { s:'His refusal to compromise showed sheer @.',                base:'STUBBORN',  answer:'stubbornness', level:'B2-C1' },
-  { s:'The scandal caused widespread public @.',                  base:'OUTRAGE',   answer:'outrage',    level:'B2-C1' },
+  { s:"The minister's @ remarks caused a public scandal.",        base:'OUTRAGE',   answer:'outrageous', level:'B2-C1' },
   { s:'Her @ to the cause never wavered, even in hard times.',    base:'LOYAL',     answer:'loyalty',    level:'B2-C1' },
   { s:"The committee's decision was met with fierce @.",           base:'OPPOSE',    answer:'opposition', level:'B2-C1' },
   { s:"The professor's @ explanation left no room for doubt.",     base:'COHERE',    answer:'coherent',   level:'B2-C1' },
   { s:'His @ attitude towards criticism surprised his colleagues.', base:'DEFEND',  answer:'defensive',  level:'B2-C1' },
   { s:'The report highlighted several @ in the current system.',  base:'INCONSISTENT', answer:'inconsistencies', level:'B2-C1' },
-  { s:'She has an @ ability to remain calm under pressure.',      base:'EXTRAORDINARY', answer:'extraordinary', level:'B2-C1' }
+  { s:'She has an @ ability to remain calm under pressure.',      base:'ORDINARY',  answer:'extraordinary', level:'B2-C1' }
 ];
 
 let wfQuestions = [], wfIndex = 0, wfScore = 0, wfAnswered = false;
@@ -2645,6 +2655,7 @@ function startWordForm() {
   document.getElementById('wf-levels').style.display = '';
   document.getElementById('wf-main').style.display = 'none';
   document.getElementById('wf-results').style.display = 'none';
+  document.getElementById('wf-back-btn').textContent = '← Back to practice';
   show('wordform');
 }
 
@@ -2655,6 +2666,9 @@ function beginWordForm(level) {
   document.getElementById('wf-levels').style.display = 'none';
   document.getElementById('wf-main').style.display = '';
   document.getElementById('wf-results').style.display = 'none';
+  document.getElementById('wf-back-btn').textContent = '← Change level';
+  document.getElementById('wf-level-label').textContent =
+    level === 'all' ? 'All levels' : level;
   logActivity('Word Formation (начал)', level, null, wfQuestions.length);
   renderWfQ();
 }
@@ -2703,6 +2717,7 @@ function wfNext() { wfIndex++; renderWfQ(); }
 
 function showWfResults() {
   document.getElementById('wf-main').style.display = 'none';
+  document.getElementById('wf-back-btn').textContent = '← Back to practice';
   logActivity('Word Formation', '', wfScore, wfQuestions.length);
   const pct = Math.round(wfScore / wfQuestions.length * 100);
   const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '💪' : '📖';
@@ -2716,7 +2731,11 @@ function showWfResults() {
     '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endWordForm()">← Back to practice</button>';
 }
 
-function endWordForm() { show('student'); switchTab('practice'); }
+function endWordForm() {
+  // Mid-round the back button returns to the level picker, not out of the mode.
+  if (document.getElementById('wf-main').style.display !== 'none') { startWordForm(); return; }
+  show('student'); switchTab('practice');
+}
 
 // ─────────────────────────────────────────────────────────────
 // B1 GRAMMAR — Use of English
@@ -2733,13 +2752,13 @@ const GRAMMAR = [
 
   // ── Articles ──
   { topic:'Articles', type:'mc', q:'She is @ honest person.', options:['a','an','the','—'], answer:'an', note:'"honest" starts with a vowel sound (the h is silent).' },
-  { topic:'Articles', type:'mc', q:'I play @ guitar every evening.', options:['a','an','the','—'], answer:'the', note:'Musical instruments take "the".' },
+  { topic:'Articles', type:'mc', q:'I play @ guitar every evening.', options:['a','an','the'], answer:'the', note:'Musical instruments take "the".' },
   { topic:'Articles', type:'cloze', q:'My brother is @ engineer.', answers:['an'], note:'"engineer" starts with a vowel sound.' },
-  { topic:'Articles', type:'cloze', q:'@ sun rises in the east.', answers:['the'], note:'Unique things (the sun) take "the".' },
+  { topic:'Articles', type:'cloze', q:'@ sun rises in the east.', answers:['The'], note:'Unique things (the sun) take "the".' },
   { topic:'Articles', type:'mc', q:'I love @ music.', options:['a','an','the','—'], answer:'—', note:'Uncountable nouns in general need no article.' },
 
   // ── Prepositions ──
-  { topic:'Prepositions', type:'cloze', q:'It depends @ the weather.', answers:['on'], note:'"depend on" something.' },
+  { topic:'Prepositions', type:'cloze', q:'It depends @ the weather.', answers:['on','upon'], note:'"depend on" something.' },
   { topic:'Prepositions', type:'cloze', q:"She's very good @ drawing.", answers:['at'], note:'"good at" doing something.' },
   { topic:'Prepositions', type:'mc', q:'I am interested @ history.', options:['in','on','at','for'], answer:'in', note:'"interested in" something.' },
   { topic:'Prepositions', type:'mc', q:'He is married @ a doctor.', options:['with','to','on','at'], answer:'to', note:'"married to" someone.' },
@@ -2750,11 +2769,11 @@ const GRAMMAR = [
   { topic:'Conditionals', type:'mc', q:'If I @ rich, I would travel the world.', options:['am','was','were','will be'], answer:'were', note:'Second conditional uses "were" for all persons.' },
   { topic:'Conditionals', type:'cloze', q:'If you heat ice, it @.', answers:['melts'], note:'Zero conditional: present simple in both parts for facts.' },
   { topic:'Conditionals', type:'kwt', original:'I don\'t have a car, so I can\'t drive you.', key:'WOULD', q:'If I had a car, I @ you.', answers:["would drive"], note:'Second conditional: would + base verb.' },
-  { topic:'Conditionals', type:'cloze', q:'If she @ harder, she would pass the exam.', answers:['studied','worked'], note:'Second conditional: past simple in the if-clause.' },
+  { topic:'Conditionals', type:'cloze', q:'If she @ harder, she would pass the exam.', answers:['studied','worked','tried','revised'], note:'Second conditional: past simple in the if-clause.' },
 
   // ── Modals ──
   { topic:'Modals', type:'mc', q:'You @ smoke here — it is forbidden.', options:["mustn't","don't have to","shouldn't","needn't"], answer:"mustn't", note:'"mustn\'t" = it is prohibited.' },
-  { topic:'Modals', type:'mc', q:'We @ hurry; we have plenty of time.', options:["mustn't","don't have to","can't","shouldn't"], answer:"don't have to", note:'"don\'t have to" = it is not necessary.' },
+  { topic:'Modals', type:'mc', q:'We @ hurry; we have plenty of time.', options:["mustn't","don't have to","can't","may not"], answer:"don't have to", note:'"don\'t have to" = it is not necessary.' },
   { topic:'Modals', type:'cloze', q:'You look tired. You @ go to bed early.', answers:['should','could','must'], note:'"should" gives advice.' },
   { topic:'Modals', type:'kwt', original:'It is not necessary to bring food.', key:'HAVE', q:'You @ bring food.', answers:["don't have to","do not have to"], note:'"don\'t have to" = not necessary.' },
   { topic:'Modals', type:'mc', q:'When I was a child, I @ swim very well.', options:['could','can','must','should'], answer:'could', note:'"could" for past ability.' },
@@ -2776,9 +2795,9 @@ const GRAMMAR = [
   // ── Reported Speech ──
   { topic:'Reported Speech', type:'mc', q:'She said she @ tired.', options:['is','was','will be','has been'], answer:'was', note:'Present → past in reported speech.' },
   { topic:'Reported Speech', type:'kwt', original:'"I will call you," he said.', key:'WOULD', q:'He said he @ me.', answers:["would call"], note:'"will" → "would" in reported speech.' },
-  { topic:'Reported Speech', type:'cloze', q:'He told @ that the shop was closed.', answers:['me','us','her','him','them'], note:'"tell" needs an object (tell someone).' },
+  { topic:'Reported Speech', type:'cloze', q:'He told @ that the shop was closed.', answers:['me','us','her','him','them','you'], note:'"tell" needs an object (tell someone).' },
   { topic:'Reported Speech', type:'mc', q:'She asked me where I @.', options:['live','lived','have lived','living'], answer:'lived', note:'Present simple → past simple in reported questions.' },
-  { topic:'Reported Speech', type:'kwt', original:'"Do you speak French?" she asked me.', key:'IF', q:'She asked me @ French.', answers:["if i spoke","whether i spoke"], note:'Reported yes/no question: ask if/whether + past.' },
+  { topic:'Reported Speech', type:'kwt', original:'"Do you speak French?" she asked me.', key:'IF', q:'She asked me @ French.', answers:["if i spoke"], note:'Reported yes/no question: ask if/whether + past.' },
 
   // ── Relative Clauses ──
   { topic:'Relative Clauses', type:'mc', q:'The man @ lives next door is a teacher.', options:['which','who','where','whose'], answer:'who', note:'"who" for people.' },
@@ -2791,26 +2810,26 @@ const GRAMMAR = [
   { topic:'Gerund / Infinitive', type:'mc', q:'I enjoy @ to music.', options:['listen','to listen','listening','listened'], answer:'listening', note:'"enjoy" is followed by the -ing form.' },
   { topic:'Gerund / Infinitive', type:'mc', q:'She decided @ a new car.', options:['buy','to buy','buying','bought'], answer:'to buy', note:'"decide" is followed by to + infinitive.' },
   { topic:'Gerund / Infinitive', type:'cloze', q:'He is good at @ problems. (solve)', answers:['solving'], note:'After a preposition, use the -ing form.' },
-  { topic:'Gerund / Infinitive', type:'kwt', original:'"Let\'s go to the cinema," she said.', key:'SUGGESTED', q:'She @ to the cinema.', answers:["suggested going"], note:'"suggest" + -ing form.' },
+  { topic:'Gerund / Infinitive', type:'kwt', original:'"Let\'s go to the cinema," she said.', key:'SUGGESTED', q:'She @ to the cinema.', answers:["suggested going","suggested we go","suggested that we go"], note:'"suggest" + -ing form.' },
   { topic:'Gerund / Infinitive', type:'mc', q:'I want @ a doctor one day.', options:['become','to become','becoming','became'], answer:'to become', note:'"want" is followed by to + infinitive.' },
 
   // ── Extra key word transformations (authentic 2–5 word format) ──
-  { topic:'Present Perfect / Past Simple', type:'kwt', original:'I started working here three years ago.', key:'FOR', q:'I @ three years.', answers:["have worked here for","have worked for"], note:'present perfect + "for" + period.' },
+  { topic:'Present Perfect / Past Simple', type:'kwt', original:'I started working here three years ago.', key:'FOR', q:'I @ three years.', answers:["have worked here for","have worked for","have been working here for","have been working for"], note:'present perfect + "for" + period.' },
   { topic:'Modals', type:'kwt', original:'It is forbidden to take photos here.', key:'ALLOWED', q:'You @ take photos here.', answers:["are not allowed to","aren't allowed to"], note:'"be allowed to" for permission.' },
   { topic:'Passive Voice', type:'kwt', original:'They are building a new school in our town.', key:'BEING', q:'A new school @ in our town.', answers:["is being built"], note:'present continuous passive: is being + past participle.' },
-  { topic:'Comparatives', type:'kwt', original:'I have never seen a more boring film.', key:'MOST', q:'This is @ I have ever seen.', answers:["the most boring film"], note:'superlative for "more ... than ever".' },
+  { topic:'Comparatives', type:'kwt', original:'I have never seen a more boring film.', key:'MOST', q:'This is @ I have ever seen.', answers:["the most boring film"], note:'"never ... a more ..." becomes superlative + ever.' },
   { topic:'Reported Speech', type:'kwt', original:'"Don\'t touch the oven," Mum told me.', key:'NOT', q:'Mum told me @ the oven.', answers:["not to touch"], note:'reported command: told + object + (not) to + verb.' },
-  { topic:'Prepositions', type:'kwt', original:'She is afraid when she sees spiders.', key:'OF', q:'She @ spiders.', answers:["is afraid of"], note:'"be afraid of" something.' },
+  { topic:'Prepositions', type:'kwt', original:'She is afraid when she sees spiders.', key:'OF', q:'She @ spiders.', answers:["is afraid of","is scared of","is frightened of","is terrified of"], note:'"be afraid of" something.' },
   { topic:'Gerund / Infinitive', type:'kwt', original:'"You broke the window!" she said to him.', key:'ACCUSED', q:'She @ the window.', answers:["accused him of breaking"], note:'"accuse somebody of" + -ing.' },
 
   // ── More Present Perfect / Past Simple ──
-  { topic:'Present Perfect / Past Simple', type:'mc', q:'They @ their homework before dinner yesterday.', options:['finished','have finished','finish','had finish'], answer:'finished', note:'A completed action at a stated past time → past simple.' },
-  { topic:'Present Perfect / Past Simple', type:'cloze', q:'@ you ever been to Japan?', answers:['have'], note:'Present perfect for life experience: Have you ever...?' },
+  { topic:'Present Perfect / Past Simple', type:'mc', q:'They @ their homework before dinner yesterday.', options:['finished','have finished','finish','were finishing'], answer:'finished', note:'A completed action at a stated past time → past simple.' },
+  { topic:'Present Perfect / Past Simple', type:'cloze', q:'@ you ever been to Japan?', answers:['Have'], note:'Present perfect for life experience: Have you ever...?' },
   { topic:'Present Perfect / Past Simple', type:'mc', q:'I @ this film three times already.', options:['saw','have seen','see','was seeing'], answer:'have seen', note:'"already" signals present perfect for a repeated experience.' },
   { topic:'Present Perfect / Past Simple', type:'kwt', original:'She started this job in January and is still here.', key:'SINCE', q:'She @ January.', answers:["has worked here since","has been working here since"], note:'present perfect + since + starting point.' },
 
   // ── More Articles ──
-  { topic:'Articles', type:'mc', q:'She plays @ violin beautifully.', options:['a','an','the','—'], answer:'the', note:'Musical instruments take "the".' },
+  { topic:'Articles', type:'mc', q:'She plays @ violin beautifully.', options:['a','an','the'], answer:'the', note:'Musical instruments take "the".' },
   { topic:'Articles', type:'cloze', q:'He is @ university student.', answers:['a'], note:'"university" starts with a consonant sound /j/, so "a" is correct.' },
   { topic:'Articles', type:'mc', q:'@ Nile is the longest river in Africa.', options:['A','An','The','—'], answer:'The', note:'Rivers, seas, and oceans take "the".' },
   { topic:'Articles', type:'cloze', q:'I need @ umbrella — it is raining.', answers:['an'], note:'"umbrella" starts with a vowel sound.' },
@@ -2829,7 +2848,7 @@ const GRAMMAR = [
 
   // ── More Modals ──
   { topic:'Modals', type:'mc', q:'You @ wear a seatbelt — it is the law.', options:['must','could','might','would'], answer:'must', note:'"must" for strong obligation/rules.' },
-  { topic:'Modals', type:'cloze', q:'She @ be at home — I can see the lights on.', answers:['must'], note:'"must" for logical certainty.' },
+  { topic:'Modals', type:'cloze', q:'She @ be at home — I can see the lights on.', answers:['must','might','may','could'], note:'"must" for logical certainty.' },
   { topic:'Modals', type:'mc', q:'It @ rain later — the sky looks grey.', options:['must','might','mustn\'t','should'], answer:'might', note:'"might" for possibility.' },
   { topic:'Modals', type:'kwt', original:'Perhaps she is at work now.', key:'MAY', q:'She @ at work now.', answers:["may be"], note:'"may be" for present possibility.' },
 
@@ -2841,27 +2860,27 @@ const GRAMMAR = [
 
   // ── More Comparatives ──
   { topic:'Comparatives', type:'mc', q:'This is @ interesting book I have ever read.', options:['more','the more','most','the most'], answer:'the most', note:'Superlative with a long adjective: the most + adjective.' },
-  { topic:'Comparatives', type:'cloze', q:'The weather today is @ than it was yesterday.', answers:['worse'], note:'"bad" → "worse" (irregular comparative).' },
+  { topic:'Comparatives', type:'cloze', q:'The weather today is @ than it was yesterday. (bad)', answers:['worse'], note:'"bad" → "worse" (irregular comparative).' },
   { topic:'Comparatives', type:'kwt', original:'No other city in the country is as big as London.', key:'BIGGEST', q:'London is @ city in the country.', answers:["the biggest"], note:'Superlative for "no other... as... as".' },
-  { topic:'Comparatives', type:'mc', q:'She is @ than her older sister.', options:['more quiet','quieter','the quietest','most quiet'], answer:'quieter', note:'Two-syllable adjective ending in -y-like sound often takes -er.' },
+  { topic:'Comparatives', type:'mc', q:'She is @ than her older sister.', options:['quiet','quieter','the quietest','most quiet'], answer:'quieter', note:'Some two-syllable adjectives (quiet, simple, clever) take -er.' },
 
   // ── More Reported Speech ──
   { topic:'Reported Speech', type:'mc', q:'He said he @ finished the report.', options:['has','had','have','was'], answer:'had', note:'Present perfect → past perfect in reported speech.' },
-  { topic:'Reported Speech', type:'cloze', q:'She said she @ come to the party the next day.', answers:['would'], note:'"will" → "would" in reported speech.' },
+  { topic:'Reported Speech', type:'cloze', q:'She said she @ come to the party the next day.', answers:['would','could','might'], note:'"will" → "would" in reported speech.' },
   { topic:'Reported Speech', type:'kwt', original:'"Please help me," she said to him.', key:'ASKED', q:'She @ her.', answers:["asked him to help"], note:'reported request: asked + object + to + verb.' },
   { topic:'Reported Speech', type:'mc', q:'He asked me if I @ tired.', options:['am','was','were','have been'], answer:'was', note:'Present → past in a reported yes/no question.' },
 
   // ── More Relative Clauses ──
   { topic:'Relative Clauses', type:'mc', q:'This is the book @ I told you about.', options:['who','which','where','whose'], answer:'which', note:'"which" refers to a thing.' },
-  { topic:'Relative Clauses', type:'cloze', q:'The reason @ she left is still unclear.', answers:['why'], note:'"why" introduces a reason clause.' },
+  { topic:'Relative Clauses', type:'cloze', q:'The reason @ she left is still unclear.', answers:['why','that'], note:'"why" introduces a reason clause.' },
   { topic:'Relative Clauses', type:'kwt', original:'That is the restaurant. We had dinner there last night.', key:'WHERE', q:'That is the restaurant @ dinner last night.', answers:["where we had"], note:'"where" joins the sentences, replacing "there".' },
-  { topic:'Relative Clauses', type:'mc', q:'The people @ live next door are very friendly.', options:['which','who','whose','where'], answer:'who', note:'"who" for people (subject of the clause).' },
+  { topic:'Relative Clauses', type:'mc', q:'The woman @ car was stolen called the police.', options:['which','who','whose','where'], answer:'whose', note:'"whose" shows possession.' },
 
   // ── More Gerund / Infinitive ──
   { topic:'Gerund / Infinitive', type:'mc', q:'He avoided @ eye contact during the interview.', options:['make','to make','making','made'], answer:'making', note:'"avoid" is followed by the -ing form.' },
   { topic:'Gerund / Infinitive', type:'cloze', q:'She refused @ the money. (accept)', answers:['to accept'], note:'"refuse" is followed by to + infinitive.' },
   { topic:'Gerund / Infinitive', type:'mc', q:'They finished @ the house last month.', options:['to paint','painting','paint','painted'], answer:'painting', note:'"finish" is followed by the -ing form.' },
-  { topic:'Gerund / Infinitive', type:'kwt', original:'"Why don\'t we go for a walk?" he said.', key:'SUGGESTED', q:'He @ for a walk.', answers:["suggested going"], note:'"suggest" + -ing form.' },
+  { topic:'Gerund / Infinitive', type:'kwt', original:'"Why don\'t we go for a walk?" he said.', key:'SUGGESTED', q:'He @ for a walk.', answers:["suggested going","suggested we go","suggested that we go"], note:'"suggest" + -ing form.' },
 ].filter(g => !g.skip);
 
 let grItems = [], grIndex = 0, grScore = 0, grAnswered = false, grTopicName = '', grTypeFilter = 'all';
@@ -2911,6 +2930,7 @@ function startGrammar() {
   document.getElementById('gr-main').style.display = 'none';
   document.getElementById('gr-results').style.display = 'none';
   document.querySelectorAll('.gr-tf-btn').forEach(b => b.classList.toggle('active', b.dataset.tf === grTypeFilter));
+  document.getElementById('gr-back-btn').textContent = '← Back to practice';
   renderGrTopics();
   show('grammar');
 }
@@ -2925,6 +2945,7 @@ function beginGrammar(topic) {
   document.getElementById('gr-topics').style.display = 'none';
   document.getElementById('gr-main').style.display = '';
   document.getElementById('gr-results').style.display = 'none';
+  document.getElementById('gr-back-btn').textContent = '← Change topic';
   logActivity('B1 Grammar (начал)', grTopicName || '', null, grItems.length);
   renderGrQ();
 }
@@ -3018,6 +3039,7 @@ function grCheck() {
 function grNext() { grIndex++; renderGrQ(); }
 
 function showGrResults() {
+  document.getElementById('gr-back-btn').textContent = '← Back to practice';
   document.getElementById('gr-main').style.display = 'none';
   logActivity('B1 Grammar', grTopicName || '', grScore, grItems.length);
   const pct = Math.round(grScore / grItems.length * 100);
@@ -3032,7 +3054,11 @@ function showGrResults() {
     '<button class="btn btn-ghost btn-full" style="margin-top:10px;" onclick="endGrammar()">← Back to practice</button>';
 }
 
-function endGrammar() { show('student'); switchTab('practice'); }
+function endGrammar() {
+  // Mid-round the back button returns to the topic picker, not out of the mode.
+  if (document.getElementById('gr-main').style.display !== 'none') { startGrammar(); return; }
+  show('student'); switchTab('practice');
+}
 
 // ─────────────────────────────────────────────────────────────
 // GRAMMAR LIBRARY — reference, rules in Russian (shared by all students)
@@ -4795,12 +4821,17 @@ const GAP_BANK = {
 };
 
 function startGap() { show('gap'); pickGapLevel(); }
-function endGap() { show('student'); switchTab('practice'); }
+function endGap() {
+  // Mid-round the back button returns to the level picker, not out of the mode.
+  if (document.getElementById('gap-question').style.display !== 'none') { pickGapLevel(); return; }
+  show('student'); switchTab('practice');
+}
 
 function pickGapLevel() {
   document.getElementById('gap-level-select').style.display = '';
   document.getElementById('gap-question').style.display = 'none';
   document.getElementById('gap-results').style.display = 'none';
+  document.getElementById('gap-back-btn').textContent = '← Back to practice';
   const levels = [
     { code: 'A2', label: 'Elementary',         desc: 'Everyday collocations and set phrases' },
     { code: 'B1', label: 'Intermediate',        desc: 'Common idioms and phrasal verbs' },
@@ -4824,6 +4855,7 @@ function startGapLevel(level) {
   document.getElementById('gap-question').style.display = '';
   document.getElementById('gap-results').style.display = 'none';
   document.getElementById('gap-level-label').textContent = 'Fill the Gap — ' + level;
+  document.getElementById('gap-back-btn').textContent = '← Change level';
   logActivity('Fill the Gap (начал)', level, null, gapQuestions.length);
   renderGapQ();
 }
@@ -4875,6 +4907,7 @@ function gapNext() { gapIndex++; renderGapQ(); }
 
 function showGapResults() {
   document.getElementById('gap-question').style.display = 'none';
+  document.getElementById('gap-back-btn').textContent = '← Back to practice';
   document.getElementById('gap-results').style.display = '';
   const pct = Math.round(gapScore / gapQuestions.length * 100);
   document.getElementById('gap-score-num').textContent = gapScore;
