@@ -156,6 +156,27 @@
   }
   .word-delete:hover { color: var(--pink-dark); background: var(--pink-light); }
 
+  .word-edit {
+    background: none; border: none; cursor: pointer;
+    color: var(--border); font-size: 0.85rem;
+    padding: 5px 7px; border-radius: 7px; transition: var(--transition);
+  }
+  .word-edit:hover { color: var(--sage-dark); background: var(--sage-light); }
+
+  /* ── INLINE WORD EDITOR (teacher panel) ── */
+  .w-edit-form { flex: 1; min-width: 0; background: var(--cream); border-radius: 10px; padding: 12px 13px; }
+  .w-edit-form label {
+    display: block; font-size: 0.66rem; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.4px; margin: 0 0 3px;
+  }
+  .w-edit-form .w-edit-field { margin-bottom: 9px; }
+  .w-edit-form input, .w-edit-form textarea {
+    width: 100%; font-size: 0.85rem; padding: 7px 10px; font-family: inherit;
+  }
+  .w-edit-form textarea { resize: vertical; min-height: 46px; line-height: 1.45; }
+  .w-edit-actions { display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+  .w-edit-err { font-size: 0.76rem; color: var(--pink-dark); display: none; }
+
   /* ── LESSON BADGE ── */
   .lesson-badge {
     display: inline-block; padding: 2px 9px; border-radius: 99px;
@@ -3850,17 +3871,7 @@ function renderTeacher() {
         '<input type="text" id="' + searchId + '" placeholder="Search words…" style="font-size:0.82rem;padding:9px 13px;" oninput="filterTeacherWords(\'' + s.id + '\')">' +
       '</div>' +
       '<div id="' + listId + '">' +
-        allWords.map(w =>
-          '<div class="t-word-row" data-word="' + esc(w.word.toLowerCase()) + '" data-sid="' + s.id + '">' +
-            '<div style="flex:1;">' +
-              (w.lesson ? '<div style="font-size:0.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">' + esc(w.lesson) + '</div>' : '') +
-              '<div class="word-en">' + esc(w.word) + '</div>' +
-              (w.ipa ? '<div style="font-size:0.72rem;color:var(--muted);font-style:italic;">' + esc(w.ipa) + '</div>' : '') +
-              '<div class="word-ru" style="margin-top:2px;">🇷🇺 ' + esc(w.translation) + '</div>' +
-            '</div>' +
-            '<button class="word-delete" style="position:static;flex-shrink:0;" onclick="teacherDeleteWord(\'' + s.id + '\',\'' + w.id + '\')">✕</button>' +
-          '</div>'
-        ).join('') +
+        allWords.map(w => tWordRowHtml(s.id, w)).join('') +
       '</div>' +
       histHtml;
     list.appendChild(el);
@@ -3951,6 +3962,90 @@ function teacherDeleteWord(sid, wid) {
   if (s) s.words = s.words.filter(w => w.id !== wid);
   save(data);
   renderTeacher();
+}
+
+// ── Inline word editing (teacher panel) ──────────────────────
+// Rows re-render individually rather than through renderTeacher() so that
+// editing one word does not wipe the search box or scroll position.
+
+function tWordRowHtml(sid, w) {
+  return '' +
+    '<div class="t-word-row" id="wrow-' + w.id + '" data-word="' + esc(w.word.toLowerCase()) + '" data-sid="' + sid + '">' +
+      '<div style="flex:1;min-width:0;">' +
+        (w.lesson ? '<div style="font-size:0.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px;">' + esc(w.lesson) + '</div>' : '') +
+        '<div class="word-en">' + esc(w.word) + '</div>' +
+        (w.ipa ? '<div style="font-size:0.72rem;color:var(--muted);font-style:italic;">' + esc(w.ipa) + '</div>' : '') +
+        '<div class="word-ru" style="margin-top:2px;">🇷🇺 ' + esc(w.translation) + '</div>' +
+        (w.example ? '<div style="font-size:0.74rem;color:var(--muted);font-style:italic;margin-top:3px;">"' + esc(w.example) + '"</div>' : '') +
+      '</div>' +
+      '<div style="display:flex;gap:1px;flex-shrink:0;align-self:flex-start;">' +
+        '<button class="word-edit" title="Edit this word" onclick="teacherEditWord(\'' + sid + '\',\'' + w.id + '\')">✎</button>' +
+        '<button class="word-delete" style="position:static;" title="Delete this word" onclick="teacherDeleteWord(\'' + sid + '\',\'' + w.id + '\')">✕</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function teacherEditWord(sid, wid) {
+  const s = db().students.find(x => x.id === sid);
+  const w = s && s.words.find(x => x.id === wid);
+  if (!w) return;
+  const row = document.getElementById('wrow-' + wid);
+  if (!row) return;
+  const field = (label, id, val, ph, ta) =>
+    '<div class="w-edit-field"><label for="' + id + '-' + wid + '">' + label + '</label>' +
+    (ta ? '<textarea id="' + id + '-' + wid + '" placeholder="' + ph + '">' + esc(val || '') + '</textarea>'
+        : '<input type="text" id="' + id + '-' + wid + '" value="' + esc(val || '') + '" placeholder="' + ph + '">') +
+    '</div>';
+  row.innerHTML =
+    '<div class="w-edit-form">' +
+      field('Word', 'ed-word', w.word, 'e.g. prevent') +
+      field('IPA', 'ed-ipa', w.ipa, 'e.g. /prɪˈvent/') +
+      field('Translation', 'ed-tr', w.translation, 'например: предотвращать') +
+      field('Example', 'ed-ex', w.example, 'A sentence using the word', true) +
+      field('Lesson', 'ed-les', w.lesson, 'optional — groups words together') +
+      '<div class="w-edit-actions">' +
+        '<button class="btn btn-primary btn-sm" onclick="teacherSaveWord(\'' + sid + '\',\'' + wid + '\')">Save</button>' +
+        '<button class="btn btn-ghost btn-sm" onclick="teacherCancelEdit(\'' + sid + '\',\'' + wid + '\')">Cancel</button>' +
+        '<span class="w-edit-err" id="ed-err-' + wid + '"></span>' +
+      '</div>' +
+    '</div>';
+  const first = document.getElementById('ed-word-' + wid);
+  if (first) { first.focus(); first.select(); }
+}
+
+function teacherCancelEdit(sid, wid) {
+  const s = db().students.find(x => x.id === sid);
+  const w = s && s.words.find(x => x.id === wid);
+  const row = document.getElementById('wrow-' + wid);
+  if (w && row) row.outerHTML = tWordRowHtml(sid, w);
+}
+
+function teacherSaveWord(sid, wid) {
+  const val = id => (document.getElementById(id + '-' + wid) || {}).value?.trim() || '';
+  const err = document.getElementById('ed-err-' + wid);
+  const fail = msg => { if (err) { err.textContent = msg; err.style.display = ''; } };
+
+  const word = val('ed-word'), translation = val('ed-tr');
+  if (!word)        { fail('Word cannot be empty.');        return; }
+  if (!translation) { fail('Translation cannot be empty.'); return; }
+
+  const data = db();
+  const s = data.students.find(x => x.id === sid);
+  const w = s && s.words.find(x => x.id === wid);
+  if (!w) return;
+  if (s.words.some(x => x.id !== wid && x.word.toLowerCase() === word.toLowerCase())) {
+    fail('"' + word + '" is already in this list.'); return;
+  }
+
+  w.word = word;
+  w.ipa = val('ed-ipa');
+  w.translation = translation;
+  w.example = val('ed-ex');
+  w.lesson = val('ed-les');
+  save(data);
+
+  const row = document.getElementById('wrow-' + wid);
+  if (row) row.outerHTML = tWordRowHtml(sid, w);
 }
 
 // ─────────────────────────────────────────────────────────────
