@@ -1973,17 +1973,24 @@ function fcSetDir(dir) {
   document.getElementById('fc-dir-ru').className = 'btn btn-sm ' + (dir === 'ru' ? 'btn-primary' : 'btn-ghost');
   renderFC();
 }
+// IPA is stored with its slashes already ('/ˈθʌrə/'), but not every entry has
+// them, so normalise to exactly one pair rather than blindly wrapping.
+function fmtIpa(v) {
+  const t = (v || '').trim().replace(/^\/+|\/+$/g, '').trim();
+  return t ? '/' + t + '/' : '';
+}
+
 function renderFC() {
   const w = fcWords[fcIndex];
   if (fcDir === 'ru') {
     document.getElementById('fc-word').textContent = w.translation;
     document.getElementById('fc-ipa').style.display = 'none';
     document.getElementById('fc-translation').textContent = w.word;
-    document.getElementById('fc-example').textContent = w.ipa ? '/' + w.ipa + '/' : '';
+    document.getElementById('fc-example').textContent = fmtIpa(w.ipa);
     document.querySelector('#screen-flashcards .fc-tap-hint span:last-child').textContent = 'Tap to reveal English';
   } else {
     document.getElementById('fc-word').textContent = w.word;
-    document.getElementById('fc-ipa').textContent = w.ipa || '';
+    document.getElementById('fc-ipa').textContent = fmtIpa(w.ipa);
     document.getElementById('fc-ipa').style.display = w.ipa ? '' : 'none';
     document.getElementById('fc-translation').textContent = '🇷🇺 ' + w.translation;
     document.getElementById('fc-example').textContent = w.example ? '"' + w.example + '"' : '';
@@ -4987,7 +4994,7 @@ const RUSTAM_WORDS = [
   { word: 'self-esteem',  ipa: '/ˌself ɪˈstiːm/',       translation: 'самооценка',               example: 'Praise from a teacher can greatly boost a student\'s self-esteem.' },
   { word: 'drawbacks',    ipa: '/ˈdrɔːb\xe6ks/',          translation: 'недостатки, минусы',       example: 'One of the drawbacks of living in a city is the noise.' },
   { word: 'superficial',  ipa: '/ˌsuːpəˈfɪʃəl/',    translation: 'поверхностный',            example: 'Their friendship was superficial - they never talked about anything serious.' },
-  { word: 'prevent from', ipa: '/prɪˈvent frɒm/',      translation: 'мешать, не давать (делать что-либо)', example: 'His fear of failure prevented him from trying new things.' },
+  { word: 'prevent',      ipa: '/prɪˈvent/',           translation: 'предотвращать',            example: 'Regular exercise can prevent a lot of serious health problems.' },
   { word: 'heat',         ipa: '/hiːt/',               translation: 'жара, тепло',              example: 'The heat in the classroom made it hard to concentrate.' },
   { word: 'vanity',                ipa: '/ˈvænɪti/',            translation: 'тщеславие',                      example: 'His vanity made him check his appearance in every mirror he passed.' },
   { word: 'the day before yesterday', ipa: '/ðə deɪ bɪˈfɔː ˈjestədeɪ/', translation: 'позавчера',              example: 'I saw him the day before yesterday at the coffee shop.' },
@@ -5991,6 +5998,14 @@ const KARINA_WORDS = [
 
 (function seedDemo() {
   const data = db();
+
+  // One-off cleanup (Aug 2026): 'prevent from' was replaced by 'prevent'
+  // (предотвращать). Seeding only ever adds missing words, so the old entry
+  // has to be dropped explicitly or it lingers in every student's saved list.
+  data.students.forEach(s => {
+    s.words = (s.words || []).filter(w =>
+      !(w.by === 'teacher' && w.word.toLowerCase() === 'prevent from'));
+  });
 
   // ── Rustam ──
   let rustam = data.students.find(s => s.name === 'Rustam');
