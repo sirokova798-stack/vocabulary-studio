@@ -1884,7 +1884,7 @@ function renderWords() {
   });
 }
 
-const A1_STUDENTS = ['Misha', 'Ilya'];
+const A1_STUDENTS = ['Misha', 'Ilya', 'Vlad'];
 
 function renderPractice() {
   const data = db();
@@ -6091,6 +6091,61 @@ const KARINA_WORDS = [
   { word: "établissement", translation: "учебное заведение", example: "Cet établissement accueille mille élèves.", lesson: "Société & Numérique" },
 ];
 
+const VLAD_WORDS = [
+  // ── Food & Places ──
+  { word: 'blueberry', translation: 'черника', example: 'I like blueberry.', lesson: 'Food & Places' },
+  { word: 'strawberry', translation: 'клубника', example: 'She likes strawberry.', lesson: 'Food & Places' },
+  { word: 'taste', translation: 'вкус', example: 'This soup has a good taste.', lesson: 'Food & Places' },
+  { word: 'tasty', translation: 'вкусный', example: 'The cake is very tasty.', lesson: 'Food & Places' },
+  { word: 'chicken and rice', translation: 'курица с рисом', example: 'We have chicken and rice for dinner.', lesson: 'Food & Places' },
+  { word: 'instant coffee', translation: 'растворимый кофе', example: 'I drink instant coffee in the morning.', lesson: 'Food & Places' },
+  { word: 'at school', translation: 'в школе', example: 'I am at school.', lesson: 'Food & Places' },
+  { word: 'at work', translation: 'на работе', example: 'My father is at work.', lesson: 'Food & Places' },
+  { word: 'at home', translation: 'дома', example: 'We are at home.', lesson: 'Food & Places' },
+  { word: 'flat', translation: 'квартира', example: 'This is my flat.', lesson: 'Food & Places' },
+  { word: 'house', translation: 'дом', example: 'This is a big house.', lesson: 'Food & Places' },
+  { word: 'chair', translation: 'стул', example: 'The chair is red.', lesson: 'Food & Places' },
+
+  // ── People & Feelings ──
+  { word: 'comfortable', translation: 'удобный', example: 'This bed is comfortable.', lesson: 'People & Feelings' },
+  { word: 'tired', translation: 'уставший', example: 'I am tired today.', lesson: 'People & Feelings' },
+  { word: 'hungry', translation: 'голодный', example: 'I am hungry now.', lesson: 'People & Feelings' },
+  { word: 'angry', translation: 'злой', example: 'She is angry with me.', lesson: 'People & Feelings' },
+  { word: 'tall', translation: 'высокий', example: 'He is very tall.', lesson: 'People & Feelings' },
+  { word: 'skinny', translation: 'худой', example: 'The cat is skinny.', lesson: 'People & Feelings' },
+  { word: 'fat', translation: 'толстый', example: 'The dog is fat.', lesson: 'People & Feelings' },
+  { word: 'strong', translation: 'сильный', example: 'My brother is strong.', lesson: 'People & Feelings' },
+  { word: 'healthy', translation: 'здоровый', example: 'Vegetables are healthy.', lesson: 'People & Feelings' },
+  { word: 'weather', translation: 'погода', example: 'The weather is nice today.', lesson: 'People & Feelings' },
+  { word: 'to sing a song', translation: 'петь песню', example: 'She likes to sing a song.', lesson: 'People & Feelings' },
+  { word: 'new', translation: 'новый', example: 'I have a new bag.', lesson: 'People & Feelings' },
+
+  // ── Opposites ──
+  { word: 'big', translation: 'большой', example: 'This is a big house.', lesson: 'Opposites' },
+  { word: 'small', translation: 'маленький', example: 'This is a small flat.', lesson: 'Opposites' },
+  { word: 'old', translation: 'старый', example: 'This is an old chair.', lesson: 'Opposites' },
+  { word: 'young', translation: 'молодой', example: 'She is young.', lesson: 'Opposites' },
+  { word: 'lazy', translation: 'ленивый', example: 'The cat is lazy.', lesson: 'Opposites' },
+  { word: 'productive', translation: 'продуктивный', example: 'I feel productive today.', lesson: 'Opposites' },
+  { word: 'happy', translation: 'счастливый', example: 'I am happy.', lesson: 'Opposites' },
+  { word: 'sad', translation: 'грустный', example: 'He is sad today.', lesson: 'Opposites' },
+  { word: 'fast', translation: 'быстрый', example: 'The car is fast.', lesson: 'Opposites' },
+  { word: 'slow', translation: 'медленный', example: 'The bus is slow.', lesson: 'Opposites' },
+  { word: 'hot', translation: 'горячий, жаркий', example: 'The tea is hot.', lesson: 'Opposites' },
+  { word: 'cold', translation: 'холодный', example: 'The water is cold.', lesson: 'Opposites' },
+  { word: 'easy', translation: 'лёгкий', example: 'This exercise is easy.', lesson: 'Opposites' },
+  { word: 'hard', translation: 'трудный', example: 'This exercise is hard.', lesson: 'Opposites' },
+  { word: 'clean', translation: 'чистый', example: 'The room is clean.', lesson: 'Opposites' },
+  { word: 'dirty', translation: 'грязный', example: 'My shoes are dirty.', lesson: 'Opposites' },
+  { word: 'quiet', translation: 'тихий', example: 'The library is quiet.', lesson: 'Opposites' },
+  { word: 'loud', translation: 'громкий', example: 'The music is loud.', lesson: 'Opposites' },
+  { word: 'expensive', translation: 'дорогой', example: 'This car is expensive.', lesson: 'Opposites' },
+  { word: 'cheap', translation: 'дешёвый', example: 'This flat is cheap.', lesson: 'Opposites' },
+
+  // ── Phrases ──
+  { word: 'I am allergic to cats', translation: 'у меня аллергия на кошек', example: 'I am allergic to cats.', lesson: 'Phrases' },
+];
+
 (function seedDemo() {
   const data = db();
 
@@ -6273,6 +6328,21 @@ const KARINA_WORDS = [
   KARINA_WORDS.forEach(w => {
     if (!karinaExisting.has(w.word.toLowerCase())) {
       karina.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
+    }
+  });
+
+  // ── Vlad (beginner, A1) ──
+  let vlad = data.students.find(s => s.name === 'Vlad');
+  if (!vlad) {
+    vlad = { id: uid(), name: 'Vlad', words: [], quizHistory: [] };
+    data.students.push(vlad);
+  }
+  if (!vlad.quizHistory) vlad.quizHistory = [];
+  vlad.pin = '3333';
+  const vladExisting = new Set(vlad.words.map(w => w.word.toLowerCase()));
+  VLAD_WORDS.forEach(w => {
+    if (!vladExisting.has(w.word.toLowerCase())) {
+      vlad.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
     }
   });
 
