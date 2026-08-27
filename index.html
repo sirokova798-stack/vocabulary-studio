@@ -1884,7 +1884,7 @@ function renderWords() {
   });
 }
 
-const A1_STUDENTS = ['Misha', 'Ilya', 'Vlad'];
+const A1_STUDENTS = ['Misha', 'Vlad'];
 
 function renderPractice() {
   const data = db();
@@ -6262,14 +6262,8 @@ const VLAD_WORDS = [
     }
   });
 
-  // ── Ilya (beginner, A1) ──
-  let ilya = data.students.find(s => s.name === 'Ilya');
-  if (!ilya) {
-    ilya = { id: uid(), name: 'Ilya', words: [], quizHistory: [] };
-    data.students.push(ilya);
-  }
-  if (!ilya.quizHistory) ilya.quizHistory = [];
-  ilya.pin = '2222';
+  // Ilya was removed (not a real student) — drop him if already seeded on this device
+  data.students = data.students.filter(s => s.name !== 'Ilya');
 
   // ── Yuliya ──
   let yuliya = data.students.find(s => s.name === 'Yuliya');
