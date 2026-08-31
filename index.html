@@ -6340,6 +6340,15 @@ const VLAD_WORDS = [
     }
   });
 
+  // ── Lyosha (words pending) ──
+  let lyosha = data.students.find(s => s.name === 'Lyosha');
+  if (!lyosha) {
+    lyosha = { id: uid(), name: 'Lyosha', words: [], quizHistory: [] };
+    data.students.push(lyosha);
+  }
+  if (!lyosha.quizHistory) lyosha.quizHistory = [];
+  lyosha.pin = '5151';
+
   save(data);
 })(); // v2
 renderHome();
