@@ -6146,6 +6146,32 @@ const VLAD_WORDS = [
   { word: 'I am allergic to cats', translation: 'у меня аллергия на кошек', example: 'I am allergic to cats.', lesson: 'Phrases' },
 ];
 
+const LYOSHA_WORDS = [
+  { word: 'reason', translation: 'причина', example: 'She didn\'t explain the reason for her decision.', lesson: 'General Vocabulary' },
+  { word: 'rarely', translation: 'редко', example: 'He rarely goes out on weekdays.', lesson: 'General Vocabulary' },
+  { word: 'it\'s not my cup of tea', translation: 'это не по мне, не в моём вкусе', example: 'Horror films are not my cup of tea.', lesson: 'General Vocabulary' },
+  { word: 'to move', translation: 'переезжать', example: 'We are moving to a new flat next month.', lesson: 'General Vocabulary' },
+  { word: 'person / people', translation: 'человек / люди (people — множественное число person)', example: 'One person can\'t change everything, but people together can.', lesson: 'General Vocabulary' },
+  { word: 'one day', translation: 'однажды', example: 'One day I will visit Japan.', lesson: 'General Vocabulary' },
+  { word: 'in the middle', translation: 'посередине', example: 'The table is in the middle of the room.', lesson: 'General Vocabulary' },
+  { word: 'it\'s unlikely', translation: 'это маловероятно', example: 'It\'s unlikely to rain today.', lesson: 'General Vocabulary' },
+  { word: 'I don\'t think so', translation: 'я так не думаю', example: 'Will he come? I don\'t think so.', lesson: 'General Vocabulary' },
+  { word: 'vacation', translation: 'отпуск, каникулы', example: 'We are going to Spain for our vacation.', lesson: 'General Vocabulary' },
+  { word: 'it changes all the time', translation: 'это постоянно меняется', example: 'The weather here changes all the time.', lesson: 'General Vocabulary' },
+  { word: 'nasty', translation: 'противный, неприятный', example: 'He said something nasty about her.', lesson: 'General Vocabulary' },
+  { word: 'she', translation: 'она', example: 'She is my sister.', lesson: 'General Vocabulary' },
+  { word: 'glad', translation: 'рад', example: 'I am so glad to see you.', lesson: 'General Vocabulary' },
+  { word: 'difficult', translation: 'трудный', example: 'This exam was really difficult.', lesson: 'General Vocabulary' },
+  { word: 'plane', translation: 'самолёт', example: 'Our plane leaves at 6 a.m.', lesson: 'General Vocabulary' },
+  { word: 'leave – left – left', translation: 'уходить, покидать (неправильный глагол)', example: 'He left the office an hour ago.', lesson: 'General Vocabulary' },
+  { word: 'exhausting', translation: 'изматывающий, выматывающий', example: 'The trip was long and exhausting.', lesson: 'General Vocabulary' },
+
+  // ── Спорт ──
+  { word: 'bench press', translation: 'жим лёжа', example: 'He can bench press 100 kilos.', lesson: 'Sport' },
+  { word: 'squats', translation: 'приседания', example: 'We did fifty squats in training today.', lesson: 'Sport' },
+  { word: 'deadlift', translation: 'становая тяга', example: 'The deadlift is one of the best exercises for your back.', lesson: 'Sport' },
+];
+
 (function seedDemo() {
   const data = db();
 
@@ -6348,6 +6374,12 @@ const VLAD_WORDS = [
   }
   if (!lyosha.quizHistory) lyosha.quizHistory = [];
   lyosha.pin = '5151';
+  const lyoshaExisting = new Set(lyosha.words.map(w => w.word.toLowerCase()));
+  LYOSHA_WORDS.forEach(w => {
+    if (!lyoshaExisting.has(w.word.toLowerCase())) {
+      lyosha.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
+    }
+  });
 
   save(data);
 })(); // v2
