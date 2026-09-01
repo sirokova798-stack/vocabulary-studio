@@ -5160,7 +5160,7 @@ const RUSTAM_WORDS = [
   { word: 'to come up with',   translation: 'придумать (идею, решение)', example: 'She came up with a great idea for the project.', lesson: 'General Vocabulary II' },
   { word: 'to get along well with somebody', translation: 'хорошо ладить с кем-то', example: 'I get along well with all my neighbours.', lesson: 'General Vocabulary II' },
   { word: 'widespread',        translation: 'широко распространённый', example: 'Smartphones have become widespread in the last decade.', lesson: 'General Vocabulary II' },
-  { word: 'a hearing',         translation: 'слушание (напр. в суде)', example: 'The court hearing was postponed until next week.', lesson: 'General Vocabulary II' },
+  { word: 'herring',           translation: 'сельдь, селёдка', example: 'She had herring and rye bread for breakfast.', lesson: 'General Vocabulary II' },
   { word: 'rucksack',          translation: 'рюкзак', example: 'He packed his rucksack for the hiking trip.', lesson: 'General Vocabulary II' },
   { word: 'to some extent',    translation: 'в некоторой степени', example: 'I agree with you to some extent.', lesson: 'General Vocabulary II' },
   { word: 'bizarre',           translation: 'странный, причудливый', example: 'It was a bizarre coincidence that we met there.', lesson: 'General Vocabulary II' },
@@ -5184,6 +5184,7 @@ const RUSTAM_WORDS = [
   { word: 'disease',           translation: 'болезнь', example: 'Regular exercise can help prevent heart disease.', lesson: 'Health' },
   { word: 'treatment',         translation: 'лечение', example: 'She is undergoing treatment for her back injury.', lesson: 'Health' },
   { word: 'my stomach churns', translation: 'у меня крутит живот (от волнения/тошноты)', example: 'My stomach churns every time before an exam.', lesson: 'Health' },
+  { word: 'joint',             translation: 'сустав', example: 'Running every day can be hard on your knee joints.', lesson: 'Health' },
 
   // ── FCE Vocabulary ──
   { word: 'convenience',        ipa: '/kənˈviːniəns/',       translation: 'удобство',                        example: 'People value the convenience of online shopping more than the lower prices.', lesson: 'FCE Vocabulary' },
@@ -6242,6 +6243,7 @@ const LYOSHA_WORDS = [
   }
   if (!rustam.quizHistory) rustam.quizHistory = [];
   rustam.pin = '1234';
+  rustam.words = rustam.words.filter(w => w.word.toLowerCase() !== 'a hearing'); // was a mishearing of "herring"
   const rustamExisting = new Set(rustam.words.map(w => w.word.toLowerCase()));
   RUSTAM_WORDS.forEach(w => {
     if (!rustamExisting.has(w.word.toLowerCase())) {
