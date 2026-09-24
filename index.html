@@ -918,10 +918,6 @@
     <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Previous</button>
     <button class="btn btn-primary btn-sm" onclick="fcNext()">Next →</button>
   </div>
-  <div id="fc-know-row" style="display:none;justify-content:center;gap:12px;margin-top:4px;">
-    <button class="btn btn-sm" style="background:#f0faf0;border:1.5px solid #a8d5a2;color:#2d7a2d;min-width:130px;" onclick="fcMark(true)">✓ I know this</button>
-    <button class="btn btn-sm" style="background:#fdf7f0;border:1.5px solid #d5c0a8;color:#7a5a2d;min-width:130px;" onclick="fcMark(false)">↺ Still learning</button>
-  </div>
   <div id="fc-mode-toggle" style="text-align:center;margin-top:18px;">
     <button class="btn btn-ghost btn-sm" id="fc-review-btn" onclick="fcStartReview()" style="display:none;font-size:0.78rem;">Review unknowns only</button>
   </div>
@@ -2023,34 +2019,10 @@ function renderFC() {
   document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcWords.length * 100) + '%';
   const card = document.getElementById('flashcard');
   card.classList.remove('flipped'); fcFlipped = false;
-  // show know-row only after flip
-  document.getElementById('fc-know-row').style.display = 'none';
-  document.getElementById('fc-nav-main').style.display = 'flex';
 }
 function flipCard() {
   fcFlipped = !fcFlipped;
   document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
-  if (fcFlipped) {
-    document.getElementById('fc-know-row').style.display = 'flex';
-    document.getElementById('fc-nav-main').style.display = 'none';
-  }
-}
-function fcMark(known) {
-  const w = fcWords[fcIndex];
-  if (known) { fcKnown.add(w.id); fcUnknown.delete(w.id); }
-  else { fcUnknown.add(w.id); fcKnown.delete(w.id); }
-  document.getElementById('fc-know-row').style.display = 'none';
-  document.getElementById('fc-nav-main').style.display = 'flex';
-  if (fcIndex < fcWords.length - 1) { fcIndex++; renderFC(); }
-  else {
-    // end of deck
-    logActivity('Flashcards', (fcReviewMode ? 'повтор незнакомых' : (practiceLesson || '')), fcKnown.size, fcWords.length);
-    if (fcUnknown.size > 0) {
-      document.getElementById('fc-review-btn').style.display = '';
-      document.getElementById('fc-review-btn').textContent = 'Review ' + fcUnknown.size + ' still learning →';
-    }
-    endPractice();
-  }
 }
 function fcStartReview() {
   const data = db();
