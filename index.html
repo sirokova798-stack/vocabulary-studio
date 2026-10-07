@@ -6858,7 +6858,7 @@ const MILANA_WORDS = [
   { word: "take a video", translation: "снимать видео", example: "She took a video of the concert.", lesson: "Actions" },
   { word: "sit in an armchair", translation: "сидеть в кресле", example: "He likes to sit in an armchair and read.", lesson: "Actions" },
   { word: "hide something", translation: "скрывать что-то", example: "She tried to hide her feelings.", lesson: "Actions" },
-  { word: "lie / a liar", translation: "лгать / лжец", example: "Don't lie to me — I know you're a liar.", lesson: "Actions" },
+  { word: "lie / a liar", translation: "лгать / лжец", example: "He lied about his age to get the job.", lesson: "Actions" },
   { word: "pretend to be confident", translation: "притворяться уверенным", example: "Sometimes you have to pretend to be confident.", lesson: "Actions" },
   { word: "try to remember", translation: "пытаться вспомнить", example: "I tried to remember her name, but I couldn't.", lesson: "Actions" },
   { word: "be on the tip of your tongue", translation: "вертеться на языке", example: "His name is on the tip of my tongue!", lesson: "Actions" },
@@ -7136,6 +7136,8 @@ const MILANA_WORDS = [
   milana.pin = '4646';
   // 'a real smile / a polite smile' was split: 'a polite smile' + 'sincere' — remove the old combined card
   milana.words = milana.words.filter(w => w.word.toLowerCase() !== 'a real smile / a polite smile');
+  // updated example sentence — also fix it on devices that already have the word
+  milana.words.forEach(w => { if (w.word.toLowerCase() === 'lie / a liar') w.example = "He lied about his age to get the job."; });
   const milanaExisting = new Set(milana.words.map(w => w.word.toLowerCase()));
   MILANA_WORDS.forEach(w => {
     if (!milanaExisting.has(w.word.toLowerCase())) {
