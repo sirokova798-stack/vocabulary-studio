@@ -2064,132 +2064,577 @@ let ctxQuestions = [], ctxIndex = 0, ctxScore = 0, ctxAnswered = false;
 
 function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
-function getBlankTarget(word) {
-  return word
-    .replace(/^to /, '')
-    .replace(/\b(somebody|someone|sb|something|sth)\b.*/i, '')
-    .replace(/\bone's\b/g, '')
-    .trim();
-}
+// ─────────────────────────────────────────────────────────────
+// In Context v2 — the blank covers the whole word/phrase exactly as it appears
+// in the sentence, and every option is the same word type in the same form
+// (past-tense verb phrases with past-tense verb phrases, plural nouns with
+// plural nouns, etc.), so the answer can't be guessed from grammar alone.
+// ─────────────────────────────────────────────────────────────
+const CTX_IRREG = {};
+('arise arose arisen;awake awoke awoken;be was|were been;bear bore born|borne;beat beat beaten;become became become;' +
+ 'begin began begun;bend bent bent;bet bet bet;bite bit bitten;bleed bled bled;blow blew blown;break broke broken;' +
+ 'breed bred bred;bring brought brought;build built built;burn burnt|burned burnt|burned;burst burst burst;buy bought bought;' +
+ 'catch caught caught;choose chose chosen;cling clung clung;come came come;cost cost cost;creep crept crept;cut cut cut;' +
+ 'deal dealt dealt;dig dug dug;do did done;draw drew drawn;dream dreamt|dreamed dreamt|dreamed;drink drank drunk;' +
+ 'drive drove driven;eat ate eaten;fall fell fallen;feed fed fed;feel felt felt;fight fought fought;find found found;' +
+ 'flee fled fled;fly flew flown;forbid forbade forbidden;forecast forecast forecast;foresee foresaw foreseen;' +
+ 'forget forgot forgotten;forgive forgave forgiven;freeze froze frozen;get got got|gotten;give gave given;go went gone;' +
+ 'grind ground ground;grow grew grown;hang hung hung;have had had;hear heard heard;hide hid hidden;hit hit hit;' +
+ 'hold held held;hurt hurt hurt;keep kept kept;kneel knelt|kneeled knelt|kneeled;know knew known;lay laid laid;' +
+ 'lead led led;lean leant|leaned leant|leaned;leap leapt|leaped leapt|leaped;learn learnt|learned learnt|learned;' +
+ 'leave left left;lend lent lent;let let let;lie lied|lay lied|lain;light lit|lighted lit|lighted;lose lost lost;' +
+ 'make made made;mean meant meant;meet met met;mislead misled misled;misunderstand misunderstood misunderstood;' +
+ 'overcome overcame overcome;oversleep overslept overslept;overtake overtook overtaken;pay paid paid;' +
+ 'prove proved proved|proven;put put put;quit quit quit;read read read;rid rid rid;ride rode ridden;ring rang rung;' +
+ 'rise rose risen;run ran run;say said said;see saw seen;seek sought sought;sell sold sold;send sent sent;set set set;' +
+ 'sew sewed sewn|sewed;shake shook shaken;shed shed shed;shine shone shone;shoot shot shot;show showed shown|showed;' +
+ 'shrink shrank shrunk;shut shut shut;sing sang sung;sink sank sunk;sit sat sat;sleep slept slept;slide slid slid;' +
+ 'smell smelt|smelled smelt|smelled;speak spoke spoken;speed sped sped;spell spelt|spelled spelt|spelled;spend spent spent;' +
+ 'spill spilt|spilled spilt|spilled;spin spun spun;spit spat spat;split split split;spoil spoilt|spoiled spoilt|spoiled;' +
+ 'spread spread spread;stand stood stood;steal stole stolen;stick stuck stuck;sting stung stung;stink stank stunk;' +
+ 'strike struck struck;swear swore sworn;sweep swept swept;swell swelled swollen;swim swam swum;swing swung swung;' +
+ 'take took taken;teach taught taught;tear tore torn;tell told told;think thought thought;throw threw thrown;' +
+ 'undergo underwent undergone;understand understood understood;undertake undertook undertaken;upset upset upset;' +
+ 'wake woke woken;wear wore worn;weep wept wept;win won won;wind wound wound;withdraw withdrew withdrawn;' +
+ 'withstand withstood withstood;write wrote written')
+  .split(';').forEach(e => { const [b, p, pp] = e.split(' '); CTX_IRREG[b] = [p.split('|'), pp.split('|')]; });
 
-function makeBlankSentence(word, sentence) {
-  const targets = [
-    getBlankTarget(word),
-    word.replace(/^to /, '').split(' ')[0]
-  ].filter((t, i, a) => t.length > 1 && a.indexOf(t) === i);
-  for (const t of targets) {
-    // match the word AND its common inflections as a whole word (suggest → suggested, manage → managed)
-    const re = new RegExp('\\b' + escRe(t) + '(?:es|ed|ing|s|d)?\\b', 'gi');
-    if (re.test(sentence)) return sentence.replace(re, '_____');
-  }
-  return null;
-}
+const CTX_VERBS = new Set(Object.keys(CTX_IRREG).concat((
+ 'accept accuse achieve act add admire admit advertise advise afford agree aim allow announce annoy answer apologise ' +
+ 'apologize appear apply appreciate approach approve argue arrange arrest arrive ask assess assume attach attack attend ' +
+ 'attract avoid bake bathe beg behave believe belong blame blink boil book borrow bother bounce braid breathe brush burn ' +
+ 'call calm cancel care carry cause celebrate change charge chase chat cheat check cheer chew choke clap clean clear climb ' +
+ 'close collect comb compare compete complain complete concentrate confess confirm confuse connect consider contain ' +
+ 'continue contribute control convince cook cope copy correct cough count cover crash crawl create cross crumble cry cure ' +
+ 'cycle damage dance dare decide decorate delay deliver deny depend describe deserve destroy detach develop die disagree ' +
+ 'disappear disappoint discover discuss dislike distract disturb divide doubt double download drag dress drop dry earn ' +
+ 'educate embarrass employ empty encourage end endure enjoy enter entertain escape establish estimate evaluate examine ' +
+ 'exaggerate excite excuse exercise exist expand expect experience expire explain explore express extend face facilitate ' +
+ 'fail fancy fasten fear fetch file fill fine finish fit fix flash flip float flow flush fold follow force form foster ' +
+ 'frighten fry gain gather giggle glance grab greet grin guarantee guess hammer hand handle happen harm hate head heal heat ' +
+ 'help hesitate hire hop hope hug hunt hurry identify ignore imagine impress improve include increase influence inform ' +
+ 'inherit injure insist inspire install intend interrupt introduce invent invite involve iron itch jog join joke judge jump ' +
+ 'kick kill kiss knock label land last laugh launch lick lift like limit link list listen live load lock long look love ' +
+ 'maintain manage mark marry match matter measure melt mention mind miss mix move mow murder nag name need nod note notice ' +
+ 'obey object observe obtain occur offend offer open order organise organize own pack paint park pass pause perform ' +
+ 'persuade phone pick plan plant play please plug point polish pour practise practice pray prefer prepare present preserve ' +
+ 'press pretend prevent print produce promise pronounce protect provide pull pump punch punish push queue quote race rain ' +
+ 'raise reach realise realize recall receive recognise recognize recommend record recover reduce refer reflect refuse ' +
+ 'regret reject relax release relieve rely remain remember remind remove rent repair repeat replace reply report request ' +
+ 'rescue resign respect respond rest retire return reveal rinse risk rob rock roll rub ruin rush sail save scare scold ' +
+ 'scream scroll scythe search seduce seem serve settle shave shiver shop shout side sigh sign sip ski skip slap slip slouch ' +
+ 'smash smile smoke snore sneeze snow soak solve sort sound spare spray squeeze stare start stay step stir stop store ' +
+ 'stretch study subscribe succeed suck suffer suggest suit supply support suppose surprise surround survive suspect ' +
+ 'swallow switch talk taste tease thank tick tidy tie tip tire touch tour trace train transfer translate travel treat ' +
+ 'tremble trick trip trust try turn type unlock unpack use vanish verify visit wait walk wander want warm warn wash waste ' +
+ 'watch water wave weigh welcome whisper whistle wink wish wobble wonder work worry wrap yawn yell zip tack betray threaten wound bless unplug nip moan struggle exchange tackle jinx impose disprove devote mix divide extend soak resolve soar expire retire giggle').split(' ')));
 
-// ── Smart distractor pools for In Context (curated English, by grammatical frame) ──
-const CTX_POOLS_RAW = {
-  gerund: ['avoid','enjoy','keep','consider','finish','mind','practise','imagine','admit','deny','miss','risk','suggest','recommend','dislike','give up','put off','feel like','have a go at','look forward to','spend hours','carry on'],
-  to: ['want','decide','hope','manage','refuse','agree','learn','plan','offer','promise','expect','choose','need','pretend','prepare','afford','arrange','tend','wish','threaten','fail','deserve'],
-  noun: ['decision','opportunity','experience','memory','silence','injury','reason','result','habit','attention','distance','reputation','assumption','solution','progress','knowledge','advice','patience','confidence','pleasure','influence','diversity'],
-  adjective: ['reliable','confident','anxious','calm','curious','honest','independent','useless','decent','modern','traditional','rare','suitable','crowded','exhausted','nervous','pleased','grounded','vague','frightening','divine','superficial'],
-  adverb: ['carefully','suddenly','usually','probably','quickly','quietly','recently','badly','clearly','rarely','gradually','certainly','frantically','eventually','obviously','deliberately'],
-  phrase: ['have a go at','put on weight','give up smoking','keep in touch','take your time','make a decision','get used to','on purpose','in moderation','keep your distance','read between the lines','take a bite','stretch your legs','side with']
+const CTX_DOUBLE = new Set('admit commit permit prefer refer occur regret submit omit transfer deter compel propel rebel excel expel equip control patrol travel cancel quarrel label level model signal marvel fuel dial total equal unplug'.split(' '));
+const CTX_ARTICLES = new Set(['a', 'an', 'the']);
+const CTX_SUBJ = new Set(['i', 'you', 'he', 'she', 'it', 'we', 'they']);
+const CTX_POSS = ['my', 'your', 'his', 'her', 'its', 'our', 'their', "one's"];
+const CTX_REFL = ['myself', 'yourself', 'himself', 'herself', 'itself', 'ourselves', 'yourselves', 'themselves', 'oneself'];
+const CTX_SUBJ_POSS = { i: 'my', you: 'your', he: 'his', she: 'her', it: 'its', we: 'our', they: 'their' };
+const CTX_SUBJ_REFL = { i: 'myself', you: 'yourself', he: 'himself', she: 'herself', it: 'itself', we: 'ourselves', they: 'themselves' };
+const CTX_PLACEHOLDERS = new Set(['something', 'somebody', 'someone', 'sth', 'sb', 'smb', 'smth', '...', '…']);
+const CTX_PREPS = new Set(['in', 'on', 'at', 'by', 'for', 'from', 'under', 'over', 'with', 'without', 'into', 'out', 'behind', 'between', 'during', 'inside', 'outside', 'near', 'within', 'after', 'before', 'around']);
+const CTX_PP_TRIGGERS = new Set(['have', 'has', 'had', 'having', 'been', 'be', 'being', 'is', 'are', 'was', 'were', 'am', 'get', 'got', 'gets', 'getting', "i've", "you've", "we've", "they've", "i'd", "you'd", "he'd", "she'd", "we'd", "they'd", "he's", "she's", "it's"]);
+const CTX_VERB_CONTEXT = new Set(['', 'to', 'can', "can't", 'cannot', 'could', "couldn't", 'will', "won't", 'would', "wouldn't", 'should', "shouldn't", 'must', "mustn't", 'might', 'may', "don't", "doesn't", "didn't", 'do', 'does', 'did', 'i', 'you', 'we', 'they', "let's", 'please', 'always', 'never', 'often', 'usually', 'sometimes', 'rarely', 'just', 'not', "i'll", "you'll", "we'll", "they'll", "i'd", "you'd", "we'd", "they'd", 'and', 'or']);
+const CTX_TO_MODAL = new Set(['to', 'can', "can't", 'cannot', 'could', "couldn't", 'will', "won't", 'would', 'should', 'must', 'might', 'may', "don't", "doesn't", "didn't"]);
+const CTX_TO_INF = new Set('manage decide refuse fail try learn forget promise pretend agree offer hesitate plan hope want need'.split(' '));
+const CTX_ADJ_CONTEXT =new Set(('very so too quite really extremely completely absolutely truly totally rather pretty fairly incredibly highly ' +
+  'is was are were be been feel felt feels seem seemed seems remain remained remains stay stayed look looked looks became become becomes sounds sounded more most').split(' '));
+// adjectives that can't stand before a noun ("an awake check" ✗)
+const CTX_PRED_ADJ = new Set('awake asleep alone alive afraid aware ill glad'.split(' '));
+const CTX_LY_ADJ =new Set('friendly lonely lovely ugly silly elderly likely early daily weekly monthly curly holy jolly costly deadly lively chilly smelly woolly'.split(' '));
+const CTX_ADV_EXTRA = new Set('rather quite very almost already still often seldom soon later yet anyway perhaps maybe abroad together apart ahead instead indoors outdoors today tomorrow yesterday tonight here there everywhere somewhere nowhere'.split(' '));
+const CTX_ADJ = new Set((
+ 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired ' +
+ 'hungry angry tall skinny fat strong healthy big small old young lazy productive happy sad fast slow hot cold easy hard clean ' +
+ 'dirty quiet loud expensive cheap new tasty modern traditional ancient crowded rural suburban urban anxious confused ' +
+ 'disappointed embarrassed exhausted guilty lonely nervous pleased scared stressed dishonest nasty useless independent rare ' +
+ 'explicit vague grounded decent divine naked nude greasy mindful compassionate decisive energetic sated full sweet risky ' +
+ 'logical illogical frightening attentive straightforward reliable available superior naive reserved curious illiterate ' +
+ 'informal superstitious affectionate prominent versatile hideous tedious intricate proper groggy recurring mind-boggling ' +
+ 'far-fetched vast elaborate shabby well-connected seductive modest quarrelsome capable sacred spiritual incomparable gifted ' +
+ 'rebellious hypervigilant spoiled suspicious arrogant irresponsible ominous implausible sheer worthwhile stiff bizarre ' +
+ 'widespread mild suitable incomprehensible developed feasible approved verbal glad difficult exhausting narrow wide ' +
+ 'superficial thorough subtle eloquent resilient frantic alert awake certain former instant beautiful talented terrible great ' +
+ 'amazing friendly married favourite empty careful polite rude generous jealous shy patient strict cheerful grateful brave ' +
+ 'clever noisy dangerous famous lucky funny busy safe unsafe ready sure afraid able possible impossible important interesting ' +
+ 'boring delicious heavy light dark bright warm cool wet dry soft rough smooth sharp kind mean cruel wise silly crazy fair ' +
+ 'unfair cute ugly pretty rich poor fresh ripe sour bitter spicy salty sick ill wrong right huge tiny short long thin thick ' +
+ 'down-to-earth fed-up tough weak quick deep shallow naughty pleasant picky numb fortunate unfortunate incredible obvious stressful useful ' +
+ 'harmful helpful hopeless harmless painful careless thoughtful grumpy moody stubborn sensitive selfish humble tidy messy ' +
+ 'cosy cozy chilly sunny rainy cloudy windy foggy stormy freezing boiling scalding sleepy lucky surprising convincing ' +
+ 'relaxing annoying confusing disappointing embarrassing exciting satisfying shocking terrifying tiring amazing promising ' +
+ 'outstanding overwhelming willing unwilling miserable desperate furious upset worried relieved ashamed jealous envious ' +
+ 'grateful thankful hopeful doubtful vulnerable fragile delicate gentle rough fierce wild tame loyal faithful polite impolite ' +
+ 'bland literate inconvenient foreign authentic drained so-called stunning spectacular witty precise analytical devoted blunt ' +
+ 'stimulating self-centered self-centred inferior gloomy magnetic brief tender unexpected urgent must-see non-negotiable').split(' '));
+const CTX_UNCOUNT = new Set((
+ 'advice information furniture music weather homework knowledge patience silence confidence pleasure attention progress luggage ' +
+ 'traffic money rice coffee water milk bread hay rhythm posture equipment boredom anxiety relief generosity unemployment healthcare ' +
+ 'inheritance admiration diversity rumination suppression reassurance evidence research news fun health wealth love happiness ' +
+ 'sadness anger fear courage honesty respect laughter peace freedom safety stuff spinach porridge garlic broth fur pastry mould ' +
+ 'weight time air sleep work help food beef pork chicken shellfish junk food social media self-esteem anxiety jewellery ' +
+ 'jewelry clothing accommodation vocabulary grammar literature art nature space violence pollution intelligence experience ' +
+ 'validation importance convenience pseudoscience heat confusion treatment custody nausea vanity cruelty entertainment hesitation ' +
+ 'jealousy compatibility friction bluntness insecurity loneliness stress grief enjoyment herring cream leisure ' +
+ 'teeth self-esteem society acne snoring lightning lyrics cutlery anticipation rigidity').split(' '));
+const CTX_LINKER_KIND = {
+  'although': 'clause', 'though': 'clause', 'even though': 'clause', 'whereas': 'clause', 'while': 'clause', 'unless': 'clause',
+  'in case': 'clause', 'as long as': 'clause', 'so that': 'clause', 'because': 'clause', 'even if': 'clause', 'meaning that': 'clause',
+  'which is why': 'clause', 'whether': 'clause',
+  'despite': 'noun', 'in spite of': 'noun', 'due to': 'noun', 'because of': 'noun', 'instead of': 'noun', 'apart from': 'noun',
+  'except for': 'noun', 'such as': 'noun', 'thanks to': 'noun', 'regardless of': 'noun',
+  'however': 'adv', 'therefore': 'adv', 'nevertheless': 'adv', 'nonetheless': 'adv', 'moreover': 'adv', 'furthermore': 'adv',
+  'as a result': 'adv', 'on the one hand': 'adv', 'on the other hand': 'adv', 'in conclusion': 'adv', 'overall': 'adv',
+  'in general': 'adv', 'besides': 'adv', 'otherwise': 'adv', 'in addition': 'adv', 'what is more': 'adv', 'consequently': 'adv',
+  'meanwhile': 'adv', 'on the contrary': 'adv', 'in fact': 'adv',
+  'what': 'q', 'who': 'q', 'where': 'q', 'when': 'q', 'why': 'q', 'how': 'q', 'which': 'q', 'whose': 'q'
 };
-CTX_POOLS_RAW.verb = [...new Set([...CTX_POOLS_RAW.gerund, ...CTX_POOLS_RAW.to])];
-CTX_POOLS_RAW.general = [...new Set(Object.values(CTX_POOLS_RAW).flat())];
-const CTX_POOLS = CTX_POOLS_RAW;
+// Hand-checked categories for entries the rules can't sort reliably
+const CTX_CAT_OVERRIDE = {
+  // adverbials
+  'once in a blue moon': 'adv', 'now and then': 'adv', 'rain or shine': 'adv', 'far and wide': 'adv', 'for ages': 'adv',
+  'for 10 days': 'adv', 'all the time': 'adv', 'the whole time': 'adv', 'one day': 'adv', 'in a row': 'adv',
+  'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
+  'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
+  'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
+  'pattern of': 'skip', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
+  // adjectives
+  'safe and sound': 'adj', 'short and sweet': 'adj', 'touch and go': 'adj', 'two peas in a pod': 'skip',
+  // nouns (no article in the entry)
+  'first impression': 'noun', 'stray dogs': 'noun', 'instant coffee': 'noun', 'former colleague': 'noun', 'age gap': 'noun',
+  'sleep patterns': 'noun', 'junk food': 'noun', 'social media': 'noun', 'chicken and rice': 'noun', 'glucose spike': 'noun',
+  'social judgment': 'noun', 'shared assumptions': 'noun', 'first-hand experience': 'noun', 'medical intervention': 'noun',
+  'unsanitary conditions': 'noun', 'rare name': 'noun', 'crowded place': 'noun', 'historic centre': 'noun',
+  'rural area': 'noun', 'suburban area': 'noun', 'urban area': 'noun', 'green field': 'noun', 'greasy hair': 'noun',
+  'rich inner world': 'noun', 'deep inner world': 'noun', 'well-developed inner world': 'noun', 'still life': 'noun',
+  'firm ground': 'noun', 'hide and seek': 'noun', 'give and take': 'noun', 'ins and outs': 'noun', 'ifs and buts': 'noun',
+  'water retention': 'noun', 'false teeth': 'noun', 'martial arts': 'noun', 'bench press': 'noun', 'pace of life': 'noun',
+  'leisure time': 'noun', 'mild climate': 'noun', 'close friends': 'noun', 'loved ones': 'noun', 'nearest and dearest': 'noun',
+  'asian food': 'noun', 'picky eater': 'noun', 'diehard fan': 'noun', 'prima ballerina': 'noun', 'corps de ballet': 'noun',
+  'curtain call': 'noun', 'pointe shoes': 'noun', 'standing ovation': 'noun', 'enjeux de développement': 'noun',
+  'cet engagement': 'noun', 'les deux tiers': 'noun', 'les passants': 'noun', 'fer de lance': 'noun',
+  'messageries instantanées': 'noun', 'piratage de comptes': 'noun', 'usurpation d\'identité': 'noun', 'outil numérique': 'noun',
+  'cow parsnip': 'noun', 'non-negotiables': 'noun', "lion's mane": 'noun', 'mosquito repellent': 'noun',
+  'travel-sized toiletries': 'noun', 'baggage claim': 'noun', 'sour cream': 'noun', 'consumer awareness': 'noun',
+  'dopamine spike': 'noun', 'peace and quiet': 'noun', 'attention span': 'noun', 'power imbalance': 'noun',
+  'worn out': 'adj', 'down to earth': 'adj', 'afraid of heights': 'adj', 'mad about': 'adj', 'popular with': 'adj',
+  'capable of': 'adj', 'filled with': 'adj', 'into': 'skip', 'greasy hair': 'skip', 'sunburn': 'skip',
+  "don't bother me": 'skip', 'not to jinx it': 'skip', 'little chance of': 'skip', 'high time': 'skip', 'time passes': 'skip',
+  'lack of': 'skip', 'layers of': 'skip', 'fundamental to': 'skip', 'what a shame': 'skip', 'one and a half': 'skip',
+  'i would rather': 'skip', 'how old': 'skip', 'how much': 'skip', 'moonlight sonata': 'skip', 'when it comes to': 'skip',
+  'smile, but not with your eyes': 'skip', 'lines at the corners of the eyes': 'skip', "it's not my cup of tea": 'skip',
+  "i'm not into that kind of thing": 'skip', 'on the tip of your tongue': 'skip', 'do something cold turkey': 'skip',
+  "i'm afraid of heights": 'skip', 'used to': 'adj',
+  // whole sentences / clause fragments — no fair 4-option question possible
+  'i am allergic to cats': 'skip', "i'm afraid of heights": 'skip', 'i am afraid of spiders': 'skip', "it's not fair": 'skip',
+  "it's not my cup of tea": 'skip', "i don't think so": 'skip', "it's unlikely": 'skip', 
+  'it depends on': 'skip', 'it depends on something': 'skip', 'it depends on the situation': 'skip', 'what a coincidence': 'skip',
+  'out of sight, out of mind': 'skip', 'out of sight out of mind': 'skip', 'sink or swim': 'skip', 'joking aside': 'skip',
+  "it's forbidden to go there": 'skip', 'it may seem': 'skip',
+  'it makes sense': 'skip', "i'm not sure": 'skip', 'why bother': 'skip', 'there is a high chance': 'skip',
+  'my mouth is watering': 'skip', 'my stomach churns': 'skip', 'had to': 'skip', 'it reminds me of something': 'skip',
+  'the temptation is too great': 'skip', 'your worst nightmare': 'skip', 'the responsibility lies with the speaker': 'skip',
+  'we will go there despite the weather': 'skip', 'i can entertain myself': 'skip', 'both girls': 'skip',
+  "i don't like ... at all": 'skip', 'i used to do': 'skip', 'rise and shine': 'skip', 'just what the doctor ordered': 'skip',
+  'as the day progresses': 'skip', 'as the evening advances': 'skip', 'as bedtime approaches': 'skip',
+  'la prise de conscience grandissante': 'skip', 'un clin d\'œil': 'skip', 'face à l\'écran': 'skip',
+  'enceinte des établissements': 'skip', 'alentours de': 'skip', 'aller de pair avec': 'skip', 'par le biais de': 'skip',
+  'à l\'encontre de': 'skip', 'en mauvaise posture': 'skip', 'au lieu de': 'skip'
+};
+
+const CTX_POOL = {
+  verb1: 'avoid admit agree apologise arrive borrow complain decide deny explain forget forgive hesitate improve invite laugh lend listen manage notice offer pretend promise refuse remember reply shout smile suggest wait whisper worry wonder recover relax repeat describe argue celebrate disappear escape steal throw win lose break catch choose bring teach'.split(' '),
+  verbP: ['make a decision', 'make a mistake', 'take a break', 'take a photo', 'pay attention', 'keep a secret', 'lose your temper',
+    'change your mind', 'give up', 'fall asleep', 'get lost', 'tell the truth', 'break a promise', 'waste time', 'save money',
+    'catch a cold', 'miss the bus', 'ask for help', 'keep calm', 'make friends', 'take notes', 'wash the dishes', 'tidy your room',
+    'lose your keys', 'cross the road', 'raise your hand', 'hold your breath', 'book a table', 'go for a walk', 'keep in touch',
+    'look for a job', 'turn off the light', 'make a noise', 'shake hands', 'clear your throat', 'make a wish', 'tell a joke',
+    'take a seat', 'pack your bag', 'change the subject'],
+  // phrasal / prepositional verbs for answers like "deal with", "wait for", "get used to"
+  verbPrep: ['look for', 'look after', 'wait for', 'depend on', 'listen to', 'care about', 'apologise for', 'agree with', 'laugh at',
+    'believe in', 'rely on', 'pay for', 'think about', 'talk to', 'point at', 'prepare for', 'turn into', 'get used to', 'look forward to',
+    'complain about', 'worry about', 'ask for', 'belong to', 'deal with', 'shout at', 'search for', 'dream about', 'insist on'],
+  // verbs followed by "to + infinitive", for answers like "managed to"
+  verbTo: ['decide to', 'refuse to', 'forget to', 'promise to', 'try to', 'learn to', 'fail to', 'manage to', 'pretend to', 'agree to',
+    'offer to', 'hesitate to', 'plan to', 'hope to'],
+  nounC: 'decision opportunity memory reason result habit solution problem question mistake journey meeting accident invitation argument complaint conversation promise secret surprise holiday present letter message picture ticket umbrella key bag chair window bottle phone camera newspaper building bridge garden kitchen neighbour colleague stranger customer doctor teacher passenger island village castle festival interview challenge reward warning gesture'.split(' '),
+  nounU: 'advice information furniture music weather homework knowledge patience silence confidence pleasure attention progress luggage traffic evidence courage honesty freedom happiness'.split(' '),
+  adj: 'reliable anxious curious honest independent useless modern traditional crowded nervous careful polite rude generous jealous proud shy patient strict cheerful grateful lonely bored excited upset worried brave clever noisy dangerous famous lucky lazy calm serious tidy messy stubborn sensitive selfish humble'.split(' '),
+  adv1: 'carefully suddenly usually probably quickly quietly recently badly clearly rarely gradually certainly eventually obviously deliberately finally immediately nearly hardly completely easily actually especially slowly politely honestly luckily'.split(' '),
+  adjPrep: ['afraid of', 'interested in', 'good at', 'keen on', 'fond of', 'tired of', 'bored with', 'aware of', 'proud of',
+    'jealous of', 'responsible for', 'famous for', 'similar to', 'married to', 'angry with', 'worried about', 'excited about',
+    'grateful for', 'guilty of', 'capable of', 'ashamed of', 'full of', 'different from', 'used to', 'popular with'],
+  adjBin: ['safe and sound', 'short and sweet', 'touch and go', 'sick and tired', 'neat and tidy', 'loud and clear',
+    'alive and kicking', 'worn out', 'down to earth', 'fed up', 'out of breath', 'over the moon'],
+  advP: ['on purpose', 'in moderation', 'in advance', 'by accident', 'at the moment', 'on time', 'at first', 'at last', 'for a while',
+    'from time to time', 'now and then', 'all of a sudden', 'in a hurry', 'by heart', 'in the end', 'in the middle', 'at home',
+    'at work', 'on stage', 'in the corner', 'at the top', 'in bed', 'on the internet', 'in public', 'in private', 'at night'],
+  linker: { clause: ['although', 'even though', 'whereas', 'unless', 'in case', 'as long as', 'so that', 'because', 'even if'],
+            noun: ['despite', 'in spite of', 'due to', 'because of', 'instead of', 'apart from', 'thanks to'],
+            adv: ['however', 'therefore', 'nevertheless', 'moreover', 'as a result', 'on the other hand', 'in addition', 'otherwise'],
+            q: ['what', 'who', 'where', 'when', 'why', 'how'] }
+};
 
 const CTX_SYNONYMS = [
-  ['suggest','recommend','propose','advise'],
-  ['want','need','would like','wish'],
-  ['decide','choose'],
-  ['hope','expect'],
-  ['keep','carry on','continue','go on'],
-  ['avoid','escape'],
-  ['reliable','dependable','trustworthy'],
-  ['calm','relaxed','peaceful'],
-  ['exhausted','tired','worn out'],
-  ['crowded','packed','busy'],
-  ['rare','uncommon'],
-  ['confident','self-assured'],
-  ['improve','develop','enhance'],
-  ['increase','rise','grow'],
-  ['reduce','decrease','lower']
+  ['suggest', 'recommend', 'propose', 'advise'], ['want', 'need', 'would like', 'wish'], ['decide', 'choose'], ['hope', 'expect'],
+  ['keep', 'carry on', 'continue', 'go on'], ['avoid', 'escape'], ['reliable', 'dependable', 'trustworthy'],
+  ['calm', 'relaxed', 'peaceful'], ['exhausted', 'tired', 'worn out', 'sleepy'], ['crowded', 'packed', 'busy'], ['rare', 'uncommon'],
+  ['confident', 'self-assured'], ['improve', 'develop', 'enhance'], ['increase', 'rise', 'grow', 'expand'], ['reduce', 'decrease', 'lower'],
+  ['make redundant', 'lay off', 'dismiss', 'fire'], ['despite', 'in spite of'], ['go shopping', 'do the shopping'],
+  ['come up with', 'think of', 'invent'], ['get along well with', 'get on well with'], ['evaluate', 'assess', 'estimate'],
+  ['relieve', 'ease'], ['lose weight', 'slim down'], ['wait for', 'expect'], ['recall', 'remember'], ['seduce', 'tempt'],
+  ['resign', 'quit', 'leave'], ['foster', 'encourage', 'facilitate', 'contribute to', 'promote'],
+  ['overcome', 'cope with', 'deal with', 'get over', 'tackle the problem'], ['reveal', 'disclose'], ['distract', 'disturb', 'interrupt'],
+  ['hide', 'conceal'], ['observe', 'watch'], ['imagine', 'picture'], ['match', 'suit', 'fit', 'go with'], ['shake', 'tremble'],
+  ['look away', 'avoid eye contact'], ['scared', 'afraid', 'frightened'], ['angry', 'cross', 'furious', 'mad'],
+  ['happy', 'glad', 'pleased'], ['sad', 'unhappy', 'upset'], ['big', 'large', 'huge'], ['small', 'little', 'tiny'],
+  ['hard', 'difficult'], ['quick', 'fast'], ['loud', 'noisy'], ['naked', 'nude'], ['honest', 'sincere', 'trustworthy'],
+  ['aloof', 'reserved', 'distant'], ['foolish', 'silly', 'stupid'], ['therefore', 'so', 'as a result'],
+  ['nevertheless', 'however', 'nonetheless'], ['although', 'even though', 'though'], ['due to', 'because of', 'thanks to'],
+  ['rarely', 'seldom', 'hardly ever'], ['mostly', 'mainly'], ['probably', 'likely'], ['keep in touch', 'get in touch'],
+  ['put on weight', 'gain weight'], ['have a nap', 'get some shut-eye'], ['vague', 'ambiguous'], ['grounded', 'down-to-earth'],
+  ['implausible', 'far-fetched'], ['bizarre', 'strange', 'weird'], ['tedious', 'boring'], ['proud', 'pleased'],
+  ['lie', 'pretend'], ['look up', 'look away'], ['excited', 'happy'], ['laid off', 'made redundant'], ['mind', 'object'],
+  ['narrow', 'thin'], ['wide', 'broad'], ['awake', 'alert'], ['focused', 'attentive'], ['defensive', 'aloof'],
+  ['tired of', 'sick of', 'fed up with', 'bored with'], ['stick to', 'stick with'], ['participate in', 'take part in'],
+  ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
+  ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
+  ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
-  const n = ctxNorm(w);
-  CTX_SYN_MAP[n] = CTX_SYN_MAP[n] || new Set();
-  group.forEach(o => { if (o !== w) CTX_SYN_MAP[n].add(ctxNorm(o)); });
+  CTX_SYN_MAP[w] = CTX_SYN_MAP[w] || new Set();
+  group.forEach(o => { if (o !== w) CTX_SYN_MAP[w].add(o); });
 }));
 
-function ctxNorm(s) { return (s || '').toLowerCase().replace(/^to\s+/, '').replace(/[.,!?;:'"]/g, '').trim(); }
+function ctxSyllables(w) { return ((w.replace(/e$/, '').match(/[aeiouy]+/g)) || ['x']).length; }
+function ctxDoubles(b) { return CTX_DOUBLE.has(b) || (ctxSyllables(b) === 1 && /[^aeiou][aeiou][^aeiouwxy]$/.test(b)); }
+function ctxEd(b) {
+  if (/e$/.test(b)) return b + 'd';
+  if (/[^aeiou]y$/.test(b)) return b.slice(0, -1) + 'ied';
+  if (ctxDoubles(b)) return b + b.slice(-1) + 'ed';
+  return b + 'ed';
+}
+function ctxIng(b) {
+  if (b === 'be') return 'being';
+  if (/ie$/.test(b)) return b.slice(0, -2) + 'ying';
+  if (/[^aeiouy]e$/.test(b) && !/(ee|ye|oe)$/.test(b)) return b.slice(0, -1) + 'ing';
+  if (ctxDoubles(b)) return b + b.slice(-1) + 'ing';
+  return b + 'ing';
+}
+function ctxS3(b) {
+  if (b === 'have') return 'has';
+  if (b === 'be') return 'is';
+  if (/(s|sh|ch|x|z|o)$/.test(b)) return b + 'es';
+  if (/[^aeiou]y$/.test(b)) return b.slice(0, -1) + 'ies';
+  return b + 's';
+}
+function ctxForms(b) {
+  b = b.toLowerCase();
+  if (b === 'be') return { base: ['be'], s3: ['is', 'am', 'are'], past: ['was', 'were'], pp: ['been'], ing: ['being'] };
+  const irr = CTX_IRREG[b];
+  return { base: [b], s3: [ctxS3(b)], past: irr ? irr[0] : [ctxEd(b)], pp: irr ? irr[1] : [ctxEd(b)], ing: [ctxIng(b)] };
+}
+function ctxPlurals(n) {
+  const irr = { person: 'people', child: 'children', man: 'men', woman: 'women', foot: 'feet', tooth: 'teeth', mouse: 'mice', knife: 'knives', life: 'lives', wife: 'wives', leaf: 'leaves', shelf: 'shelves', half: 'halves' };
+  if (irr[n]) return [irr[n]];
+  if (/(s|sh|ch|x|z)$/.test(n)) return [n + 'es'];
+  if (/[^aeiou]y$/.test(n)) return [n.slice(0, -1) + 'ies'];
+  return [n + 's'];
+}
+function ctxLooksPlural(n) { return /[^su]s$/.test(n) && !/(ss|us|is|ics|news)$/.test(n); }
+function ctxAn(word) { return /^(hour|honest|honour|heir)/i.test(word) || (/^[aeiou]/i.test(word) && !/^(uni|use|usu|eu|one|once)/i.test(word)) ? 'an' : 'a'; }
 
-const CTX_DETERMINERS = new Set(['a','an','the','this','that','these','those','my','your','his','her','its','our','their','some','any','no','every','another']);
-const CTX_NONVERB_AFTER_TO = new Set(['a','an','the','my','your','his','her','its','our','their','this','that','these','those','me','him','them','us','you','it','school','work','bed','home','town','him','her']);
+// Split an entry like "lie / a liar", "leave – left – left", "to provide sb with sth" into matchable token lists
+function ctxAlts(word) {
+  const w = word.replace(/\([^)]*\)/g, ' ').replace(/[“”"]/g, '').replace(/’/g, "'");
+  let firstHadTo = false;
+  return w.split(/\s*(?:\/|–|—|→|\s-\s|\bvs\.?\s)\s*/i).map((p, idx) => {
+    const raw = p.trim().toLowerCase().replace(/[.!?,;:]+$/, '');
+    const hadTo = /^to\s+/.test(raw) || (idx > 0 && firstHadTo);
+    if (idx === 0) firstHadTo = hadTo;
+    let toks = raw.replace(/^to\s+/, '').split(/\s+/).filter(Boolean);
+    while (toks.length > 1 && CTX_PLACEHOLDERS.has(toks[toks.length - 1])) toks.pop();
+    const phrase = toks.join(' ');
+    let hadArticle = false, beStrip = false, droppedSubj = false;
+    if (toks.length > 1 && CTX_SUBJ.has(toks[0])) {
+      toks = toks.slice(1); droppedSubj = true;
+      // "it rings a bell" → "ring a bell": turn the 3rd-person verb back into its base form
+      const b = toks[0].replace(/ies$/, 'y').replace(/(s|sh|ch|x|z|o)es$/, '$1').replace(/s$/, '');
+      if (b !== toks[0] && CTX_VERBS.has(b)) toks[0] = b;
+    }
+    if (toks.length > 1 && CTX_ARTICLES.has(toks[0])) { toks = toks.slice(1); hadArticle = true; }
+    if (toks.length > 1 && toks[0] === 'be' && !CTX_PREPS.has(toks[1])) { toks = toks.slice(1); beStrip = true; }
+    toks = toks.map((t, i) => (/^(someone|somebody|one)'s$/.test(t) ? '§poss' : (t === 'do' && toks[i - 1] === 'to' ? '§verb' : t)));
+    return { toks, hadTo, phrase, hadArticle, beStrip, droppedSubj };
+  }).filter(a => a.toks.length && !CTX_PLACEHOLDERS.has(a.toks[0]));
+}
 
-function ctxFrame(blanked) {
-  const parts = blanked.split('_____');
-  const afterTokens = (parts[1] || '').trim().toLowerCase().split(/\s+/).map(t => t.replace(/[^a-z']/g, ''));
-  const beforeTokens = (parts[0] || '').trim().toLowerCase().split(/\s+/).map(t => t.replace(/[^a-z']/g, ''));
-  const next = afterTokens[0] || '';
-  const prev = beforeTokens[beforeTokens.length - 1] || '';
-  // a determiner right before the blank → it's a noun ("the ___ to meet", "a ___")
-  if (CTX_DETERMINERS.has(prev)) return 'noun';
-  // gerund: blank directly before an -ing word
-  if (/ing$/.test(next) && next.length > 4) return 'gerund';
-  // to-infinitive: "to" + a base verb (not "to the park" / "to her salad")
-  if (next === 'to') {
-    const after2 = afterTokens[1] || '';
-    if (after2 && !CTX_NONVERB_AFTER_TO.has(after2)) return 'to';
-    return 'noun'; // "added ___ to her salad" → the blank is a noun
+// Find the entry in its example sentence; returns the exact matched span and the grammatical form used
+function ctxMatch(entry) {
+  const sentence = (entry.example || '').replace(/’/g, "'");
+  if (!sentence) return null;
+  const alts = ctxAlts(entry.word);
+  for (const loose of [false, true]) {
+    for (const alt of alts) {
+      const toks = alt.toks;
+      const h = 0;
+      const verbLike = !alt.beStrip && (alt.hadTo || CTX_VERBS.has(toks[h]));
+      const last = toks.length - 1;
+      const sep = loose ? "\\s+(?:[\\w'-]+\\s+){0,3}" : '\\s+';
+      const DET = "(?:a|an|the|my|your|his|her|its|our|their|one's)";
+      let src = '';
+      toks.forEach((t, i) => {
+        if (CTX_PLACEHOLDERS.has(t)) { src += "(?:\\s+[\\w'-]+){0,4}"; return; }
+        if (i > 0 && (CTX_ARTICLES.has(t) || CTX_POSS.includes(t))) { src += '(?:' + sep + DET + ')?'; return; }
+        let r;
+        if (t === '§verb') r = "[\\w'-]+";
+        else if (t === '§poss') r = "(?:[\\w-]+'s|my|your|his|her|its|our|their)";
+        else if (CTX_REFL.includes(t)) r = '(?:' + CTX_REFL.join('|') + ')';
+        else if (i === h && verbLike) {
+          const f = ctxForms(t);
+          r = '(?:' + [...new Set([].concat(f.base, f.s3, f.past, f.pp, f.ing))].sort((a, b) => b.length - a.length).map(escRe).join('|') + ')';
+        } else if (i === h || i === last) {
+          r = '(?:' + [t].concat(ctxPlurals(t)).sort((a, b) => b.length - a.length).map(escRe).join('|') + ')';
+        } else r = escRe(t);
+        if (i === h) r = '(' + r + ')';
+        src += (i === 0 ? '' : sep) + r;
+      });
+      const m = new RegExp("(^|[^\\w'])(" + src + ")(?=$|[^\\w'])", 'i').exec(sentence);
+      if (!m) continue;
+      const start = m.index + m[1].length;
+      const surface = entry.example.slice(start, start + m[2].length);
+      const headSurface = (m[3] || '').toLowerCase();
+      const prev = ((sentence.slice(0, start).match(/([a-z']+)[^a-z']*$/i) || [])[1] || '').toLowerCase();
+      let form = 'base';
+      if (verbLike) {
+        const f = ctxForms(toks[h]);
+        if (toks[h] === 'be') form = { is: 's3', am: 'base', are: 'base', was: 'past', were: 'past', been: 'pp', being: 'ing' }[headSurface] || 'base';
+        else if (f.ing.includes(headSurface)) form = 'ing';
+        else if (headSurface !== toks[h] && (f.past.includes(headSurface) || f.pp.includes(headSurface))) {
+          const inP = f.past.includes(headSurface), inPP = f.pp.includes(headSurface);
+          form = inP && inPP ? (CTX_PP_TRIGGERS.has(prev) ? 'pp' : 'past') : (inPP ? 'pp' : 'past');
+        } else if (headSurface !== toks[h] && f.s3.includes(headSurface)) form = 's3';
+      }
+      const surfLast = surface.split(/\s+/).pop().toLowerCase().replace(/[^\w'-]/g, '');
+      const plural = !verbLike && (surfLast !== toks[last] || ctxLooksPlural(toks[last]));
+      return { alt, toks, h, verbLike, start, end: start + m[2].length, surface, headSurface, prev, form, plural, sentence };
+    }
   }
-  // noun: a determiner sits a little before the blank ("a ripe ___")
-  if (beforeTokens.slice(-2).some(t => CTX_DETERMINERS.has(t))) return 'noun';
   return null;
 }
 
-function ctxPickDistractors(answerWord, blanked, usable) {
-  let key = ctxFrame(blanked);
-  if (!key) {
-    const pos = detectPOS(answerWord.word);
-    key = CTX_POOLS[pos] ? pos : 'general';
+function ctxCategory(m) {
+  const phrase = m.alt.phrase, core = m.toks.join(' ');
+  const ov = CTX_CAT_OVERRIDE[phrase] || CTX_CAT_OVERRIDE[core];
+  if (ov) return ov;
+  // question words: "_____ is this?" fits What and Who alike — no fair question
+  if (CTX_LINKER_KIND[core] === 'q') return 'skip';
+  if (CTX_LINKER_KIND[core]) return 'lk-' + CTX_LINKER_KIND[core];
+  const first = m.toks[0], lastTok = m.toks[m.toks.length - 1];
+  if (m.alt.beStrip) return 'adj';
+  if (m.alt.hadTo) return 'verb';
+  if (m.verbLike && m.form !== 'base') return 'verb';
+  if (m.alt.hadArticle) return CTX_PREPS.has(lastTok) ? 'skip' : 'noun';
+  if (m.toks.length > 1) {
+    if (CTX_PREPS.has(first)) return 'adv';
+    if (m.verbLike) return 'verb';
+    if (CTX_PREPS.has(lastTok) && CTX_ADJ.has(first)) return 'adj';
+    return 'skip';
   }
-  const ansN = ctxNorm(answerWord.word);
-  const ansTargetN = ctxNorm(getBlankTarget(answerWord.word));
-  const syn = CTX_SYN_MAP[ansN] || CTX_SYN_MAP[ansTargetN] || new Set();
-  const out = [], seen = new Set([ansN, ansTargetN]);
-  const tryAdd = s => {
-    const n = ctxNorm(s);
-    if (out.length >= 3 || seen.has(n) || syn.has(n)) return;
-    seen.add(n); out.push(s);
+  if (m.verbLike && CTX_VERB_CONTEXT.has(m.prev)) return 'verb';
+  // "to attain", "can accomplish": after to/modal a word is a verb even if it's not in our verb list
+  if (CTX_TO_MODAL.has(m.prev) && !CTX_ADJ.has(first) && !/ly$/.test(first)) return 'verb';
+  if (CTX_ADV_EXTRA.has(first) || (/ly$/.test(first) && !CTX_LY_ADJ.has(first))) return 'adv';
+  // "felt completely drained", "was absolutely stunning": degree words / linking verbs before it → adjective
+  if (CTX_ADJ_CONTEXT.has(m.prev) && !CTX_UNCOUNT.has(first) && !/(ness|ity|ism|ment|tion|sion|ance|ence)$/.test(first)) return 'adj';
+  if (CTX_ADJ.has(first) || CTX_LY_ADJ.has(first) || (/(ous|ful|less|ive|able|ible|ish)$/.test(first) && !CTX_UNCOUNT.has(first))) return 'adj';
+  return 'noun';
+}
+
+function ctxCap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// Turn a base-form candidate into the same shape as the answer
+function ctxShapeCandidate(cTok, info) {
+  const toks = cTok.slice();
+  // dictionary placeholders ("someone", "something", "to do") never belong inside a real sentence
+  if (toks.some(t => t.startsWith('§') || /^(someone|somebody|something|sb|sth|smb|smth)$/.test(t))) return null;
+  if (info.cat === 'verb') {
+    if (CTX_SUBJ.has(toks[0])) return null;
+    // only inflect heads we know are verbs (avoids "somed extent")
+    if (info.m.form !== 'base' && !CTX_VERBS.has(toks[0]) && !CTX_IRREG[toks[0]]) return null;
+    const ansBase = info.m.toks[info.m.h];
+    if (toks[0] === 'be') {
+      if (ansBase !== 'be') return null;
+      toks[0] = info.m.headSurface;
+    } else if (info.m.form !== 'base') {
+      const f = ctxForms(toks[0]);
+      toks[0] = f[info.m.form][0];
+    }
+    const subj = (info.m.sentence.slice(0, info.m.start).match(/\b(i|you|he|she|it|we|they)\b[^a-z]*$/i) ||
+                  info.m.sentence.slice(0, info.m.start).match(/\b(i|you|he|she|it|we|they)\b/i) || [])[1];
+    const s = (subj || '').toLowerCase();
+    const ansPoss = info.m.surface.toLowerCase().split(/\s+/).find(t => CTX_POSS.includes(t));
+    const ansRefl = info.m.surface.toLowerCase().split(/\s+/).find(t => CTX_REFL.includes(t));
+    for (let i = 1; i < toks.length; i++) {
+      if (CTX_POSS.includes(toks[i])) toks[i] = ansPoss || CTX_SUBJ_POSS[s] || 'your';
+      else if (CTX_REFL.includes(toks[i])) toks[i] = ansRefl || CTX_SUBJ_REFL[s] || 'yourself';
+      else if (['somebody', 'someone', 'sb', 'smb'].includes(toks[i])) toks[i] = 'someone';
+      else if (['something', 'sth', 'smth'].includes(toks[i])) toks[i] = 'something';
+      else if (toks[i] === '...' || toks[i] === '…') return null;
+    }
+    return toks.join(' ');
+  }
+  if (info.cat === 'noun') {
+    if (CTX_ARTICLES.has(toks[0]) && toks.length > 1) toks.shift();
+    const last = toks[toks.length - 1];
+    const cPlural = ctxLooksPlural(last);
+    // fixed phrases like "pace of life", "peace and quiet", "year before last" can't take a/an or a plural
+    const uncount = CTX_UNCOUNT.has(toks.join(' ')) || CTX_UNCOUNT.has(last) ||
+      toks.some(t => ['of', 'and', 'before'].includes(t)) || /(ness|ity|ism|ance|ence|ship|dom)$/.test(last);
+    if (info.plural) {
+      if (uncount) return null;
+      if (!cPlural) toks[toks.length - 1] = ctxPlurals(last)[0];
+    } else if (cPlural) return null;
+    const core = toks.join(' ');
+    if (info.article === 'the') return 'the ' + core;
+    if (info.article) { if (uncount || info.plural) return null; return ctxAn(core) + ' ' + core; }
+    return core;
+  }
+  if (info.cat === 'adj' && info.article && CTX_PRED_ADJ.has(toks[0])) return null;
+  if (info.cat === 'adj' && info.article) return ctxAn(toks.join(' ')) + ' ' + toks.join(' ');
+  return toks.join(' ');
+}
+
+function ctxInfo(entry) {
+  const m = ctxMatch(entry);
+  if (!m) return { entry, cat: 'nomatch' };
+  const cat = ctxCategory(m);
+  const info = { entry, m, cat, plural: m.plural, article: null };
+  // "sleep patterns": the head looks like a verb, but as a noun what matters is whether the last word is plural
+  if (cat === 'noun') {
+    const surfLast = m.surface.split(/\s+/).pop().toLowerCase().replace(/[^\w'-]/g, '');
+    info.plural = surfLast !== m.toks[m.toks.length - 1] || ctxLooksPlural(m.toks[m.toks.length - 1]);
+  }
+  if (cat === 'noun' || cat === 'adj') {
+    const firstSurf = m.surface.split(/\s+/)[0].toLowerCase();
+    if (CTX_ARTICLES.has(firstSurf) && m.toks.length > 1) info.article = firstSurf;
+    else if (m.prev === 'a' || m.prev === 'an') {
+      // include the article in the blank so "a/an" can't give the answer away
+      const pre = m.sentence.slice(0, m.start).match(/(an?)\s+$/i);
+      if (pre) { m.start -= pre[0].length; m.surface = entry.example.slice(m.start, m.end); info.article = pre[1].toLowerCase(); }
+    }
+  }
+  return info;
+}
+
+function ctxCandidatePool(info, infos) {
+  const multi = info.m.surface.trim().split(/\s+/).length - (info.article ? 1 : 0) > 1;
+  const own = infos.filter(o => o !== info && o.cat === info.cat && o.m && o.entry.id !== info.entry.id).map(o => o.m.toks);
+  let pool;
+  if (info.cat === 'verb') {
+    const ansT = info.m.toks, ansLast = ansT[ansT.length - 1];
+    if (!multi) pool = CTX_POOL.verb1;
+    else if (ansLast === 'to' && CTX_TO_INF.has(ansT[0])) pool = CTX_POOL.verbTo;
+    else if (CTX_PREPS.has(ansLast) || ['of', 'to', 'about'].includes(ansLast)) pool = CTX_POOL.verbPrep;
+    else pool = CTX_POOL.verbP;
+  }
+  else if (info.cat === 'noun') pool = CTX_POOL.nounC.concat(info.article || info.plural ? [] : CTX_POOL.nounU);
+  const endsPrep = toks => !['worn out', 'fed up', 'down to earth'].includes(toks.join(' ')) && CTX_PREPS.has(toks[toks.length - 1]) || ['of', 'to', 'about'].includes(toks[toks.length - 1]);
+  if (info.cat === 'adj') pool = !multi ? CTX_POOL.adj : (endsPrep(info.m.toks) ? CTX_POOL.adjPrep : CTX_POOL.adjBin);
+  else if (info.cat === 'adv') pool = multi ? CTX_POOL.advP : CTX_POOL.adv1;
+  else if (info.cat.startsWith('lk-')) pool = CTX_POOL.linker[info.cat.slice(3)] || [];
+  else if (info.cat !== 'verb' && info.cat !== 'noun') pool = [];
+  const shaped = toks => {
+    if (info.cat === 'noun' || info.cat.startsWith('lk-')) return true;
+    if ((toks.length > 1) !== multi) return false;
+    // "managed to ___" needs options that also end in a preposition / "to", and vice versa
+    if (multi && (info.cat === 'adj' || info.cat === 'verb')) return endsPrep(toks) === endsPrep(info.m.toks);
+    return true;
   };
-  // 1) curated pool for this frame (reliable grammatical fit, wrong meaning)
-  shuffle((CTX_POOLS[key] || []).slice()).forEach(tryAdd);
-  // 2) top up from the student's own same-POS words
-  if (out.length < 3) {
-    const pos = detectPOS(answerWord.word);
-    shuffle(usable.filter(x => x.id !== answerWord.id && detectPOS(x.word) === pos)).forEach(x => tryAdd(x.word));
-  }
-  // 3) last resort: general pool
-  if (out.length < 3) shuffle(CTX_POOLS.general.slice()).forEach(tryAdd);
-  return out.slice(0, 3).map(s => ({ word: s, id: 'cd-' + Math.random().toString(36).slice(2, 9) }));
+  const ownC = own.filter(shaped);
+  const poolC = pool.map(p => p.split(' ')).filter(shaped);
+  return { ownC, poolC };
+}
+
+function ctxBuildQuestion(info, infos) {
+  if (!info.m || ['skip', 'nomatch'].includes(info.cat)) return null;
+  const ansBase = info.m.alt.phrase;
+  const syn = CTX_SYN_MAP[ansBase] || new Set();
+  const atStart = !/[a-z0-9]/i.test(info.m.sentence.slice(0, info.m.start));
+  const seen = new Set([ansBase, info.m.surface.toLowerCase()]);
+  const out = [];
+  const ansLen = info.m.surface.split(/\s+/).length;
+  const tryAdd = toks => {
+    if (out.length >= 3) return;
+    const base = toks.join(' ');
+    if (seen.has(base) || syn.has(base) || (CTX_SYN_MAP[base] && CTX_SYN_MAP[base].has(ansBase))) return;
+    const shapedText = ctxShapeCandidate(toks, info);
+    if (!shapedText) return;
+    const key = shapedText.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(base); seen.add(key);
+    const fixed = shapedText.replace(/\b(easter|christmas|french|english|london|monday|sunday|saturday|superman)\b/g, ctxCap);
+    out.push(atStart ? ctxCap(fixed) : fixed);
+  };
+  const { ownC, poolC } = ctxCandidatePool(info, infos);
+  // prefer the student's own words of a similar length, then the curated pool
+  const near = t => Math.abs(t.length - ansLen) <= 1;
+  shuffle(ownC.filter(near)).forEach(tryAdd);
+  shuffle(ownC.filter(t => !near(t))).forEach(tryAdd);
+  shuffle(poolC.slice()).forEach(tryAdd);
+  if (out.length < 3) return null;
+  const blanked = info.entry.example.slice(0, info.m.start) + '_____' + info.entry.example.slice(info.m.end);
+  return {
+    word: info.entry,
+    sentence: blanked,
+    options: [{ word: info.m.surface, id: info.entry.id }].concat(out.map(s => ({ word: s, id: 'cd-' + Math.random().toString(36).slice(2, 9) })))
+      .sort(() => Math.random() - 0.5),
+    correctId: info.entry.id
+  };
+}
+
+// Karina's French cabinet: no English grammar rules — exact matches only, distractors from her own French words
+function ctxIsFrench(words) {
+  const fr = words.filter(w => /\b(le|la|les|des|du|est|une|et|pour|dans|très)\b/i.test(w.example || '')).length;
+  return fr > words.length * 0.5;
+}
+function ctxFrenchQuestions(words) {
+  const items = [];
+  words.forEach(w => {
+    if (!w.example) return;
+    const core = w.word.replace(/\([^)]*\)/g, '').split('/')[0].trim();
+    if (!core) return;
+    const m = new RegExp('(^|[^\\p{L}])(' + escRe(core) + ')(?=$|[^\\p{L}])', 'iu').exec(w.example);
+    if (!m) return;
+    const start = m.index + m[1].length;
+    items.push({ w, start, end: start + m[2].length, surface: w.example.slice(start, start + m[2].length), len: core.split(/\s+/).length });
+  });
+  return items.map(it => {
+    const others = shuffle(items.filter(o => o !== it && Math.abs(o.len - it.len) <= 1 && o.surface.toLowerCase() !== it.surface.toLowerCase()));
+    if (others.length < 3) return null;
+    const atStart = it.start === 0;
+    const fix = s => atStart ? ctxCap(s) : s.charAt(0).toLowerCase() + s.slice(1);
+    return {
+      word: it.w,
+      sentence: it.w.example.slice(0, it.start) + '_____' + it.w.example.slice(it.end),
+      options: [{ word: it.surface, id: it.w.id }].concat(others.slice(0, 3).map(o => ({ word: fix(o.surface), id: 'cd-' + Math.random().toString(36).slice(2, 9) })))
+        .sort(() => Math.random() - 0.5),
+      correctId: it.w.id
+    };
+  }).filter(Boolean);
 }
 
 function buildContextQuestions(studentWords) {
-  const usable = studentWords.filter(w => w.example && w.word);
-  const questions = [];
-  usable.forEach(w => {
-    const blanked = makeBlankSentence(w.word, w.example);
-    if (!blanked) return;
-    const distractors = ctxPickDistractors(w, blanked, usable);
-    if (distractors.length < 3) return;
-    questions.push({
-      word: w,
-      sentence: blanked,
-      options: [{ word: w.word, id: w.id }, ...distractors].sort(() => Math.random() - 0.5),
-      correctId: w.id
-    });
-  });
+  if (ctxIsFrench(studentWords)) return ctxFrenchQuestions(studentWords).sort(() => Math.random() - 0.5).slice(0, 20);
+  const infos = studentWords.filter(w => w.example && w.word).map(ctxInfo);
+  const questions = infos.map(i => ctxBuildQuestion(i, infos)).filter(Boolean);
   return questions.sort(() => Math.random() - 0.5).slice(0, 20);
 }
 
@@ -2230,6 +2675,7 @@ function renderCtxQ() {
     btn.className = 'ctx-opt';
     btn.textContent = shortLabel(opt.word);
     btn.title = opt.word;
+    btn.dataset.id = opt.id;
     btn.onclick = () => answerCtx(btn, opt.id === q.correctId, q);
     wrap.appendChild(btn);
   });
@@ -2242,7 +2688,7 @@ function answerCtx(btn, isCorrect, q) {
   btn.classList.add(isCorrect ? 'correct' : 'wrong');
   document.querySelectorAll('.ctx-opt').forEach(b => {
     b.disabled = true;
-    if (b.title === q.word.word) b.classList.add('correct');
+    if (b.dataset.id === q.correctId) b.classList.add('correct');
   });
   document.getElementById('ctx-feedback').innerHTML =
     '<div class="ctx-fb">' +
