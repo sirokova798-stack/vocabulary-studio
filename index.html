@@ -6392,7 +6392,8 @@ const MILANA_WORDS = [
   { word: "a pose", translation: "поза", example: "She held the pose for the photo.", lesson: "Body Language" },
   { word: "slouch", translation: "сутулиться", example: "Don't slouch — sit up straight.", lesson: "Body Language" },
   { word: "copy someone", translation: "повторять за кем-то (копировать чьи-то жесты)", example: "People often copy someone's gestures when they like them.", lesson: "Body Language" },
-  { word: "a real smile / a polite smile", translation: "искренняя / вежливая улыбка", example: "You can tell a real smile from a polite smile by looking at the eyes.", lesson: "Body Language" },
+  { word: "a polite smile", translation: "вежливая улыбка", example: "She gave him a polite smile, but she wasn't interested.", lesson: "Body Language" },
+  { word: "sincere", translation: "искренний", example: "His apology sounded sincere.", lesson: "Adjectives" },
   { word: "smile, but not with your eyes", translation: "улыбаться, но не глазами", example: "She smiled, but not with her eyes — she wasn't really happy.", lesson: "Body Language" },
   { word: "lines at the corners of the eyes", translation: "морщинки в уголках глаз", example: "A real smile creates lines at the corners of the eyes.", lesson: "Body Language" },
   { word: "touch lightly", translation: "слегка коснуться", example: "She touched his arm lightly to get his attention.", lesson: "Body Language" },
@@ -6687,6 +6688,8 @@ const MILANA_WORDS = [
   }
   if (!milana.quizHistory) milana.quizHistory = [];
   milana.pin = '4646';
+  // 'a real smile / a polite smile' was split: 'a polite smile' + 'sincere' — remove the old combined card
+  milana.words = milana.words.filter(w => w.word.toLowerCase() !== 'a real smile / a polite smile');
   const milanaExisting = new Set(milana.words.map(w => w.word.toLowerCase()));
   MILANA_WORDS.forEach(w => {
     if (!milanaExisting.has(w.word.toLowerCase())) {
