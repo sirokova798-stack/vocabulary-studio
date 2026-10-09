@@ -6902,7 +6902,6 @@ const MILANA_WORDS = [
 
   // ── Latest lesson ──
   { word: "theatre", translation: "театр", example: "We went to the theatre to see a new play.", lesson: "Latest Lesson" },
-  { word: "a stage", translation: "сцена", example: "The actors walked onto the stage and the audience went quiet.", lesson: "Latest Lesson" },
   { word: "mediocre", translation: "посредственный, средненький", example: "The food was mediocre — not bad, but nothing special.", lesson: "Latest Lesson" },
   { word: "a thesis", translation: "дипломная работа, диссертация", example: "She is writing her thesis on body language.", lesson: "Latest Lesson" },
   { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
@@ -7144,7 +7143,7 @@ const MILANA_WORDS = [
   if (!milana.quizHistory) milana.quizHistory = [];
   milana.pin = '4646';
   // 'a real smile / a polite smile' was split: 'a polite smile' + 'sincere' — remove the old combined card
-  milana.words = milana.words.filter(w => w.word.toLowerCase() !== 'a real smile / a polite smile');
+  milana.words = milana.words.filter(w => !['a real smile / a polite smile', 'a stage'].includes(w.word.toLowerCase()));
   // updated example sentence — also fix it on devices that already have the word
   milana.words.forEach(w => { if (w.word.toLowerCase() === 'lie / a liar') w.example = "He lied about his age to get the job."; });
   const milanaExisting = new Set(milana.words.map(w => w.word.toLowerCase()));
