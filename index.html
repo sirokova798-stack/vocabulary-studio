@@ -2171,6 +2171,7 @@ const CTX_ADJ = new Set((
  'outstanding overwhelming willing unwilling miserable desperate furious upset worried relieved ashamed jealous envious ' +
  'grateful thankful hopeful doubtful vulnerable fragile delicate gentle rough fierce wild tame loyal faithful polite impolite ' +
  'bland literate inconvenient foreign authentic drained so-called stunning spectacular witty precise analytical devoted blunt ' +
+ 'sturdy ordinary distracted restrained absent swollen self-sufficient ' +
  'stimulating self-centered self-centred inferior gloomy magnetic brief tender unexpected urgent must-see non-negotiable').split(' '));
 const CTX_UNCOUNT = new Set((
  'advice information furniture music weather homework knowledge patience silence confidence pleasure attention progress luggage ' +
@@ -2202,7 +2203,7 @@ const CTX_CAT_OVERRIDE = {
   'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
   'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
   'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
-  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
+  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
   // adjectives
   'safe and sound': 'adj', 'short and sweet': 'adj', 'touch and go': 'adj', 'two peas in a pod': 'skip',
   // nouns (no article in the entry)
@@ -2582,7 +2583,7 @@ function ctxBuildQuestion(info, infos) {
     const key = shapedText.toLowerCase();
     if (seen.has(key)) return;
     seen.add(base); seen.add(key);
-    const fixed = shapedText.replace(/\b(easter|christmas|french|english|london|monday|sunday|saturday|superman)\b/g, ctxCap);
+    const fixed = shapedText.replace(/\b(easter|christmas|french|english|london|monday|sunday|saturday|superman|instagram|telegram)\b/g, ctxCap);
     out.push(atStart ? ctxCap(fixed) : fixed);
   };
   const { ownC, poolC } = ctxCandidatePool(info, infos);
@@ -6930,6 +6931,151 @@ const MILANA_WORDS = [
   { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
 ];
 
+const OCT9_WORDS = {
+  Yuliya: [
+    { word: 'swollen', translation: 'опухший, отёкший', example: 'Her ankle was swollen after the fall.' },
+    { word: 'an ankle', translation: 'лодыжка', example: 'She twisted her ankle on the stairs.' },
+    { word: 'tied up', translation: 'очень занят (разг.); связанный', example: "I'm tied up at work all day, so I'll call you tonight." },
+    { word: 'self-sufficient', translation: 'самодостаточный, независимый', example: "She is completely self-sufficient and never asks anyone for help." },
+    { word: 'to brainwash', translation: 'промывать мозги', example: 'The cult brainwashed its members into giving away their money.' },
+    { word: 'a trap', translation: 'ловушка', example: 'He walked straight into the trap.' },
+    { word: 'revenge / to take revenge on somebody', translation: 'месть / отомстить кому-то', example: 'He wanted to take revenge on the people who had hurt him.' },
+    { word: 'it pops into my mind', translation: 'мне приходит в голову', example: 'Sometimes a strange idea just pops into my mind.' },
+    { word: 'to expire', translation: 'истекать (о сроке)', example: 'My visa expires in May.' },
+    { word: 'like sheep', translation: 'как стадо баранов (бездумно, все за всеми)', example: 'Everyone bought the same phone — they followed the trend like sheep.' },
+    { word: 'on Instagram / on Telegram / on the internet', translation: 'в Инстаграме / в Телеграме / в интернете (всегда предлог on)', example: 'I saw her new video on Instagram.' },
+    { word: 'to mock somebody / mockery', translation: 'высмеивать кого-то / насмешка', example: 'The other children mocked him because of his accent.' },
+    { word: 'profit motive', translation: 'стремление к прибыли, мотив выгоды', example: 'Many critics say the company is driven only by the profit motive.' },
+    { word: 'repentance / to repent of something', translation: 'раскаяние / раскаиваться в чём-то', example: 'In the end, he repented of everything he had done.' },
+    { word: 'to mumble', translation: 'бормотать', example: 'He mumbled something and left the room.' },
+    { word: 'to see through somebody', translation: 'видеть кого-то насквозь', example: 'She saw through him immediately — she knew he was lying.' },
+    { word: 'self-esteem', translation: 'самооценка', example: 'Honest praise can boost your self-esteem.' },
+    { word: 'to cope with something', translation: 'справляться с чем-то', example: 'She coped with the pressure surprisingly well.' },
+    { word: 'bureaucracy', translation: 'бюрократия', example: 'It took three months to get the permit because of all the bureaucracy.' },
+    { word: 'to get indignant', translation: 'возмутиться, вознегодовать', example: 'She got indignant when they asked her to pay a second time.' },
+    { word: 'to pass out', translation: 'потерять сознание', example: 'He passed out from the heat during the rehearsal.' },
+    { word: 'a close-knit community', translation: 'сплочённое сообщество', example: 'They live in a close-knit community where everyone knows each other.' },
+    { word: 'to delve into something', translation: 'углубляться во что-то, вникать', example: 'She delved into the history of Russian ballet.' },
+    { word: 'to foresee', translation: 'предвидеть', example: 'Nobody could foresee how the story would end.' },
+    { word: 'to predict', translation: 'предсказывать, прогнозировать', example: "It's hard to predict the weather in spring." },
+    { word: 'to put labels on people', translation: 'вешать ярлыки на людей (также: to label people)', example: "Don't put labels on people you hardly know." },
+    { word: 'to clock somebody / something', translation: 'заметить, засечь (разговорное)', example: 'I clocked him the moment he walked into the room.' },
+    { word: 'to react to something', translation: 'реагировать на что-то', example: 'How did she react to the news?' },
+    { word: 'hypervigilant', translation: 'сверхбдительный, постоянно настороже', example: 'After the accident, he became hypervigilant about safety.' },
+    { word: 'to resign', translation: 'уволиться по собственному желанию', example: 'She decided to resign from her position after ten years.' },
+    { word: 'to make redundant', translation: 'сократить (уволить по сокращению)', example: 'Fifty workers were made redundant when the factory closed.' },
+    { word: 'to lay off', translation: 'сократить, уволить (временно или из-за нехватки работы)', example: 'The company had to lay off a third of its staff.' },
+    { word: 'separate', translation: 'отдельный', example: 'They decided to sleep in separate rooms during the trip.' },
+    { word: 'rumination', translation: 'зацикленность на мыслях, «пережёвывание» мыслей', example: 'Constant rumination can make anxiety much worse.' },
+    { word: 'to detach from', translation: 'отстраниться, отделиться от', example: 'It took her years to detach from that toxic relationship.' },
+    { word: 'sacred', translation: 'священный', example: 'Family time is sacred to them — nothing interrupts it.' },
+    { word: 'to come over', translation: 'нахлынуть, охватить (о чувстве); зайти в гости', example: 'A strange feeling of calm came over her.' },
+    { word: 'to overcome', translation: 'преодолеть', example: 'It took him years to overcome his fear of flying.' },
+    { word: 'to contribute to', translation: 'способствовать, вносить вклад в', example: 'Poor sleep can contribute to anxiety and low mood.' },
+    { word: 'to facilitate', translation: 'облегчать, способствовать', example: "The therapist's role is to facilitate open conversation." },
+    { word: 'modest', translation: 'скромный', example: 'Despite her success, she remained modest about it.' },
+    { word: 'affectionate', translation: 'ласковый, нежный', example: 'He is very affectionate with his younger siblings.' },
+    { word: 'it reminds me of something', translation: 'это напоминает мне что-то', example: 'This song reminds me of my childhood.' },
+    { word: 'capable of', translation: 'способный на', example: 'I know she is capable of great things.' },
+    { word: 'inclination', translation: 'склонность', example: 'He has a natural inclination towards music.' }
+  ].map(w => ({ ...w, lesson: 'Lessons 9 Oct' })),
+  Alexandra: [
+    { word: 'to drop by', translation: 'заскочить, зайти ненадолго', example: "Drop by for a coffee if you're in the area." },
+    { word: 'a lecture', translation: 'лекция', example: 'She attends lectures at the university twice a week.' },
+    { word: 'at our first lesson', translation: 'на нашем первом уроке', example: 'At our first lesson, we talked about your goals.' },
+    { word: 'a campfire', translation: 'костёр (походный)', example: 'We sat around the campfire and told stories.' }
+  ].map(w => ({ ...w, lesson: 'Lessons 9 Oct' })),
+  Rustam: [
+    { word: 'restrained', translation: 'сдержанный', example: 'His reaction to the news was very restrained.' },
+    { word: 'accurate / inaccurate', translation: 'точный / неточный', example: 'The information in the article was inaccurate.' },
+    { word: 'to demand / demand', translation: 'требовать / спрос (a big demand — большой спрос)', example: 'There is a big demand for English teachers in this city.' },
+    { word: 'to break off', translation: 'отломить', example: 'She broke off a piece of bread and gave it to me.' },
+    { word: 'at least', translation: 'по крайней мере, хотя бы', example: "At least it didn't rain." },
+    { word: 'a runny nose', translation: 'насморк', example: 'I have a runny nose and a sore throat.' },
+    { word: 'to make up a story', translation: 'выдумать историю', example: 'He made up a story about why he was late.' },
+    { word: 'sturdy', translation: 'крепкий, прочный', example: 'We need a sturdy table for the garden.' },
+    { word: 'miss / missing', translation: 'miss — скучать, пропускать (I miss you. I missed the bus.); missing — пропавший, отсутствующий (My keys are missing.) Скучаю = I miss you, а не "I am missing you"', example: 'I miss my family, and my cat has been missing since Monday.' },
+    { word: 'by myself', translation: 'сам, самостоятельно; в одиночку', example: 'I fixed the bike by myself.' },
+    { word: 'to suspect', translation: 'подозревать', example: 'I suspect he is not telling the truth.' },
+    { word: 'to interrupt', translation: 'перебивать, прерывать', example: 'Sorry to interrupt, but your taxi is here.' },
+    { word: 'to take something for granted', translation: 'принимать что-то как должное', example: "Don't take your health for granted." },
+    { word: 'witty', translation: 'остроумный', example: 'He is so witty that everyone loves talking to him.' },
+    { word: 'to dice', translation: 'нарезать кубиками', example: 'Dice the onion and fry it in a pan.' },
+    { word: 'to slice', translation: 'нарезать ломтиками', example: 'Can you slice the bread, please?' },
+    { word: 'to grate', translation: 'натирать на тёрке', example: 'Grate some cheese over the pasta.' },
+    { word: 'a moisturizer', translation: 'увлажняющий крем', example: 'I put on moisturizer every morning.' },
+    { word: 'a cleanser', translation: 'очищающее средство (для лица)', example: 'Wash your face with a gentle cleanser before bed.' }
+  ].map(w => ({ ...w, lesson: 'Lessons 9 Oct' })),
+  Trofim: [
+    { word: 'consistent', translation: 'последовательный, стабильный', example: 'You need to be consistent if you want to see results.' },
+    { word: 'a serial entrepreneur', translation: 'серийный предприниматель', example: 'He is a serial entrepreneur who has started five companies.' },
+    { word: 'to spread myself too thin', translation: 'браться за слишком много дел сразу', example: 'I spread myself too thin and couldn\'t finish anything properly.' },
+    { word: 'bored with', translation: 'уставший от чего-то, которому надоело', example: "I'm bored with the same breakfast every day." },
+    { word: 'to devote my time to something', translation: 'посвящать время чему-то', example: 'I devote my free time to music.' },
+    { word: 'novelty', translation: 'новизна', example: 'The novelty of the new job soon wore off.' },
+    { word: 'to bring up a topic', translation: 'поднять тему', example: 'She brought up the topic of money at dinner.' },
+    { word: 'consistency', translation: 'последовательность, постоянство', example: 'Consistency is the key to learning a language.' },
+    { word: "I don't want to be mean", translation: 'не хочу показаться грубым / злым', example: "I don't want to be mean, but your essay is far too long." },
+    { word: 'accurately', translation: 'точно', example: 'Try to describe the problem as accurately as possible.' },
+    { word: 'at the same time (advanced synonym: simultaneously)', translation: 'одновременно (продвинутый синоним — simultaneously)', example: "I can't listen and take notes at the same time." }
+  ].map(w => ({ ...w, lesson: 'Lessons 9 Oct' })),
+  Anastasia: [
+    { word: 'to take sick leave / to be on sick leave', translation: 'взять больничный / быть на больничном', example: 'She took sick leave for a week when she had the flu.' },
+    { word: 'to be absent', translation: 'отсутствовать', example: 'He was absent from work yesterday.' },
+    { word: 'to have the sniffles', translation: 'шмыгать носом, лёгкий насморк', example: "I have the sniffles, but I'm fine." },
+    { word: 'a runny nose', translation: 'насморк', example: 'I have a runny nose and a headache.' },
+    { word: 'to reject', translation: 'отклонять, отвергать', example: 'They rejected my application.' },
+    { word: 'to go hiking', translation: 'ходить в поход', example: 'We go hiking in the mountains every summer.' },
+    { word: 'a cough', translation: 'кашель', example: 'I have had a bad cough for a week.' },
+    { word: 'to defend a project', translation: 'защищать проект', example: 'She will defend her project next Friday.' },
+    { word: 'a decade', translation: 'десятилетие', example: 'Prices have doubled in the last decade.' },
+    { word: 'to draw attention to something', translation: 'привлекать внимание к чему-то', example: 'The article draws attention to the problem of plastic waste.' },
+    { word: 'priority', translation: 'приоритет', example: 'My health is my top priority.' },
+    { word: 'a conclusion / to draw conclusions', translation: 'вывод / делать выводы (естественнее draw, чем make)', example: "Don't draw conclusions before you know all the facts." },
+    { word: 'to call somebody out', translation: 'предъявить претензию, открыто указать на плохое поведение (также: to confront somebody; to have a go at somebody — разг., брит.)', example: 'She called him out for being rude to the waiter.' },
+    { word: 'to have a meal', translation: 'поесть, пообедать / поужинать', example: "Let's have a meal together after work." },
+    { word: 'to feel guilty', translation: 'чувствовать себя виноватым', example: 'I feel guilty about missing her birthday.' },
+    { word: "I don't have a clue", translation: 'понятия не имею (также: I have no idea)', example: "Where are my keys? I don't have a clue." },
+    { word: 'to get offended', translation: 'обидеться (также: to take offence, to be hurt, to feel hurt)', example: 'She got offended when I forgot her name.' },
+    { word: 'to overcome something', translation: 'преодолеть что-то', example: 'She overcame her fear of public speaking.' },
+    { word: 'my weak spots', translation: 'мои слабые места', example: 'Grammar is one of my weak spots.' },
+    { word: 'a trauma bond', translation: 'травматическая привязанность', example: 'A trauma bond can make it hard to leave a toxic relationship.' },
+    { word: 'vulnerable', translation: 'уязвимый', example: 'She felt vulnerable after the breakup.' },
+    { word: 'to bear something / unbearable', translation: 'терпеть, выносить что-то / невыносимый', example: "I can't bear this noise — it's unbearable!" },
+    { word: 'to last', translation: 'длиться', example: 'The film lasts two hours.' },
+    { word: 'thick hair (also: dense hair)', translation: 'густые волосы (чаще говорят thick hair; dense hair — в основном в рекламе средств для волос)', example: 'She has long, thick hair.' },
+    { word: 'a strand of hair', translation: 'прядь волос (a grey / silver strand — седая прядь)', example: 'She found a silver strand of hair this morning.' },
+    { word: 'to make an appointment', translation: 'записаться (к врачу и т. п.)', example: 'I need to make an appointment with the dentist.' },
+    { word: 'a graduate student', translation: 'аспирант / магистрант', example: 'He is a graduate student at Moscow State University.' },
+    { word: 'to make a deal', translation: 'заключить сделку, договориться', example: "Let's make a deal: you cook, and I wash up." },
+    { word: 'south-east', translation: 'юго-восток. Стороны света: north (север), south (юг), east (восток), west (запад); north-east, north-west, south-east, south-west', example: 'The storm is moving towards the south-east of the country.' }
+  ].map(w => ({ ...w, lesson: 'Lessons 9 Oct' })),
+  Carolina: [
+    { word: 'distracted', translation: 'отвлечённый, рассеянный', example: 'I get distracted when my phone is on the table.' },
+    { word: 'to fall asleep', translation: 'заснуть', example: 'I fell asleep in front of the TV.' },
+    { word: 'ordinary', translation: 'обычный, обыкновенный', example: 'It was just an ordinary day.' },
+    { word: 'a blacksmith', translation: 'кузнец', example: 'The blacksmith made new shoes for the horse.' },
+    { word: 'a connecting flight', translation: 'стыковочный рейс', example: 'We missed our connecting flight in Istanbul.' },
+    { word: 'to limp', translation: 'хромать', example: 'He was limping after the football match.' },
+    { word: 'a stray animal', translation: 'бездомное животное', example: 'She often feeds stray animals near her house.' },
+    { word: 'a painkiller', translation: 'обезболивающее', example: 'Take a painkiller if your head hurts.' },
+    { word: 'holiday pay', translation: 'отпускные', example: 'I will get my holiday pay next week.' },
+    { word: 'to survive', translation: 'выжить', example: 'Only a few trees survived the storm.' },
+    { word: 'a goat', translation: 'коза', example: 'My grandmother keeps two goats at the dacha.' },
+    { word: 'to take a photo', translation: 'сфотографировать', example: 'Can you take a photo of us, please?' },
+    { word: 'to make steps', translation: 'делать шаги (к цели)', example: 'She is making steps towards her goal every day.' },
+    { word: 'an election', translation: 'выборы', example: 'The election takes place next month.' },
+    { word: 'to lay eggs', translation: 'нести яйца', example: 'Hens usually lay eggs early in the morning.' },
+    { word: 'a bush', translation: 'куст', example: 'A bird built its nest in the bush by the fence.' },
+    { word: 'a duckling', translation: 'утёнок', example: 'The mother duck was followed by five little ducklings.' },
+    { word: 'hay', translation: 'сено', example: 'The farmer stored hay in the barn for the winter.' }
+  ].map(w => ({ ...w, lesson: 'Lessons 9 Oct' })),
+  Milana: [
+    { word: 'a chalk quarry 😊', translation: 'меловой карьер 😊 (chalk — мел)', example: 'We walked around an old chalk quarry with white cliffs.' },
+    { word: 'a bruise', translation: 'синяк', example: 'I have a big bruise on my knee.' }
+  ].map(w => ({ ...w, lesson: 'Latest Lesson' }))
+};
+
 (function seedDemo() {
   const data = db();
 
@@ -7174,6 +7320,20 @@ const MILANA_WORDS = [
     if (!milanaExisting.has(w.word.toLowerCase())) {
       milana.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
     }
+  });
+
+  // ── Lesson words of 9 Oct 2026, several students ──
+  // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
+  const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
+  Object.entries(OCT9_WORDS).forEach(([name, list]) => {
+    const st = data.students.find(s => s.name === name);
+    if (!st) return;
+    const have = new Set(st.words.map(w => normWord(w.word)));
+    list.forEach(w => {
+      if (have.has(normWord(w.word))) return;
+      have.add(normWord(w.word));
+      st.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
+    });
   });
 
   save(data);
