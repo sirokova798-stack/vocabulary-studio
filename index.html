@@ -2421,6 +2421,8 @@ function ctxMatch(entry) {
           const inP = f.past.includes(headSurface), inPP = f.pp.includes(headSurface);
           form = inP && inPP ? (CTX_PP_TRIGGERS.has(prev) ? 'pp' : 'past') : (inPP ? 'pp' : 'past');
         } else if (headSurface !== toks[h] && f.s3.includes(headSurface)) form = 's3';
+        // "He put…", "She set…": past = base for these verbs, but after he/she/it the bare form must be past
+        else if (f.past.includes(headSurface) && /^(he|she|it)$/.test(prev)) form = 'past';
       }
       const surfLast = surface.split(/\s+/).pop().toLowerCase().replace(/[^\w'-]/g, '');
       const plural = !verbLike && (surfLast !== toks[last] || ctxLooksPlural(toks[last]));
@@ -6897,6 +6899,13 @@ const MILANA_WORDS = [
   { word: "a tip", translation: "чаевые", example: "We left a tip for the waiter.", lesson: "Work & Everyday Life" },
   { word: "rhythm", translation: "ритм", example: "Music helps you feel the rhythm of English.", lesson: "Work & Everyday Life" },
   { word: "unfortunately", translation: "к сожалению", example: "Unfortunately, I can't come to the party.", lesson: "Work & Everyday Life" },
+
+  // ── Latest lesson ──
+  { word: "theatre", translation: "театр", example: "We went to the theatre to see a new play.", lesson: "Latest Lesson" },
+  { word: "a stage", translation: "сцена", example: "The actors walked onto the stage and the audience went quiet.", lesson: "Latest Lesson" },
+  { word: "mediocre", translation: "посредственный, средненький", example: "The food was mediocre — not bad, but nothing special.", lesson: "Latest Lesson" },
+  { word: "a thesis", translation: "дипломная работа, диссертация", example: "She is writing her thesis on body language.", lesson: "Latest Lesson" },
+  { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
 ];
 
 (function seedDemo() {
