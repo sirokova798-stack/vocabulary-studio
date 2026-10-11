@@ -6958,8 +6958,8 @@ const OCT9_WORDS = {
     { word: 'to delve into something', translation: 'углубляться во что-то, вникать', example: 'She delved into the history of Russian ballet.' },
     { word: 'to foresee', translation: 'предвидеть', example: 'Nobody could foresee how the story would end.' },
     { word: 'to predict', translation: 'предсказывать, прогнозировать', example: "It's hard to predict the weather in spring." },
-    { word: 'to put labels on people', translation: 'вешать ярлыки на людей (также: to label people)', example: "Don't put labels on people you hardly know." },
-    { word: 'to clock somebody / something', translation: 'заметить, засечь (разговорное)', example: 'I clocked him the moment he walked into the room.' },
+    { word: 'to put labels on people / to label people', translation: 'вешать ярлыки на людей (оба варианта правильные)', example: "Don't put labels on people you hardly know." },
+    { word: 'to clog / clogged', translation: 'засорить(ся), забить(ся) / засорённый, забитый (clogs — сабо, деревянные башмаки)', example: 'The kitchen sink is clogged again.' },
     { word: 'to react to something', translation: 'реагировать на что-то', example: 'How did she react to the news?' },
     { word: 'hypervigilant', translation: 'сверхбдительный, постоянно настороже', example: 'After the accident, he became hypervigilant about safety.' },
     { word: 'to resign', translation: 'уволиться по собственному желанию', example: 'She decided to resign from her position after ten years.' },
@@ -6994,7 +6994,7 @@ const OCT9_WORDS = {
     { word: 'a runny nose', translation: 'насморк', example: 'I have a runny nose and a sore throat.' },
     { word: 'to make up a story', translation: 'выдумать историю', example: 'He made up a story about why he was late.' },
     { word: 'sturdy', translation: 'крепкий, прочный', example: 'We need a sturdy table for the garden.' },
-    { word: 'miss / missing', translation: 'miss — скучать, пропускать (I miss you. I missed the bus.); missing — пропавший, отсутствующий (My keys are missing.) Скучаю = I miss you, а не "I am missing you"', example: 'I miss my family, and my cat has been missing since Monday.' },
+    { word: 'miss / missing', translation: 'miss — скучать, пропускать (I miss you. I missed the bus.); missing — пропавший, отсутствующий (My keys are missing.) Скучаю = I miss you, а не "I am missing you". Но "I\'m missing something" — правильно, если значит «я чего-то не понимаю / мне чего-то не хватает».', example: 'I miss my family, and my cat has been missing since Monday.' },
     { word: 'by myself', translation: 'сам, самостоятельно; в одиночку', example: 'I fixed the bike by myself.' },
     { word: 'to suspect', translation: 'подозревать', example: 'I suspect he is not telling the truth.' },
     { word: 'to interrupt', translation: 'перебивать, прерывать', example: 'Sorry to interrupt, but your taxi is here.' },
@@ -7328,6 +7328,10 @@ const OCT9_WORDS = {
   Object.entries(OCT9_WORDS).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
+    // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
+    st.words = st.words.filter(w => !['to clock somebody / something', 'to put labels on people'].includes(w.word));
+    // keep translations/examples of these cards up to date on devices that already have them
+    st.words.forEach(w => { const n = list.find(x => x.word === w.word); if (n) { w.translation = n.translation; w.example = n.example; } });
     const have = new Set(st.words.map(w => normWord(w.word)));
     list.forEach(w => {
       if (have.has(normWord(w.word))) return;
