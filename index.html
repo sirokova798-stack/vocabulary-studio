@@ -2171,7 +2171,7 @@ const CTX_ADJ = new Set((
  'outstanding overwhelming willing unwilling miserable desperate furious upset worried relieved ashamed jealous envious ' +
  'grateful thankful hopeful doubtful vulnerable fragile delicate gentle rough fierce wild tame loyal faithful polite impolite ' +
  'bland literate inconvenient foreign authentic drained so-called stunning spectacular witty precise analytical devoted blunt ' +
- 'sturdy ordinary distracted restrained absent swollen self-sufficient ' +
+ 'genuine approachable outgoing sturdy ordinary distracted restrained absent swollen self-sufficient ' +
  'stimulating self-centered self-centred inferior gloomy magnetic brief tender unexpected urgent must-see non-negotiable').split(' '));
 const CTX_UNCOUNT = new Set((
  'advice information furniture music weather homework knowledge patience silence confidence pleasure attention progress luggage ' +
@@ -2306,7 +2306,7 @@ const CTX_SYNONYMS = [
   ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
   ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
   ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
-  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
@@ -6931,6 +6931,31 @@ const MILANA_WORDS = [
   { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
 ];
 
+const DIANA_WORDS = [
+  { word: 'genuine', translation: 'искренний, настоящий', example: 'She gave me a genuine smile.' },
+  { word: "crow's feet", translation: 'морщинки в уголках глаз («гусиные лапки»)', example: "When he laughs, you can see crow's feet around his eyes." },
+  { word: 'to slouch', translation: 'сутулиться (сидеть или стоять расслабленно и криво)', example: "Don't slouch — sit up straight." },
+  { word: 'posture', translation: 'осанка', example: 'Good posture makes you look more confident.' },
+  { word: 'to stoop', translation: 'сутулиться, горбиться (постоянно); наклоняться', example: 'My grandfather stoops a little when he walks.' },
+  { word: 'to hunch', translation: 'горбиться, ссутулиться (to hunch over — склониться, сгорбившись)', example: 'He sat hunched over his laptop all day.' },
+  { word: 'a generation', translation: 'поколение', example: 'My generation grew up without smartphones.' },
+  { word: 'to be drawn to', translation: 'тянуться к, испытывать влечение к', example: 'I have always been drawn to people with a good sense of humour.' },
+  { word: "it doesn't bother me", translation: 'меня это не беспокоит, мне это не мешает', example: "The noise doesn't bother me — I'm used to it." },
+  { word: 'attentive', translation: 'внимательный, заботливый', example: 'The waiter was very attentive.' },
+  { word: 'to come across (as)', translation: 'производить впечатление, казаться (кем-то)', example: 'He comes across as a bit shy at first.' },
+  { word: 'approachable', translation: 'доступный, открытый (к нему легко подойти)', example: 'Our new manager is very approachable.' },
+  { word: 'reserved', translation: 'сдержанный, замкнутый', example: 'She is quite reserved and rarely talks about herself.' },
+  { word: 'outgoing', translation: 'общительный', example: 'My sister is very outgoing and makes friends easily.' },
+  { word: 'we hit it off', translation: 'мы сразу нашли общий язык, сразу поладили', example: "I'm sure you two will hit it off." },
+  { word: 'to get off on the wrong foot', translation: 'неудачно начать (отношения, знакомство)', example: 'We got off on the wrong foot, but now we are good friends.' },
+  { word: 'to give somebody the benefit of the doubt', translation: 'поверить на слово, не судить сразу', example: "He's late again, but let's give him the benefit of the doubt." },
+  { word: 'to have a gut feeling', translation: 'чувствовать нутром, интуиция подсказывает', example: 'I have a gut feeling that something is wrong.' },
+  { word: 'to trust your gut', translation: 'доверять своей интуиции (gut — без -s; guts — смелость)', example: "If something feels wrong, trust your gut." },
+  { word: 'to be mean', translation: 'быть злым, грубым, недобрым', example: "Don't be mean to your little brother." },
+  { word: 'to make an impression', translation: 'производить впечатление', example: 'She made a great impression at the interview.' },
+  { word: 'to give somebody a chance', translation: 'дать кому-то шанс', example: "Give him a chance — he's new here." }
+].map(w => ({ ...w, lesson: 'First Lesson' }));
+
 const OCT9_WORDS = {
   Yuliya: [
     { word: 'swollen', translation: 'опухший, отёкший', example: 'Her ankle was swollen after the fall.' },
@@ -7320,6 +7345,16 @@ const OCT9_WORDS = {
     if (!milanaExisting.has(w.word.toLowerCase())) {
       milana.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
     }
+  });
+
+  // ── Diana ──
+  let diana = data.students.find(s => s.name === 'Diana');
+  if (!diana) { diana = { id: uid(), name: 'Diana', words: [], quizHistory: [] }; data.students.push(diana); }
+  if (!diana.quizHistory) diana.quizHistory = [];
+  diana.pin = '3434';
+  const dianaExisting = new Set(diana.words.map(w => w.word.toLowerCase()));
+  DIANA_WORDS.forEach(w => {
+    if (!dianaExisting.has(w.word.toLowerCase())) diana.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
   });
 
   // ── Lesson words of 9 Oct 2026, several students ──
