@@ -7251,6 +7251,15 @@ const MILANA_WORDS = [
   { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
 ];
 
+const DIANA_IPA = {
+  'genuine': '/ˈdʒenjuɪn/', "crow's feet": '/ˈkrəʊz fiːt/', 'to slouch': '/slaʊtʃ/', 'posture': '/ˈpɒstʃə/',
+  'to stoop': '/stuːp/', 'to hunch': '/hʌntʃ/', 'a generation': '/ˌdʒenəˈreɪʃn/', 'to be drawn to': '/bi ˈdrɔːn tə/',
+  "it doesn't bother me": '/ɪt ˈdʌznt ˈbɒðə mi/', 'attentive': '/əˈtentɪv/', 'to come across (as)': '/kʌm əˈkrɒs/',
+  'approachable': '/əˈprəʊtʃəbl/', 'reserved': '/rɪˈzɜːvd/', 'outgoing': '/ˌaʊtˈɡəʊɪŋ/', 'we hit it off': '/wi ˈhɪt ɪt ˈɒf/',
+  'to get off on the wrong foot': '/ɡet ˈɒf ɒn ðə ˈrɒŋ ˈfʊt/', 'to give somebody the benefit of the doubt': '/ɡɪv ðə ˈbenɪfɪt əv ðə ˈdaʊt/',
+  'to have a gut feeling': '/hæv ə ˈɡʌt ˌfiːlɪŋ/', 'to trust your gut': '/ˈtrʌst jə ˈɡʌt/', 'to be mean': '/bi ˈmiːn/',
+  'to make an impression': '/meɪk ən ɪmˈpreʃn/', 'to give somebody a chance': '/ɡɪv ə ˈtʃɑːns/'
+};
 const DIANA_WORDS = [
   { word: 'genuine', translation: 'искренний, настоящий', example: 'She gave me a genuine smile.' },
   { word: "crow's feet", translation: 'морщинки в уголках глаз («гусиные лапки»)', example: "When he laughs, you can see crow's feet around his eyes." },
@@ -7274,7 +7283,7 @@ const DIANA_WORDS = [
   { word: 'to be mean', translation: 'быть злым, грубым, недобрым', example: "Don't be mean to your little brother." },
   { word: 'to make an impression', translation: 'производить впечатление', example: 'She made a great impression at the interview.' },
   { word: 'to give somebody a chance', translation: 'дать кому-то шанс', example: "Give him a chance — he's new here." }
-].map(w => ({ ...w, lesson: 'First Lesson' }));
+].map(w => ({ ...w, lesson: 'First Lesson', ipa: DIANA_IPA[w.word] || '' }));
 
 const OCT9_WORDS = {
   Yuliya: [
@@ -7672,9 +7681,11 @@ const OCT9_WORDS = {
   if (!diana) { diana = { id: uid(), name: 'Diana', words: [], quizHistory: [] }; data.students.push(diana); }
   if (!diana.quizHistory) diana.quizHistory = [];
   diana.pin = '3434';
+  // transcriptions added later — fill them in on devices that already have the words
+  diana.words.forEach(w => { if (!w.ipa && DIANA_IPA[w.word]) w.ipa = DIANA_IPA[w.word]; });
   const dianaExisting = new Set(diana.words.map(w => w.word.toLowerCase()));
   DIANA_WORDS.forEach(w => {
-    if (!dianaExisting.has(w.word.toLowerCase())) diana.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
+    if (!dianaExisting.has(w.word.toLowerCase())) diana.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
   });
 
   // ── Lesson words of 9 Oct 2026, several students ──
