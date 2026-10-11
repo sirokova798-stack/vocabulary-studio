@@ -544,6 +544,37 @@
   .lib-eg { background: var(--cream); border-radius: 10px; padding: 10px 13px; margin-bottom: 7px; }
   .lib-eg-en { font-size: 0.92rem; color: var(--text); }
   .lib-eg-ru { font-size: 0.84rem; color: var(--muted); font-style: italic; margin-top: 2px; }
+  /* full lessons inside the library (theory + tasks with hidden answers) */
+  .lx h4 { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 1.12rem; color: var(--sage-dark); margin: 22px 0 6px; }
+  .lx h4:first-child { margin-top: 4px; }
+  .lx h5 { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pink-dark); margin: 16px 0 5px; }
+  .lx p { margin: 0 0 8px; }
+  .lx .ex { margin: 4px 0 10px; padding-left: 11px; border-left: 3px solid var(--border); }
+  .lx .ex div { margin-bottom: 3px; }
+  .lx .ru { color: var(--muted); font-size: 0.86rem; }
+  .lx .no { color: #a14a3b; }
+  .lx .yes { color: #3f7a4f; font-weight: 600; }
+  .lx .note { background: var(--cream); border-radius: 10px; padding: 10px 13px; margin: 10px 0; }
+  .lx .tw { overflow-x: auto; margin: 6px 0 10px; }
+  .lx table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  .lx th, .lx td { text-align: left; padding: 6px 5px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  .lx th { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+  .lx td:first-child { font-weight: 600; }
+  .lx td.c { text-align: center; white-space: nowrap; }
+  .lx ol { padding-left: 22px; margin: 4px 0 8px; }
+  .lx ol li { margin-bottom: 7px; }
+  .lx ol.plain { list-style: none; padding-left: 0; }
+  .lx .instr { font-size: 0.84rem; color: var(--text-2); font-style: italic; margin-bottom: 8px; }
+  .lx .g { display: inline-block; min-width: 64px; border-bottom: 1.5px solid var(--sage-dark); background: var(--sage-light); padding: 0 4px; font-size: 0.8rem; color: var(--sage-dark); }
+  .lx .g b { color: var(--muted); font-weight: 400; margin-right: 3px; }
+  .lx .kw { display: inline-block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.05em; background: var(--sage-dark); color: #fff; border-radius: 4px; padding: 0 6px; margin: 2px 0; }
+  .lx .ln { display: inline-block; min-width: 120px; border-bottom: 1px solid var(--muted); }
+  .lx .two { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; }
+  @media (max-width: 560px) { .lx .two { grid-template-columns: 1fr; } }
+  .lx details { margin: 8px 0 4px; border-top: 1px dashed var(--border); padding-top: 7px; font-size: 0.86rem; }
+  .lx summary { cursor: pointer; color: var(--pink-dark); font-weight: 600; }
+  .lx details ol { margin-top: 6px; }
+  .lx details li { margin-bottom: 4px; }
   .lib-tip { font-size: 0.88rem; line-height: 1.55; color: var(--pink-dark); background: var(--pink-light); border-radius: 10px; padding: 10px 13px; margin-top: 10px; }
   .lib-empty { color: var(--muted); text-align: center; padding: 30px 0; }
   /* A1 Practice */
@@ -3656,6 +3687,296 @@ you / we / they → <b>are</b> &nbsp;(ты, вы / мы / они)
 </div>`,
     egs:[{en:'I enjoy reading.', ru:'Мне нравится читать. (enjoy + -ing)'},{en:'I decided to leave.', ru:'Я решил уйти. (decide + to)'},{en:'She is good at singing.', ru:'Она хорошо поёт. (после предлога at → -ing)'},{en:'I stopped to rest. / I stopped smoking.', ru:'Я остановился, чтобы отдохнуть. / Я бросил курить.'}],
     tip:'💡 После предлога (at, of, about, in, to) — ВСЕГДА -ing: interested in learning, look forward to seeing you.' },
+
+  // ── Продвинутый уровень (C1) — полные уроки: теория + задания с ответами ──
+  { cat:'Продвинутый уровень (C1)', title:'Verbs of perception: I saw it happen', title_ru:'Глаголы восприятия: see / hear / watch + do / doing / done',
+    rule:`<div class="lx">
+<h4>The rule</h4>
+<h5>1. Two patterns, two meanings</h5>
+<p>After verbs of perception, the object can be followed by a <b>bare infinitive</b> (no <i>to</i>) or an <b>-ing form</b>. Both are correct, but they don’t mean the same thing.</p>
+<div class="tw"><table>
+<tr><th>Pattern</th><th>Meaning</th><th>Example</th></tr>
+<tr><td>verb + obj + <i>do</i></td><td>the <b>whole</b> action, from start to finish; often a single, completed event</td><td>I saw him <b>cross</b> the road.<br><span class="ru">видел, как он перешёл (от начала до конца)</span></td></tr>
+<tr><td>verb + obj + <i>doing</i></td><td>action <b>in progress</b> — we only caught part of it; or a <b>repeated</b> action</td><td>I saw him <b>crossing</b> the road.<br><span class="ru">видел, как он переходил (застал в процессе)</span></td></tr>
+</table></div>
+<p>With short actions, the difference is often about <b>once</b> vs <b>again and again</b>:</p>
+<div class="ex"><div>I heard the door <b>slam</b>. <span class="ru">— один раз</span></div><div>I heard the door <b>slamming</b> all night. <span class="ru">— снова и снова</span></div></div>
+<p>Sometimes the difference changes the whole story:</p>
+<div class="ex"><div>I saw the man <b>drown</b>. <span class="ru">— он утонул, я видел всё</span></div><div>I saw the man <b>drowning</b> and jumped in. <span class="ru">— он тонул, ещё можно было спасти</span></div></div>
+
+<h5>2. Which verbs?</h5>
+<div class="tw"><table>
+<tr><th>Both patterns</th><th>Example</th></tr>
+<tr><td>see</td><td>I saw her <b>leave</b> / <b>leaving</b>.</td></tr>
+<tr><td>hear</td><td>We heard someone <b>scream</b> / <b>screaming</b>.</td></tr>
+<tr><td>watch</td><td>We watched the sun <b>go down</b> / <b>going down</b>.</td></tr>
+<tr><td>notice</td><td>Did you notice anyone <b>come in</b> / <b>coming in</b>?</td></tr>
+<tr><td>feel</td><td>I felt the floor <b>shake</b> / <b>shaking</b>.</td></tr>
+<tr><td>observe</td><td>The police observed him <b>enter</b> / <b>entering</b> the bank. <span class="ru">(formal)</span></td></tr>
+<tr><td>overhear</td><td>I overheard them <b>discuss</b> / <b>discussing</b> my salary.</td></tr>
+<tr><td>listen to</td><td>We listened to her <b>sing</b> / <b>singing</b>.</td></tr>
+<tr><td>look at</td><td>Look at him <b>go</b>! / Look at him <b>dancing</b>!</td></tr>
+</table></div>
+<div class="tw"><table>
+<tr><th>Only -ing</th><th>Example</th></tr>
+<tr><td>smell</td><td>I can smell something <b>burning</b>.</td></tr>
+<tr><td>catch</td><td>She caught him <b>reading</b> her messages. <span class="ru">застала за…</span></td></tr>
+<tr><td>find</td><td>I found her <b>crying</b> in the kitchen.</td></tr>
+<tr><td>spot</td><td>I spotted a fox <b>crossing</b> the garden.</td></tr>
+</table></div>
+
+<h5>3. Passive: the infinitive gets its “to” back</h5>
+<p>In the passive, the bare infinitive becomes a <b>to-infinitive</b>. The -ing form doesn’t change.</p>
+<div class="ex"><div>Someone saw him <b>leave</b>. → He was seen <b>to leave</b>.</div><div>Someone saw him <b>leaving</b>. → He was seen <b>leaving</b>.</div><div>The minister was heard <b>to say</b> that the plan was “a joke”.</div><div class="no">✗ He was seen leave.</div></div>
+<p>This works mainly with <b>see</b> and <b>hear</b> (and formally with <i>observe</i>). <i>Watch, listen to, notice</i> are hardly ever used this way.</p>
+
+<h5>4. Past participle: the action is done TO the object</h5>
+<div class="ex"><div>I heard my name <b>called</b>. <span class="ru">— кто-то назвал моё имя</span></div><div>We watched the old cinema <b>pulled down</b>.</div><div>I saw my car <b>being towed</b> away. <span class="ru">— в процессе</span></div></div>
+
+<h5>5. “that”-clause: knowing, not perceiving</h5>
+<p>When <i>see</i>, <i>hear</i>, <i>feel</i> or <i>notice</i> are followed by a <b>that</b>-clause (with a normal tense), they are no longer about the senses. They mean <b>understand, find out, think</b>.</p>
+<div class="ex"><div>I heard her <b>sing</b>. <span class="ru">— я слышал своими ушами</span></div><div>I heard <b>(that)</b> she <b>sings</b> in a choir. <span class="ru">— мне рассказали</span></div><div>I saw <b>(that)</b> he was upset. <span class="ru">— я понял</span></div><div>I feel <b>(that)</b> we should wait. <span class="ru">— я считаю</span></div></div>
+<div class="note"><b>Classic mix-up:</b> <span class="no">I heard the newsreader said there had been an explosion.</span><br>This tries to use both patterns at once. Choose one:<br>→ I heard the newsreader <b>say</b> there had been an explosion. <span class="ru">(perception)</span><br>→ I heard <b>(that)</b> there had been an explosion. <span class="ru">(information)</span></div>
+
+<h5>6. can / could + see, hear, smell, feel</h5>
+<p>These verbs are usually stative, so we don’t say <i>I was hearing</i>. To describe what someone was perceiving at a moment, use <b>can / could</b>:</p>
+<div class="ex"><div>I <b>could hear</b> the neighbours arguing. <span class="no">✗ I was hearing…</span></div><div><b>Can you see</b> that man waving at us?</div></div>
+
+<h5>7. Same family: make, let, help</h5>
+<div class="ex"><div>They made me <b>wait</b>. → I was made <b>to wait</b>.</div><div>She let us <b>leave</b> early. <span class="ru">(no passive — use “we were allowed to”)</span></div><div>He helped me <b>(to) carry</b> the boxes.</div></div>
+
+<h4>Task 1. Same verb, different story</h4>
+<p class="instr">Соедини начало предложения с продолжением. Каждая пара отличается только формой глагола.</p>
+<div class="two"><ol class="plain">
+<li><b>1</b> I heard him knock —</li><li><b>2</b> I heard him knocking —</li><li><b>3</b> I watched them build the bridge —</li><li><b>4</b> I watched them building the bridge —</li><li><b>5</b> I saw the man drown —</li><li><b>6</b> I saw the man drowning —</li><li><b>7</b> I heard her sing “Ave Maria” —</li><li><b>8</b> I heard her singing “Ave Maria” —</li><li><b>9</b> I felt the bridge move —</li><li><b>10</b> I felt the bridge moving —</li>
+</ol><ol class="plain">
+<li><b>a</b> once — just a single jolt.</li><li><b>b</b> for about five minutes before I finally opened the door.</li><li><b>c</b> through the bathroom door as I walked past.</li><li><b>d</b> so I jumped into the water and pulled him out.</li><li><b>e</b> from the first stone to the last.</li><li><b>f</b> twice, quietly, and then silence.</li><li><b>g</b> beneath my feet the whole time we were crossing.</li><li><b>h</b> as I drove past on my way to work.</li><li><b>i</b> at the concert — it was the highlight of the evening.</li><li><b>j</b> There was nothing anyone could do.</li>
+</ol></div>
+<details><summary>Answers</summary><ol>
+<li>f — two short, complete knocks</li><li>b — repeated, ongoing</li><li>e — the whole process</li><li>h — a moment of an ongoing process</li><li>j — he died; the action was completed</li><li>d — still in progress, so he could be saved</li><li>i — the whole song, a complete performance</li><li>c — part of it, in passing</li><li>a — a single movement</li><li>g — continuous movement</li>
+</ol></details>
+
+<h4>Task 2. The Man Upstairs</h4>
+<p class="instr">Вставь глагол в нужной форме (do / doing / to do / done). Русское слово переведи на английский.</p>
+<p>For my first three months in the new flat, I never once saw the man who lived upstairs. I heard him, though. Every night at about eleven I would hear him <span class="g"><b>1</b>come</span> in, <span class="g"><b>2</b>drop</span> his keys on the table and then <span class="g"><b>3</b>pace</span> up and down the room, sometimes for over an hour.</p>
+<p>Then one evening I could smell something <span class="g"><b>4</b>burn</span>. I ran upstairs and knocked. Nobody answered, but I could hear a radio <span class="g"><b>5</b>play</span> quietly somewhere inside. I was just reaching for my phone when I heard the lock <span class="g"><b>6</b>turn</span> and the door opened. Behind the old man, I <span class="g"><b>7</b>заметила</span> a pan <span class="g"><b>8</b>smoke</span> on the cooker.</p>
+<p>“I must have nodded off,” he said, embarrassed, and invited me in for tea.</p>
+<p>It turned out he had been a conductor. Forty years ago, audiences in Vienna had watched him <span class="g"><b>9</b>conduct</span> the whole of Mahler’s Ninth without a score. Now his hands shook too much to hold a baton. “In the evenings I just walk around and hear the orchestra <span class="g"><b>10</b>play</span> in my head,” he said.</p>
+<p>Since then, I’ve got to know him a little. He is said to have been difficult to work with — he was once heard <span class="g"><b>11</b>tell</span> a famous soprano to “sing less”. Last week I <span class="g"><b>12</b>застала</span> him <span class="g"><b>13</b>hum</span> on the stairs, and yesterday, as I was coming home, I heard my name <span class="g"><b>14</b>call</span> from his window. “Come up,” he said. “I want you to hear me <span class="g"><b>15</b>play</span> something.” He sat down at the old piano and played a short piece from beginning to end. I don’t think I’ve ever heard anything so sad.</p>
+<details><summary>Answers</summary><ol>
+<li>come — complete, short action</li><li>drop — complete, short action</li><li>pacing — ongoing, “for over an hour”</li><li>burning — <i>smell</i> takes only -ing</li><li>playing — in progress</li><li>turn — one short, complete action</li><li>noticed / spotted</li><li>smoking — in progress</li><li>conduct — “the whole of”: start to finish</li><li>playing — ongoing, in his head</li><li>to tell — passive: <i>heard + to</i> (<i>telling</i> also possible)</li><li>caught</li><li>humming — <i>catch</i> takes only -ing</li><li>called — past participle: someone called it</li><li>play — the whole piece, “from beginning to end”</li>
+</ol></details>
+
+<h4>Task 3. Key word transformations</h4>
+<p class="instr">Закончи второе предложение так, чтобы смысл не изменился. Используй слово в рамке, не меняя его. 3–6 слов, включая это слово.</p>
+<ol>
+<li>Someone saw the suspect leave the building at midnight.<br><span class="kw">SEEN</span><br>The suspect <span class="ln"></span> the building at midnight.</li>
+<li>People heard the minister criticise his own party.<br><span class="kw">HEARD</span><br>The minister <span class="ln"></span> his own party.</li>
+<li>I was in the next room and accidentally heard them arguing about money.<br><span class="kw">OVERHEARD</span><br>From the next room, I <span class="ln"></span> about money.</li>
+<li>The teacher discovered that Tom was copying from his neighbour.<br><span class="kw">CAUGHT</span><br>The teacher <span class="ln"></span> from his neighbour.</li>
+<li>There was an obvious smell of something burning in the kitchen.<br><span class="kw">COULD</span><br>I <span class="ln"></span> in the kitchen.</li>
+<li>Somebody called my name — I heard it clearly.<br><span class="kw">BEING</span><br>I clearly <span class="ln"></span>.</li>
+<li>Nobody saw the children leave the house.<br><span class="kw">WITHOUT</span><br>The children left the house <span class="ln"></span>.</li>
+<li>They forced us to wait outside for two hours.<br><span class="kw">MADE</span><br>We <span class="ln"></span> outside for two hours.</li>
+</ol>
+<details><summary>Answers</summary><ol>
+<li>was seen to leave / was seen leaving</li><li>was heard to criticise / was heard criticising</li><li>overheard them arguing / overheard them argue</li><li>caught Tom copying</li><li>could smell something burning</li><li>heard my name being called</li><li>without being seen / without anyone seeing them</li><li>were made to wait</li>
+</ol></details>
+
+<h4>Task 4. Translate</h4>
+<p class="instr">Переведи на английский. Подумай: процесс или всё действие целиком? Восприятие или информация?</p>
+<ol>
+<li>Я видела, как он вышел из машины и зашёл в банк.</li><li>Когда я проходила мимо, он стоял у банка и курил — я его видела.</li><li>Ты слышишь? Кто-то кричит на улице.</li><li>Его видели выходящим из отеля в три часа ночи.</li><li>Я почувствовала, как кто-то тронул меня за плечо.</li><li>Я слышала, что она уволилась.</li><li>Мама застала нас, когда мы ели торт прямо перед ужином.</li><li>Я никогда не слышал, чтобы он повышал голос.</li><li>Я видела, что ты устала, поэтому не стала звонить.</li><li>Пахнет так, будто что-то горит.</li>
+</ol>
+<details><summary>Answers</summary><ol>
+<li>I saw him get out of the car and go into the bank.</li>
+<li>As I walked past, I saw him standing outside the bank, smoking.</li>
+<li>Can you hear that? Someone’s shouting outside. / Can you hear someone shouting outside?</li>
+<li>He was seen leaving the hotel at three in the morning. (<i>was seen to leave</i> is also possible)</li>
+<li>I felt someone touch my shoulder.</li>
+<li>I heard (that) she’d quit / resigned. — information, not perception</li>
+<li>Mum caught us eating cake just before dinner.</li>
+<li>I’ve never heard him raise his voice.</li>
+<li>I could see (that) you were tired, so I didn’t call. — understanding</li>
+<li>I can smell something burning. / It smells like something’s burning.</li>
+</ol></details>
+
+<h4>Task 5. Let’s talk</h4>
+<ol>
+<li>Have you ever overheard someone say something that wasn’t meant for your ears? What did you do?</li>
+<li>When was the last time someone caught you doing something you’d rather they hadn’t seen?</li>
+<li>Is there anything you could watch someone do for hours — a craftsman, a chef, an athlete?</li>
+<li>What sound do you love hearing first thing in the morning? And what sound can’t you stand?</li>
+<li>Have you ever seen something happen that nobody else believed when you told them?</li>
+<li>Some people say they can feel someone looking at them. Have you ever felt that? Were you right?</li>
+</ol>
+</div>`,
+    egs:[{en:'I saw him cross the road.', ru:'Я видел, как он перешёл дорогу. (всё действие целиком)'},{en:'I saw him crossing the road.', ru:'Я видел, как он переходил дорогу. (застал в процессе)'},{en:'He was seen to leave. / He was seen leaving.', ru:'Видели, как он ушёл / уходил. (пассив: to возвращается)'},{en:'I heard (that) she sings in a choir.', ru:'Я слышал, что она поёт в хоре. (информация, не восприятие)'}],
+    tip:'💡 do = всё действие от начала до конца (или один раз); doing = в процессе / снова и снова. smell, catch, find, spot — только -ing. В пассиве: was seen TO leave.' },
+
+  { cat:'Продвинутый уровень (C1)', title:'The subjunctive: be that as it may', title_ru:'Сослагательное наклонение: suggest / insist + that he go; were; it’s time we left',
+    rule:`<div class="lx">
+<h4>Part 1. The mandative subjunctive</h4>
+<h5>What it is</h5>
+<p>After words that express a <b>demand, recommendation, suggestion or necessity</b>, English can use a <b>that-clause with the bare base form</b> of the verb. This form is called the subjunctive. It looks like the infinitive without <i>to</i>, and it is the same for every person and every time.</p>
+<div class="ex"><div>I recommend (that) you <b>go</b> there.</div><div>I suggest (that) she <b>watch</b> it. <span class="ru">— не <i>watches</i>: нет -s</span></div><div>They insisted (that) he <b>be</b> present. <span class="ru">— <i>be</i>, не <i>is / was</i></span></div><div>She recommended that he <b>go</b>. <span class="ru">— не <i>went</i>: время не сдвигается</span></div></div>
+<p class="ru">По-русски это обычно «чтобы»: «Я рекомендую, <b>чтобы</b> ты сходил». Если в русском есть «чтобы» после «предлагаю / настаиваю / важно», почти наверняка нужен этот паттерн, а не <i>somebody to do</i>.</p>
+
+<h5>Three ways to say the same thing</h5>
+<div class="tw"><table>
+<tr><th>Form</th><th>Example</th><th>Where you hear it</th></tr>
+<tr><td>subjunctive</td><td>I suggest she <b>take</b> a break.</td><td>everywhere; standard in American English; formal British</td></tr>
+<tr><td>should + verb</td><td>I suggest she <b>should take</b> a break.</td><td>typically British</td></tr>
+<tr><td>normal tense</td><td>I suggest she <b>takes</b> a break.</td><td>informal British</td></tr>
+</table></div>
+<p>All three are correct. In exams, the subjunctive and <i>should</i> are the safest choices.</p>
+
+<h5>Negative, passive, past</h5>
+<div class="ex">
+<div><b>Negative:</b> not + base form, <i>no do</i> — It’s vital that he <b>not find out</b>. <span class="ru">(в формальном стиле не <i>that he doesn’t find out</i>; в разговорном британском так говорят)</span></div>
+<div><b>Passive:</b> be + past participle — They demanded that the decision <b>be reversed</b>.</div>
+<div><b>Past main verb:</b> nothing changes — The doctor insisted that I <b>stay</b> in bed.</div>
+</div>
+
+<h5>The verbs — and which patterns they take</h5>
+<p>This is the part that causes most mistakes. The verbs <b>don’t all behave the same way</b>.</p>
+<div class="tw"><table>
+<tr><th>Verb</th><th>that + sb + do</th><th>sb + to do</th><th>+ -ing</th><th>Notes</th></tr>
+<tr><td>suggest</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c yes">✓</td><td><span class="no">✗ suggest you to go</span> — never. Also <i>suggest <b>to</b> sb that…</i></td></tr>
+<tr><td>recommend</td><td class="c yes">✓</td><td class="c">formal BrE</td><td class="c yes">✓</td><td><i>recommend you go</i> is the natural choice</td></tr>
+<tr><td>propose</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c yes">✓</td><td><i>propose <b>to</b> do</i> = intend: <i>I propose to retire next year.</i></td></tr>
+<tr><td>insist</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c">on + -ing</td><td><i>insist on going / on <b>my</b> going</i></td></tr>
+<tr><td>demand</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c no">✗</td><td><i>demand to see</i> — only about yourself</td></tr>
+<tr><td>advise</td><td class="c">formal</td><td class="c yes">✓</td><td class="c yes">✓</td><td><i>I advise you to go</i> — the opposite of <i>suggest</i>!</td></tr>
+<tr><td>urge</td><td class="c yes">✓</td><td class="c yes">✓</td><td class="c">—</td><td><i>urge caution</i> — also + noun</td></tr>
+<tr><td>ask</td><td class="c">formal</td><td class="c yes">✓</td><td class="c no">✗</td><td><i>We ask that guests not smoke</i> (signs, notices)</td></tr>
+<tr><td>request</td><td class="c yes">✓</td><td class="c">formal</td><td class="c no">✗</td><td><i>request that</i> is very common in writing</td></tr>
+<tr><td>require</td><td class="c yes">✓</td><td class="c yes">✓</td><td class="c">—</td><td><i>The car requires servicing</i> = needs to be serviced</td></tr>
+<tr><td>order, command</td><td class="c">formal</td><td class="c yes">✓</td><td class="c no">✗</td><td></td></tr>
+<tr><td>prefer</td><td class="c">formal</td><td class="c yes">✓</td><td class="c yes">✓</td><td><i>I’d prefer that you didn’t</i> — often unreal past</td></tr>
+<tr><td>move (meetings)</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c no">✗</td><td><i>I move that the meeting be adjourned.</i></td></tr>
+<tr><td>stipulate, specify, decree</td><td class="c yes">✓</td><td class="c no">✗</td><td class="c no">✗</td><td>legal / official style</td></tr>
+</table></div>
+
+<h5>Adjectives</h5>
+<p><b>It is … that + subjunctive:</b> <i>essential, vital, crucial, important, necessary, imperative, advisable, desirable, urgent, compulsory, mandatory, preferable</i></p>
+<div class="ex"><div>It is <b>essential</b> that every candidate <b>bring</b> photo ID.</div><div>It is <b>imperative</b> that the patient <b>not be</b> moved.</div><div>Less formal alternative: It’s essential <b>for</b> every candidate <b>to bring</b> photo ID.</div></div>
+
+<h5>Nouns</h5>
+<p><i>suggestion, recommendation, proposal, demand, insistence, request, requirement, condition</i></p>
+<div class="ex"><div>She ignored his <b>suggestion</b> that she <b>see</b> a specialist.</div><div>The <b>requirement</b> that all staff <b>be</b> vaccinated was dropped.</div></div>
+
+<div class="note"><b>Trap: same verb, different meaning.</b> When <i>suggest</i> means <b>imply</b> and <i>insist</i> means <b>claim strongly</b>, they’re about facts, not wishes. Then you use a <b>normal tense</b>, not the subjunctive.<br><br>
+He suggested that she <b>take</b> a break. <span class="ru">— посоветовал</span><br>He suggested that she <b>was</b> lying. <span class="ru">— намекнул</span><br><br>
+She insisted that he <b>stay</b> for dinner. <span class="ru">— настояла, чтобы</span><br>She insisted that he <b>had stayed</b> at home all evening. <span class="ru">— утверждала, что</span></div>
+
+<h4>Part 2. The “were” subjunctive</h4>
+<p>In unreal situations, <b>were</b> is used for all persons, including <i>I / he / she / it</i>.</p>
+<div class="tw"><table>
+<tr><th>Structure</th><th>Example</th></tr>
+<tr><td>if</td><td>If I <b>were</b> you, I’d take the job.</td></tr>
+<tr><td>wish / if only</td><td>I wish it <b>were</b> Friday. If only she <b>were</b> here.</td></tr>
+<tr><td>as if / as though</td><td>He talks as if he <b>were</b> the boss.</td></tr>
+<tr><td>suppose / imagine</td><td>Suppose you <b>were</b> offered the job — would you take it?</td></tr>
+<tr><td>if it weren’t for</td><td>If it <b>weren’t</b> for the rain, we’d go. <span class="ru">— если бы не</span></td></tr>
+<tr><td>inversion</td><td><b>Were</b> I in your position, I’d say no. <b>Were</b> it not for you… <b>Were</b> she to resign, …</td></tr>
+</table></div>
+<p><i>If I was / I wish it was</i> is common in informal speech. But <b>If I were you</b> is a fixed phrase, and the inverted forms (<i>Were I…</i>) only work with <i>were</i>.</p>
+
+<h4>Part 3. Its cousin: the unreal past</h4>
+<p>These structures use a <b>past tense</b> to talk about the present or future. The meaning is “not real (yet)”.</p>
+<div class="ex"><div>It’s <b>time</b> we <b>left</b>. / It’s <b>high time</b> you <b>told</b> him. <span class="ru">— давно пора</span></div><div>I’d <b>rather</b> you <b>didn’t</b> smoke in here. <span class="ru">— мне бы не хотелось, чтобы</span></div><div>I’d <b>sooner</b> we <b>stayed</b> in tonight.</div><div><b>Suppose</b> we <b>missed</b> the train — what then?</div></div>
+<div class="note"><b>would rather — two patterns:</b><br>I’d rather <b>stay</b> at home. <span class="ru">— сам(а)</span><br>I’d rather <b>you stayed</b> at home. <span class="ru">— другой человек → unreal past</span></div>
+
+<h4>Part 4. Fixed phrases</h4>
+<p>These are old subjunctive forms frozen in modern English. They are learnt as whole phrases.</p>
+<div class="two">
+<div><b>Be that as it may</b> <span class="ru">— как бы то ни было</span></div><div><b>Come what may</b> <span class="ru">— будь что будет</span></div>
+<div><b>So be it</b> <span class="ru">— да будет так; что ж, ладно</span></div><div><b>If need be</b> <span class="ru">— если понадобится</span></div>
+<div><b>Suffice it to say</b> <span class="ru">— достаточно сказать</span></div><div><b>Far be it from me to…</b> <span class="ru">— я вовсе не собираюсь…, но</span></div>
+<div><b>Heaven forbid / God forbid</b> <span class="ru">— не дай бог</span></div><div><b>Perish the thought</b> <span class="ru">— упаси боже</span></div>
+<div><b>Long live the King</b> <span class="ru">— да здравствует</span></div><div><b>God save the King</b> <span class="ru">— боже, храни короля</span></div>
+<div><b>Whether it be X or Y</b> <span class="ru">— будь то X или Y</span></div><div><b>…lest we forget</b> <span class="ru">— дабы не забыть (книжн.)</span></div>
+</div>
+
+<h4>Task 1. What does it mean?</h4>
+<p class="instr">Соедини предложение с его значением.</p>
+<div class="two"><ol class="plain">
+<li><b>1</b> He suggested that she was lying.</li><li><b>2</b> He suggested that she take a break.</li><li><b>3</b> She insisted that he had been at home.</li><li><b>4</b> She insisted that he stay at home.</li><li><b>5</b> I propose to leave early.</li><li><b>6</b> I propose that we leave early.</li><li><b>7</b> I’d rather stay.</li><li><b>8</b> I’d rather you stayed.</li>
+</ol><ol class="plain">
+<li><b>a</b> She told him he had to.</li><li><b>b</b> It’s my plan for myself.</li><li><b>c</b> He hinted at something.</li><li><b>d</b> I want another person to do it.</li><li><b>e</b> She was sure about a fact.</li><li><b>f</b> He gave her some advice.</li><li><b>g</b> It’s an idea for the whole group.</li><li><b>h</b> It’s my own preference.</li>
+</ol></div>
+<details><summary>Answers</summary><ol><li>c</li><li>f</li><li>e</li><li>a</li><li>b</li><li>g</li><li>h</li><li>d</li></ol></details>
+
+<h4>Task 2. Mrs Harrington’s Wedding</h4>
+<p class="instr">Вставь глагол в нужной форме. Русское слово или фразу переведи на английский. Иногда возможно несколько вариантов.</p>
+<p>Planning a wedding is hard. Planning one for Mrs Harrington’s daughter is something else entirely. At our first meeting she insisted that the ceremony <span class="g"><b>1</b>hold</span> outdoors, “whatever the weather”. When I pointed out that it was October in the Lake District, she looked at me as if I <span class="g"><b>2</b>be</span> mad.</p>
+<p>Her list of demands ran to four pages. It was essential that every guest <span class="g"><b>3</b>receive</span> a handwritten invitation. She requested that the cake <span class="g"><b>4</b>not / contain</span> a single nut, and she demanded that the band <span class="g"><b>5</b>play</span> nothing recorded after 1985. She also proposed <span class="g"><b>6</b>hire</span> a string quartet for the drinks reception, “just in case”.</p>
+<p>The bride, a quiet girl called Emma, agreed with almost everything. Only once did she speak up: “Mum, I’d rather you <span class="g"><b>7</b>not / invite</span> Uncle Graham.” Her mother suggested, rather coldly, that Emma <span class="g"><b>8</b>be</span> being ungrateful.</p>
+<p>Two weeks before the big day, the forecast predicted storms. My assistant suggested <span class="g"><b>9</b>move</span> everything into a marquee, and I recommended that we <span class="g"><b>10</b>book</span> one at once. Mrs Harrington, of course, insisted that she <span class="g"><b>11</b>know</span> better: she had “never been rained on in her life”. “If I <span class="g"><b>12</b>be</span> you,” I told her, “I’d at least order some umbrellas.”</p>
+<p>On the morning of the wedding it poured. Mrs Harrington stood at the window in silence. “It’s high time somebody <span class="g"><b>13</b>tell</span> her about the English weather,” my assistant whispered.</p>
+<p>In the end, the ceremony took place in the marquee. The band played ABBA, nobody ate a nut, and Uncle Graham turned up uninvited and behaved <span class="g"><b>14</b>как будто</span> he <span class="g"><b>15</b>own</span> the place.</p>
+<p>“Well,” Mrs Harrington said to me afterwards, “it would have been a disaster <span class="g"><b>16</b>если бы не</span> you.” <span class="g"><b>17</b>Я вовсе не собираюсь</span> to say “I told you so”. But I did think it.</p>
+<details><summary>Answers</summary><ol>
+<li>be held / should be held — subjunctive passive</li><li>were / was — as if</li><li>receive / should receive</li><li>not contain / should not contain</li><li>play / should play</li><li>hiring — propose + -ing (<i>to hire</i> is also possible, but then it means she herself intended to hire one)</li><li>didn’t invite — would rather + unreal past</li><li>was — <i>suggest</i> = imply → normal tense</li><li>moving</li><li>book / should book</li><li>knew — <i>insist</i> = claim → normal tense</li><li>were</li><li>told — it’s high time + unreal past</li><li>as if / as though</li><li>owned / were the owner of</li><li>if it hadn’t been for / had it not been for / but for</li><li>Far be it from me</li>
+</ol></details>
+
+<h4>Task 3. Key word transformations</h4>
+<p class="instr">Закончи второе предложение так, чтобы смысл не изменился. Используй слово в рамке, не меняя его. 2–6 слов, включая это слово.</p>
+<ol>
+<li>“You should apply early,” the tutor told us.<br><span class="kw">SUGGESTED</span><br>The tutor <span class="ln"></span> early.</li>
+<li>“Why don’t you take a gap year?” my father said to me.<br><span class="kw">RECOMMENDED</span><br>My father <span class="ln"></span> a gap year.</li>
+<li>Passengers must wear seatbelts at all times.<br><span class="kw">VITAL</span><br>It is <span class="ln"></span> seatbelts at all times.</li>
+<li>The manager said I had to work on Saturday, and he wouldn’t change his mind.<br><span class="kw">INSISTED</span><br>The manager <span class="ln"></span> on Saturday.</li>
+<li>She refused to wait and said she wanted to see the manager immediately.<br><span class="kw">DEMANDED</span><br>She <span class="ln"></span> the manager immediately.</li>
+<li>The committee proposed that the meeting should be postponed.<br><span class="kw">POSTPONING</span><br>The committee <span class="ln"></span> the meeting.</li>
+<li>I’m sorry I’m not taller.<br><span class="kw">WISH</span><br>I <span class="ln"></span> taller.</li>
+<li>You really should go to bed now — it’s late.<br><span class="kw">TIME</span><br>It’s <span class="ln"></span> to bed.</li>
+<li>Please don’t smoke in here.<br><span class="kw">RATHER</span><br>I’d <span class="ln"></span> smoke in here.</li>
+<li>Without your help, I would have failed.<br><span class="kw">BEEN</span><br>If it <span class="ln"></span> your help, I would have failed.</li>
+<li>He talks about Paris like someone who has lived there for years.<br><span class="kw">THOUGH</span><br>He talks about Paris <span class="ln"></span> there for years.</li>
+<li>If you are offered the post, will you accept it?<br><span class="kw">WERE</span><br><span class="ln"></span> the post, would you accept it?</li>
+</ol>
+<details><summary>Answers</summary><ol>
+<li>suggested (that) we (should) apply / suggested applying</li><li>recommended (that) I (should) take / recommended taking</li><li>vital that passengers (should) wear</li><li>insisted (that) I (should) work / insisted on my working</li><li>demanded to see / demanded to speak to</li><li>proposed postponing</li><li>wish I were / was</li><li>(high) time you went</li><li>rather you didn’t</li><li>hadn’t been for</li><li>as though he had lived / as though he’d lived</li><li>Were you to be offered / If you were offered</li>
+</ol></details>
+
+<h4>Task 4. Translate</h4>
+<p class="instr">Переведи на английский. Где возможно, дай два варианта.</p>
+<ol>
+<li>Я предлагаю пойти в кино.</li><li>Врач порекомендовал, чтобы он бросил курить.</li><li>Важно, чтобы никто об этом не узнал.</li><li>Она настояла, чтобы мы остались на ужин.</li><li>Ты что, намекаешь, что я соврала?</li><li>Он настаивал, что ни в чём не виноват.</li><li>Компания требует, чтобы все сотрудники проходили обучение.</li><li>Жаль, что сейчас не лето.</li><li>Будь я на твоём месте, я бы согласилась.</li><li>Нам давно пора серьёзно поговорить.</li><li>Мне бы не хотелось, чтобы ты ей рассказывал.</li><li>Если бы не дождь, мы бы поехали за город.</li><li>Как бы то ни было, решение уже принято.</li><li>Будь что будет — я ухожу с этой работы.</li>
+</ol>
+<details><summary>Answers</summary><ol>
+<li>I suggest going to the cinema. / I suggest (that) we go to the cinema.</li>
+<li>The doctor recommended that he (should) give up smoking. / …recommended giving up smoking.</li>
+<li>It’s important that nobody (should) find out about it.</li>
+<li>She insisted that we (should) stay for dinner. / She insisted on our staying for dinner.</li>
+<li>Are you suggesting (that) I lied? — imply → normal tense</li>
+<li>He insisted (that) he was innocent / hadn’t done anything wrong. — claim → normal tense</li>
+<li>The company requires all employees to undergo training. / …requires that all employees undergo training.</li>
+<li>I wish it were / was summer.</li>
+<li>If I were you / Were I in your place, I’d agree.</li>
+<li>It’s (high) time we had a serious talk.</li>
+<li>I’d rather you didn’t tell her.</li>
+<li>If it weren’t for the rain, we’d go to the countryside. / Were it not for the rain, …</li>
+<li>Be that as it may, the decision has already been made.</li>
+<li>Come what may, I’m leaving this job.</li>
+</ol></details>
+
+<h4>Task 5. Let’s talk</h4>
+<ol>
+<li>If you could demand that one law be changed tomorrow, which would it be?</li>
+<li>What would you recommend a visitor to your city do — and what would you suggest they avoid at all costs?</li>
+<li>Is it essential that children start a second language before the age of ten? Why or why not?</li>
+<li>Tell me about a time you insisted on something and turned out to be wrong.</li>
+<li>What’s one thing you wish were different about the way languages are taught?</li>
+<li>Should employers require that staff come into the office at least three days a week?</li>
+<li>It’s high time someone invented… what?</li>
+<li>If you were in charge of an exam board, what would you insist every candidate be able to do?</li>
+</ol>
+</div>`,
+    egs:[{en:'I suggest (that) she take a break.', ru:'Я предлагаю, чтобы она сделала перерыв. (без -s)'},{en:'It is essential that he be present.', ru:'Важно, чтобы он присутствовал. (be для всех лиц)'},{en:'He suggested that she was lying.', ru:'Он намекнул, что она лжёт. (suggest = намекать → обычное время)'},{en:"It's high time we left. / I'd rather you didn't.", ru:'Нам давно пора уходить. / Мне бы не хотелось, чтобы ты это делал.'}],
+    tip:'⚠️ Никогда: suggest you to go. Правильно: suggest (that) you go / suggest going. После «чтобы» в русском (предлагаю, настаиваю, важно, чтобы…) → that + глагол без -s и без смены времени.' },
 ];
 
 let libOpenId = null;
