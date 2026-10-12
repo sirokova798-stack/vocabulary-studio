@@ -7285,6 +7285,20 @@ const DIANA_WORDS = [
   { word: 'to give somebody a chance', translation: 'дать кому-то шанс', example: "Give him a chance — he's new here." }
 ].map(w => ({ ...w, lesson: 'First Lesson', ipa: DIANA_IPA[w.word] || '' }));
 
+const OCT12_WORDS = {
+  Rustam: [
+    { word: 'to irritate / to be irritated', translation: 'раздражать / раздражаться (be irritated by / with something)', example: 'His constant complaining really irritates me.' },
+    { word: 'to miss out on something', translation: 'упустить что-то (возможность, удовольствие)', example: "Come with us — you don't want to miss out on all the fun!" },
+    { word: 'to carve out', translation: 'выкроить, найти (время, место); добиться (карьеры, ниши)', example: 'I try to carve out an hour every day for reading.' },
+    { word: 'to admire', translation: 'восхищаться', example: 'I really admire people who speak several languages.' },
+    { word: 'to appreciate', translation: 'ценить; быть благодарным', example: 'I really appreciate your help.' },
+    { word: 'outrageous', translation: 'возмутительный, вопиющий; невероятный', example: 'The prices in that restaurant are outrageous.' },
+    { word: 'reluctant', translation: 'неохотный; делающий что-то без желания (be reluctant to do)', example: 'He was reluctant to admit his mistake.' },
+    { word: 'a participant', translation: 'участник', example: 'Each participant received a certificate at the end of the course.' },
+    { word: 'consequences', translation: 'последствия', example: "He didn't think about the consequences of his decision." }
+  ].map(w => ({ ...w, lesson: 'Lesson 12 Oct' }))
+};
+
 const OCT9_WORDS = {
   Yuliya: [
     { word: 'swollen', translation: 'опухший, отёкший', example: 'Her ankle was swollen after the fall.' },
@@ -7691,7 +7705,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  Object.entries(OCT9_WORDS).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
