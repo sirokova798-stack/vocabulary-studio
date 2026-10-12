@@ -7327,7 +7327,7 @@ const OCT12_WORDS = {
     { word: 'to react to somebody / something', translation: 'реагировать на кого-то / что-то', example: 'How did he react to the news?' },
     { word: "to put yourself in somebody's shoes", translation: 'поставить себя на чьё-то место', example: 'He wanted me to put myself in his shoes.' },
     { word: 'to be the object of admiration', translation: 'быть предметом восхищения', example: 'Her garden is the object of admiration of the whole street.' },
-    { word: 'to come down', translation: 'спуститься; снизиться (о ценах, температуре)', example: 'Prices usually come down after the holidays.' },
+    { word: 'to calm down', translation: 'успокоиться; успокоить (кого-то)', example: 'Calm down — everything is going to be fine.' },
     { word: 'to try something on', translation: 'примерить что-то (одежду, обувь)', example: 'Can I try these jeans on?' },
     { word: 'one hour later / an hour later', translation: 'через час (в рассказе о прошлом). Не "after one hour"', example: 'She left at six and came back an hour later.' },
     { word: 'literacy', translation: 'грамотность', example: 'Reading to children improves their literacy.' }
@@ -7745,6 +7745,8 @@ const OCT9_WORDS = {
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
     st.words = st.words.filter(w => !['to clock somebody / something', 'to put labels on people'].includes(w.word));
+    // 'to come down' was a mishearing of 'to calm down' (Nastya, 12 Oct)
+    if (name === 'Anastasia') st.words = st.words.filter(w => w.word !== 'to come down');
     // keep translations/examples of these cards up to date on devices that already have them
     st.words.forEach(w => { const n = list.find(x => x.word === w.word); if (n) { w.translation = n.translation; w.example = n.example; } });
     const have = new Set(st.words.map(w => normWord(w.word)));
