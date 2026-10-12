@@ -2170,7 +2170,7 @@ const CTX_SUBJ_POSS = { i: 'my', you: 'your', he: 'his', she: 'her', it: 'its', 
 const CTX_SUBJ_REFL = { i: 'myself', you: 'yourself', he: 'himself', she: 'herself', it: 'itself', we: 'ourselves', they: 'themselves' };
 const CTX_PLACEHOLDERS = new Set(['something', 'somebody', 'someone', 'sth', 'sb', 'smb', 'smth', '...', '…']);
 const CTX_PREPS = new Set(['in', 'on', 'at', 'by', 'for', 'from', 'under', 'over', 'with', 'without', 'into', 'out', 'behind', 'between', 'during', 'inside', 'outside', 'near', 'within', 'after', 'before', 'around']);
-const CTX_PP_TRIGGERS = new Set(['have', 'has', 'had', 'having', 'been', 'be', 'being', 'is', 'are', 'was', 'were', 'am', 'get', 'got', 'gets', 'getting', "i've", "you've", "we've", "they've", "i'd", "you'd", "he'd", "she'd", "we'd", "they'd", "he's", "she's", "it's"]);
+const CTX_PP_TRIGGERS = new Set(['have', 'has', 'had', 'having', 'been', 'be', 'being', 'is', 'are', 'was', 'were', 'am', 'get', 'got', 'gets', 'getting', "i've", "you've", "we've", "they've", "i'd", "you'd", "he'd", "she'd", "we'd", "they'd", "he's", "she's", "it's", "hasn't", "haven't", "hadn't", 'not', 'never', 'already', 'just', 'ever', 'yet', 'recently']);
 const CTX_VERB_CONTEXT = new Set(['', 'to', 'can', "can't", 'cannot', 'could', "couldn't", 'will', "won't", 'would', "wouldn't", 'should', "shouldn't", 'must', "mustn't", 'might', 'may', "don't", "doesn't", "didn't", 'do', 'does', 'did', 'i', 'you', 'we', 'they', "let's", 'please', 'always', 'never', 'often', 'usually', 'sometimes', 'rarely', 'just', 'not', "i'll", "you'll", "we'll", "they'll", "i'd", "you'd", "we'd", "they'd", 'and', 'or']);
 const CTX_TO_MODAL = new Set(['to', 'can', "can't", 'cannot', 'could', "couldn't", 'will', "won't", 'would', 'should', 'must', 'might', 'may', "don't", "doesn't", "didn't"]);
 const CTX_TO_INF = new Set('manage decide refuse fail try learn forget promise pretend agree offer hesitate plan hope want need'.split(' '));
@@ -2235,7 +2235,7 @@ const CTX_CAT_OVERRIDE = {
   'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
   'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
   'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
-  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
+  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
   // adjectives
   'safe and sound': 'adj', 'short and sweet': 'adj', 'touch and go': 'adj', 'two peas in a pod': 'skip',
   // nouns (no article in the entry)
@@ -2338,7 +2338,7 @@ const CTX_SYNONYMS = [
   ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
   ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
   ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
-  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
@@ -7316,7 +7316,22 @@ const OCT12_WORDS = {
     { word: 'long-term', translation: 'долгосрочный', example: 'Regular exercise has many long-term benefits.' },
     { word: 'worthwhile', translation: 'стоящий, полезный (оправдывающий усилия)', example: 'Volunteering is a worthwhile way to spend your free time.' },
     { word: 'a benefit', translation: 'преимущество, польза', example: 'One benefit of living in a city is good public transport.' }
-  ].map(w => ({ ...w, lesson: '🎓 HSE Exam Preparation' }))
+  ].map(w => ({ ...w, lesson: '🎓 HSE Exam Preparation' })).concat([
+    { word: 'to look at it from a different angle / perspective', translation: 'посмотреть на это с другой стороны / с другой точки зрения', example: 'Try to look at it from a different angle.' },
+    { word: 'stick – stuck – stuck', translation: 'приклеивать; застревать (неправильный глагол)', example: 'The door is stuck — I can\'t open it.' },
+    { word: 'to stick to the plan', translation: 'придерживаться плана', example: "Let's stick to the plan and leave at eight." },
+    { word: 'clumsiness', translation: 'неуклюжесть', example: 'Her clumsiness is famous — she breaks a cup every week.' },
+    { word: 'a button has come off / fallen off / popped off', translation: 'оторвалась пуговица (come off, fall off – fell off – fallen off, pop off)', example: 'A button has come off my coat.' },
+    { word: 'to reply to somebody / something', translation: 'отвечать кому-то / на что-то (письмо, сообщение) — обязательно с to', example: "She still hasn't replied to my message." },
+    { word: 'to respond to somebody / something', translation: 'отвечать, откликаться на что-то (более формально)', example: 'The company has not responded to our complaint.' },
+    { word: 'to react to somebody / something', translation: 'реагировать на кого-то / что-то', example: 'How did he react to the news?' },
+    { word: "to put yourself in somebody's shoes", translation: 'поставить себя на чьё-то место', example: 'He wanted me to put myself in his shoes.' },
+    { word: 'to be the object of admiration', translation: 'быть предметом восхищения', example: 'Her garden is the object of admiration of the whole street.' },
+    { word: 'to come down', translation: 'спуститься; снизиться (о ценах, температуре)', example: 'Prices usually come down after the holidays.' },
+    { word: 'to try something on', translation: 'примерить что-то (одежду, обувь)', example: 'Can I try these jeans on?' },
+    { word: 'one hour later / an hour later', translation: 'через час (в рассказе о прошлом). Не "after one hour"', example: 'She left at six and came back an hour later.' },
+    { word: 'literacy', translation: 'грамотность', example: 'Reading to children improves their literacy.' }
+  ].map(w => ({ ...w, lesson: 'Lesson 12 Oct' })))
 };
 
 const OCT9_WORDS = {
