@@ -1928,7 +1928,8 @@ function renderPractice() {
 function getLessons(s) {
   const set = new Set();
   s.words.forEach(w => { if (w.lesson) set.add(w.lesson); });
-  return [...set];
+  // exam folders (marked 🎓) go first
+  return [...set].sort((a, b) => (b.startsWith('🎓') ? 1 : 0) - (a.startsWith('🎓') ? 1 : 0));
 }
 
 function renderLessonFilter(s) {
@@ -2234,7 +2235,7 @@ const CTX_CAT_OVERRIDE = {
   'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
   'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
   'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
-  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
+  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
   // adjectives
   'safe and sound': 'adj', 'short and sweet': 'adj', 'touch and go': 'adj', 'two peas in a pod': 'skip',
   // nouns (no article in the entry)
@@ -2601,7 +2602,9 @@ function ctxBuildQuestion(info, infos) {
   if (!info.m || ['skip', 'nomatch'].includes(info.cat)) return null;
   const ansBase = info.m.alt.phrase;
   const syn = CTX_SYN_MAP[ansBase] || new Set();
-  const atStart = !/[a-z0-9]/i.test(info.m.sentence.slice(0, info.m.start));
+  // capitalise options at the start of a sentence — also after ". " / "! " / "? " inside the example
+  const before = info.m.sentence.slice(0, info.m.start);
+  const atStart = !/[a-z0-9]/i.test(before) || /[.!?]["”’)]?\s+$/.test(before);
   const seen = new Set([ansBase, info.m.surface.toLowerCase()]);
   const out = [];
   const ansLen = info.m.surface.split(/\s+/).length;
@@ -7296,7 +7299,24 @@ const OCT12_WORDS = {
     { word: 'reluctant', translation: 'неохотный; делающий что-то без желания (be reluctant to do)', example: 'He was reluctant to admit his mistake.' },
     { word: 'a participant', translation: 'участник', example: 'Each participant received a certificate at the end of the course.' },
     { word: 'consequences', translation: 'последствия', example: "He didn't think about the consequences of his decision." }
-  ].map(w => ({ ...w, lesson: 'Lesson 12 Oct' }))
+  ].map(w => ({ ...w, lesson: 'Lesson 12 Oct' })),
+  // Nastya's exam folder — words and phrases she can use at the HSE exam
+  Anastasia: [
+    { word: 'to encourage', translation: 'поощрять, побуждать', example: 'Teachers should encourage students to ask questions.' },
+    { word: 'intimidated', translation: 'запуганный, испуганный (чувствовать робость)', example: 'Many first-year students feel intimidated by large lecture halls.' },
+    { word: 'appealing', translation: 'привлекательный', example: 'The new design makes the website more appealing to young people.' },
+    { word: 'lending', translation: 'выдача (напр., книг на дом); кредитование', example: 'The library has extended its lending hours.' },
+    { word: 'a wide range of', translation: 'широкий ассортимент / широкий выбор', example: 'The shop offers a wide range of books and magazines.' },
+    { word: 'to entice', translation: 'соблазнить, заманить', example: 'Free coffee is used to entice customers into the shop.' },
+    { word: 'once in', translation: 'попав внутрь, оказавшись там', example: 'Once in, visitors are free to explore every floor of the museum.' },
+    { word: 'to browse', translation: 'просматривать, листать (без определённой цели)', example: 'I like to browse in bookshops on Saturday mornings.' },
+    { word: 'nevertheless', translation: 'тем не менее', example: 'The task was difficult. Nevertheless, she finished it on time.' },
+    { word: 'an aim', translation: 'цель', example: 'The main aim of the project is to help young people find jobs.' },
+    { word: 'to be worth (doing)', translation: 'стоит (имеет смысл) что-то сделать', example: "The museum is worth visiting if you're in the city." },
+    { word: 'long-term', translation: 'долгосрочный', example: 'Regular exercise has many long-term benefits.' },
+    { word: 'worthwhile', translation: 'стоящий, полезный (оправдывающий усилия)', example: 'Volunteering is a worthwhile way to spend your free time.' },
+    { word: 'a benefit', translation: 'преимущество, польза', example: 'One benefit of living in a city is good public transport.' }
+  ].map(w => ({ ...w, lesson: '🎓 HSE Exam Preparation' }))
 };
 
 const OCT9_WORDS = {
