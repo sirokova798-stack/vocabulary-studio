@@ -575,6 +575,35 @@
   .lx summary { cursor: pointer; color: var(--pink-dark); font-weight: 600; }
   .lx details ol { margin-top: 6px; }
   .lx details li { margin-bottom: 4px; }
+  .lxq { margin: 6px 0 14px; }
+  .lxq-item { display: flex; gap: 9px; padding: 9px 0; border-bottom: 1px solid var(--border-light); }
+  .lxq-n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--sage-light); color: var(--sage-dark); font-size: 0.74rem; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .lxq-body { flex: 1; min-width: 0; }
+  .lxq-hint { color: var(--muted); font-size: 0.84rem; }
+  .lxq-gap { color: var(--sage-dark); font-weight: 600; }
+  .lxq-in { font: inherit; font-size: 0.92rem; border: 1.5px solid var(--border); border-radius: 8px; padding: 3px 8px; margin: 2px 4px; min-width: 150px; max-width: 100%; background: var(--white); color: var(--text); }
+  .lxq-in:focus { outline: none; border-color: var(--sage); }
+  .lxq input.lxq-in { display: inline-block; width: 170px; vertical-align: baseline; }
+  .lxq-ta { display: block; width: 100%; margin: 6px 0 0; resize: vertical; }
+  .lxq-in.ok { border-color: #3f7a4f; background: #eef6f0; }
+  .lxq-in.bad { border-color: #a14a3b; background: #fbefed; }
+  .lxq-row { margin-top: 6px; }
+  .lxq-check { font: inherit; font-size: 0.8rem; font-weight: 600; border: none; border-radius: 8px; padding: 5px 12px; background: var(--sage-dark); color: #fff; cursor: pointer; }
+  .lxq-opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .lxq-opt { font: inherit; font-size: 0.86rem; border: 1.5px solid var(--border); border-radius: 8px; padding: 5px 11px; background: var(--white); color: var(--text); cursor: pointer; }
+  .lxq-opt:hover:not(:disabled) { border-color: var(--sage); }
+  .lxq-opt:disabled { cursor: default; }
+  .lxq-opt.ok { border-color: #3f7a4f; background: #eef6f0; color: #2e5e3b; font-weight: 600; }
+  .lxq-opt.bad { border-color: #a14a3b; background: #fbefed; color: #8a3a2e; }
+  .lxq-fb { font-size: 0.86rem; margin-top: 6px; }
+  .lxq-fb:empty { display: none; }
+  .lxq-ok { color: #3f7a4f; font-weight: 600; }
+  .lxq-bad { color: #a14a3b; font-weight: 600; }
+  .lxq-note { color: var(--text-2); margin-top: 3px; }
+  .lxq-alt { color: var(--muted); margin-top: 3px; }
+  .lxq-model { margin-top: 4px; padding: 6px 9px; background: var(--cream); border-radius: 8px; font-weight: 600; }
+  .lxq-show { color: var(--pink-dark); }
+  .lxq-score { margin-top: 10px; font-weight: 600; color: var(--sage-dark); font-size: 0.9rem; }
   .lib-tip { font-size: 0.88rem; line-height: 1.55; color: var(--pink-dark); background: var(--pink-light); border-radius: 10px; padding: 10px 13px; margin-top: 10px; }
   .lib-empty { color: var(--muted); text-align: center; padding: 30px 0; }
   /* A1 Practice */
@@ -3979,6 +4008,151 @@ She insisted that he <b>stay</b> for dinner. <span class="ru">— настоял
 </div>`,
     egs:[{en:'I suggest (that) she take a break.', ru:'Я предлагаю, чтобы она сделала перерыв. (без -s)'},{en:'It is essential that he be present.', ru:'Важно, чтобы он присутствовал. (be для всех лиц)'},{en:'He suggested that she was lying.', ru:'Он намекнул, что она лжёт. (suggest = намекать → обычное время)'},{en:"It's high time we left. / I'd rather you didn't.", ru:'Нам давно пора уходить. / Мне бы не хотелось, чтобы ты это делал.'}],
     tip:'⚠️ Никогда: suggest you to go. Правильно: suggest (that) you go / suggest going. После «чтобы» в русском (предлагаю, настаиваю, важно, чтобы…) → that + глагол без -s и без смены времени.' },
+
+  { cat:'Продвинутый уровень (C1)', title:'Perfect infinitive & perfect -ing (+ vocabulary: The Way You Talk)', title_ru:'Перфектный инфинитив и перфектная -ing форма: to have done / having done',
+    rule:`<div class="lx">
+<h4>Part 1. Grammar</h4>
+<h5>Главная идея</h5>
+<p>На продвинутом уровне <b>have + V3</b> используется не только в perfect tenses. Та же структура появляется внутри инфинитива и -ing формы, когда нужно показать, что одно действие <b>предшествует</b> другому.</p>
+<div class="note"><b>Точка отсчёта — главный глагол, а не «сейчас».</b> Перфектная форма говорит: «это случилось раньше, чем то, что выражено главным глаголом».<br>
+<i>He claims to have met her.</i> <span class="ru">— сначала встреча (met her), потом утверждение (claims, сейчас)</span><br>
+<i>He admitted having lied.</i> <span class="ru">— сначала ложь (had lied), потом признание (admitted) — оба в прошлом</span></div>
+
+<h5>1. Перфектный инфинитив с to: to have + V3</h5>
+<div class="ex">
+<div>He claims <b>to know</b> her. <span class="ru">= Он утверждает, что знает её.</span></div>
+<div>He claims <b>to have met</b> her before. <span class="ru">= Он утверждает, что встречал её раньше.</span></div>
+<div>She seems <b>to be</b> fine. <span class="ru">= Похоже, сейчас с ней всё хорошо.</span></div>
+<div>She seems <b>to have recovered</b>. <span class="ru">= Похоже, она уже выздоровела.</span></div>
+</div>
+<p><i>To have done</i> относит действие к более раннему моменту. Иногда без перфектной формы нужное значение просто не получится:</p>
+<div class="ex"><div><span class="yes">✓</span> He claims to have seen her yesterday.</div><div class="no">✗ He claims to see her yesterday.</div></div>
+<p>Если мы используем pattern <b>claim + to-infinitive</b> и говорим о конкретном прошлом действии, нужен <b>to have + V3</b>.</p>
+
+<h5>2. Перфектная -ing форма: having + V3</h5>
+<p>После глаголов, которые требуют -ing, более раннее действие можно выразить через <b>having + V3</b>:</p>
+<div class="ex"><div>He admitted <b>having lied</b>.</div><div>She denied <b>having taken</b> the money.</div></div>
+<p>С некоторыми глаголами перфектная форма не обязательна, если предшествование и так понятно из значения глагола и контекста:</p>
+<div class="ex"><div>He admitted <b>stealing</b> the money.</div><div>He admitted <b>having stolen</b> the money.</div></div>
+<p>Разница минимальна: оба предложения обычно относятся к уже совершённой краже. <i>Having stolen</i> делает предшествование более явным.</p>
+<p>Но <i>doing</i> и <i>having done</i> не всегда взаимозаменяемы:</p>
+<div class="ex"><div>He denied <b>being</b> married. <span class="ru">= Он отрицал, что женат.</span></div><div>He denied <b>having been</b> married. <span class="ru">= Он отрицал, что был женат раньше.</span></div></div>
+<p>Здесь перфектная форма уже важна: <i>having been</i> однозначно относит состояние к более раннему периоду.</p>
+
+<h5>Следим за verb pattern</h5>
+<p>Перфектная форма <b>не меняет</b> pattern самого глагола. Сначала смотрим, какой pattern требует глагол, а затем при необходимости используем перфектную форму.</p>
+<div class="tw"><table>
+<tr><th>Pattern</th><th>Пример</th></tr>
+<tr><td>claim + to-infinitive</td><td><i>He claims to have warned them.</i></td></tr>
+<tr><td>admit / deny + -ing</td><td><i>He admitted having warned them.<br>She denied having seen him.</i></td></tr>
+</table></div>
+
+<h5>3. Пассивный залог</h5>
+<p>Та же система работает и в пассиве.</p>
+<p>С инфинитивом: <b>to have been + V3</b></p>
+<div class="ex"><div>He claims to have been warned. <span class="ru">— его предупредили</span></div><div>The documents seem to have been destroyed. <span class="ru">— документы, похоже, уничтожили</span></div><div>She appears to have been given the wrong information. <span class="ru">— ей, похоже, дали неверную информацию</span></div></div>
+<p>С -ing формой: <b>having been + V3</b></p>
+<div class="ex"><div>He admitted having been warned.</div><div>She denied having been informed about the decision.</div></div>
+<div class="note"><b>Сравните:</b><br>He admitted having <b>misled</b> them. <span class="ru">= Он признал, что ввёл их в заблуждение.</span><br>He admitted having <b>been misled</b>. <span class="ru">= Он признал, что его ввели в заблуждение.</span></div>
+
+<h5>4. Сводная таблица форм</h5>
+<div class="tw"><table>
+<tr><th></th><th>Одновременно</th><th>Раньше</th></tr>
+<tr><td>Infinitive, active</td><td>to do</td><td>to have done</td></tr>
+<tr><td>Infinitive, passive</td><td>to be done</td><td>to have been done</td></tr>
+<tr><td>-ing, active</td><td>doing</td><td>having done</td></tr>
+<tr><td>-ing, passive</td><td>being done</td><td>having been done</td></tr>
+</table></div>
+
+<h5>5. Тонкости, которые стоит знать</h5>
+<div class="note"><b>Когда перфект невозможен по смыслу.</b> Если главный глагол смотрит в будущее (намерение, решение, отказ) — <i>refuse, decide, plan, intend, consider, contemplate</i> — действие ещё не произошло, и перфектная форма нелогична:<br>
+<span class="yes">✓</span> She refused to discuss it. &nbsp; <span class="no">✗ She refused to have discussed it.</span><br>
+<span class="yes">✓</span> He contemplated leaving the company. &nbsp; <span class="no">✗ He contemplated having left the company.</span></div>
+<div class="note"><b>Когда простая -ing форма — норма.</b> После глаголов, которые по смыслу смотрят назад — <i>admit, deny, regret, remember, recall, mention, forgive sb for, thank sb for, apologise for</i> — простая форма <i>doing</i> встречается чаще; <i>having done</i> звучит формальнее и подчёркивает предшествование. Разница становится важной в основном с <b>состояниями</b> (<i>be, have, know, live</i>): <i>denied being married ≠ denied having been married.</i></div>
+<div class="note"><b>Глаголы с двумя patterns.</b><br>
+I regret having said that. <span class="ru">— жалею, что сказал (прошлое)</span><br>
+We regret to inform you that… <span class="ru">— с сожалением сообщаем (сейчас, формально)</span><br>
+I remember (having) locked the door. <span class="ru">— помню, что запер</span><br>
+Remember to lock the door. <span class="ru">— не забудь запереть</span></div>
+<div class="note"><b>Отрицание.</b> <i>not</i> ставится перед перфектной формой: <i>not to have understood, not having taken.</i> С <i>seem / appear</i> можно отрицать и сам главный глагол — оба варианта правильные:<br>
+He doesn’t seem to have understood. <span class="ru">— нейтрально</span><br>
+He seems not to have understood. <span class="ru">— звучит книжнее</span></div>
+<div class="note"><b>Где ещё вы встретите перфектный инфинитив.</b><br>
+• Пассивные reporting structures (очень частотно в новостях и в академическом английском, есть в CAE/CPE Use of English):<br>
+<i>He is said to have left the country.</i> <span class="ru">— Говорят, он уехал из страны.</span><br>
+<i>The painting is believed to have been stolen in 1990.</i> <span class="ru">— Считается, что картину украли в 1990 году.</span><br>
+• <i>turn out / happen / be likely / be sure:</i><br>
+<i>The figures turned out to have been calculated incorrectly.</i> <span class="ru">— Оказалось, что цифры были посчитаны неверно.</span><br>
+<i>She’s likely to have forgotten.</i> <span class="ru">— Скорее всего, она забыла.</span><br>
+• Нереализованное прошлое: <i>would like / would love / was meant to</i><br>
+<i>I’d love to have seen his face.</i> <span class="ru">— Хотела бы я увидеть его лицо (но не увидела).</span><br>
+• Перфектное причастие в начале предложения (та же форма, другая функция):<br>
+<i>Having finished the report, she went home.</i> <span class="ru">— Закончив отчёт, она ушла домой.</span><br>
+<i>Having been warned twice, he still ignored the rules.</i> <span class="ru">— Хотя его дважды предупредили, он всё равно нарушал правила.</span></div>
+
+<h4>Exercise 1</h4>
+<p class="instr">Complete the sentences using a perfect infinitive or perfect -ing form. Use the active or passive form as appropriate.<br>Вставь перфектный инфинитив или перфектную -ing форму (активную или пассивную). Напиши только недостающие слова и нажми «Проверить».</p>
+<div class="lxq" data-ex="pf1"></div>
+
+<h4>Exercise 2</h4>
+<p class="instr">Rewrite the sentences using the word in brackets. Do not change the meaning.<br>Перепиши предложение целиком, используя слово в скобках. Смысл не должен измениться.</p>
+<div class="lxq" data-ex="pf2"></div>
+
+<h4>Exercise 3</h4>
+<p class="instr">Choose the form that best fits the meaning.<br>Выбери форму, которая лучше всего подходит по смыслу. Иногда правильны оба варианта.</p>
+<div class="lxq" data-ex="pf3"></div>
+
+<h4>Part 2. Vocabulary: “The Way You Talk”</h4>
+<p class="ru">Статья British Council (Voices Magazine): «The Way You Talk: Why there is more to your accent than you think».</p>
+<div class="note"><b>In a nutshell:</b> the article argues that no British accent is linguistically “better” than another. RP was chosen by a BBC committee in the 1920s as a broadcasting standard and has since been yielding to Standard Southern British English. Northern accents such as Geordie preserve older vowel sounds, while music (The Beatles, Oasis, Stormzy) has spread regional and urban accents among young people. Accent bias, the authors say, is a widely tolerated form of prejudice with no scientific basis.<br><br>
+<span class="ru"><b>Коротко:</b> ни один британский акцент не «лучше» другого с точки зрения лингвистики. RP выбрал комитет BBC в 1920-х как стандарт для эфира, и сейчас он уступает место Standard Southern British English. Северные акценты (например, Geordie) сохраняют старые гласные, а музыка (The Beatles, Oasis, Stormzy) распространила региональные и городские акценты среди молодёжи. Предвзятость к акцентам, по мнению авторов, — широко терпимая форма предрассудков без научной основы.</span></div>
+
+<h5>1. hold someone back — сдерживать, мешать развиваться / продвигаться</h5>
+<p>To prevent someone from progressing, succeeding or developing. <span class="ru">В статье: людям иногда говорят, что их акцент может мешать им в карьере или в обществе.</span></p>
+<div class="ex"><div>Fear of making mistakes can hold you back when you speak English.</div><div>His lack of confidence is holding him back at work.</div></div>
+<p class="ru">Часто: career, progress, confidence. Также: <i>hold back tears</i> (сдерживать слёзы), <i>hold back information</i> (утаивать).</p>
+
+<h5>2. be hyper-aware of something — болезненно / обострённо осознавать что-то</h5>
+<p>To be extremely conscious of something, often in an uncomfortable or excessive way. <span class="ru">В статье: на собеседовании вдруг начинаешь остро замечать своё произношение.</span></p>
+<div class="ex"><div>I became hyper-aware of my accent when I moved to London.</div><div>She’s hyper-aware of how she comes across in meetings.</div></div>
+<p class="ru">Сильнее, чем <i>be aware of</i>; часто про неловкость. Сравни: <i>painfully aware of, acutely aware of.</i></p>
+
+<h5>3. a source of anxiety — источник тревоги</h5>
+<p>Something that regularly causes worry or nervousness. <span class="ru">В статье: то, как человек говорит, для многих — источник тихой тревоги.</span></p>
+<div class="ex"><div>Public speaking has always been a source of anxiety for me.</div><div>Money became a major source of anxiety after he lost his job.</div></div>
+<p class="ru">Продуктивная модель: <i>a source of concern / frustration / tension / conflict / inspiration</i>.</p>
+
+<h5>4. give way to something — уступать место чему-то</h5>
+<p>To gradually be replaced by something else. <span class="ru">В статье: RP постепенно уступает место новому престижному акценту — Standard Southern British English.</span></p>
+<div class="ex"><div>Traditional offices are gradually giving way to hybrid working.</div><div>Her initial excitement soon gave way to disappointment.</div></div>
+<p class="ru">Удобно для описания изменений: <i>X gives way to Y.</i> Другие значения: <i>give way to panic / tears</i> (поддаться); <i>the ice gave way</i> (провалился, не выдержал); дорожный знак <i>Give Way</i> = уступи дорогу.</p>
+
+<h5>5. hold on to something — сохранять, держаться за что-то</h5>
+<p>To keep or preserve something rather than lose or abandon it. <span class="ru">В статье: северные варианты английского (особенно Geordie) сохранили старые особенности произношения, которые южнее изменились или исчезли.</span></p>
+<div class="ex"><div>Some communities have managed to hold on to their traditions.</div><div>He’s still holding on to the hope that they’ll change their minds.</div></div>
+<p class="ru">Про вещи, но также про убеждения, традиции, воспоминания, власть, надежду. Пишется и <i>hold on to</i>, и <i>hold onto</i>.</p>
+
+<h5>6. deep-rooted — глубоко укоренившийся</h5>
+<p>Firmly established and therefore difficult to change. <span class="ru">В статье: некоторые региональные акценты исторически укоренены глубже (<i>deeper-rooted</i>), чем престижный акцент, с которым их сравнивают.</span></p>
+<div class="ex"><div>The country has a deep-rooted distrust of central government.</div><div>These attitudes are deeply rooted in social class.</div></div>
+<p class="ru"><i>deep-rooted</i> обычно стоит перед существительным; после <i>be</i>, особенно с <i>in</i>, говорим <i>deeply rooted in</i>. Сочетания: <i>deep-rooted beliefs / attitudes / prejudices / problems / traditions</i>.</p>
+
+<h5>7. a marker of something — признак, маркер чего-то</h5>
+<p>Something that indicates or represents a particular quality, identity or status. <span class="ru">В статье: манчестерский акцент группы Oasis стал для молодёжи маркером идентичности и принадлежности.</span></p>
+<div class="ex"><div>For some people, their accent is an important marker of identity.</div><div>Owning certain brands can become a marker of social status.</div></div>
+<p class="ru">Частотно в академическом английском: <i>a marker of identity / status / success / class / change</i>.</p>
+
+<h5>8. be at work — действовать, влиять (о силах, факторах)</h5>
+<p>To be operating or influencing a situation. <span class="ru">В статье: та же культурная сила, что когда-то распространяла акценты через The Beatles и Oasis, сейчас действует через Multicultural London English (Stormzy, Little Simz).</span></p>
+<div class="ex"><div>There are several psychological factors at work here.</div><div>You can see the same forces at work in social media.</div></div>
+<p class="ru">Обычно о процессе или влиянии, которое не сразу заметно. Не путай с <i>be at work</i> = быть на работе.</p>
+
+<h4>Vocabulary practice</h4>
+<p class="instr">Choose the phrase that fits the sentence.<br>Выбери выражение, которое подходит по смыслу.</p>
+<div class="lxq" data-ex="pfv"></div>
+</div>`,
+    egs:[{en:'He claims to have met her before.', ru:'Он утверждает, что встречал её раньше. (сначала встреча, потом утверждение)'},{en:'She denied having been informed.', ru:'Она отрицала, что её проинформировали. (пассив + раньше)'},{en:'He denied being married. / He denied having been married.', ru:'Он отрицал, что женат. / …что был женат раньше.'}],
+    tip:'💡 Точка отсчёта — главный глагол: to have done / having done = «раньше, чем главный глагол». После refuse, decide, plan, contemplate перфект невозможен — действие ещё впереди.' },
 ];
 
 let libOpenId = null;
@@ -4020,7 +4194,138 @@ function renderLibrary(filter) {
     });
   });
   list.innerHTML = html;
+  lxHydrate(list);
 }
+
+// ── Interactive exercises inside library lessons ──
+// A lesson's rule HTML holds <div class="lxq" data-ex="id"></div>; LIB_TASKS[id] describes the exercise.
+//   type 'gap'     — one gap per sentence, typed answer checked against `ok`
+//   type 'choice'  — pick one option; `ok` lists every acceptable option
+//   type 'rewrite' — full sentence; matched against `ok`, otherwise the model answer is shown to compare
+function lxNorm(s) {
+  return (s || '').toLowerCase().replace(/[’‘`]/g, "'").replace(/[.,!?;:"“”]/g, '').replace(/\s+/g, ' ').trim();
+}
+function lxHydrate(root) {
+  root.querySelectorAll('.lxq').forEach(box => {
+    const ex = LIB_TASKS[box.dataset.ex];
+    if (!ex || box.dataset.ready) return;
+    box.dataset.ready = '1';
+    let html = '';
+    ex.items.forEach((it, i) => {
+      const n = '<span class="lxq-n">' + (i + 1) + '</span>';
+      if (ex.type === 'choice') {
+        html += '<div class="lxq-item" data-i="' + i + '">' + n + '<div class="lxq-body"><div>' + it.q.replace('___', '<span class="lxq-gap">_____</span>') + '</div>' +
+          '<div class="lxq-opts">' + it.opts.map((o, k) => '<button class="lxq-opt" data-k="' + k + '">' + esc(o) + '</button>').join('') + '</div>' +
+          '<div class="lxq-fb"></div></div></div>';
+      } else if (ex.type === 'gap') {
+        const [a, b] = it.q.split('___');
+        html += '<div class="lxq-item" data-i="' + i + '">' + n + '<div class="lxq-body"><div>' + a +
+          '<input class="lxq-in" autocomplete="off" autocapitalize="off" spellcheck="false">' + (b || '') +
+          (it.hint ? ' <span class="lxq-hint">(' + esc(it.hint) + ')</span>' : '') + '</div>' +
+          '<div class="lxq-row"><button class="lxq-check">Проверить</button></div><div class="lxq-fb"></div></div></div>';
+      } else {
+        html += '<div class="lxq-item" data-i="' + i + '">' + n + '<div class="lxq-body"><div>' + it.q +
+          (it.hint ? ' <span class="lxq-hint">(' + esc(it.hint) + ')</span>' : '') + '</div>' +
+          '<textarea class="lxq-in lxq-ta" rows="2" autocapitalize="sentences" spellcheck="false"></textarea>' +
+          '<div class="lxq-row"><button class="lxq-check">Проверить</button></div><div class="lxq-fb"></div></div></div>';
+      }
+    });
+    html += '<div class="lxq-score"></div>';
+    box.innerHTML = html;
+    const done = new Map();
+    const updateScore = () => {
+      const right = [...done.values()].filter(Boolean).length;
+      box.querySelector('.lxq-score').textContent = done.size ? 'Результат: ' + right + ' / ' + ex.items.length + (done.size < ex.items.length ? ' (ответов: ' + done.size + ')' : '') : '';
+    };
+    const fbHtml = (good, it, extra) =>
+      (good ? '<span class="lxq-ok">✓ Верно!</span>' : '<span class="lxq-bad">✗ Не совсем.</span>') + (extra || '') +
+      (it.note ? '<div class="lxq-note">' + it.note + '</div>' : '');
+    box.querySelectorAll('.lxq-item').forEach(el => {
+      const it = ex.items[+el.dataset.i];
+      const fb = el.querySelector('.lxq-fb');
+      if (ex.type === 'choice') {
+        el.querySelectorAll('.lxq-opt').forEach(btn => btn.onclick = () => {
+          if (done.has(el.dataset.i)) return;
+          const good = it.ok.includes(+btn.dataset.k);
+          el.querySelectorAll('.lxq-opt').forEach(b => {
+            b.disabled = true;
+            if (it.ok.includes(+b.dataset.k)) b.classList.add('ok');
+          });
+          if (!good) btn.classList.add('bad');
+          done.set(el.dataset.i, good);
+          fb.innerHTML = fbHtml(good, it);
+          updateScore();
+        });
+        return;
+      }
+      const inp = el.querySelector('.lxq-in');
+      const check = () => {
+        const v = lxNorm(inp.value);
+        if (!v) { inp.focus(); return; }
+        const good = it.ok.some(a => lxNorm(a) === v);
+        const first = !done.has(el.dataset.i);
+        if (first) done.set(el.dataset.i, good);
+        else if (good) done.set(el.dataset.i, done.get(el.dataset.i));
+        inp.classList.toggle('ok', good); inp.classList.toggle('bad', !good);
+        let extra = '';
+        if (!good && ex.type === 'gap') extra = ' Попробуй ещё раз — или <a href="#" class="lxq-show">покажи ответ</a>.';
+        if (!good && ex.type === 'rewrite') extra = ' Сравни с образцом (твой вариант может быть тоже возможен):<div class="lxq-model">' + esc(it.ok[0]) + '</div>';
+        if (good && it.ok.length > 1) extra = '<div class="lxq-alt">Возможные варианты: ' + it.ok.map(esc).join(' / ') + '</div>';
+        fb.innerHTML = fbHtml(good, it, extra);
+        const show = fb.querySelector('.lxq-show');
+        if (show) show.onclick = e => { e.preventDefault(); fb.innerHTML = '<span class="lxq-bad">Ответ:</span> <b>' + it.ok.map(esc).join(' / ') + '</b>' + (it.note ? '<div class="lxq-note">' + it.note + '</div>' : ''); };
+        updateScore();
+      };
+      el.querySelector('.lxq-check').onclick = check;
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); check(); } });
+    });
+  });
+}
+
+const LIB_TASKS = {
+  pf1: { type: 'gap', items: [
+    { q: 'Somehow, he seemed ___ all the money before we arrived.', hint: 'lose', ok: ['to have lost'] },
+    { q: 'She denied ___ about the change in advance.', hint: 'inform', ok: ['having been informed'], note: 'Её проинформировали → пассив: having been + V3.' },
+    { q: 'He claimed ___ the same offer several months earlier.', hint: 'make', ok: ['to have made', 'to have been made'], note: '<i>to have made the same offer</i> = он сам сделал предложение; <i>to have been made the same offer</i> = предложение сделали ему.' },
+    { q: 'I regret ___ the warning more seriously at the time.', hint: 'not / take', ok: ['not having taken', 'not taking'], note: '<i>not taking</i> тоже правильно — regret и так указывает на прошлое.' },
+    { q: 'They appear ___ the scale of the problem from the beginning.', hint: 'underestimate', ok: ['to have underestimated'] },
+    { q: 'She admitted ___ by several colleagues before making the decision.', hint: 'advise', ok: ['having been advised'], note: 'Ей советовали → пассив: having been advised.' },
+    { q: 'He seems ___ the implications of what he agreed to.', hint: 'not / understand', ok: ['not to have understood'], note: 'not ставится перед перфектной формой. Так же правильно: <i>He doesn’t seem to have understood…</i>' },
+    { q: 'They denied ___ any opportunity to explain their side of the story.', hint: 'give', ok: ['having been given'], note: 'Им не давали возможности → пассив: having been given.' }
+  ] },
+  pf2: { type: 'rewrite', items: [
+    { q: 'It seems that he lost interest long before the project ended.', hint: 'seem', ok: ['He seems to have lost interest long before the project ended.'] },
+    { q: 'She admitted that people had warned her several times.', hint: 'admit', ok: ['She admitted having been warned several times.', 'She admitted to having been warned several times.'] },
+    { q: 'Apparently, they had misunderstood what we were asking them to do.', hint: 'appear', ok: ['They appear to have misunderstood what we were asking them to do.'] },
+    { q: 'He said that he had been offered the position before.', hint: 'claim', ok: ['He claimed to have been offered the position before.'] },
+    { q: 'She denied that anyone had informed her about the risks.', hint: 'deny', ok: ['She denied having been informed about the risks.'] },
+    { q: 'Looking back, I’m sorry that I didn’t consider their advice more carefully.', hint: 'regret', ok: ['I regret not having considered their advice more carefully.', 'Looking back, I regret not having considered their advice more carefully.', 'I regret not considering their advice more carefully.', 'Looking back, I regret not considering their advice more carefully.'] },
+    { q: 'In the end, we discovered that the figures had been calculated incorrectly.', hint: 'turn out', ok: ['The figures turned out to have been calculated incorrectly.', 'In the end, the figures turned out to have been calculated incorrectly.'] },
+    { q: 'He remembered that he had met her once before, although he couldn’t remember where.', hint: 'recall', ok: ['He recalled having met her once before, although he couldn’t remember where.', 'He recalled meeting her once before, although he couldn’t remember where.'] }
+  ] },
+  pf3: { type: 'choice', items: [
+    { q: 'He denied ___ a member of the organisation, although records showed that he had left it two years earlier.', opts: ['being', 'having been'], ok: [1], note: 'Состояние в прошлом (он вышел из организации два года назад), а не сейчас.' },
+    { q: 'She admitted ___ several warnings before the accident.', opts: ['ignoring', 'having ignored'], ok: [0, 1], note: 'Оба варианта правильные; <i>having ignored</i> подчёркивает, что это было раньше.' },
+    { q: 'He seems ___ what I said yesterday.', opts: ['to misunderstand', 'to have misunderstood'], ok: [1], note: 'Подсказка — <i>yesterday</i>: действие было раньше.' },
+    { q: 'I recall ___ something similar years ago.', opts: ['being told', 'having been told'], ok: [0, 1], note: 'Оба варианта правильные.' },
+    { q: 'She claims ___ the job before the company changed its recruitment policy.', opts: ['to be offered', 'to have been offered'], ok: [1], note: 'Подсказка — <i>before the company changed…</i>: это было раньше.' },
+    { q: 'He was fed up with ___ as if he were inexperienced throughout his first year there.', opts: ['being treated', 'having been treated'], ok: [0], note: 'Ситуация длилась одновременно с «fed up» → простая форма.' },
+    { q: 'They appear ___ one important detail when they prepared the report.', opts: ['to overlook', 'to have overlooked'], ok: [1], note: 'Подсказка — <i>when they prepared</i>: в прошлом.' },
+    { q: 'She regretted ___ to him before he left.', opts: ['not speaking', 'not having spoken'], ok: [0, 1], note: 'Оба правильные; перфект лишь явно подчёркивает предшествование.' },
+    { q: 'He contemplated ___ the company, but eventually decided to stay.', opts: ['leaving', 'having left'], ok: [0], note: '<i>contemplate</i> смотрит в будущее — действие ещё не произошло, перфект нелогичен.' },
+    { q: 'She refused ___ what had happened at the meeting.', opts: ['to discuss', 'to have discussed'], ok: [0], note: '<i>refuse</i> смотрит в будущее → простой инфинитив.' }
+  ] },
+  pfv: { type: 'choice', items: [
+    { q: 'Perfectionism can really ___ — you never finish anything.', opts: ['hold you back', 'hold on to you', 'give way to you', 'be at work'], ok: [0], note: 'hold someone back — мешать развиваться.' },
+    { q: 'During the interview I suddenly became ___ every word I said.', opts: ['a marker of', 'hyper-aware of', 'deep-rooted in', 'a source of'], ok: [1], note: 'be hyper-aware of — обострённо осознавать.' },
+    { q: 'Exams have always been ___ for my younger brother.', opts: ['a marker of identity', 'a source of anxiety', 'at work', 'deep-rooted'], ok: [1], note: 'a source of anxiety — источник тревоги.' },
+    { q: 'By the evening, the heat finally ___ a cool breeze.', opts: ['held on to', 'held back', 'gave way to', 'was at work'], ok: [2], note: 'give way to — уступить место.' },
+    { q: 'Despite all the difficulties, she ___ her dream of becoming a doctor.', opts: ['gave way to', 'held on to', 'held back', 'was hyper-aware'], ok: [1], note: 'hold on to — сохранять, держаться за.' },
+    { q: 'The village has a ___ suspicion of outsiders.', opts: ['deep-rooted', 'hyper-aware', 'held back', 'at work'], ok: [0], note: 'deep-rooted — глубоко укоренившийся (перед существительным).' },
+    { q: 'In many cultures, the way you dress is ___ social status.', opts: ['a source of', 'a marker of', 'at work', 'held on to'], ok: [1], note: 'a marker of — признак, маркер.' },
+    { q: 'It’s not just about the price — other factors are clearly ___ here.', opts: ['at work', 'held back', 'deep-rooted', 'a source'], ok: [0], note: 'be at work — действовать, влиять (о силах, факторах).' }
+  ] }
+};
 
 function libToggle(id) {
   const item = document.getElementById('lib-item-' + id);
