@@ -2370,7 +2370,7 @@ const CTX_SYNONYMS = [
   ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
   ['obsessed with', 'be obsessed with', 'interested in', 'keen on', 'mad about', 'fond of', 'addicted to'],
   ['overrated', 'hackneyed'], ['risqué', 'inappropriate'], ['understated', 'powerful', 'gripping', 'riveting', 'moving'],
-  ['put up with', 'deal with', 'cope with'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
+  ['put up with', 'deal with', 'cope with'], ['stuck in traffic', 'be stuck in traffic', 'worn out'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
@@ -7675,7 +7675,21 @@ const OCT12_WORDS = {
     { word: 'to try something on', translation: 'примерить что-то (одежду, обувь)', example: 'Can I try these jeans on?' },
     { word: 'one hour later / an hour later', translation: 'через час (в рассказе о прошлом). Не "after one hour"', example: 'She left at six and came back an hour later.' },
     { word: 'literacy', translation: 'грамотность', example: 'Reading to children improves their literacy.' }
-  ].map(w => ({ ...w, lesson: 'Lesson 12 Oct' }))),
+  ].map(w => ({ ...w, lesson: 'Lesson 12 Oct' }))).concat([
+    { word: 'to sew something back on', translation: 'пришить обратно', example: 'Can you sew this button back on for me?' },
+    { word: 'I was told (that)…', translation: 'мне сказали, что…', example: 'I was told that the meeting had been cancelled.' },
+    { word: 'to turn out to be', translation: 'оказаться (кем-то / каким-то)', example: 'The new neighbour turned out to be a famous writer.' },
+    { word: 'before you do something / before doing something', translation: 'прежде чем сделать что-то', example: 'Think carefully before making a decision.' },
+    { word: 'to commute / commuting', translation: 'ездить на работу / дорога на работу', example: 'I commute to the city every day — it takes about an hour.' },
+    { word: 'to fit (somebody)', translation: 'подходить по размеру', example: "These jeans don't fit me any more." },
+    { word: 'to manage to do something', translation: 'суметь, справиться (сделать что-то)', example: 'She managed to finish the project on time.' },
+    { word: 'it takes (a lot of) time', translation: 'на это уходит (много) времени', example: 'Learning a language well takes a lot of time.' },
+    { word: 'to focus on something', translation: 'сосредоточиться на чём-то', example: 'Turn off your phone and focus on your work.' },
+    { word: 'to be stuck in traffic', translation: 'стоять в пробке', example: "Sorry I'm late — I was stuck in traffic for an hour." },
+    { word: "it isn't paid / you don't get paid for it", translation: 'за это не платят', example: "Volunteering is rewarding, but you don't get paid for it." },
+    { word: 'over the last twenty years', translation: 'за последние двадцать лет', example: 'The city has changed a lot over the last twenty years.' },
+    { word: 'the literacy rate', translation: 'уровень грамотности', example: 'The literacy rate has risen sharply over the last twenty years.' }
+  ].map(w => ({ ...w, lesson: 'Lesson 14 Oct' }))),
   Alexei: [
     { word: 'a funnel', translation: 'воронка (для переливания жидкости); воронка продаж', example: 'Use a funnel to pour the oil into the bottle.' },
     { word: 'to growl', translation: 'рычать; ворчать (о человеке)', example: 'The dog growled at the stranger.' }
