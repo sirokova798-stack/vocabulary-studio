@@ -2415,7 +2415,7 @@ function ctxPlurals(n) {
   return [n + 's'];
 }
 function ctxLooksPlural(n) { return /[^su]s$/.test(n) && !/(ss|us|is|ics|news)$/.test(n); }
-function ctxAn(word) { return /^(hour|honest|honour|heir)/i.test(word) || (/^[aeiou]/i.test(word) && !/^(uni|use|usu|eu|one|once)/i.test(word)) ? 'an' : 'a'; }
+function ctxAn(word) { return /^(hour|honest|honour|heir)/i.test(word) || (/^[aeiou]/i.test(word) && !/^(uni(form|que|t|vers|on|corn|lateral|son)|use|usu|eu|one|once)/i.test(word)) ? 'an' : 'a'; }
 
 // Split an entry like "lie / a liar", "leave – left – left", "to provide sb with sth" into matchable token lists
 function ctxAlts(word) {
@@ -2701,10 +2701,19 @@ function ctxFrenchQuestions(words) {
   }).filter(Boolean);
 }
 
+// one card at a time: is its example sentence French?
+function ctxWordIsFrench(w) {
+  return /\b(le|la|les|des|du|de|est|une|et|pour|dans|très|je|nous|vous|avec|pas|qui|que|ce|cette|sur|elle|il|mon|ma|tout)\b|\b[ldjqs]'|qu'|[àâçéèêëîïôûùœ]/i.test(w.example || '') &&
+         !/\b(the|is|are|was|were|and|of|to|with)\b/i.test(w.example || '');
+}
 function buildContextQuestions(studentWords) {
-  if (ctxIsFrench(studentWords)) return ctxFrenchQuestions(studentWords).sort(() => Math.random() - 0.5).slice(0, 20);
-  const infos = studentWords.filter(w => w.example && w.word).map(ctxInfo);
-  const questions = infos.map(i => ctxBuildQuestion(i, infos)).filter(Boolean);
+  // Karina's cabinet mixes French and English cards: French ones get exact-match questions,
+  // English ones go through the English engine — each with distractors from its own language
+  const fr = studentWords.filter(ctxWordIsFrench);
+  const en = studentWords.filter(w => !ctxWordIsFrench(w));
+  let questions = fr.length >= 4 ? ctxFrenchQuestions(fr) : [];
+  const infos = (fr.length >= 4 ? en : studentWords).filter(w => w.example && w.word).map(ctxInfo);
+  questions = questions.concat(infos.map(i => ctxBuildQuestion(i, infos)).filter(Boolean));
   return questions.sort(() => Math.random() - 0.5).slice(0, 20);
 }
 
@@ -4062,6 +4071,65 @@ He seems not to have understood. <span class="ru">— звучит книжне�
 </div>`,
     egs:[{en:'He claims to have met her before.', ru:'Он утверждает, что встречал её раньше. (сначала встреча, потом утверждение)'},{en:'She denied having been informed.', ru:'Она отрицала, что её проинформировали. (пассив + раньше)'},{en:'He denied being married. / He denied having been married.', ru:'Он отрицал, что женат. / …что был женат раньше.'}],
     tip:'💡 Точка отсчёта — главный глагол: to have done / having done = «раньше, чем главный глагол». После refuse, decide, plan, contemplate перфект невозможен — действие ещё впереди.' },
+
+  // Module 5 — the vocabulary tables come from M5_LESSONS (the same data as Karina's flashcards),
+  // so the rule is built when the library opens
+  { cat:'Продвинутый уровень (C1)', title:'Module 5 — Language and literature', title_ru:'Модуль 5: язык и литература — лексика, идиомы, cleft sentences',
+    get rule() {
+      const tbl = lesson => '<div class="tw"><table>' + M5_LESSONS[lesson].map(([w, t, e]) =>
+        '<tr><td>' + esc(w) + '</td><td class="ru">' + esc(t) + '</td><td><i>' + esc(e) + '</i></td></tr>').join('') + '</table></div>';
+      return `<div class="lx">
+<p class="ru">Лексика и грамматика модуля 5 (Expert). Все слова отсюда есть и в виде карточек.</p>
+<h4>Expert Word Check</h4><p class="ru">SB p. 79 · Listening 2</p>${tbl('M5 · Word Check')}
+<h4>Brain, face, head, mind, wits</h4><p class="ru">SB p. 74 Ex. 2 · Review p. 86 Ex. 1</p>${tbl('M5 · Brain, face, head, mind, wits')}
+<div class="note">Watch the plurals: <b>rack your brains</b>, <b>the brains behind</b>, <b>wits</b> are always plural. The apostrophe goes after the s in <b>wits’ end</b>.</div>
+<h4>Words with a similar meaning</h4><p class="ru">SB p. 77 Ex. 1 · Review Ex. 3 · WB p. 52 Ex. 1</p>${tbl('M5 · Similar meaning')}
+<h4>Confusable words</h4><p class="ru">SB p. 77 Ex. 2 · WB p. 52 Ex. 2</p>${tbl('M5 · Confusable words')}
+
+<h4>Cleft sentences &amp; nominal relative clauses</h4><p class="ru">SB p. 82 · Expert Grammar p. 180</p>
+<h5>Cleft sentences — выделение части предложения</h5>
+<div class="ex">
+<div><b>What I like about her is that</b> she’s honest. <span class="ru">— Что мне в ней нравится, так это то, что…</span></div>
+<div><b>All I’ve ever wanted is</b> to travel. <span class="ru">(= the only thing — единственное, чего я хотел)</span></div>
+<div><b>There isn’t a lot I don’t know.</b></div>
+<div><b>To have / Having</b> a library was a sign of status.</div>
+<div><b>The reason (why)</b> I came <b>is that</b>… <span class="ru">(в экзамене — не “is because”)</span></div>
+<div><b>The person (who)</b> you need to see <b>is</b> Mr Evans.</div>
+<div><b>It was</b> her mother <b>who</b> taught her to read. <span class="ru">— Именно мама научила её читать.</span></div>
+</div>
+<div class="note">After <b>What / All … do … is</b>, use the bare infinitive: <i>All I did was <b>ask</b>.</i> <i>What he did was <b>resign</b>.</i> <span class="ru">— после do … is — инфинитив без to.</span></div>
+<h5>Nominal relative clauses</h5>
+<div class="ex">
+<div><b>what</b> = the thing that · <b>how</b> = the way in which · <b>where</b> = the place where · <b>when</b> = the time when</div>
+<div><b>whoever / whatever / whichever / wherever / whenever</b> = any… / no matter… <span class="ru">(кто угодно, что угодно…)</span></div>
+<div><i>Invite whoever you like. · Whichever essay you choose, watch the time.</i></div>
+</div>
+<div class="note"><b>which</b> needs an antecedent (<i>He got published, which was a breakthrough</i>); <b>what</b> doesn’t (<i>What surprised me was the price</i>). <span class="ru">— which относится к предыдущей части, what — «то, что».</span></div>
+
+<h4>Noun collocations with <i>of</i></h4><p class="ru">SB p. 82 Ex. 3 · WB p. 56 Ex. 4</p>${tbl('M5 · Noun + of')}
+<h4>Phrases from Shakespeare</h4><p class="ru">SB p. 75 Ex. 3</p>${tbl('M5 · Shakespeare')}
+<h4>Literary devices</h4><p class="ru">SB p. 74 Ex. 1</p>${tbl('M5 · Literary devices')}
+<h4>Word formation: multiple affixation</h4><p class="ru">SB p. 75 Ex. 4 · UoE 1 · WB pp. 50, 59</p>${tbl('M5 · Word formation')}
+<h4>Adjectives for reviews</h4><p class="ru">SB p. 78 Ex. 5</p>${tbl('M5 · Review adjectives')}
+<h4>Collocations from the texts</h4><p class="ru">SB p. 83 · SB p. 80 · WB p. 51</p>${tbl('M5 · Collocations from the texts')}
+<h4>Workbook extras</h4><p class="ru">WB pp. 50, 55 — types of language, book idioms, ways of speaking, collocations</p>${tbl('M5 · Workbook extras')}
+
+<h4>Practice 1. Confusable words</h4>
+<p class="instr">Choose the right word.<br>Выбери правильное слово.</p>
+<div class="lxq" data-ex="m5a"></div>
+<h4>Practice 2. Brain, face, head, mind, wits</h4>
+<p class="instr">Complete the idiom. One word in each gap.<br>Вставь одно слово.</p>
+<div class="lxq" data-ex="m5b"></div>
+<h4>Practice 3. Cleft sentences &amp; nominal relatives</h4>
+<p class="instr">Complete the sentence. One word in each gap.<br>Вставь одно слово.</p>
+<div class="lxq" data-ex="m5c"></div>
+<h4>Practice 4. Noun + of</h4>
+<p class="instr">Complete the collocation. One word in each gap.<br>Закончи выражение одним словом.</p>
+<div class="lxq" data-ex="m5d"></div>
+</div>`;
+    },
+    egs:[{en:'What I like about her is that she’s honest.', ru:'Cleft sentence — выделяем главное.'},{en:'I’ve been racking my brains for hours.', ru:'rack your brains — ломать голову (brains — всегда мн. ч.)'},{en:'a disinterested judge / an uninterested student', ru:'беспристрастный / равнодушный'}],
+    tip:'💡 Все слова модуля есть в виде карточек (уроки «M5 · …»). После All / What … do … is — инфинитив без to: All I did was ask.' },
 ];
 
 let libOpenId = null;
@@ -4216,6 +4284,53 @@ function lxHydrate(root) {
 
 const LIB_H = w => '<span class="lxq-hint">(' + w + ')</span>';
 const LIB_TASKS = {
+  // ── Module 5 ──
+  m5a: { type: 'choice', items: [
+    { q: 'A judge must be completely ___ in the case.', opts: ['disinterested', 'uninterested'], ok: [0], note: 'disinterested — беспристрастный; uninterested — равнодушный.' },
+    { q: 'He looked totally ___ in the lecture and kept checking his phone.', opts: ['disinterested', 'uninterested'], ok: [1] },
+    { q: 'She carried out an ___ study of Victorian poetry.', opts: ['exhausted', 'exhaustive'], ok: [1], note: 'exhaustive — исчерпывающий.' },
+    { q: 'York is a ___ city with Roman walls.', opts: ['historic', 'historical'], ok: [0], note: 'historic — исторически значимый.' },
+    { q: 'I love ___ novels set in the nineteenth century.', opts: ['historic', 'historical'], ok: [1], note: 'historical — относящийся к истории (жанр).' },
+    { q: 'She is an ___ student who never misses a deadline.', opts: ['industrial', 'industrious'], ok: [1] },
+    { q: 'All ___ must wear an identity badge.', opts: ['personal', 'personnel'], ok: [1] },
+    { q: 'The minister was ___ by parliament for misleading the public.', opts: ['censored', 'censured'], ok: [1], note: 'censure — официально порицать; censor — подвергать цензуре.' },
+    { q: 'The increase in price is ___ — only a few pence.', opts: ['negligent', 'negligible'], ok: [1] },
+    { q: 'The teacher agreed to ___ the deadline by a week.', opts: ['extend', 'expand'], ok: [0] },
+    { q: 'I’ve had a ___ cough for weeks.', opts: ['insistent', 'persistent'], ok: [1] },
+    { q: 'The car is at your ___ for the whole week.', opts: ['disposal', 'disposable'], ok: [0] }
+  ] },
+  m5b: { type: 'gap', items: [
+    { q: 'I’ve been racking my ___ for hours, but I can’t remember his name.', ok: ['brains'], note: 'always plural: brains.' },
+    { q: 'It never crossed my ___ that she might be lying.', ok: ['mind'] },
+    { q: 'Don’t let success go to your ___.', ok: ['head'] },
+    { q: 'The baby hasn’t slept for three nights — we’re at our ___ end.', ok: ['wits’', "wits'"], note: 'wits’ end — апостроф после s.' },
+    { q: 'When he made that remark, it was hard to keep a straight ___.', ok: ['face'] },
+    { q: 'You can do anything if you put your ___ to it.', ok: ['mind'] },
+    { q: '___ the top of my head, I’d say it came out last year.', ok: ['Off'] },
+    { q: 'Teenagers don’t want to lose ___ in front of their friends.', ok: ['face'] },
+    { q: 'If anything goes wrong, keep your ___ about you.', ok: ['wits'] },
+    { q: 'The flat is a mess — I’m going to give Tracy a piece of my ___.', ok: ['mind'] }
+  ] },
+  m5c: { type: 'gap', items: [
+    { q: 'All I did ___ ask a simple question.', ok: ['was'], note: 'All I did was + инфинитив без to.' },
+    { q: '___ I like about her is that she’s honest.', ok: ['What'] },
+    { q: 'The reason I came is ___ I need your help.', ok: ['that'], note: 'The reason … is that (не because).' },
+    { q: 'It ___ her mother who taught her to read.', ok: ['was'] },
+    { q: 'What he did was ___ — he left the company the next day.', ok: ['resign'], note: 'После What … did was — инфинитив без to.' },
+    { q: 'Invite ___ you like — it’s your party.', ok: ['whoever'] },
+    { q: 'He finally got published, ___ was a real breakthrough.', ok: ['which'], note: 'which относится ко всей предыдущей части.' },
+    { q: '___ surprised me most was the price.', ok: ['What'] }
+  ] },
+  m5d: { type: 'gap', items: [
+    { q: 'We left at the crack of ___ to avoid the traffic.', ok: ['dawn'] },
+    { q: 'Sorry, I’ve lost my train of ___.', ok: ['thought'] },
+    { q: 'For me, it’s a matter of ___ — I won’t change my mind.', ok: ['principle'] },
+    { q: 'Once we had signed the contract, we had reached the point of no ___.', ok: ['return'] },
+    { q: 'The meeting was a complete waste of ___.', ok: ['time'] },
+    { q: 'She loves being the centre of ___.', ok: ['attention'] },
+    { q: 'Losing your privacy is the price of ___.', ok: ['fame', 'success'] },
+    { q: 'Forgetting her name was just a lapse of ___.', ok: ['memory'] }
+  ] },
   // ── Verbs of perception ──
   vp1: { type: 'choice', items: [
     { q: 'I heard him knock —', opts: ['twice, quietly, and then silence.', 'for about five minutes before I finally opened the door.'], ok: [0], note: 'knock = два коротких законченных стука.' },
@@ -7671,6 +7786,260 @@ const DIANA_WORDS = [
   { word: 'to give somebody a chance', translation: 'дать кому-то шанс', example: "Give him a chance — he's new here." }
 ].map(w => ({ ...w, lesson: 'First Lesson', ipa: DIANA_IPA[w.word] || '' }));
 
+// Karina's own revision cards for the Module 5 test (Language and literature) — English cards in her French cabinet
+const M5_LESSONS = {
+  'M5 · Word Check': [
+    ['unfolding', 'разворачивающийся (о событиях, сюжете)', 'We watched the unfolding drama on the news.'],
+    ['to keep somebody on tenterhooks', 'держать в напряжении', 'The last chapter kept me on tenterhooks until the very end.'],
+    ['quirky', 'причудливый, своеобразный (в хорошем смысле)', 'It’s a quirky little novel with a very odd narrator.'],
+    ['daunting', 'пугающий (своей сложностью или объёмом)', 'Nine hundred pages of Tolstoy is a daunting prospect.'],
+    ['to blow somebody away', 'потрясти, поразить, привести в восторг', 'The ending absolutely blew me away.'],
+    ['intricate', 'замысловатый, сложный, детально проработанный', 'It has an intricate plot with dozens of characters.'],
+    ['to browse', 'листать, просматривать без определённой цели', 'I spent an hour browsing in a second-hand bookshop.'],
+    ['eclectic', 'эклектичный, разнообразный', 'She has very eclectic taste in books — from sci-fi to poetry.'],
+    ['an eye-opener', 'откровение, то, что открывает глаза', 'Living abroad was a real eye-opener for me.'],
+    ['human endeavour', 'человеческие усилия, стремления, начинания', 'The book is a celebration of human endeavour.']
+  ],
+  'M5 · Brain, face, head, mind, wits': [
+    ['to rack your brains', 'ломать голову (always plural: brains)', 'I’ve been racking my brains for hours, but I can’t remember his name.'],
+    ['to be the brains behind something', 'быть мозгом, идейным вдохновителем', 'Who was the brains behind this clever little scheme?'],
+    ['to come face to face with', 'столкнуться лицом к лицу', 'As I turned the corner, I came face to face with my worst enemy.'],
+    ['to keep a straight face', 'сохранять серьёзное лицо, не рассмеяться', 'When he made that remark, it was hard to keep a straight face.'],
+    ['to lose face / to save face', 'потерять лицо / сохранить лицо', 'Teenagers don’t want to lose face in front of their friends.'],
+    ['off the top of your head', 'навскидку, не задумываясь', 'Off the top of my head, I’d say his autobiography came out last year.'],
+    ['to go to somebody’s head', 'вскружить голову (об успехе, славе, алкоголе)', 'Don’t let success go to your head.'],
+    ['to bang your head against a brick wall', 'биться головой о стену, без толку пытаться', 'Arguing with my sister is like banging my head against a brick wall.'],
+    ['to be a load off your mind', 'гора с плеч', 'Finding my passport was a real load off my mind.'],
+    ['to cross somebody’s mind', 'прийти в голову, промелькнуть в мыслях', 'It never crossed my mind that she might be lying.'],
+    ['to give somebody a piece of your mind', 'высказать всё, что думаешь (резко)', 'The flat is a mess — I’m going to give Tracy a piece of my mind.'],
+    ['to have a good mind to do something', 'так и хочется (сделать что-то), подмывает', 'I’ve a good mind to complain to the manager.'],
+    ['to have a mind of its own', 'жить своей жизнью (о вещи, которая не слушается)', 'This drill seems to have a mind of its own!'],
+    ['to put your mind to something', 'всерьёз взяться за что-то, сосредоточиться', 'You can do anything if you put your mind to it.'],
+    ['to be at your wits’ end', 'не знать, что делать; быть в полном отчаянии (apostrophe after s)', 'The baby hasn’t slept for three nights — we’re at our wits’ end.'],
+    ['to keep your wits about you', 'не терять головы, быть начеку', 'If anything goes wrong, keep your wits about you and don’t panic.']
+  ],
+  'M5 · Similar meaning': [
+    ['to entail', 'влечь за собой, подразумевать', 'The job entails a lot of travel.'],
+    ['to contain', 'содержать', 'The document contains the outline of the project.'],
+    ['to enclose', 'прилагать (в письме); огораживать', 'Please find enclosed my CV.'],
+    ['to differentiate (between)', 'различать, проводить различие', 'Some children can’t differentiate between b and d.'],
+    ['to discern', 'распознать, разглядеть (с трудом)', 'She’ll be able to discern the best way forward.'],
+    ['to separate', 'разделять (физически)', 'Separate the eggs before you start.'],
+    ['a discrepancy', 'расхождение (там, где должно совпадать)', 'There was a discrepancy between the figures in the book and the cash in the till.'],
+    ['to compare something to', 'сравнивать с', 'The museum has been compared to something out of a futuristic novel.'],
+    ['to associate something with', 'ассоциировать с', 'I always associate that smell with my grandmother’s kitchen.'],
+    ['potential', 'потенциал', 'Writing helps you tap into the potential of your imagination.'],
+    ['an opportunity', 'возможность, удобный случай', 'The trip was a great opportunity to practise my French.'],
+    ['a possibility', 'вероятность, возможность (то, что может случиться)', 'There is a possibility that the exam will be moved.'],
+    ['rare', 'редкий (и потому ценный)', 'He deals in rare books.'],
+    ['scarce', 'дефицитный, которого не хватает', 'During the war food was scarce.'],
+    ['to refrain from', 'воздержаться от', 'Jill refrained from commenting.'],
+    ['to refuse to do', 'отказаться (сделать)', 'He refused to answer the question.'],
+    ['to reject', 'отвергнуть', 'Louise rejected my offer of help.'],
+    ['similarity', 'сходство', 'He was surprised at the lack of similarity between the sisters.'],
+    ['a match', 'пара, соответствие', 'The new curtains are a perfect match for the sofa.'],
+    ['to abandon (plans)', 'отказаться от (планов)', 'They abandoned their plans because of the weather.'],
+    ['to abolish (a law)', 'упразднить, отменить (закон)', 'The death penalty was abolished in 1965.'],
+    ['I beg to differ', 'позволю себе не согласиться', 'You think the book is boring? I beg to differ.'],
+    ['to vary', 'варьироваться', 'Prices vary from shop to shop.'],
+    ['the equivalent of', 'эквивалент', 'It costs the equivalent of a month’s salary.'],
+    ['equal', 'равный', 'All citizens are equal before the law.'],
+    ['the necessity for', 'необходимость', 'There is no necessity for a second meeting.'],
+    ['an obligation', 'обязательство', 'You are under no obligation to buy anything.'],
+    ['if you have the chance', 'если будет возможность', 'If you have the chance, read the original version.'],
+    ['an occasion', 'повод, событие', 'A wedding is a special occasion.'],
+    ['to launch', 'запустить (was launched in 1988)', 'The magazine was launched in 1988.'],
+    ['to originate', 'возникнуть, зародиться (intransitive)', 'The custom originated in Scotland.'],
+    ['to propose that', 'внести предложение (formal motion)', 'I propose that the meeting be adjourned.'],
+    ['to put a value on', 'оценить, придать ценность', 'You can’t put a value on friendship.'],
+    ['worth', 'ценность, стоимость', 'The painting’s worth was estimated at a million pounds.']
+  ],
+  'M5 · Confusable words': [
+    ['disinterested', 'беспристрастный, незаинтересованный лично', 'A judge must be completely disinterested.'],
+    ['uninterested', 'равнодушный, которому неинтересно', 'He seemed totally uninterested in the lecture.'],
+    ['exhausted', 'измотанный', 'I was exhausted after the long journey.'],
+    ['exhaustive', 'исчерпывающий, всесторонний', 'She carried out an exhaustive study of the subject.'],
+    ['historic', 'исторически значимый (a historic city, a historic moment)', 'It was a historic moment for the country.'],
+    ['historical', 'относящийся к истории (historical background, novel)', 'I love historical novels.'],
+    ['industrious', 'трудолюбивый', 'She is an industrious student who never misses a deadline.'],
+    ['industrial', 'промышленный', 'The town grew during the industrial revolution.'],
+    ['personnel', 'персонал, сотрудники', 'All personnel must wear a badge.'],
+    ['personal', 'личный', 'That is a very personal question.'],
+    ['accept / except', 'принять / кроме', 'I accept all the changes except the last one.'],
+    ['to censor', 'подвергать цензуре', 'The film was heavily censored.'],
+    ['to censure', 'официально порицать', 'The minister was censured by parliament.'],
+    ['disposable', 'одноразовый', 'Many cafés no longer use disposable cups.'],
+    ['at your disposal', 'в вашем распоряжении', 'The car is at your disposal for the whole week.'],
+    ['to extend (a deadline)', 'продлить', 'The teacher agreed to extend the deadline.'],
+    ['to expand (a business)', 'расширяться, расширить', 'They plan to expand the business abroad.'],
+    ['insistent', 'настойчивый (в требовании)', 'She was insistent that we stay for dinner.'],
+    ['persistent', 'упорный; непрекращающийся', 'I have had a persistent cough for weeks.'],
+    ['negligent', 'халатный, небрежный', 'The doctor was found negligent.'],
+    ['negligible', 'незначительный', 'The difference in price is negligible.'],
+    ['varying (levels)', 'различный', 'Students arrive with varying levels of English.'],
+    ['variable (climate)', 'переменчивый', 'The weather here is very variable.']
+  ],
+  'M5 · Noun + of': [
+    ['the balance of power', 'баланс сил', 'The election changed the balance of power.'],
+    ['the centre of attention', 'центр внимания', 'She loves being the centre of attention.'],
+    ['a choice of career', 'выбор профессии', 'Her choice of career surprised everyone.'],
+    ['a course of action', 'план действий', 'What is the best course of action?'],
+    ['at the crack of dawn', 'ни свет ни заря', 'We left at the crack of dawn.'],
+    ['the language of love', 'язык любви', 'French is often called the language of love.'],
+    ['a life of leisure', 'праздная жизнь', 'After winning the lottery, he lived a life of leisure.'],
+    ['a matter of principle', 'дело принципа', 'For me, it’s a matter of principle.'],
+    ['the point of no return', 'точка невозврата', 'We had reached the point of no return.'],
+    ['the price of success', 'цена успеха', 'Loneliness is sometimes the price of success.'],
+    ['no sign of trouble', 'никаких признаков беспорядков', 'There was no sign of trouble at the match.'],
+    ['this time of year', 'это время года', 'It’s always cold at this time of year.'],
+    ['to lose your train of thought', 'потерять мысль', 'Sorry, I’ve lost my train of thought.'],
+    ['a lapse of memory', 'провал в памяти', 'Forgetting her name was just a lapse of memory.'],
+    ['a matter of opinion', 'дело вкуса, вопрос мнения', 'Whether the film is good is a matter of opinion.'],
+    ['an offer of help', 'предложение помощи', 'Thank you for your offer of help.'],
+    ['my point of view', 'моя точка зрения', 'Try to see it from my point of view.'],
+    ['the price of fame', 'цена славы', 'Losing your privacy is the price of fame.'],
+    ['a sign of success', 'признак успеха', 'A long waiting list is a sign of success.'],
+    ['what time of day', 'какое время суток', 'What time of day do you work best?'],
+    ['a waste of time', 'пустая трата времени', 'The meeting was a complete waste of time.']
+  ],
+  'M5 · Shakespeare': [
+    ['it’s (all) Greek to me', 'для меня это китайская грамота', 'He tried to explain the tax system, but it was all Greek to me.'],
+    ['to vanish into thin air', 'как сквозь землю провалиться', 'My keys seem to have vanished into thin air.'],
+    ['(not) to budge an inch', 'не уступить ни на шаг', 'I asked him to change his mind, but he wouldn’t budge an inch.'],
+    ['tongue-tied', 'язык отнялся (от смущения)', 'I was completely tongue-tied when I met my hero.'],
+    ['a tower of strength', 'надёжная опора', 'My mother was a tower of strength during that difficult year.'],
+    ['fair play', 'честная игра', 'The referee is there to ensure fair play.'],
+    ['foul play', 'злой умысел, преступление', 'The police do not suspect foul play.'],
+    ['not to sleep a wink', 'глаз не сомкнуть', 'I didn’t sleep a wink the night before the exam.'],
+    ['too much of a good thing', 'хорошего понемножку', 'Even chocolate can be too much of a good thing.'],
+    ['a foregone conclusion', 'предрешённый исход', 'The result of the match was a foregone conclusion.'],
+    ['it’s high time (that) + past', 'давно пора', 'It’s high time you started revising.'],
+    ['the long and the short of it', 'короче говоря, суть дела', 'The long and the short of it is that we need more money.'],
+    ['the game is up', 'игра окончена, ты разоблачён', 'The game is up — we know what you did.'],
+    ['to lie low', 'затаиться', 'After the scandal, he decided to lie low for a while.'],
+    ['till the crack of doom', 'до скончания века', 'We could argue about this till the crack of doom.'],
+    ['good riddance', 'скатертью дорога', 'He finally moved out — good riddance!'],
+    ['to send somebody packing', 'выпроводить, прогнать', 'She sent the salesman packing.'],
+    ['(as) dead as a doornail', 'мертвее мёртвого', 'The battery is as dead as a doornail.'],
+    ['a laughing stock', 'посмешище', 'His terrible speech made him a laughing stock.'],
+    ['more fool you', 'тем хуже для тебя, сам виноват', 'If you believed him, more fool you.']
+  ],
+  'M5 · Literary devices': [
+    ['a cliché', 'клише, избитая фраза', '“From the bottom of my heart” is a cliché.'],
+    ['an idiom', 'идиома', '“She’s an absolute angel” is an idiom.'],
+    ['irony', 'ирония', '“Tired after all that studying?” — said with irony to someone who did nothing.'],
+    ['a metaphor', 'метафора', '“I gave him a piece of my mind” is a metaphor.'],
+    ['onomatopoeia', 'звукоподражание', 'Words like “crack” and “buzz” are examples of onomatopoeia.'],
+    ['personification', 'олицетворение', '“The sun smiled down” is an example of personification.'],
+    ['a pun', 'каламбур', '“A sense of rumour” is a pun on “a sense of humour”.'],
+    ['a rhetorical question', 'риторический вопрос', '“Will that change anything?” is a rhetorical question.'],
+    ['a simile', 'сравнение (like / as)', '“It goes like a dream” is a simile.']
+  ],
+  'M5 · Word formation': [
+    ['disbelieving', 'недоверчивый (о реакции человека)', 'She gave me a disbelieving look.'],
+    ['unbelievable', 'невероятный', 'His rudeness was unbelievable.'],
+    ['comprehensible', 'понятный', 'His handwriting is barely comprehensible.'],
+    ['comprehensive', 'всесторонний, исчерпывающий', 'This is a comprehensive guide to English grammar.'],
+    ['conceive → word family', 'concept, conception, misconception, preconception, conceivable, inconceivable, inconceivably', 'It is inconceivable that he didn’t know.'],
+    ['doubt → word family', 'doubtful, doubtless, undoubted, undoubtedly, indubitably', 'She is undoubtedly the best writer of her generation.'],
+    ['suit → word family', 'suitable, unsuitable, suitability, unsuitably, ill-suited', 'He was ill-suited to the job.'],
+    ['understand → word family', 'understanding, misunderstand, misunderstanding, misunderstood', 'Van Gogh was a misunderstood genius.'],
+    ['subtlety', 'тонкость, едва уловимость', 'The subtlety of her humour is easy to miss.'],
+    ['suitability', 'пригодность, соответствие', 'They questioned his suitability for the role.'],
+    ['competence', 'компетентность', 'Nobody doubts her competence.'],
+    ['inclusion', 'включение', 'The inclusion of a glossary makes the book easier to read.'],
+    ['undeniably', 'бесспорно', 'The novel is undeniably well written.'],
+    ['misleading', 'вводящий в заблуждение', 'The title is rather misleading.'],
+    ['inaccessible', 'недоступный', 'The village is inaccessible in winter.'],
+    ['inaccuracy', 'неточность', 'The article contains several inaccuracies.'],
+    ['unimpressive', 'невпечатляющий', 'The sequel was rather unimpressive.'],
+    ['illiteracy', 'неграмотность', 'The charity fights adult illiteracy.'],
+    ['diplomacy', 'дипломатия, такт', 'The situation needs a lot of diplomacy.'],
+    ['reluctance', 'нежелание', 'He agreed, but with obvious reluctance.'],
+    ['irrespective of', 'независимо от', 'Everyone pays the same, irrespective of age.'],
+    ['cognitive', 'когнитивный, познавательный', 'Reading improves cognitive skills.'],
+    ['to sharpen', 'обострять, оттачивать', 'Puzzles help to sharpen your mind.'],
+    ['the onset (of)', 'начало (чего-то неприятного)', 'the onset of winter / of an illness'],
+    ['to bemoan', 'сетовать, оплакивать', 'Teachers often bemoan the decline in reading.']
+  ],
+  'M5 · Review adjectives': [
+    ['acclaimed', 'признанный, получивший высокую оценку', 'It’s a critically acclaimed novel.'],
+    ['clichéd', 'шаблонный, избитый', 'The dialogue was clichéd and predictable.'],
+    ['exceptional', 'исключительный', 'The acting was exceptional.'],
+    ['gripping', 'захватывающий', 'It’s a gripping thriller.'],
+    ['legendary', 'легендарный', 'The band’s legendary concert took place in 1985.'],
+    ['mediocre', 'посредственный', 'The food was mediocre — nothing special.'],
+    ['(un)memorable', '(не)запоминающийся', 'The film was pleasant but unmemorable.'],
+    ['over-hyped', 'перехваленный, раздутый', 'The show was over-hyped and disappointing.'],
+    ['over-priced', 'завышенный в цене', 'The tickets were over-priced.'],
+    ['over-the-top', 'чрезмерный, перебор', 'Her performance was a bit over-the-top.'],
+    ['sophisticated', 'утончённый, изысканный', 'It’s a sophisticated restaurant with a long wine list.'],
+    ['superb', 'превосходный', 'The service was superb.'],
+    ['thriving', 'процветающий', 'The town has a thriving arts scene.'],
+    ['true-to-life', 'правдоподобный, жизненный', 'The characters are completely true-to-life.'],
+    ['up to scratch', 'на должном уровне', 'The second book wasn’t up to scratch.'],
+    ['world-renowned', 'всемирно известный', 'She is a world-renowned author.']
+  ],
+  'M5 · Collocations from the texts': [
+    ['widely praised', 'широко признанный, получивший много похвал', 'Her debut novel was widely praised.'],
+    ['to be left to your own devices', 'быть предоставленным самому себе', 'Left to their own devices, children will invent their own games.'],
+    ['to dream up', 'придумать, выдумать', 'Who dreamt up this crazy plan?'],
+    ['an attention span', 'способность удерживать внимание', 'Young children have a short attention span.'],
+    ['to appeal to somebody', 'нравиться, привлекать', 'The book appeals to readers of all ages.'],
+    ['to identify with somebody', 'отождествлять себя с, сопереживать', 'Teenagers easily identify with the main character.'],
+    ['against the odds', 'вопреки всему', 'Against the odds, the book became a bestseller.'],
+    ['to break the mould', 'ломать стереотипы, делать по-новому', 'Her novels break the mould of traditional romance.'],
+    ['shrouded in mystery', 'окутанный тайной', 'The author’s life is shrouded in mystery.'],
+    ['to put forward a theory', 'выдвинуть теорию', 'He put forward a new theory about the poem.'],
+    ['wholly convincing', 'полностью убедительный', 'The ending is not wholly convincing.'],
+    ['a craze for', 'повальное увлечение', 'There was a craze for crossword puzzles in the 1920s.'],
+    ['to fade out of use', 'выйти из употребления', 'Many old words have faded out of use.'],
+    ['in constant use', 'в постоянном употреблении', 'This dictionary is in constant use.'],
+    ['to have the honour of being', 'иметь честь быть', 'She has the honour of being the first woman to win the prize.'],
+    ['writer’s block', 'творческий кризис', 'He suffered from writer’s block for two years.'],
+    ['oratorical skills', 'ораторское мастерство', 'Churchill was famous for his oratorical skills.'],
+    ['a solitary occupation', 'работа в одиночестве', 'Writing is a solitary occupation.'],
+    ['a good command of the language', 'хорошее владение языком', 'You need a good command of the language to work as a translator.']
+  ],
+  'M5 · Workbook extras': [
+    ['jargon', 'профессиональный жаргон', 'The report was full of legal jargon.'],
+    ['slang', 'сленг', 'Teenage slang changes very quickly.'],
+    ['a dialect', 'диалект', 'They speak a local dialect.'],
+    ['Estuary English', 'лондонский / юго-восточный выговор', 'Estuary English is common in the south-east of England.'],
+    ['a lingua franca', 'язык межнационального общения', 'English has become the lingua franca of science.'],
+    ['a burr', 'раскатистое «r» (Шотландия, Сомерсет)', 'He spoke with a soft Scottish burr.'],
+    ['by word of mouth', 'из уст в уста', 'The café became popular by word of mouth.'],
+    ['to be in somebody’s good books', 'быть у кого-то на хорошем счету', 'I’m in my boss’s good books at the moment.'],
+    ['don’t judge a book by its cover', 'не суди по обложке', 'He looks scary, but don’t judge a book by its cover.'],
+    ['to read between the lines', 'читать между строк', 'If you read between the lines, she isn’t happy.'],
+    ['to read somebody like a book', 'видеть насквозь', 'I can read you like a book.'],
+    ['to speak volumes', 'говорить о многом', 'Her silence spoke volumes.'],
+    ['to take a leaf out of somebody’s book', 'брать пример с кого-то', 'You should take a leaf out of your sister’s book and start revising.'],
+    ['child’s play', 'детская забава, проще простого', 'For her, the exam was child’s play.'],
+    ['(as) tough as old boots', 'крепкий орешек', 'My grandmother is as tough as old boots.'],
+    ['to babble', 'тараторить, лепетать', 'The baby babbled happily.'],
+    ['to gabble', 'тараторить (быстро и неразборчиво)', 'He was so nervous that he gabbled through his speech.'],
+    ['to rabbit on', 'болтать без умолку', 'She rabbited on about her holiday for hours.'],
+    ['to coax', 'уговаривать ласково', 'She coaxed the cat out from under the bed.'],
+    ['to wheedle', 'выпрашивать лестью', 'He wheedled some money out of his grandmother.'],
+    ['to whine', 'ныть', 'Stop whining and do your homework.'],
+    ['to whinge', 'жаловаться, ныть (брит.)', 'He’s always whingeing about the weather.'],
+    ['to rant', 'разглагольствовать, орать (сердито)', 'He ranted about politics all evening.'],
+    ['to insinuate', 'намекать (неприятное)', 'Are you insinuating that I cheated?'],
+    ['to mumble', 'бормотать (невнятно)', 'He mumbled an apology.'],
+    ['to murmur', 'шептать, тихо говорить', 'She murmured something in his ear.'],
+    ['to mutter', 'ворчать под нос', 'He muttered something rude under his breath.'],
+    ['a prolific writer', 'плодовитый писатель', 'Agatha Christie was a prolific writer.'],
+    ['an attentive listener', 'внимательный слушатель', 'A good teacher is an attentive listener.'],
+    ['a fluent speaker', 'человек, свободно говорящий на языке', 'She is a fluent speaker of three languages.'],
+    ['a discerning reader', 'взыскательный, разборчивый читатель', 'The book is aimed at the discerning reader.'],
+    ['a voracious reader', 'запойный читатель', 'As a child, I was a voracious reader.'],
+    ['a celebrated writer', 'прославленный писатель', 'Tolstoy is a celebrated writer.']
+  ]
+};
+const M5_WORDS = { Karina: Object.entries(M5_LESSONS).flatMap(([lesson, rows]) =>
+  rows.map(([word, translation, example]) => ({ word, translation, example, lesson }))) };
+
 const OCT12_WORDS = {
   Rustam: [
     { word: 'to irritate / to be irritated', translation: 'раздражать / раздражаться (be irritated by / with something)', example: 'His constant complaining really irritates me.' },
@@ -8221,7 +8590,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
