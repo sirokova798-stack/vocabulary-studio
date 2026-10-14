@@ -1248,6 +1248,7 @@
       <button class="phr-level-btn" onclick="a1Begin('tobe')"><b>To be</b><span>am / is / are · собери предложение</span></button>
       <button class="phr-level-btn" onclick="a1Begin('thisthat')"><b>This / That</b><span>this · that · these · those · выбери слово</span></button>
       <button class="phr-level-btn" onclick="a1Begin('can')"><b>Can</b><span>can / can't · собери предложение</span></button>
+      <button class="phr-level-btn" id="a1-btn-vlad" style="display:none;" onclick="a1Begin('vlad')"><b>My words</b><span>твои слова · собери предложение</span></button>
     </div>
   </div>
 
@@ -4437,6 +4438,41 @@ const A1_DATA = {
     { answer: 'Can we sit here?', ru: 'вопрос: can в начало' },
     { answer: 'Can he swim?', ru: 'вопрос: can в начало' }
   ]},
+  // Vlad's own vocabulary; `prompt` is the Russian sentence he builds in English
+  vlad: { label: 'My words', type: 'jumble', items: [
+    { answer: 'I usually wake up at seven.', prompt: 'Я обычно просыпаюсь в семь.', ru: 'usually — перед глаголом' },
+    { answer: 'I go to bed at eleven.', prompt: 'Я ложусь спать в одиннадцать.', ru: 'go to bed — ложиться спать' },
+    { answer: 'I am late for work.', prompt: 'Я опаздываю на работу.', ru: 'I am late' },
+    { answer: 'He is late again.', prompt: 'Он снова опаздывает.', ru: 'he is late' },
+    { answer: 'The kettle is in the kitchen.', prompt: 'Чайник на кухне.', ru: 'kettle (один) → is' },
+    { answer: 'Where are my keys?', prompt: 'Где мои ключи?', ru: 'keys (много) → are' },
+    { answer: 'The cat is on the sofa.', prompt: 'Кошка на диване.', ru: 'on the sofa — на диване' },
+    { answer: 'The lemon is sour.', prompt: 'Лимон кислый.', ru: 'sour — кислый' },
+    { answer: 'The cake is very sweet.', prompt: 'Торт очень сладкий.', ru: 'very — перед прилагательным' },
+    { answer: 'My father wears a suit to work.', prompt: 'Мой папа носит костюм на работу.', ru: 'father (он) → wears' },
+    { answer: 'The street is very noisy.', prompt: 'Улица очень шумная.', ru: 'noisy — шумный' },
+    { answer: 'This book is interesting.', prompt: 'Эта книга интересная.', ru: 'this — эта (рядом)' },
+    { answer: 'The shop is near my house.', prompt: 'Магазин рядом с моим домом.', ru: 'near — рядом' },
+    { answer: 'My school is far away.', prompt: 'Моя школа далеко.', ru: 'far away — далеко' },
+    { answer: 'She is tanned after her holiday.', prompt: 'Она загорелая после отпуска.', ru: 'tanned — загорелый' },
+    { answer: 'I drink coffee in the morning.', prompt: 'Я пью кофе утром.', ru: 'in the morning — в конце' },
+    { answer: 'We have lunch at noon.', prompt: 'Мы обедаем в полдень.', ru: 'at noon — в полдень' },
+    { answer: 'I watch TV in the evening.', prompt: 'Я смотрю телевизор вечером.', ru: 'in the evening — вечером' },
+    { answer: 'I am usually tired in the evening.', prompt: 'Вечером я обычно уставший.', ru: 'usually — после am' },
+    { answer: "I don't usually drink coffee.", prompt: 'Я обычно не пью кофе.', ru: "don't + usually + глагол" },
+    { answer: 'There is nothing in the box.', prompt: 'В коробке ничего нет.', ru: 'there is nothing — ничего нет' },
+    { answer: 'The cake is very tasty.', prompt: 'Торт очень вкусный.', ru: 'tasty — вкусный' },
+    { answer: 'I drink instant coffee.', prompt: 'Я пью растворимый кофе.', ru: 'instant coffee — растворимый кофе' },
+    { answer: 'My father is at work.', prompt: 'Мой папа на работе.', ru: 'at work — на работе' },
+    { answer: 'We are at home.', prompt: 'Мы дома.', ru: 'we → are' },
+    { answer: 'This is a big house.', prompt: 'Это большой дом.', ru: 'a + прилагательное + существительное' },
+    { answer: 'This flat is cheap.', prompt: 'Эта квартира дешёвая.', ru: 'cheap — дешёвый' },
+    { answer: 'The bus is slow.', prompt: 'Автобус медленный.', ru: 'slow — медленный' },
+    { answer: 'I am hungry now.', prompt: 'Я сейчас голодный.', ru: 'now — в конце' },
+    { answer: 'Vegetables are healthy.', prompt: 'Овощи полезные.', ru: 'vegetables (много) → are' },
+    { answer: 'My brother is very tall.', prompt: 'Мой брат очень высокий.', ru: 'tall — высокий' },
+    { answer: 'The library is quiet.', prompt: 'В библиотеке тихо.', ru: 'quiet — тихий' }
+  ]},
   thisthat: { label: 'This / That', type: 'mc', items: [
     { q: '____ is my book. (один, рядом)', options: ['This', 'These', 'Those'], answer: 'This', ru: 'один предмет рядом → this' },
     { q: '____ are my keys. (много, рядом)', options: ['These', 'This', 'That'], answer: 'These', ru: 'много предметов рядом → these' },
@@ -4472,6 +4508,9 @@ let a1Order = [], a1Chips = [], a1Punct = ''; // for jumble
 function a1Norm(s) { return (s || '').toLowerCase().replace(/[.?!,]/g, '').replace(/\s+/g, ' ').trim(); }
 
 function startA1() {
+  // "My words" is built from Vlad's own vocabulary, so only he sees it
+  const me = db().students.find(x => x.id === currentStudent);
+  document.getElementById('a1-btn-vlad').style.display = me && me.name === 'Vlad' ? '' : 'none';
   document.getElementById('a1-topics').style.display = '';
   document.getElementById('a1-main').style.display = 'none';
   document.getElementById('a1-results').style.display = 'none';
@@ -4512,7 +4551,7 @@ function renderA1Q() {
     a1Chips = shuffle(bare.split(' ').map((w, i) => ({ w, i })));
     // reshuffle if it accidentally equals the answer order
     if (a1Chips.map(c => c.w).join(' ') === bare && a1Chips.length > 1) a1Chips.reverse();
-    document.getElementById('a1-prompt-ru').textContent = 'Собери предложение:';
+    document.getElementById('a1-prompt-ru').textContent = it.prompt ? 'Собери предложение: «' + it.prompt + '»' : 'Собери предложение:';
     renderA1Jumble();
   } else {
     jumble.style.display = 'none'; mc.style.display = '';
