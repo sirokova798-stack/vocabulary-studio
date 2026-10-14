@@ -1366,7 +1366,6 @@
   <div class="tabs">
     <button class="tab active" onclick="switchTeacherTab('students')">Students</button>
     <button class="tab" onclick="switchTeacherTab('add-student')">New Student</button>
-    <button class="tab" onclick="switchTeacherTab('add-word')">Add Word</button>
     <button class="tab" onclick="switchTeacherTab('activity')">Activity</button>
   </div>
 
@@ -4846,8 +4845,8 @@ function switchTeacherTab(tab) {
   ['students','add-student','add-word','activity'].forEach(t => {
     document.getElementById('tt-' + t).style.display = t === tab ? '' : 'none';
   });
-  document.querySelectorAll('#screen-teacher .tab').forEach((el, i) => {
-    el.classList.toggle('active', ['students','add-student','add-word','activity'][i] === tab);
+  document.querySelectorAll('#screen-teacher .tab').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('onclick').includes("'" + tab + "'"));
   });
   if (tab === 'students') renderTeacher();
   if (tab === 'add-word') populateSelect();
