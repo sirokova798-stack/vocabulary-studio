@@ -2264,7 +2264,7 @@ const CTX_CAT_OVERRIDE = {
   'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
   'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
   'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
-  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'nothing': 'skip',
+  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'nothing': 'skip', 'be a cold fish': 'skip', 'be a bit thin on top': 'skip', 'be rolling in it': 'skip',
   // time-of-day phrases: "I drink coffee ___" fits morning, at home, at work… — no fair question
   'in the morning': 'skip', 'in the afternoon': 'skip', 'in the evening': 'skip', 'at noon': 'skip', 'at night': 'skip', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
   // adjectives
@@ -7665,7 +7665,20 @@ const OCT12_WORDS = {
     { word: 'to wear a suit', translation: 'носить костюм', example: 'My father wears a suit to work.' },
     { word: 'to go to bed', translation: 'ложиться спать', example: 'I go to bed at eleven.' },
     { word: 'to wake up', translation: 'просыпаться', example: 'I wake up at seven every day.' }
-  ].map(w => ({ ...w, lesson: 'Lesson 14 Oct' }))
+  ].map(w => ({ ...w, lesson: 'Lesson 14 Oct' })),
+  'Talk Talk Talk': [
+    { word: 'to be a cold fish (dated)', translation: 'быть холодным, неэмоциональным человеком, «сухарь» (немного устаревшее)', example: 'Her new boss is a bit of a cold fish — he never smiles.' },
+    { word: "to follow in somebody's footsteps", translation: 'пойти по чьим-то стопам', example: "She followed in her mother's footsteps and became a doctor." },
+    { word: 'to be so hungry you could eat a horse', translation: 'быть голодным как волк', example: "I haven't eaten all day — I'm so hungry I could eat a horse." },
+    { word: 'to be under the weather', translation: 'плохо себя чувствовать, приболеть', example: "I'm a bit under the weather today, so I'll stay at home." },
+    { word: 'to be a bit thin on top', translation: 'начинать лысеть, редеют волосы на макушке', example: "My dad is getting a bit thin on top these days." },
+    { word: 'to drive somebody up the wall', translation: 'доводить кого-то до белого каления, бесить', example: 'The noise from next door is driving me up the wall.' },
+    { word: 'to be rolling in it', translation: 'купаться в деньгах, быть очень богатым', example: "They've got three houses — they must be rolling in it." },
+    { word: 'to be over the moon', translation: 'быть на седьмом небе от счастья', example: 'She was over the moon when she got the job.' },
+    { word: 'to have two left feet', translation: 'быть неуклюжим (особенно в танцах)', example: "I'd love to dance, but I've got two left feet." },
+    { word: 'to have been in the wars', translation: 'быть в синяках и ссадинах, «побывать в переделке» (шутливо)', example: "You've been in the wars! What happened to your knee?" },
+    { word: 'to burn the candle at both ends (usually Present Perfect Continuous)', translation: 'работать на износ, мало спать (обычно в Present Perfect Continuous: I’ve been burning the candle at both ends)', example: "I've been burning the candle at both ends, and now I'm exhausted." }
+  ].map(w => ({ ...w, lesson: 'Idioms' }))
 };
 
 const OCT9_WORDS = {
