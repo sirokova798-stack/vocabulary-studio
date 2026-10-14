@@ -2264,7 +2264,7 @@ const CTX_CAT_OVERRIDE = {
   'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
   'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
   'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
-  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'nothing': 'skip', 'be a cold fish': 'skip', 'be a bit thin on top': 'skip', 'be rolling in it': 'skip',
+  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'nothing': 'skip', 'be a cold fish': 'skip', 'be a bit thin on top': 'skip', 'be rolling in it': 'skip', 'cattle': 'skip', 'accepted vs consented': 'skip', 'accepted': 'skip',
   // time-of-day phrases: "I drink coffee ___" fits morning, at home, at work… — no fair question
   'in the morning': 'skip', 'in the afternoon': 'skip', 'in the evening': 'skip', 'at noon': 'skip', 'at night': 'skip', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
   // adjectives
@@ -2369,7 +2369,7 @@ const CTX_SYNONYMS = [
   ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
   ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
   ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
-  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
@@ -7678,7 +7678,26 @@ const OCT12_WORDS = {
     { word: 'to have two left feet', translation: 'быть неуклюжим (особенно в танцах)', example: "I'd love to dance, but I've got two left feet." },
     { word: 'to have been in the wars', translation: 'быть в синяках и ссадинах, «побывать в переделке» (шутливо)', example: "You've been in the wars! What happened to your knee?" },
     { word: 'to burn the candle at both ends (usually Present Perfect Continuous)', translation: 'работать на износ, мало спать (обычно в Present Perfect Continuous: I’ve been burning the candle at both ends)', example: "I've been burning the candle at both ends, and now I'm exhausted." }
-  ].map(w => ({ ...w, lesson: 'Idioms' }))
+  ].map(w => ({ ...w, lesson: 'Idioms' })).concat([
+    { word: 'to give something your undivided attention', translation: 'уделять чему-то всё своё внимание (безраздельное внимание)', example: 'When a client is speaking, give them your undivided attention.' },
+    { word: 'to dedicate yourself to something / to dedicate something to something', translation: 'посвятить себя чему-то / посвятить что-то чему-то (время, жизнь, книгу)', example: 'She dedicated herself to her music. He dedicated his first book to his mother.' },
+    { word: 'to attend an event / to attend to something', translation: 'посещать (мероприятие) / уделять внимание, заниматься чем-то (слушать внимательно, следить за тем, что происходит)', example: 'Over 300 people attended the concert. Please attend to what the speaker is saying.' },
+    { word: 'to seize the moment', translation: 'ловить момент (также: seize the opportunity / the chance — воспользоваться возможностью)', example: 'Seize the moment — you may never get another chance like this.' },
+    { word: 'to grasp', translation: 'схватить; понять, уловить (grasp the idea / the meaning / the point; grasp an opportunity; have a good grasp of — хорошо разбираться в)', example: 'It took me a while to grasp the main idea of the article.' },
+    { word: 'to capture a moment', translation: 'запечатлеть момент (на фото, в песне, в тексте)', example: 'The photo perfectly captures the moment they met.' },
+    { word: 'to snatch', translation: 'выхватить; урвать (snatch a bag — выхватить сумку; snatch a few hours of sleep — урвать пару часов сна; snatch a quick lunch — наскоро перекусить)', example: 'A thief snatched her bag and ran away.' },
+    { word: 'to engage with something / somebody', translation: 'вникать во что-то, взаимодействовать с кем-то / чем-то', example: 'Good teachers help students engage with difficult texts.' },
+    { word: 'to apply yourself to something', translation: 'усердно взяться за что-то, приложить усилия', example: 'If you apply yourself to your studies, you will pass easily.' },
+    { word: 'faithful', translation: 'верный, преданный; точный (о переводе, копии)', example: 'He has been a faithful friend for twenty years.' },
+    { word: 'cattle', translation: 'крупный рогатый скот (всегда множественное число: the cattle are…)', example: 'The cattle are grazing in the field.' },
+    { word: 'to take a risk', translation: 'рисковать, пойти на риск', example: 'Sometimes you have to take a risk to get what you want.' },
+    { word: 'an understatement', translation: 'преуменьшение (очень характерно для британцев: «not bad» может значить «отлично», «a bit of a problem» — «катастрофа»)', example: "Saying the film was “not bad” is an understatement — it was brilliant." },
+    { word: 'to give permission = to give consent', translation: 'дать разрешение = дать согласие', example: 'Her parents gave permission for the trip. / The patient gave consent to the operation.' },
+    { word: 'accepted vs consented', translation: 'accepted — принятый, общепринятый (It is accepted that… — общепризнано, что…; Your offer was accepted — ваше предложение приняли). to consent to something — дать согласие на что-то (обычно о человеке: She consented to the interview). «It is consented» не говорят — правильно: consent was given / they consented to it.', example: 'It is widely accepted that sleep affects memory. The patient consented to the treatment.' },
+    { word: 'to stand a chance / to take a chance', translation: 'иметь шанс (на успех) / рискнуть, попытать удачу', example: "Without training, he doesn't stand a chance. I decided to take a chance and apply for the job." },
+    { word: 'plausible / implausible', translation: 'правдоподобный / неправдоподобный', example: 'Her excuse sounded plausible, but the story was completely implausible.' },
+    { word: 'riveting', translation: 'захватывающий, от которого невозможно оторваться', example: 'The documentary was absolutely riveting.' }
+  ].map(w => ({ ...w, lesson: 'Lesson 14 Oct' })))
 };
 
 const OCT9_WORDS = {
