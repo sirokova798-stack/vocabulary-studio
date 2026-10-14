@@ -2232,6 +2232,7 @@ const CTX_ADJ = new Set((
  'outstanding overwhelming willing unwilling miserable desperate furious upset worried relieved ashamed jealous envious ' +
  'grateful thankful hopeful doubtful vulnerable fragile delicate gentle rough fierce wild tame loyal faithful polite impolite ' +
  'bland literate inconvenient foreign authentic drained so-called stunning spectacular witty precise analytical devoted blunt ' +
+ 'overrated disjointed risqué harrowing memorable understated hilarious hackneyed gripping moving unforgettable intense catchy riveting faithful ' +
  'genuine approachable outgoing sturdy ordinary distracted restrained absent swollen self-sufficient ' +
  'stimulating self-centered self-centred inferior gloomy magnetic brief tender unexpected urgent must-see non-negotiable').split(' '));
 const CTX_UNCOUNT = new Set((
@@ -2369,7 +2370,10 @@ const CTX_SYNONYMS = [
   ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
   ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
   ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
-  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
+  ['obsessed with', 'be obsessed with', 'interested in', 'keen on', 'mad about', 'fond of', 'addicted to'],
+  ['overrated', 'hackneyed'], ['risqué', 'inappropriate'], ['understated', 'powerful', 'gripping', 'riveting', 'moving'],
+  ['put up with', 'deal with', 'cope with'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
@@ -3796,15 +3800,6 @@ you / we / they → <b>are</b> &nbsp;(ты, вы / мы / они)
 <p class="instr">Переведи на английский. Подумай: процесс или всё действие целиком? Восприятие или информация? Если твой вариант не совпал с образцом, сравни их — твой тоже может быть правильным.</p>
 <div class="lxq" data-ex="vp4"></div>
 
-<h4>Task 5. Let’s talk</h4>
-<ol>
-<li>Have you ever overheard someone say something that wasn’t meant for your ears? What did you do?</li>
-<li>When was the last time someone caught you doing something you’d rather they hadn’t seen?</li>
-<li>Is there anything you could watch someone do for hours — a craftsman, a chef, an athlete?</li>
-<li>What sound do you love hearing first thing in the morning? And what sound can’t you stand?</li>
-<li>Have you ever seen something happen that nobody else believed when you told them?</li>
-<li>Some people say they can feel someone looking at them. Have you ever felt that? Were you right?</li>
-</ol>
 </div>`,
     egs:[{en:'I saw him cross the road.', ru:'Я видел, как он перешёл дорогу. (всё действие целиком)'},{en:'I saw him crossing the road.', ru:'Я видел, как он переходил дорогу. (застал в процессе)'},{en:'He was seen to leave. / He was seen leaving.', ru:'Видели, как он ушёл / уходил. (пассив: to возвращается)'},{en:'I heard (that) she sings in a choir.', ru:'Я слышал, что она поёт в хоре. (информация, не восприятие)'}],
     tip:'💡 do = всё действие от начала до конца (или один раз); doing = в процессе / снова и снова. smell, catch, find, spot — только -ing. В пассиве: was seen TO leave.' },
@@ -7742,7 +7737,29 @@ const OCT12_WORDS = {
     { word: 'to stand a chance / to take a chance', translation: 'иметь шанс (на успех) / рискнуть, попытать удачу', example: "Without training, he doesn't stand a chance. I decided to take a chance and apply for the job." },
     { word: 'plausible / implausible', translation: 'правдоподобный / неправдоподобный', example: 'Her excuse sounded plausible, but the story was completely implausible.' },
     { word: 'riveting', translation: 'захватывающий, от которого невозможно оторваться', example: 'The documentary was absolutely riveting.' }
-  ].map(w => ({ ...w, lesson: 'Lesson 14 Oct' })))
+  ].map(w => ({ ...w, lesson: 'Lesson 14 Oct' }))).concat([
+    { word: 'overrated', translation: 'переоценённый (не такой хороший, как все говорят)', example: 'Everyone loves that film, but I think it’s overrated.' },
+    { word: 'disjointed', translation: 'бессвязный, рваный (о сюжете)', example: 'The plot was so disjointed that I couldn’t follow it.' },
+    { word: 'risqué', translation: 'рискованный, на грани приличия (о шутках, сценах)', example: 'Some of the jokes were a bit risqué for a family audience.' },
+    { word: 'harrowing', translation: 'душераздирающий, мучительный', example: 'The film tells the harrowing story of a family during the war.' },
+    { word: 'memorable', translation: 'запоминающийся', example: 'The final scene is the most memorable part of the film.' },
+    { word: 'understated', translation: 'сдержанный, без преувеличений (о стиле, игре)', example: 'Her understated performance was more powerful than all the drama around her.' },
+    { word: 'hilarious', translation: 'уморительный, очень смешной', example: 'The comedy was absolutely hilarious — we couldn’t stop laughing.' },
+    { word: 'hackneyed', translation: 'избитый, банальный', example: 'The dialogue was full of hackneyed phrases.' },
+    { word: 'far-fetched', translation: 'надуманный, неправдоподобный', example: 'The ending was too far-fetched to be believable.' },
+    { word: 'gripping', translation: 'захватывающий', example: 'It’s a gripping thriller — you won’t want to stop watching.' },
+    { word: 'moving', translation: 'трогательный', example: 'It was such a moving story that half the audience cried.' },
+    { word: 'unforgettable', translation: 'незабываемый', example: 'Seeing that film in the cinema was an unforgettable experience.' },
+    { word: 'tedious', translation: 'нудный, утомительный', example: 'The middle of the film was so tedious that I nearly fell asleep.' },
+    { word: 'intense', translation: 'напряжённый, интенсивный', example: 'The last twenty minutes are really intense.' },
+    { word: 'a slow burner', translation: 'фильм / сериал, который «раскачивается» медленно, но потом затягивает', example: 'The series is a slow burner, but by episode three you’ll be hooked.' },
+    { word: 'catchy', translation: 'цепляющий, запоминающийся (о мелодии, песне)', example: 'The theme song is so catchy — I can’t get it out of my head.' },
+    { word: 'a must-see', translation: 'то, что обязательно нужно посмотреть', example: 'This documentary is a must-see for anyone interested in nature.' },
+    { word: 'to be obsessed with', translation: 'быть одержимым чем-то, «помешаться» на чём-то', example: 'My sister is obsessed with Korean dramas.' },
+    { word: 'a crane', translation: 'журавль (также: подъёмный кран)', example: 'A crane was standing on one leg by the lake.' },
+    { word: 'to put up with', translation: 'терпеть, мириться с', example: 'I can’t put up with his rudeness any longer.' },
+    { word: 'to deal with', translation: 'справляться с; иметь дело с', example: 'She knows how to deal with difficult customers.' }
+  ].map(w => ({ ...w, lesson: 'Films & Reviews' })))
 };
 
 const OCT9_WORDS = {
