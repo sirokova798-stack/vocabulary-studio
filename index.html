@@ -2242,7 +2242,7 @@ const CTX_UNCOUNT = new Set((
  'jewelry clothing accommodation vocabulary grammar literature art nature space violence pollution intelligence experience ' +
  'validation importance convenience pseudoscience heat confusion treatment custody nausea vanity cruelty entertainment hesitation ' +
  'jealousy compatibility friction bluntness insecurity loneliness stress grief enjoyment herring cream leisure ' +
- 'teeth self-esteem society acne snoring lightning lyrics cutlery anticipation rigidity coursework').split(' '));
+ 'teeth self-esteem society acne snoring lightning lyrics cutlery anticipation rigidity coursework cohesion bureaucracy').split(' '));
 const CTX_LINKER_KIND = {
   'although': 'clause', 'though': 'clause', 'even though': 'clause', 'whereas': 'clause', 'while': 'clause', 'unless': 'clause',
   'in case': 'clause', 'as long as': 'clause', 'so that': 'clause', 'because': 'clause', 'even if': 'clause', 'meaning that': 'clause',
@@ -8051,7 +8051,31 @@ const OCT16_WORDS = {
     { word: 'cohesion', translation: 'сплочённость; связность (текста)', example: 'Team-building games improve group cohesion.' },
     { word: 'to have a visceral reaction', translation: 'инстинктивная, «нутряная» реакция', example: 'I had a visceral reaction to the smell — I felt sick at once.' },
     { word: 'to have a vivid imagination', translation: 'иметь богатое (живое) воображение', example: 'Children have such a vivid imagination.' }
-  ].map(w => ({ ...w, lesson: 'Lesson 16 Oct' })),
+  ].map(w => ({ ...w, lesson: 'Lesson 16 Oct' })).concat([
+    { word: 'a blunder', ipa: '/ˈblʌndə/', translation: 'грубая ошибка, ляп (one of the greatest live TV blunders)', example: 'It was one of the greatest live TV blunders of all time.' },
+    { word: 'a mix-up', ipa: '/ˈmɪks ʌp/', translation: 'путаница', example: 'Because of a mix-up, the wrong man was taken to the studio.' },
+    { word: 'to be immortalised as', ipa: '/ɪˈmɔːtəlaɪzd əz/', translation: 'войти в историю как, быть увековеченным', example: 'He was immortalised as the man who went on TV by mistake.' },
+    { word: 'inadvertently / inadvertent', ipa: '/ˌɪnədˈvɜːtəntli/ /ˌɪnədˈvɜːtənt/', translation: 'нечаянно / невольный (an inadvertent star)', example: 'He inadvertently became a star overnight.' },
+    { word: 'to go along for the ride', ipa: '/ɡəʊ əˈlɒŋ fə ðə ˈraɪd/', translation: 'плыть по течению, участвовать «за компанию»', example: 'He had no idea what was happening, so he just went along for the ride.' },
+    { word: 'en route to', ipa: '/ɒn ˈruːt tə/', translation: 'по пути к', example: 'He was stopped en route to the studio.' },
+    { word: 'to usher somebody onto / into', ipa: '/ˈʌʃə/', translation: 'провожать кого-то куда-то (ushered onto the set)', example: 'A producer ushered him onto the set.' },
+    { word: 'to be mic’d up', ipa: '/bi ˌmaɪkt ˈʌp/', translation: 'прикрепить микрофон (тебе прикрепили микрофон)', example: 'Within a minute he was mic’d up and sitting in front of the camera.' },
+    { word: 'before he knew it', ipa: '/bɪˈfɔː hi ˈnjuː ɪt/', translation: 'не успел и глазом моргнуть', example: 'Before he knew it, he was live on national television.' },
+    { word: 'his face says it all', ipa: '/hɪz ˈfeɪs sez ɪt ˈɔːl/', translation: 'всё написано на лице', example: 'When the presenter introduces him, his face says it all.' },
+    { word: 'to out yourself', ipa: '/ˈaʊt jɔːˈself/', translation: 'выдать себя, признаться, кто ты', example: 'He didn’t want to out himself as the wrong guest.' },
+    { word: 'to stumble (over your words)', ipa: '/ˈstʌmbl ˈəʊvə jə ˈwɜːdz/', translation: 'запинаться', example: 'He stumbled over his words but kept answering the questions.' },
+    { word: 'a verdict', ipa: '/ˈvɜːdɪkt/', translation: 'решение суда, вердикт', example: 'The interview was about the court’s verdict in a music case.' },
+    { word: 'an ordeal', ipa: '/ɔːˈdiːl/', translation: 'тяжёлое испытание', example: 'The interview must have been a real ordeal for him.' },
+    { word: 'to keep calm / to get control of the situation', ipa: '/kiːp ˈkɑːm/ /ɡet kənˈtrəʊl əv ðə ˌsɪtʃuˈeɪʃn/', translation: 'сохранять спокойствие / взять ситуацию под контроль', example: 'Somehow he managed to keep calm and get control of the situation.' },
+    { word: 'an internet sensation / to go viral', ipa: '/ˈɪntənet senˈseɪʃn/ /ɡəʊ ˈvaɪrəl/', translation: 'интернет-сенсация / разлететься по сети', example: 'The clip went viral and he became an internet sensation.' },
+    { word: 'a teachable moment', ipa: '/ˈtiːtʃəbl ˈməʊmənt/', translation: 'поучительная ситуация', example: 'Teachers often use the clip as a teachable moment.' },
+    { word: 'spot on', ipa: '/ˌspɒt ˈɒn/', translation: 'абсолютно точно, в яблочко', example: 'Funnily enough, some of his answers were spot on.' },
+    { word: 'to take somebody to court', ipa: '/teɪk ˈsʌmbədi tə ˈkɔːt/', translation: 'подать в суд на кого-то', example: 'The band took the company to court.' },
+    { word: 'royalties', ipa: '/ˈrɔɪəltiz/', translation: 'авторские отчисления', example: 'Musicians earn royalties every time their song is played.' },
+    { word: 'to team up with', ipa: '/ˌtiːm ˈʌp wɪð/', translation: 'объединиться с', example: 'She teamed up with a famous producer to make the album.' },
+    { word: 'a saga', ipa: '/ˈsɑːɡə/', translation: 'длинная история, эпопея', example: 'The court case turned into a long saga.' },
+    { word: 'humble', ipa: '/ˈhʌmbl/', translation: 'скромный', example: 'Despite his fame, he stayed humble.' }
+  ].map(w => ({ ...w, lesson: 'Retelling' }))),
   Milana: [
     { word: 'to be outdoors', translation: 'быть на улице, на открытом воздухе', example: 'I love being outdoors in the summer.' },
     { word: 'to be in the fresh air', translation: 'быть на свежем воздухе', example: 'It’s good to be in the fresh air after a day at the office.' },
@@ -8639,7 +8663,7 @@ const OCT9_WORDS = {
     list.forEach(w => {
       if (have.has(normWord(w.word))) return;
       have.add(normWord(w.word));
-      st.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
+      st.words.push({ id: uid(), word: w.word, ipa: w.ipa || '', translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
     });
   });
 
