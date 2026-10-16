@@ -2371,7 +2371,7 @@ const CTX_SYNONYMS = [
   ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
   ['obsessed with', 'be obsessed with', 'interested in', 'keen on', 'mad about', 'fond of', 'addicted to'],
   ['overrated', 'hackneyed'], ['risqué', 'inappropriate'], ['understated', 'powerful', 'gripping', 'riveting', 'moving'],
-  ['put up with', 'deal with', 'cope with'], ['stuck in traffic', 'be stuck in traffic', 'worn out'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
+  ['put up with', 'deal with', 'cope with'], ['stuck in traffic', 'be stuck in traffic', 'worn out', 'be like a hamster on a wheel', 'like a hamster on a wheel'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
 ];
 const CTX_SYN_MAP = {};
 CTX_SYNONYMS.forEach(group => group.forEach(w => {
@@ -8040,6 +8040,42 @@ const M5_LESSONS = {
 const M5_WORDS = { Karina: Object.entries(M5_LESSONS).flatMap(([lesson, rows]) =>
   rows.map(([word, translation, example]) => ({ word, translation, example, lesson }))) };
 
+const OCT16_WORDS = {
+  Yuliya: [
+    { word: 'to do sums / to solve maths problems', translation: 'решать примеры / решать задачи по математике', example: 'My son is doing sums for his maths homework.' },
+    { word: 'to toss and turn', translation: 'ворочаться в кровати (не могу уснуть)', example: 'Did you toss and turn all night before the premiere?' },
+    { word: 'to swallow your words / to drop sounds', translation: 'проглатывать звуки (нечётко произносить). Не путай с mumble — бормотать тихо и невнятно', example: 'Speak slowly and don’t swallow your words.' },
+    { word: 'to study part-time / evening classes', translation: 'учиться на вечернем (заочном) отделении / вечерние занятия', example: 'She studied part-time, going to evening classes after work.' },
+    { word: 'a hallway (entrance hall)', translation: 'прихожая', example: 'Leave your shoes in the hallway, please.' },
+    { word: 'a candidacy / a candidature (formal)', translation: 'кандидатура (candidacy — чаще; candidature — формальное, брит.)', example: 'The party announced her candidacy for mayor.' },
+    { word: 'cohesion', translation: 'сплочённость; связность (текста)', example: 'Team-building games improve group cohesion.' },
+    { word: 'to have a visceral reaction', translation: 'инстинктивная, «нутряная» реакция', example: 'I had a visceral reaction to the smell — I felt sick at once.' },
+    { word: 'to have a vivid imagination', translation: 'иметь богатое (живое) воображение', example: 'Children have such a vivid imagination.' }
+  ].map(w => ({ ...w, lesson: 'Lesson 16 Oct' })),
+  Milana: [
+    { word: 'to be outdoors', translation: 'быть на улице, на открытом воздухе', example: 'I love being outdoors in the summer.' },
+    { word: 'to be in the fresh air', translation: 'быть на свежем воздухе', example: 'It’s good to be in the fresh air after a day at the office.' },
+    { word: 'poor quality', translation: 'низкое (плохое) качество', example: 'The shoes were cheap but of poor quality.' },
+    { word: 'a high-rise building / a block of flats', translation: 'многоэтажка / многоквартирный дом', example: 'We live in a high-rise building on the ninth floor.' },
+    { word: 'to complain (about)', translation: 'жаловаться (на)', example: 'She always complains about the weather.' },
+    { word: 'unpredictable', translation: 'непредсказуемый', example: 'The weather in spring is unpredictable.' },
+    { word: 'a pedestrian', translation: 'пешеход', example: 'The car stopped to let a pedestrian cross.' },
+    { word: 'permanently', translation: 'навсегда, постоянно', example: 'They moved to Spain permanently.' },
+    { word: 'to style somebody', translation: 'стилизовать кого-то, подбирать образ (одежду, причёску)', example: 'A professional stylist styled her for the photo shoot.' },
+    { word: 'I really like it / I like it very much', translation: 'мне это очень нравится. Не говори «I very like it»', example: 'Your new dress is lovely — I really like it.' },
+    { word: 'to take part in a competition', translation: 'участвовать в соревновании (конкурсе)', example: 'She took part in a dance competition last year.' },
+    { word: 'dig – dug – dug', translation: 'копать (неправильный глагол)', example: 'The children dug a big hole on the beach.' },
+    { word: 'to decide to keep it as it is', translation: 'решить оставить всё как есть (decide to do something)', example: 'We wanted to change the design, but decided to keep it as it is.' },
+    { word: 'it’s a matter of choice', translation: 'это дело выбора (a matter, не the matter)', example: 'Tea or coffee? It’s a matter of choice.' },
+    { word: 'soft', translation: 'мягкий', example: 'This sweater is very soft.' }
+  ].map(w => ({ ...w, lesson: 'Lesson 16 Oct' })),
+  Anastasia: [
+    { word: 'to be like a hamster on a wheel', translation: 'быть как белка в колесе', example: 'Work, home, work, home — I feel like a hamster on a wheel.' },
+    { word: 'for now', translation: 'пока что, на данный момент', example: "That's all for now — see you next week." },
+    { word: 'remote work', translation: 'удалённая работа', example: 'Remote work saves me two hours of commuting every day.' }
+  ].map(w => ({ ...w, lesson: 'Lesson 16 Oct' }))
+};
+
 const OCT12_WORDS = {
   Rustam: [
     { word: 'to irritate / to be irritated', translation: 'раздражать / раздражаться (be irritated by / with something)', example: 'His constant complaining really irritates me.' },
@@ -8590,7 +8626,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
