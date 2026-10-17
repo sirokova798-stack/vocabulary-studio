@@ -2232,6 +2232,7 @@ const CTX_ADJ = new Set((
  'bland literate inconvenient foreign authentic drained so-called stunning spectacular witty precise analytical devoted blunt ' +
  'overrated disjointed risqué harrowing memorable understated hilarious hackneyed gripping moving unforgettable intense catchy riveting faithful ' +
  'genuine approachable outgoing sturdy ordinary distracted restrained absent swollen self-sufficient ' +
+ 'odd internalised wired isolated predictive ' +
  'stimulating self-centered self-centred inferior gloomy magnetic brief tender unexpected urgent must-see non-negotiable').split(' '));
 const CTX_UNCOUNT = new Set((
  'advice information furniture music weather homework knowledge patience silence confidence pleasure attention progress luggage ' +
@@ -2242,7 +2243,7 @@ const CTX_UNCOUNT = new Set((
  'jewelry clothing accommodation vocabulary grammar literature art nature space violence pollution intelligence experience ' +
  'validation importance convenience pseudoscience heat confusion treatment custody nausea vanity cruelty entertainment hesitation ' +
  'jealousy compatibility friction bluntness insecurity loneliness stress grief enjoyment herring cream leisure ' +
- 'teeth self-esteem society acne snoring lightning lyrics cutlery anticipation rigidity coursework cohesion bureaucracy').split(' '));
+ 'teeth self-esteem society acne snoring lightning lyrics cutlery anticipation rigidity coursework cohesion bureaucracy hair').split(' '));
 const CTX_LINKER_KIND = {
   'although': 'clause', 'though': 'clause', 'even though': 'clause', 'whereas': 'clause', 'while': 'clause', 'unless': 'clause',
   'in case': 'clause', 'as long as': 'clause', 'so that': 'clause', 'because': 'clause', 'even if': 'clause', 'meaning that': 'clause',
@@ -2547,7 +2548,7 @@ function ctxShapeCandidate(cTok, info) {
     }
     const subj = (info.m.sentence.slice(0, info.m.start).match(/\b(i|you|he|she|it|we|they)\b[^a-z]*$/i) ||
                   info.m.sentence.slice(0, info.m.start).match(/\b(i|you|he|she|it|we|they)\b/i) || [])[1];
-    const s = (subj || '').toLowerCase();
+    const s = ((subj || '').toLowerCase() === 'it') ? '' : (subj || '').toLowerCase();
     const ansPoss = info.m.surface.toLowerCase().split(/\s+/).find(t => CTX_POSS.includes(t));
     const ansRefl = info.m.surface.toLowerCase().split(/\s+/).find(t => CTX_REFL.includes(t));
     for (let i = 1; i < toks.length; i++) {
@@ -7752,6 +7753,68 @@ const MILANA_WORDS = [
   { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
 ];
 
+// New student Karina Kar — a separate name so she isn't mixed up with Karina's own French cabinet
+const KARINA_S_WORDS = [
+  ...[
+    ['to be comfortable in your own skin', 'чувствовать себя комфортно в своей шкуре, принимать себя', 'She’s finally comfortable in her own skin.'],
+    ['to feel secure within yourself', 'чувствовать внутреннюю уверенность', 'When you feel secure within yourself, criticism hurts less.'],
+    ['to rely on (yourself)', 'полагаться на (себя)', 'You can always rely on yourself.'],
+    ['to gain clarity', 'обрести ясность', 'A long walk helps me gain clarity.'],
+    ['to miss out on something', 'упустить что-то', 'I don’t want to miss out on this opportunity.'],
+    ['to panic at the idea of', 'паниковать от одной мысли о', 'Some people panic at the idea of spending a weekend alone.'],
+    ['in moments of solitude', 'в моменты уединения', 'In moments of solitude, I write in my diary.'],
+    ['to nourish', 'питать, подпитывать (things that nourish you — то, что тебя наполняет)', 'Spend time on the things that nourish you.'],
+    ['to be drawn to', 'тянуться к', 'People are naturally drawn to calm, confident people.'],
+    ['to enjoy your own company', 'получать удовольствие от собственной компании', 'I’ve learnt to enjoy my own company.']
+  ].map(r => [...r, 'Being Alone']),
+  ...[
+    ['to engage in', 'заниматься чем-то, вовлекаться в (engage in self-talk — разговаривать с собой)', 'Most people engage in self-talk every day.'],
+    ['a sign of', 'признак', 'Talking to yourself is not a sign of madness.'],
+    ['to stigmatise', 'стигматизировать, клеймить', 'Mental health problems are still stigmatised.'],
+    ['to boost your self-esteem', 'повысить самооценку', 'Small achievements can boost your self-esteem.'],
+    ['to tackle (a problem / everyday tasks)', 'браться за, решать (проблему, повседневные дела)', 'Positive self-talk helps us tackle everyday tasks.'],
+    ['a cycle of negative thoughts', 'замкнутый круг негативных мыслей', 'It’s hard to break a cycle of negative thoughts.'],
+    ['compassionate', 'сострадательный, чуткий', 'Try to be compassionate towards yourself.'],
+    ['a facet of your life', 'грань, сторона твоей жизни', 'Self-talk affects every facet of your life.'],
+    ['verbalised thoughts', 'мысли, выраженные словами', 'Self-talk is a stream of verbalised thoughts.'],
+    ['internalised', 'усвоенный, принятый внутрь себя', 'Children repeat internalised messages from their parents.'],
+    ['to be predictive of', 'предсказывать, указывать на (в будущем)', 'Your self-talk can be predictive of your performance.'],
+    ['to regulate the tone', 'регулировать тон', 'You can learn to regulate the tone of your inner voice.']
+  ].map(r => [...r, 'Self-talk (TED-Ed)']),
+  ...[
+    ['distanced self-talk', 'разговор с собой во втором / третьем лице («Ты справишься, Карина»)', 'Distanced self-talk can reduce anxiety before a speech.'],
+    ['to give yourself a (quick) pep talk', 'подбодрить себя, сказать себе воодушевляющие слова (также: give somebody a pep talk)', 'Before the exam, I gave myself a quick pep talk.'],
+    ['to dwell on something', 'зацикливаться на чём-то, постоянно думать о', 'Don’t dwell on your mistakes.'],
+    ['to beat yourself up', 'корить себя, винить себя', 'Stop beating yourself up — everyone makes mistakes.'],
+    ['to cut yourself some slack', 'дать себе поблажку, не быть слишком строгим к себе (также: cut somebody some slack)', 'You’ve been ill — cut yourself some slack.'],
+    ['to give yourself credit (for)', 'отдать себе должное (за) (также: give somebody credit for)', 'Give yourself credit for how far you’ve come.'],
+    ['to blow something out of proportion', 'раздувать из мухи слона', 'It was a small mistake — don’t blow it out of proportion.'],
+    ['to overthink', 'слишком много думать, «накручивать» себя', 'I tend to overthink everything.'],
+    ['what really matters', 'что действительно важно', 'Focus on what really matters.'],
+    ['to gain confidence', 'обрести уверенность', 'She gained confidence after a few lessons.'],
+    ['to jot down', 'быстро записать, набросать', 'Let me jot down your phone number.'],
+    ['to put effort into something', 'вкладывать усилия во что-то', 'She puts a lot of effort into her English.'],
+    ['to acquire a habit', 'приобрести привычку', 'It takes time to acquire a new habit.'],
+    ['to sleep on it', 'отложить решение до утра, «переспать с этой мыслью»', 'Don’t decide now — sleep on it.'],
+    ['hair (always singular)', 'волосы — в английском неисчисляемое, всегда ед. число: my hair is…, it dries', 'My hair is long, and it dries very slowly.'],
+    ['to make braids', 'заплетать косички', 'My sister makes braids every morning.'],
+    ['a reminder of', 'напоминание о', 'This photo is a reminder of our trip to Italy.'],
+    ['comprehensive vs comprehensible', 'comprehensive — всесторонний, исчерпывающий; comprehensible — понятный', 'It’s a comprehensive guide, and it’s easily comprehensible.'],
+    ['compatible', 'совместимый, подходящий друг другу', 'We’re very compatible — we like the same things.'],
+    ['to add to (happiness)', 'добавлять, увеличивать (счастье и т. п.)', 'Small rituals add to our happiness.'],
+    ['odd', 'странный', 'It’s odd that he hasn’t called.'],
+    ['it makes a real difference', 'это действительно имеет значение, это сильно помогает', 'A good night’s sleep makes a real difference.'],
+    ['a study', 'исследование (научное)', 'A recent study shows that self-talk improves performance.'],
+    ['a threat', 'угроза', 'Stress can be a threat to your health.'],
+    ['stop to do vs stop doing', 'stop to do — остановиться, чтобы сделать; stop doing — перестать делать', 'I stopped to buy coffee. / I stopped drinking coffee.'],
+    ['to be wired', 'быть взвинченным, на взводе (не можешь успокоиться)', 'I drank three coffees and now I’m completely wired.'],
+    ['to binge-watch', 'смотреть сериал запоем', 'We binge-watched the whole series in one weekend.'],
+    ['isolated', 'изолированный, оторванный от других', 'Working from home, she started to feel isolated.'],
+    ['altitude vs attitude', 'altitude — высота (над уровнем моря); attitude — отношение', 'At high altitude it’s hard to breathe. / She has a positive attitude.'],
+    ['riveting', 'захватывающий, от которого невозможно оторваться', 'The documentary was absolutely riveting.']
+  ].map(r => [...r, 'Lesson 16 Oct'])
+].map(([word, translation, example, lesson]) => ({ word, translation, example, lesson }));
+
 const DIANA_IPA = {
   'genuine': '/ˈdʒenjuɪn/', "crow's feet": '/ˈkrəʊz fiːt/', 'to slouch': '/slaʊtʃ/', 'posture': '/ˈpɒstʃə/',
   'to stoop': '/stuːp/', 'to hunch': '/hʌntʃ/', 'a generation': '/ˌdʒenəˈreɪʃn/', 'to be drawn to': '/bi ˈdrɔːn tə/',
@@ -8646,6 +8709,16 @@ const OCT9_WORDS = {
   const dianaExisting = new Set(diana.words.map(w => w.word.toLowerCase()));
   DIANA_WORDS.forEach(w => {
     if (!dianaExisting.has(w.word.toLowerCase())) diana.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
+  });
+
+  // ── Karina Kar ──
+  let karinaS = data.students.find(s => s.name === 'Karina Kar');
+  if (!karinaS) { karinaS = { id: uid(), name: 'Karina Kar', words: [], quizHistory: [] }; data.students.push(karinaS); }
+  if (!karinaS.quizHistory) karinaS.quizHistory = [];
+  karinaS.pin = '2727';
+  const karinaSExisting = new Set(karinaS.words.map(w => w.word.toLowerCase()));
+  KARINA_S_WORDS.forEach(w => {
+    if (!karinaSExisting.has(w.word.toLowerCase())) karinaS.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
   });
 
   // ── Lesson words of 9 Oct 2026, several students ──
