@@ -1102,6 +1102,7 @@
       <button class="phr-level-btn" onclick="beginPhrasal('A2-B1')"><b>A2–B1</b><span>Everyday basics</span></button>
       <button class="phr-level-btn" onclick="beginPhrasal('B1-B2')"><b>B1–B2</b><span>Intermediate</span></button>
       <button class="phr-level-btn" onclick="beginPhrasal('B2-C1')"><b>B2–C1</b><span>Advanced</span></button>
+      <button class="phr-level-btn" onclick="beginPhrasal('U137')"><b>Unit 137</b><span>Introduction · from your book</span></button>
     </div>
   </div>
 
@@ -2880,7 +2881,24 @@ const PHRASAL_VERBS = [
   { verb:'wear',   particle:'out',    ru:'изнашивать(ся); изматывать',            ex:'These shoes have worn out.',              level:'B2-C1' },
   { verb:'come',   particle:'up',     ru:'возникать (о проблеме, теме)',          ex:'A problem came up.',                      level:'B2-C1' },
   { verb:'get',    particle:'along',  ru:'ладить (с кем-то)',                     ex:'They get along well.',                    level:'B2-C1' },
-  { verb:'give',   particle:'in',     ru:'уступать, сдаваться',                   ex:'He finally gave in.',                     level:'B2-C1' }
+  { verb:'give',   particle:'in',     ru:'уступать, сдаваться',                   ex:'He finally gave in.',                     level:'B2-C1' },
+
+  // ── Unit 137 · Introduction (phrasal verbs from the students' grammar book) ──
+  { verb:'get',    particle:'on',      ru:'садиться (в автобус, поезд); справляться (How did you get on?)', ex:'How did you get on at the interview?', level:'U137' },
+  { verb:'drive',  particle:'off',     ru:'уехать (на машине)',                    ex:'She got into the car and drove off.',     level:'U137' },
+  { verb:'turn',   particle:'round',   ru:'обернуться, повернуться',               ex:'I called his name and he turned round.',  level:'U137' },
+  { verb:'get',    particle:'by',      ru:'обходиться, сводить концы с концами',   ex:'My Italian is basic, but I can get by.',  level:'U137' },
+  { verb:'speak',  particle:'up',      ru:'говорить громче',                       ex:'Could you speak up? I can’t hear you.',   level:'U137' },
+  { verb:'go',     particle:'up',      ru:'расти (о ценах)',                       ex:'Bus fares have gone up again.',           level:'U137' },
+  { verb:'look',   particle:'round',   ru:'оглянуться; осмотреть (место)',         ex:'I heard a noise and looked round.',       level:'U137' },
+  { verb:'get',    particle:'out',     ru:'выбраться, выйти',                      ex:'The door was locked and we couldn’t get out.', level:'U137' },
+  { verb:'fly',    particle:'away',    ru:'улететь',                               ex:'The bird flew away when the cat came closer.', level:'U137' },
+  { verb:'be',     particle:'back',    ru:'вернуться (быть снова здесь)',           ex:'I’m going to the shop. I’ll be back in ten minutes.', level:'U137' },
+  { verb:'switch', particle:'on',      ru:'включать',                              ex:'Switch on the kettle, please.',           level:'U137' },
+  { verb:'put',    particle:'out',     ru:'тушить (огонь, сигарету)',              ex:'They put out the fire in a few minutes.', level:'U137' },
+  { verb:'knock',  particle:'over',    ru:'опрокинуть, сбить',                     ex:'The cat knocked over my glass of water.', level:'U137' },
+  { verb:'keep',   particle:'up',      ru:'не отставать (keep up with)',           ex:'Slow down — I can’t keep up with you!',   level:'U137' },
+  { verb:'look',   particle:'forward', ru:'ждать с нетерпением (look forward to)', ex:'I’m looking forward to the holidays.',    level:'U137' }
 ];
 
 const ALL_PHR_VERBS = [...new Set(PHRASAL_VERBS.map(p => p.verb))];
@@ -2893,12 +2911,19 @@ const ALL_PHR_PARTICLES = [...new Set(PHRASAL_VERBS.map(p => p.particle))];
 const PHR_SYNONYMS = [
   ['find out','figure out','work out','sort out','make out'],
   ['give up','give in'],
-  ['get in','get into'],
+  ['get in','get into','get on'],
   ['carry on','go on'],
   ['turn up','show up'],
   ['set off','set out'],
   ['throw away','throw out'],
-  ['fill in','fill out']
+  ['fill in','fill out'],
+  ['switch on','turn on'],
+  ['switch off','turn off'],
+  ['turn round','turn around','look round','look around'],
+  ['go up','put up'],
+  ['get out','get off'],
+  ['get by','get on'],
+  ['run out','give out']
 ];
 // Map each phrasal verb to the set of its synonyms (excluding itself).
 const PHR_SYN_MAP = {};
@@ -3796,6 +3821,63 @@ you / we / they → <b>are</b> &nbsp;(ты, вы / мы / они)
     egs:[{en:'I enjoy reading.', ru:'Мне нравится читать. (enjoy + -ing)'},{en:'I decided to leave.', ru:'Я решил уйти. (decide + to)'},{en:'She is good at singing.', ru:'Она хорошо поёт. (после предлога at → -ing)'},{en:'I stopped to rest. / I stopped smoking.', ru:'Я остановился, чтобы отдохнуть. / Я бросил курить.'}],
     tip:'💡 После предлога (at, of, about, in, to) — ВСЕГДА -ing: interested in learning, look forward to seeing you.' },
 
+  { cat:'Структуры', title:'Phrasal verbs 1 — Introduction', title_ru:'Фразовые глаголы: что это, предлоги, место объекта',
+    rule:`<div class="lx">
+<h5>1. Что такое фразовый глагол</h5>
+<p>Фразовый глагол = <b>глагол + частица</b>: in, out, on, off, up, down, away, back, by, through, about, along, over, forward, round / around.<br>
+<i>look out · get on · take off · run away</i></p>
+<p>Часто частица показывает <b>направление движения</b>:</p>
+<div class="ex">
+<div>The bus was full. We couldn’t <b>get on</b>. <span class="ru">— сесть (в автобус)</span></div>
+<div>A woman got into the car and <b>drove off</b>. <span class="ru">— уехала</span></div>
+<div>She’s leaving tomorrow and <b>coming back</b> on Saturday. <span class="ru">— вернётся</span></div>
+<div>When I touched his shoulder, he <b>turned round</b>. <span class="ru">— обернулся</span></div>
+</div>
+
+<h5>2. Частица меняет смысл</h5>
+<p>Часто значение фразового глагола <b>нельзя угадать</b> по словам — его нужно запомнить целиком:</p>
+<div class="tw"><table>
+<tr><td>break down</td><td class="ru">сломаться (о машине, технике)</td><td><i>The car broke down on the motorway.</i></td></tr>
+<tr><td>find out</td><td class="ru">узнать, выяснить</td><td><i>I never found out who sent the flowers.</i></td></tr>
+<tr><td>take off</td><td class="ru">взлететь (о самолёте); снять (одежду)</td><td><i>I was nervous as the plane took off.</i></td></tr>
+<tr><td>give up</td><td class="ru">сдаться, перестать пытаться; бросить (привычку)</td><td><i>I tried many times, but in the end I gave up.</i></td></tr>
+<tr><td>get on</td><td class="ru">справиться, как прошло (How did you get on?)</td><td><i>How was the exam? How did you get on?</i></td></tr>
+<tr><td>get by</td><td class="ru">обходиться, справляться (минимумом)</td><td><i>My French isn’t good, but it’s enough to get by.</i></td></tr>
+</table></div>
+
+<h5>3. Фразовый глагол + предлог</h5>
+<p>Иногда после фразового глагола идёт ещё и <b>предлог</b> — тогда это три слова, и их учат вместе:</p>
+<div class="tw"><table>
+<tr><td>look up at</td><td class="ru">посмотреть вверх на</td><td><i>We looked up at the plane.</i></td></tr>
+<tr><td>run away from</td><td class="ru">убежать от</td><td><i>Why did you run away from me?</i></td></tr>
+<tr><td>keep up with</td><td class="ru">не отставать от</td><td><i>You’re walking too fast — I can’t keep up with you.</i></td></tr>
+<tr><td>look forward to</td><td class="ru">ждать с нетерпением (+ существительное или -ing)</td><td><i>I’m looking forward to the trip / to seeing you.</i></td></tr>
+</table></div>
+
+<h5>4. Где стоит объект</h5>
+<p>Если у глагола есть объект (<i>the light, my shoes, the baby</i>), он может стоять <b>в двух местах</b>:</p>
+<div class="ex"><div>I turned <b>on</b> the light. = I turned the light <b>on</b>.</div><div>Take <b>off</b> your shoes. = Take your shoes <b>off</b>.</div></div>
+<div class="note"><b>Но!</b> Если объект — <b>местоимение</b> (it, them, me, him, her, us, you), оно стоит <b>только между глаголом и частицей</b>:<br>
+I turned <b>it</b> on. &nbsp; <span class="no">✗ I turned on it.</span><br>
+These shoes hurt. I’m going to take <b>them</b> off. &nbsp; <span class="no">✗ take off them</span><br>
+The baby is asleep. Don’t wake <b>her</b> up. &nbsp; <span class="no">✗ wake up her</span></div>
+
+<h4>Practice 1. Verb + particle</h4>
+<p class="instr">Complete the sentence with the phrasal verb in the correct form. The verb is in brackets.<br>Вставь фразовый глагол в правильной форме (глагол дан в скобках).</p>
+<div class="lxq" data-ex="pv1"></div>
+<h4>Practice 2. Phrasal verb + preposition</h4>
+<p class="instr">Write the two missing words.<br>Впиши два пропущенных слова (частицу и предлог).</p>
+<div class="lxq" data-ex="pv2"></div>
+<h4>Practice 3. it / them / me</h4>
+<p class="instr">Complete with the pronoun and the particle.<br>Впиши местоимение и частицу — в правильном порядке.</p>
+<div class="lxq" data-ex="pv3"></div>
+<h4>Practice 4. Which order?</h4>
+<p class="instr">Choose the correct option.<br>Выбери правильный вариант.</p>
+<div class="lxq" data-ex="pv4"></div>
+</div>`,
+    egs:[{en:'I turned on the light. / I turned the light on.', ru:'Существительное — в любом из двух мест.'},{en:'I turned it on.', ru:'Местоимение — только между глаголом и частицей.'},{en:'I’m looking forward to the trip.', ru:'Фразовый глагол + предлог.'}],
+    tip:'⚠️ Местоимение (it, them, me…) всегда между глаголом и частицей: take them off, wake her up, throw it away.' },
+
   // ── Продвинутый уровень (C1) — полные уроки: теория + задания с ответами ──
   { cat:'Продвинутый уровень (C1)', title:'Verbs of perception: I saw it happen', title_ru:'Глаголы восприятия: see / hear / watch + do / doing / done',
     rule:`<div class="lx">
@@ -4347,6 +4429,51 @@ function lxHydrate(root) {
 
 const LIB_H = w => '<span class="lxq-hint">(' + w + ')</span>';
 const LIB_TASKS = {
+  // ── Phrasal verbs 1 — Introduction (own sentences, not the book's) ──
+  pv1: { type: 'gap', items: [
+    { q: 'My parents are on holiday. They’re ___ next Monday.', hint: 'come', ok: ['coming back'], note: 'come back — возвращаться.' },
+    { q: 'The bus was so full that we couldn’t ___.', hint: 'get', ok: ['get on'] },
+    { q: 'Our car ___ on the way to the airport, so we missed the flight.', hint: 'break', ok: ['broke down'] },
+    { q: 'I’ve been standing all day. Let’s ___ for a minute.', hint: 'sit', ok: ['sit down'] },
+    { q: 'Can you ___? We can’t hear you at the back of the room.', hint: 'speak', ok: ['speak up'] },
+    { q: 'Food is so expensive now. Prices have ___ again.', hint: 'go', ok: ['gone up'] },
+    { q: 'I heard footsteps behind me, so I ___.', hint: 'turn', ok: ['turned round', 'turned around'] },
+    { q: 'The plane ___ at exactly nine o’clock.', hint: 'take', ok: ['took off'] },
+    { q: 'My Spanish isn’t great, but it’s enough to ___.', hint: 'get', ok: ['get by'] },
+    { q: 'How was your driving test? How did you ___?', hint: 'get', ok: ['get on'] },
+    { q: 'I’m just going to the bank. I’ll ___ in twenty minutes.', hint: 'be', ok: ['be back'] },
+    { q: 'Someone left the door open, and the parrot ___.', hint: 'fly', ok: ['flew away'] }
+  ] },
+  pv2: { type: 'gap', items: [
+    { q: 'You’re walking too fast. I can’t keep ___ you.', ok: ['up with'] },
+    { q: 'I’m really looking ___ the summer holidays.', ok: ['forward to'] },
+    { q: 'Why did the cat run ___ you? Did you scare it?', ok: ['away from'] },
+    { q: 'We lay on the grass and looked ___ the stars.', ok: ['up at'] },
+    { q: 'The holidays are over. Tomorrow I’ll be ___ work.', ok: ['back at'] },
+    { q: 'Nobody told me about the party. How did you find ___ it?', ok: ['out about'] },
+    { q: 'The thieves got ___ all the money from the safe.', ok: ['away with'], note: 'get away with — уйти, скрыться с (украденным).' },
+    { q: 'We walked ___ the top of the hill to see the view.', ok: ['up to'] }
+  ] },
+  pv3: { type: 'gap', items: [
+    { q: 'I want to keep these letters. Please don’t throw ___.', ok: ['them away'] },
+    { q: 'The baby is asleep. Please don’t wake ___!', ok: ['her up', 'him up'] },
+    { q: 'These boots are really uncomfortable. I’m going to take ___.', ok: ['them off'] },
+    { q: 'Where’s the light switch? Can you switch ___?', ok: ['it on'] },
+    { q: 'That’s my phone! Give ___, please.', ok: ['it back', 'it back to me'] },
+    { q: 'I’m going to bed now. Can you wake ___ at seven?', ok: ['me up'] },
+    { q: 'Your jacket is on the chair. Put ___ — it’s cold outside.', ok: ['it on'] },
+    { q: 'There’s a small fire in the bin! Quick, put ___!', ok: ['it out'] }
+  ] },
+  pv4: { type: 'choice', items: [
+    { q: 'The music is too loud. Can you turn ___?', opts: ['it down', 'down it'], ok: [0], note: 'Местоимение — между глаголом и частицей.' },
+    { q: 'I don’t need these papers. You can throw ___.', opts: ['away them', 'them away'], ok: [1] },
+    { q: 'Turn ___ before you leave the room.', opts: ['off the lights', 'off them'], ok: [0], note: 'Существительное может стоять после частицы; местоимение — нет.' },
+    { q: 'I found your keys and gave ___.', opts: ['them back', 'back them'], ok: [0] },
+    { q: 'Don’t wake ___ — he’s had a long day.', opts: ['up him', 'up Tom'], ok: [1], note: 'wake up Tom ✓ / wake Tom up ✓ / wake him up ✓ / wake up him ✗' },
+    { q: 'This coat is wet. I’m going to take ___.', opts: ['it off', 'off it'], ok: [0] },
+    { q: 'Can you pick ___ from school today?', opts: ['the kids up', 'up them'], ok: [0] },
+    { q: 'The cat knocked ___ and broke it.', opts: ['over the vase', 'over it'], ok: [0] }
+  ] },
   // ── Module 5 ──
   m5a: { type: 'choice', items: [
     { q: 'A judge must be completely ___ in the case.', opts: ['disinterested', 'uninterested'], ok: [0], note: 'disinterested — беспристрастный; uninterested — равнодушный.' },
@@ -8227,6 +8354,13 @@ const OCT16_WORDS = {
   ].map(w => ({ ...w, lesson: 'Lesson 16 Oct' }))
 };
 
+// 19 Oct: everyone asked about contact lenses; weekdays for Rustam
+const LENS_CARD = { word: 'a contact lens / contact lenses', translation: 'контактная линза / контактные линзы (wear lenses — носить линзы; put in / take out your lenses — надеть / снять линзы)', example: 'I wear contact lenses, but I take them out before I go to bed.', lesson: 'Lesson 19 Oct' };
+const OCT19_WORDS = {
+  Anastasia: [LENS_CARD], Trofim: [LENS_CARD], 'Talk Talk Talk': [LENS_CARD], Milana: [LENS_CARD],
+  Rustam: [{ word: 'on weekdays / at the weekend', translation: 'по будням / в выходные (weekdays — Monday to Friday)', example: 'I work on weekdays, but at the weekend I relax.', lesson: 'Lesson 19 Oct' }]
+};
+
 const OCT12_WORDS = {
   Rustam: [
     { word: 'to irritate / to be irritated', translation: 'раздражать / раздражаться (be irritated by / with something)', example: 'His constant complaining really irritates me.' },
@@ -8787,7 +8921,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
