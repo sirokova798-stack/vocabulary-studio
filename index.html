@@ -2995,6 +2995,16 @@ function beginPhrasal(level) {
   renderPhrQ();
 }
 
+// The hint shown BEFORE answering must be Russian only — English notes like "(wear somebody out)"
+// or "— How did you get on?" would give the answer away. The full text appears after answering.
+function phrHint(ru) {
+  return ru
+    .replace(/\([^)]*[A-Za-z][^)]*\)/g, '')                 // (make up with), (тж. turn around)
+    .split(';').map(part => part.split(/\s—\s/).filter(seg => !/[A-Za-z]/.test(seg)).join(' — '))
+    .map(x => x.trim()).filter(Boolean).join('; ')
+    .replace(/\s+([,;])/g, '$1').replace(/\s{2,}/g, ' ').trim();
+}
+
 function renderPhrQ() {
   if (phrIndex >= phrQuestions.length) { showPhrResults(); return; }
   const q = phrQuestions[phrIndex];
@@ -3003,7 +3013,7 @@ function renderPhrQ() {
   document.getElementById('phr-progress').style.width = (phrIndex / phrQuestions.length * 100) + '%';
   document.getElementById('phr-counter').textContent = (phrIndex + 1) + ' of ' + phrQuestions.length;
   document.getElementById('phr-hint').innerHTML =
-    '<div class="phr-hint-ru">' + esc(q.correct.ru) + '</div>' +
+    '<div class="phr-hint-ru">' + esc(phrHint(q.correct.ru)) + '</div>' +
     '<div class="phr-hint-sub">Choose the verb + particle that mean this</div>';
   document.getElementById('phr-feedback').innerHTML = '';
   document.getElementById('phr-next-wrap').style.display = 'none';
