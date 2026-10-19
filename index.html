@@ -4230,7 +4230,8 @@ He seems not to have understood. <span class="ru">— звучит книжне�
 
   // Module 5 — the vocabulary tables come from M5_LESSONS (the same data as Karina's flashcards),
   // so the rule is built when the library opens
-  { cat:'Продвинутый уровень (C1)', title:'Module 5 — Language and literature', title_ru:'Модуль 5: язык и литература — лексика, идиомы, cleft sentences',
+  // Karina's own revision topic — visible only in her cabinet
+  { only:['Karina'], cat:'Продвинутый уровень (C1)', title:'Module 5 — Language and literature', title_ru:'Модуль 5: язык и литература — лексика, идиомы, cleft sentences',
     get rule() {
       const tbl = lesson => '<div class="tw"><table>' + M5_LESSONS[lesson].map(([w, t, e]) =>
         '<tr><td>' + esc(w) + '</td><td class="ru">' + esc(t) + '</td><td><i>' + esc(e) + '</i></td></tr>').join('') + '</table></div>';
@@ -4299,9 +4300,11 @@ function startLibrary() {
 function renderLibrary(filter) {
   const f = (filter || '').toLowerCase().trim();
   const list = document.getElementById('lib-list');
-  const matched = GRAMMAR_LIBRARY.filter(t =>
+  // lessons with `only` are personal (e.g. Karina's Module 5) — show them only to those students
+  const me = (db().students.find(x => x.id === currentStudent) || {}).name;
+  const matched = GRAMMAR_LIBRARY.filter(t => (!t.only || t.only.includes(me)) && (
     !f || (t.title + ' ' + t.title_ru + ' ' + t.cat + ' ' + t.rule).toLowerCase().includes(f)
-  );
+  ));
   if (!matched.length) { list.innerHTML = '<div class="lib-empty">Ничего не найдено 🔍</div>'; return; }
   const cats = [...new Set(matched.map(t => t.cat))];
   let html = '';
