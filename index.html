@@ -561,6 +561,12 @@
   .lx th { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
   .lx td:first-child { font-weight: 600; }
   .lx td.c { text-align: center; white-space: nowrap; }
+  .lx table.tense { min-width: 760px; }
+  .lx table.tense td:nth-child(1) { width: 110px; }
+  .lx table.tense td:nth-child(2) { width: 130px; white-space: nowrap; }
+  .lx table.tense td:nth-child(5) { width: 250px; }
+  .lx .scroll-hint { display: none; font-size: 0.78rem; color: var(--muted); }
+  @media (max-width: 760px) { .lx .scroll-hint { display: block; } }
   .lx ol { padding-left: 22px; margin: 4px 0 8px; }
   .lx ol li { margin-bottom: 7px; }
   .lx ol.plain { list-style: none; padding-left: 0; }
@@ -3589,6 +3595,46 @@ function endGrammar() {
 // ─────────────────────────────────────────────────────────────
 // GRAMMAR LIBRARY — reference, rules in Russian (shared by all students)
 // ─────────────────────────────────────────────────────────────
+// Rows of the "All English tenses" table (Russian explanations, + / − / ? examples)
+const TENSE_TABLE = [
+  { group: 'Present', name: 'Present Simple', formula: 'V / V+s (he, she, it)<br>do / does not + V<br>Do / Does … V?',
+    use: 'Регулярные действия и привычки; факты и общие истины; расписания.', markers: 'always, usually, often, sometimes, never, every day, on Mondays',
+    ex: '+ She <b>works</b> in a bank.<br>− She <b>doesn’t work</b> on Sundays.<br>? <b>Does</b> she <b>work</b> every day?' },
+  { group: 'Present', name: 'Present Continuous', formula: 'am / is / are + V-ing',
+    use: 'Действие происходит прямо сейчас; временная ситуация; договорённость на ближайшее будущее.', markers: 'now, at the moment, right now, today, this week, Look! Listen!',
+    ex: '+ I <b>am reading</b> now.<br>− He <b>isn’t sleeping</b>.<br>? <b>Are</b> you <b>working</b> this week?' },
+  { group: 'Present', name: 'Present Perfect', formula: 'have / has + V3',
+    use: 'Действие в прошлом, но важен результат сейчас; опыт («когда-либо»); действие ещё не закончилось (с for / since). Точное время в прошлом не называется.', markers: 'already, yet, just, ever, never, recently, so far, for, since',
+    ex: '+ I <b>have lost</b> my keys.<br>− She <b>hasn’t finished</b> yet.<br>? <b>Have</b> you ever <b>been</b> to Paris?' },
+  { group: 'Present', name: 'Present Perfect Continuous', formula: 'have / has been + V-ing',
+    use: 'Действие началось в прошлом и длится до сих пор (или только что закончилось) — важно, КАК ДОЛГО оно длится.', markers: 'for, since, all day, how long, lately, recently',
+    ex: '+ I <b>have been learning</b> English for two years.<br>− He <b>hasn’t been sleeping</b> well lately.<br>? How long <b>have</b> you <b>been waiting</b>?' },
+  { group: 'Past', name: 'Past Simple', formula: 'V-ed / V2<br>did not + V<br>Did … V?',
+    use: 'Законченное действие в прошлом, время известно; цепочка действий в прошлом.', markers: 'yesterday, last week, ago, in 2020, when I was a child',
+    ex: '+ We <b>visited</b> Rome last year.<br>− I <b>didn’t see</b> him yesterday.<br>? <b>Did</b> you <b>call</b> her?' },
+  { group: 'Past', name: 'Past Continuous', formula: 'was / were + V-ing',
+    use: 'Действие длилось в определённый момент в прошлом; фон для другого (короткого) действия.', markers: 'at 5 o’clock yesterday, while, when, all evening',
+    ex: '+ I <b>was cooking</b> when he called.<br>− They <b>weren’t listening</b>.<br>? What <b>were</b> you <b>doing</b> at 8 pm?' },
+  { group: 'Past', name: 'Past Perfect', formula: 'had + V3',
+    use: 'Действие произошло РАНЬШЕ другого действия в прошлом («предпрошедшее»).', markers: 'before, after, by the time, already, when',
+    ex: '+ When I arrived, the film <b>had</b> already <b>started</b>.<br>− She <b>hadn’t eaten</b> before the meeting.<br>? <b>Had</b> you <b>met</b> him before?' },
+  { group: 'Past', name: 'Past Perfect Continuous', formula: 'had been + V-ing',
+    use: 'Действие длилось какое-то время ДО момента в прошлом — важно, как долго.', markers: 'for, since, before, by the time, how long',
+    ex: '+ She <b>had been waiting</b> for an hour when the bus came.<br>− I <b>hadn’t been sleeping</b> well before the exam.<br>? How long <b>had</b> they <b>been living</b> there?' },
+  { group: 'Future', name: 'Future Simple', formula: 'will + V<br>will not (won’t) + V<br>Will … V?',
+    use: 'Решение в момент речи; обещание; предсказание (мнение). Для планов чаще используем be going to.', markers: 'tomorrow, next week, soon, I think, probably, in 2030',
+    ex: '+ I <b>will help</b> you.<br>− It <b>won’t take</b> long.<br>? <b>Will</b> you <b>come</b> tomorrow?' },
+  { group: 'Future', name: 'Future Continuous', formula: 'will be + V-ing',
+    use: 'Действие будет длиться в определённый момент в будущем.', markers: 'at this time tomorrow, at 6 pm tomorrow, all day tomorrow',
+    ex: '+ At this time tomorrow I <b>will be flying</b> to London.<br>− She <b>won’t be working</b> on Saturday.<br>? <b>Will</b> you <b>be using</b> the car tonight?' },
+  { group: 'Future', name: 'Future Perfect', formula: 'will have + V3',
+    use: 'Действие будет ЗАКОНЧЕНО к определённому моменту в будущем.', markers: 'by tomorrow, by Friday, by the time, by 2030',
+    ex: '+ I <b>will have finished</b> the report by Friday.<br>− They <b>won’t have arrived</b> by noon.<br>? <b>Will</b> you <b>have done</b> it by then?' },
+  { group: 'Future', name: 'Future Perfect Continuous', formula: 'will have been + V-ing',
+    use: 'Как долго действие будет длиться к определённому моменту в будущем.', markers: 'by … for, by the time … for',
+    ex: '+ By June I <b>will have been working</b> here for ten years.<br>− By then he <b>won’t have been studying</b> for long.<br>? How long <b>will</b> you <b>have been living</b> here by next year?' }
+];
+
 const GRAMMAR_LIBRARY = [
   // ── Для начинающих (A1) ──
   { cat:'Для начинающих (A1)', title:'To be: am / is / are', title_ru:'Глагол «быть»: am / is / are',
@@ -3655,6 +3701,22 @@ you / we / they → <b>are</b> &nbsp;(ты, вы / мы / они)
     tip:'💡 this/that → один предмет (is). these/those → много предметов (are).' },
 
   // ── Времена / Tenses ──
+  // All 12 tenses in one table, built from TENSE_TABLE when the library opens
+  { cat:'Времена', title:'All English tenses — table', title_ru:'Все времена английского языка — таблица',
+    get rule() {
+      const groups = [['Present', 'Настоящее'], ['Past', 'Прошедшее'], ['Future', 'Будущее']];
+      let h = '<div class="lx"><p class="scroll-hint">↔ Таблицу можно листать вбок.</p><p>Все 12 времён в одной таблице. <b>Simple</b> — факт, привычка, просто событие. <b>Continuous</b> — процесс (действие длится). <b>Perfect</b> — результат к определённому моменту. <b>Perfect Continuous</b> — как долго длилось действие до определённого момента.</p>';
+      groups.forEach(([g, ru]) => {
+        h += '<h4>' + g + ' — ' + ru + '</h4><div class="tw"><table class="tense"><tr><th>Время</th><th>Формула</th><th>Когда используем</th><th>Маркеры</th><th>Примеры</th></tr>';
+        TENSE_TABLE.filter(t => t.group === g).forEach(t => {
+          h += '<tr><td>' + t.name + '</td><td>' + t.formula + '</td><td>' + t.use + '</td><td>' + t.markers + '</td><td>' + t.ex + '</td></tr>';
+        });
+        h += '</table></div>';
+      });
+      return h + '<div class="note"><b>Подсказка.</b> Глаголы состояния (know, like, love, want, need, understand, believe, own) обычно не используются в Continuous: <i>I know</i>, а не <i>I am knowing</i>.</div></div>';
+    },
+    egs:[{en:'I work. / I am working. / I have worked. / I have been working.', ru:'Present: Simple · Continuous · Perfect · Perfect Continuous'},{en:'I worked. / I was working. / I had worked. / I had been working.', ru:'Past'},{en:'I will work. / I will be working. / I will have worked. / I will have been working.', ru:'Future'}],
+    tip:'💡 Спроси себя: это факт (Simple), процесс (Continuous), результат к моменту (Perfect) или «как долго» до момента (Perfect Continuous)?' },
   { cat:'Времена', title:'Present Simple vs Present Continuous', title_ru:'Простое и длительное настоящее',
     rule:'<b>Present Simple</b> — для регулярных действий, привычек, фактов: I <b>work</b> every day. Маркеры: always, usually, often, every day.<br><br><b>Present Continuous</b> (am/is/are + V-ing) — для действия прямо сейчас или временного: I <b>am working</b> now. Маркеры: now, at the moment, today.',
     egs:[{en:'She drinks coffee every morning.', ru:'Она пьёт кофе каждое утро. (привычка)'},{en:'Look! She is drinking coffee.', ru:'Смотри! Она пьёт кофе. (сейчас)'}],
