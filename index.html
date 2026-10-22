@@ -8011,7 +8011,7 @@ const KATYA_WORDS = [
   ['an envelope', 'конверт', 'She put the letter in an envelope.'],
   ['tastes differ', 'о вкусах не спорят, у всех разные вкусы', 'You don’t like it? Well, tastes differ.'],
   ['to make a mistake', 'сделать ошибку, ошибиться', 'Everyone makes mistakes — it happens.']
-].map(([word, translation, example]) => ({ word, translation, example, lesson: 'First Lesson' }));
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'First Two Lessons' }));
 
 // New student Karina Kar — a separate name so she isn't mixed up with Karina's own French cabinet
 const KARINA_S_WORDS = [
@@ -8984,6 +8984,7 @@ const OCT9_WORDS = {
   if (!katya) { katya = { id: uid(), name: 'Katya', words: [], quizHistory: [] }; data.students.push(katya); }
   if (!katya.quizHistory) katya.quizHistory = [];
   katya.pin = '1212';
+  katya.words.forEach(w => { if (w.lesson === 'First Lesson') w.lesson = 'First Two Lessons'; });
   const katyaExisting = new Set(katya.words.map(w => w.word.toLowerCase()));
   KATYA_WORDS.forEach(w => {
     if (!katyaExisting.has(w.word.toLowerCase())) katya.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
