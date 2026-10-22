@@ -2270,7 +2270,7 @@ const CTX_CAT_OVERRIDE = {
   'on average': 'adv', 'from time to time': 'adv', 'to some extent': 'adv', 'in the first place': 'adv',
   'in advance': 'adv', 'some extent': 'skip', 'archive': 'noun', 'be against': 'skip', 'a sedative': 'noun', 'sedative': 'noun', 'bless': 'skip', 'clash': 'verb', 'admire': 'verb', 'belly': 'noun', 'enemy': 'noun', 'enemies': 'noun', 'dish': 'noun',
   'shellfish': 'noun', 'late': 'adj', 'she': 'skip', 'bench press': 'skip', 'off-screen': 'adv', 'stable': 'noun',
-  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'nothing': 'skip', 'be a cold fish': 'skip', 'be a bit thin on top': 'skip', 'be rolling in it': 'skip', 'cattle': 'skip', 'accepted vs consented': 'skip', 'accepted': 'skip',
+  'pattern of': 'skip', 'near': 'skip', 'curly hair': 'noun', 'like sheep': 'adv', 'demand': 'noun', 'a wide range of': 'skip', 'wide range of': 'skip', 'long-term': 'adj', 'a button has come off': 'skip', 'be the object of admiration': 'skip', 'one hour later': 'skip', 'hour later': 'skip', 'the same': 'skip', 'same': 'skip', 'nothing': 'skip', 'be a cold fish': 'skip', 'be a bit thin on top': 'skip', 'be rolling in it': 'skip', 'cattle': 'skip', 'accepted vs consented': 'skip', 'accepted': 'skip',
   // time-of-day phrases: "I drink coffee ___" fits morning, at home, at work… — no fair question
   'in the morning': 'skip', 'in the afternoon': 'skip', 'in the evening': 'skip', 'at noon': 'skip', 'at night': 'skip', 'considered': 'adj', 'painstaking': 'adj', 'du matin au soir': 'adv', 'sans répit': 'adv', 'en effet': 'adv',
   // adjectives
@@ -2375,7 +2375,7 @@ const CTX_SYNONYMS = [
   ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
   ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
   ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
-  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['confident', 'calm'], ['quietly', 'politely', 'calmly'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
   ['obsessed with', 'be obsessed with', 'interested in', 'keen on', 'mad about', 'fond of', 'addicted to'],
   ['overrated', 'hackneyed'], ['risqué', 'inappropriate'], ['understated', 'powerful', 'gripping', 'riveting', 'moving'],
   ['put up with', 'deal with', 'cope with'], ['stuck in traffic', 'be stuck in traffic', 'worn out', 'be like a hamster on a wheel', 'like a hamster on a wheel'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
@@ -7956,6 +7956,63 @@ const MILANA_WORDS = [
   { word: "put effort into something", translation: "вкладывать усилия во что-то", example: "He put a lot of effort into his presentation.", lesson: "Latest Lesson" },
 ];
 
+// New student Katya (22 Oct 2026) — a different person from Ekaterina (5678)
+const KATYA_WORDS = [
+  ['greasy hair', 'жирные волосы', 'I need to wash my hair — it’s really greasy.'],
+  ['it’s not a big deal', 'ничего страшного, это не так важно', 'Don’t worry about the mistake — it’s not a big deal.'],
+  ['an event', 'событие, мероприятие', 'The concert was the biggest event of the year.'],
+  ['to hug somebody', 'обнимать кого-то', 'She hugged me when I arrived.'],
+  ['kinda = kind of', 'вроде, как бы, немного (kinda — разговорный вариант kind of)', 'I’m kinda tired today. = I’m kind of tired today.'],
+  ['trainers', 'кроссовки (брит.; амер. — sneakers)', 'I bought a new pair of trainers for running.'],
+  ['a pose', 'поза', 'She held the pose for the photo.'],
+  ['an accident', 'авария, несчастный случай; случайность', 'There was an accident on the motorway this morning.'],
+  ['to drop', 'уронить', 'I dropped my phone and the screen broke.'],
+  ['to fall / to fall over', 'падать / упасть (споткнувшись, потеряв равновесие)', 'He tripped on the stairs and fell over.'],
+  ['a fisherman', 'рыбак', 'The fisherman caught a huge fish.'],
+  ['to record a message', 'записать сообщение (голосовое)', 'I recorded a voice message for my friend.'],
+  ['it happens', 'бывает, такое случается', 'You forgot? Don’t worry, it happens.'],
+  ['a dish / a meal', 'a dish — блюдо (конкретное); a meal — приём пищи, еда (завтрак, обед, ужин)', 'Pasta is my favourite dish. We have three meals a day.'],
+  ['a builder', 'строитель', 'The builders are repairing our roof.'],
+  ['a liar', 'лжец, обманщик', 'Don’t believe him — he’s a liar.'],
+  ['to look somebody in the eye', 'смотреть кому-то в глаза', 'Look me in the eye and tell me the truth.'],
+  ['trustworthy', 'заслуживающий доверия, надёжный', 'You can tell her your secret — she’s completely trustworthy.'],
+  ['I’m allergic to…', 'у меня аллергия на…', 'I’m allergic to cats.'],
+  ['a study', 'исследование (научное)', 'A recent study shows that first impressions form in seconds.'],
+  ['to make a good (bad) first impression', 'произвести хорошее (плохое) первое впечатление', 'I want to make a good first impression at my new job.'],
+  ['the same', 'такой же, тот же самый', 'We have the same phone.'],
+  ['on purpose', 'нарочно, специально', 'I’m sorry — I didn’t do it on purpose.'],
+  ['to judge (people by their appearance)', 'судить, оценивать (людей по внешности)', 'Don’t judge people by their appearance.'],
+  ['to make eye contact', 'смотреть в глаза, устанавливать зрительный контакт', 'Try to make eye contact when you speak.'],
+  ['a firm handshake', 'крепкое рукопожатие', 'He greeted me with a firm handshake.'],
+  ['to cross your arms', 'скрестить руки', 'When you cross your arms, you can look defensive.'],
+  ['body language', 'язык тела', 'Your body language says a lot about you.'],
+  ['confident', 'уверенный (в себе)', 'She wasn’t nervous at all — she looked very confident.'],
+  ['to get to know somebody', 'узнать кого-то получше, познакомиться ближе', 'I’d like to get to know you better.'],
+  ['to interrupt', 'перебивать', 'Please don’t interrupt me when I’m speaking.'],
+  ['completely', 'полностью, совершенно', 'I completely forgot about the meeting.'],
+  ['polite', 'вежливый', 'He always says please and thank you — he’s very polite.'],
+  ['calm / calmly', 'спокойный / спокойно', 'Even in an emergency she stays calm and doesn’t panic.'],
+  ['mean', 'злой, недобрый, грубый (не путай с arrogant — высокомерный)', 'Don’t be mean to your little brother.'],
+  ['to pretend', 'притворяться', 'He pretended to be asleep.'],
+  ['to nod', 'кивать', 'She nodded to show she agreed.'],
+  ['sit – sat – sat', 'сидеть (неправильный глагол)', 'We sat in the garden all afternoon.'],
+  ['fly – flew – flown', 'летать (неправильный глагол)', 'We flew to Rome last summer.'],
+  ['run – ran – run', 'бегать (неправильный глагол)', 'I ran five kilometres yesterday.'],
+  ['hold – held – held', 'держать (неправильный глагол)', 'She held the baby in her arms.'],
+  ['a job interview', 'собеседование', 'I have a job interview tomorrow morning.'],
+  ['an obsession', 'одержимость, навязчивая страсть', 'Coffee is my obsession.'],
+  ['to star in a film', 'сниматься в главной роли (star in, не «star a film»)', 'She starred in her first film at the age of ten.'],
+  ['a high-budget movie', 'высокобюджетный фильм', 'It’s a high-budget movie with lots of special effects.'],
+  ['attentive', 'внимательный, заботливый', 'The waiter was very attentive — he refilled our glasses before we even asked.'],
+  ['medieval times', 'Средние века, средневековье', 'This castle was built in medieval times.'],
+  ['except for', 'кроме, за исключением', 'Everyone came except for Tom.'],
+  ['quietly', 'тихо', 'She closed the door quietly so she wouldn’t wake the baby.'],
+  ['politely', 'вежливо', '“Excuse me, could we have the bill, please?” he asked politely.'],
+  ['an envelope', 'конверт', 'She put the letter in an envelope.'],
+  ['tastes differ', 'о вкусах не спорят, у всех разные вкусы', 'You don’t like it? Well, tastes differ.'],
+  ['to make a mistake', 'сделать ошибку, ошибиться', 'Everyone makes mistakes — it happens.']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'First Lesson' }));
+
 // New student Karina Kar — a separate name so she isn't mixed up with Karina's own French cabinet
 const KARINA_S_WORDS = [
   ...[
@@ -8920,6 +8977,16 @@ const OCT9_WORDS = {
   const dianaExisting = new Set(diana.words.map(w => w.word.toLowerCase()));
   DIANA_WORDS.forEach(w => {
     if (!dianaExisting.has(w.word.toLowerCase())) diana.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
+  });
+
+  // ── Katya ──
+  let katya = data.students.find(s => s.name === 'Katya');
+  if (!katya) { katya = { id: uid(), name: 'Katya', words: [], quizHistory: [] }; data.students.push(katya); }
+  if (!katya.quizHistory) katya.quizHistory = [];
+  katya.pin = '1212';
+  const katyaExisting = new Set(katya.words.map(w => w.word.toLowerCase()));
+  KATYA_WORDS.forEach(w => {
+    if (!katyaExisting.has(w.word.toLowerCase())) katya.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
   });
 
   // ── Karina Kar ──
