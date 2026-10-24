@@ -868,6 +868,12 @@
         <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
         <div class="mode-desc-ru">Соедини две части · прочитай подсказку · собери фразовый глагол</div>
       </div>
+      <div class="mode-card" onclick="startIngEd()" style="grid-column:1/-1;">
+        <span class="mode-icon">🎭</span>
+        <div class="mode-name">-ing / -ed Adjectives</div>
+        <div class="mode-desc">bored or boring? · choose the right adjective · 15 sentences per round</div>
+        <div class="mode-desc-ru">bored или boring? · выбери правильное прилагательное · 15 предложений за раунд</div>
+      </div>
       <div class="mode-card" onclick="startWordForm()" style="grid-column:1/-1;">
         <span class="mode-icon">🔤</span>
         <div class="mode-name">Word Formation</div>
@@ -1230,6 +1236,22 @@
     </div>
   </div>
   <div id="gr-results" style="display:none;text-align:center;padding-top:30px;"></div>
+</div>
+
+<!-- ── SCREEN: -ING / -ED ADJECTIVES ── -->
+<div class="screen" id="screen-inged">
+  <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
+  <div class="page-title" style="font-size:1.4rem;">-ing / -ed Adjectives</div>
+  <div class="page-sub">Выбери правильное прилагательное. После ответа увидишь объяснение.</div>
+  <div class="lx">
+    <div class="note">
+      <b>-ed</b> — что <b>чувствует</b> человек: <i>I’m <b>bored</b>.</i> = Мне скучно.<br>
+      <b>-ing</b> — что <b>вызывает</b> это чувство (вещь, ситуация или человек): <i>The film is <b>boring</b>.</i> = Фильм скучный.<br>
+      <span class="ru">Осторожно: <i>I’m boring</i> = «я скучный человек» (со мной скучно), а не «мне скучно».</span>
+    </div>
+    <div class="lxq" id="inged-box" data-ex="inged"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startIngEd()">New round →</button>
+  </div>
 </div>
 
 <!-- ── SCREEN: GRAMMAR LIBRARY ── -->
@@ -4288,6 +4310,107 @@ He seems not to have understood. <span class="ru">— звучит книжне�
     egs:[{en:'What I like about her is that she’s honest.', ru:'Cleft sentence — выделяем главное.'},{en:'I’ve been racking my brains for hours.', ru:'rack your brains — ломать голову (brains — всегда мн. ч.)'},{en:'a disinterested judge / an uninterested student', ru:'беспристрастный / равнодушный'}],
     tip:'💡 Все слова модуля есть в виде карточек (уроки «M5 · …»). После All / What … do … is — инфинитив без to: All I did was ask.' },
 ];
+
+// ── -ing / -ed adjectives practice ──
+// [sentence with ___, the -ed form, the -ing form, which one is right ('ed' | 'ing')]
+const ING_ED_ITEMS = [
+  ['The lecture was so ___ that half the students fell asleep.', 'bored', 'boring', 'ing'],
+  ['I’m ___. There’s nothing to do in this town.', 'bored', 'boring', 'ed'],
+  ['Are you ___ in modern art?', 'interested', 'interesting', 'ed'],
+  ['That’s an ___ idea — tell me more.', 'interested', 'interesting', 'ing'],
+  ['The kids are so ___ about the trip to Disneyland.', 'excited', 'exciting', 'ed'],
+  ['It was an ___ match — the winning goal came in the last minute.', 'excited', 'exciting', 'ing'],
+  ['After a ten-hour shift, I was really ___.', 'tired', 'tiring', 'ed'],
+  ['Moving house is very ___.', 'tired', 'tiring', 'ing'],
+  ['The instructions were really ___ — I couldn’t understand them at all.', 'confused', 'confusing', 'ing'],
+  ['I’m a bit ___. Which bus do I need to take?', 'confused', 'confusing', 'ed'],
+  ['We were ___ to see snow in May.', 'surprised', 'surprising', 'ed'],
+  ['The results of the study were quite ___.', 'surprised', 'surprising', 'ing'],
+  ['The view from the top of the mountain was ___.', 'amazed', 'amazing', 'ing'],
+  ['I was ___ by how much she had changed.', 'amazed', 'amazing', 'ed'],
+  ['My neighbour’s dog barks all night — it’s really ___.', 'annoyed', 'annoying', 'ing'],
+  ['She was ___ because he was late again.', 'annoyed', 'annoying', 'ed'],
+  ['The film was ___ — the book was much better.', 'disappointed', 'disappointing', 'ing'],
+  ['I was really ___ with my exam results.', 'disappointed', 'disappointing', 'ed'],
+  ['I felt so ___ when I called my teacher “Mum”.', 'embarrassed', 'embarrassing', 'ed'],
+  ['Falling over on stage was the most ___ moment of my life.', 'embarrassed', 'embarrassing', 'ing'],
+  ['The little boy was ___ of the dark.', 'frightened', 'frightening', 'ed'],
+  ['Driving in a storm can be very ___.', 'frightened', 'frightening', 'ing'],
+  ['I’m ___ about my sister — she hasn’t called for days.', 'worried', 'worrying', 'ed'],
+  ['The number of people without jobs is ___.', 'worried', 'worrying', 'ing'],
+  ['A hot bath after work is so ___.', 'relaxed', 'relaxing', 'ing'],
+  ['After the holiday, I felt completely ___.', 'relaxed', 'relaxing', 'ed'],
+  ['Are you ___ with the service, or would you like to speak to the manager?', 'satisfied', 'satisfying', 'ed'],
+  ['Finishing a long project is very ___.', 'satisfied', 'satisfying', 'ing'],
+  ['Everyone was ___ by the terrible news.', 'shocked', 'shocking', 'ed'],
+  ['The prices in that restaurant are ___ — ten pounds for a coffee!', 'shocked', 'shocking', 'ing'],
+  ['Looking after three small children all day is ___.', 'exhausted', 'exhausting', 'ing'],
+  ['After the marathon, I was absolutely ___.', 'exhausted', 'exhausting', 'ed'],
+  ['The documentary about the ocean was ___.', 'fascinated', 'fascinating', 'ing'],
+  ['Children are often ___ by dinosaurs.', 'fascinated', 'fascinating', 'ed'],
+  ['I’m ___ of spiders — I can’t even look at them.', 'terrified', 'terrifying', 'ed'],
+  ['The roller coaster was ___ — I screamed the whole time.', 'terrified', 'terrifying', 'ing'],
+  ['Rainy November days can be really ___.', 'depressed', 'depressing', 'ing'],
+  ['He felt ___ after he lost his job.', 'depressed', 'depressing', 'ed'],
+  ['His jokes are very ___ — everyone laughs.', 'amused', 'amusing', 'ing'],
+  ['The teacher didn’t look ___ when I fell asleep in class.', 'amused', 'amusing', 'ed'],
+  ['It’s so ___ when the internet stops working in the middle of a meeting.', 'frustrated', 'frustrating', 'ing'],
+  ['I get ___ when people don’t listen to me.', 'frustrated', 'frustrating', 'ed'],
+  ['Her speech was really ___ — I want to change my life now!', 'inspired', 'inspiring', 'ing'],
+  ['I felt ___ after the concert and started writing music again.', 'inspired', 'inspiring', 'ed'],
+  ['There was so much information that I felt ___.', 'overwhelmed', 'overwhelming', 'ed'],
+  ['The amount of homework this week is ___.', 'overwhelmed', 'overwhelming', 'ing'],
+  ['We were ___ to hear that we had won the competition.', 'thrilled', 'thrilling', 'ed'],
+  ['The last ten minutes of the film were ___.', 'thrilled', 'thrilling', 'ing'],
+  ['The teacher looked ___ by my strange question.', 'puzzled', 'puzzling', 'ed'],
+  ['It’s ___ that nobody saw the thief.', 'puzzled', 'puzzling', 'ing'],
+  ['She was ___ to find a stranger in her kitchen.', 'astonished', 'astonishing', 'ed'],
+  ['The speed of the new train is ___.', 'astonished', 'astonishing', 'ing'],
+  ['We watched the ___ pictures of the earthquake on the news.', 'horrified', 'horrifying', 'ing'],
+  ['I was ___ when I saw how dirty the kitchen was.', 'horrified', 'horrifying', 'ed'],
+  ['His habit of interrupting everyone is really ___.', 'irritated', 'irritating', 'ing'],
+  ['She sounded ___ on the phone — maybe she was busy.', 'irritated', 'irritating', 'ed'],
+  ['This soup is ___ — it tastes of old socks.', 'disgusted', 'disgusting', 'ing'],
+  ['I was ___ by the way he spoke to the waiter.', 'disgusted', 'disgusting', 'ed'],
+  ['I’m not very ___ to study on Friday evenings.', 'motivated', 'motivating', 'ed'],
+  ['Her talks are so ___ that I always want to work harder afterwards.', 'motivated', 'motivating', 'ing'],
+  ['The doctor’s words were very ___ — I felt much better.', 'encouraged', 'encouraging', 'ing'],
+  ['We were ___ by how quickly our son was learning.', 'encouraged', 'encouraging', 'ed'],
+  ['It was a ___ story about an old man and his dog.', 'touched', 'touching', 'ing'],
+  ['I was really ___ that you remembered my birthday.', 'touched', 'touching', 'ed'],
+  ['Half the audience cried — it was a very ___ film.', 'moved', 'moving', 'ing'],
+  ['I was deeply ___ by her speech at the wedding.', 'moved', 'moving', 'ed'],
+  ['The rise in crime in our area is ___.', 'alarmed', 'alarming', 'ing'],
+  ['Don’t be ___ — the noise is just the old heating system.', 'alarmed', 'alarming', 'ed'],
+  ['The show was really ___ — we laughed all evening.', 'entertained', 'entertaining', 'ing'],
+  ['The kids were ___ for hours by a simple cardboard box.', 'entertained', 'entertaining', 'ed'],
+  ['Some scenes in the film are quite ___, so it’s not for children.', 'disturbed', 'disturbing', 'ing'],
+  ['I was ___ by the strange noises coming from the attic.', 'disturbed', 'disturbing', 'ed'],
+  ['I’m ___ — what was in that mysterious box?', 'intrigued', 'intriguing', 'ed'],
+  ['The book starts with an ___ question.', 'intrigued', 'intriguing', 'ing'],
+  ['A cold glass of water is so ___ on a hot day.', 'refreshed', 'refreshing', 'ing'],
+  ['After a good night’s sleep, I felt ___.', 'refreshed', 'refreshing', 'ed'],
+  ['His excuse wasn’t very ___ — nobody believed him.', 'convinced', 'convincing', 'ing'],
+  ['I’m not ___ that this is a good idea.', 'convinced', 'convincing', 'ed'],
+  ['Failing the driving test five times was ___.', 'humiliated', 'humiliating', 'ing'],
+  ['He felt ___ when his boss shouted at him in front of everyone.', 'humiliated', 'humiliating', 'ed']
+];
+const ING_ED_NOTE = { ed: '-ed — чувство человека (кто чувствует)', ing: '-ing — то, что вызывает чувство (вещь, ситуация, человек)' };
+
+function startIngEd() {
+  const items = shuffle(ING_ED_ITEMS.slice()).slice(0, 15).map(([q, ed, ing, right]) => {
+    const opts = Math.random() < 0.5 ? [ed, ing] : [ing, ed];
+    return { q, opts, ok: [opts.indexOf(right === 'ed' ? ed : ing)], note: ING_ED_NOTE[right] };
+  });
+  LIB_TASKS.inged = { type: 'choice', items };
+  const box = document.getElementById('inged-box');
+  delete box.dataset.ready;
+  box.innerHTML = '';
+  show('inged');
+  lxHydrate(document.getElementById('screen-inged'));
+  window.scrollTo(0, 0);
+  logActivity('-ing/-ed Adjectives (начал)', '', null, items.length);
+}
 
 let libOpenId = null;
 
