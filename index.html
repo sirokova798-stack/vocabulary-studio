@@ -8188,7 +8188,7 @@ const KATYA_WORDS = [
   ['to shrug', 'пожимать плечами', 'When I asked him where she was, he just shrugged.'],
   ['forget it', 'забудь, неважно, не бери в голову', '“Sorry, what did you say?” — “Oh, forget it, it’s not important.”'],
   ['Swiss / Swedish', 'Swiss — швейцарский (из Switzerland, Швейцарии); Swedish — шведский (из Sweden, Швеции)', 'Swiss chocolate is famous all over the world. IKEA is a Swedish company.']
-].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Lesson 24 Oct' })));
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Lesson 22 Oct' })));
 
 // New student Karina Kar — a separate name so she isn't mixed up with Karina's own French cabinet
 const KARINA_S_WORDS = [
@@ -9161,7 +9161,7 @@ const OCT9_WORDS = {
   if (!katya) { katya = { id: uid(), name: 'Katya', words: [], quizHistory: [] }; data.students.push(katya); }
   if (!katya.quizHistory) katya.quizHistory = [];
   katya.pin = '1212';
-  katya.words.forEach(w => { if (w.lesson === 'First Lesson') w.lesson = 'First Two Lessons'; });
+  katya.words.forEach(w => { if (w.lesson === 'First Lesson') w.lesson = 'First Two Lessons'; if (w.lesson === 'Lesson 24 Oct') w.lesson = 'Lesson 22 Oct'; });
   const katyaExisting = new Set(katya.words.map(w => w.word.toLowerCase()));
   KATYA_WORDS.forEach(w => {
     if (!katyaExisting.has(w.word.toLowerCase())) katya.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
