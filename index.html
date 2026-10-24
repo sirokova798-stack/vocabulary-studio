@@ -2261,7 +2261,7 @@ const CTX_ADJ = new Set((
  'bland literate inconvenient foreign authentic drained so-called stunning spectacular witty precise analytical devoted blunt ' +
  'overrated disjointed risqué harrowing memorable understated hilarious hackneyed gripping moving unforgettable intense catchy riveting faithful ' +
  'genuine approachable outgoing sturdy ordinary distracted restrained absent swollen self-sufficient ' +
- 'odd internalised wired isolated predictive ' +
+ 'odd internalised wired isolated predictive awkward superstitious nerve-wracking empathetic ' +
  'stimulating self-centered self-centred inferior gloomy magnetic brief tender unexpected urgent must-see non-negotiable').split(' '));
 const CTX_UNCOUNT = new Set((
  'advice information furniture music weather homework knowledge patience silence confidence pleasure attention progress luggage ' +
@@ -2272,7 +2272,7 @@ const CTX_UNCOUNT = new Set((
  'jewelry clothing accommodation vocabulary grammar literature art nature space violence pollution intelligence experience ' +
  'validation importance convenience pseudoscience heat confusion treatment custody nausea vanity cruelty entertainment hesitation ' +
  'jealousy compatibility friction bluntness insecurity loneliness stress grief enjoyment herring cream leisure ' +
- 'teeth self-esteem society acne snoring lightning lyrics cutlery anticipation rigidity coursework cohesion bureaucracy hair').split(' '));
+ 'teeth self-esteem society acne snoring lightning police lyrics cutlery anticipation rigidity coursework cohesion bureaucracy hair').split(' '));
 const CTX_LINKER_KIND = {
   'although': 'clause', 'though': 'clause', 'even though': 'clause', 'whereas': 'clause', 'while': 'clause', 'unless': 'clause',
   'in case': 'clause', 'as long as': 'clause', 'so that': 'clause', 'because': 'clause', 'even if': 'clause', 'meaning that': 'clause',
@@ -2398,7 +2398,7 @@ const CTX_SYNONYMS = [
   ['overall', 'in general'], ['jealous', 'envious'], ['incredible', 'amazing', 'stunning', 'spectacular', 'outstanding'],
   ['influence', 'have influence on', 'have a lasting influence on'], ['accomplish', 'achieve', 'attain'],
   ['insult', 'offend'], ['disturb', 'bother', 'interrupt', 'distract'], ['set an alarm', 'set an alarm clock'],
-  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['confident', 'calm'], ['quietly', 'politely', 'calmly'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
+  ['flawless', 'faultless', 'impeccable', 'immaculate', 'seamless', 'perfect', 'ideal'], ['moved', 'touched'], ['slouch', 'stoop', 'hunch'], ['confident', 'calm'], ['handle', 'solve', 'cope with', 'deal with', 'manage'], ['a decisive year', 'decisive year', 'a make-or-break situation', 'make-or-break situation'], ['quietly', 'politely', 'calmly'], ['reply to', 'respond to', 'react to'], ['riveting', 'gripping', 'powerful', 'flawless', 'moving', 'immaculate', 'faultless', 'impeccable', 'seamless', 'memorable', 'unforgettable', 'intense', 'harrowing'],
   ['obsessed with', 'be obsessed with', 'interested in', 'keen on', 'mad about', 'fond of', 'addicted to'],
   ['overrated', 'hackneyed'], ['risqué', 'inappropriate'], ['understated', 'powerful', 'gripping', 'riveting', 'moving'],
   ['put up with', 'deal with', 'cope with'], ['stuck in traffic', 'be stuck in traffic', 'worn out', 'be like a hamster on a wheel', 'like a hamster on a wheel'], ['in the morning', 'in the afternoon', 'in the evening', 'at noon', 'at night'], ['have a gut feeling', 'trust your gut'], ['devoted to', 'dedicated to'], ['brush up', 'brush up on'], ['remove', 'get rid of', 'take off']
@@ -8660,6 +8660,67 @@ const OCT19_WORDS = {
   Rustam: [{ word: 'on weekdays / at the weekend', translation: 'по будням / в выходные (weekdays — Monday to Friday)', example: 'I work on weekdays, but at the weekend I relax.', lesson: 'Lesson 19 Oct' }]
 };
 
+// 24 Oct: words from the latest lessons
+const OCT24_WORDS = {
+  Milana: [
+    ['a stray (animal)', 'бездомное животное (a stray dog / cat)', 'We found a little stray in the park and took it home.'],
+    ['to shout (at somebody)', 'кричать (на кого-то)', 'Please don’t shout at me — I can hear you.'],
+    ['a homeless person', 'бездомный человек', 'She gives food to a homeless person near the station every week.'],
+    ['stop to do vs stop doing', 'stop to do — остановиться, чтобы сделать; stop doing — перестать делать', 'I stopped to buy some water. / I stopped eating sweets.'],
+    ['to roll into the room', 'вкатиться в комнату', 'The ball rolled into the room and under the sofa.'],
+    ['to crawl', 'ползать, ползти', 'The baby is learning to crawl.'],
+    ['to carry on (doing something)', 'продолжать (делать что-то)', 'Don’t stop — carry on reading.'],
+    ['to keep a straight face', 'сохранять серьёзное лицо, сдерживать смех', 'He looked so funny that I couldn’t keep a straight face.'],
+    ['to be embarrassed', 'смущаться, испытывать неловкость (мне неловко)', 'I was so embarrassed when I fell on the stairs.'],
+    ['awkward', 'неловкий, неудобный (о ситуации, молчании)', 'There was an awkward silence after his joke.'],
+    ['a baby walker', 'ходунки (для малыша)', 'The baby zoomed around the kitchen in her baby walker.'],
+    ['a babysitter', 'няня (которая сидит с ребёнком)', 'We need a babysitter for Saturday evening.'],
+    ['to burst into the room', 'ворваться в комнату', 'The children burst into the room, shouting and laughing.'],
+    ['to burst into tears', 'расплакаться, разрыдаться (burst into tears, не «in tears»)', 'When she heard the news, she burst into tears.'],
+    ['to push somebody away (gently)', '(мягко) оттолкнуть кого-то', 'She gently pushed the puppy away from her plate.'],
+    ['to drag somebody out', 'вытащить кого-то (силой, с трудом)', 'I had to drag my brother out of bed this morning.'],
+    ['the traffic police', 'ГАИ / ГИБДД, дорожная полиция', 'The traffic police stopped us for speeding.'],
+    ['a cave', 'пещера', 'We explored a dark cave in the mountains.'],
+    ['on purpose', 'нарочно, специально', 'I didn’t break it on purpose — it was an accident!'],
+    ['in front of', 'перед, впереди (о месте)', 'There’s a big tree in front of our house.'],
+    ['a stage of life', 'этап жизни', 'University is an exciting stage of life.'],
+    ['superstitious / a superstition', 'суеверный / суеверие', 'She’s very superstitious — she believes black cats bring bad luck.']
+  ],
+  Yuliya: [
+    ['to outnumber', 'превосходить численно', 'In our class, girls outnumber boys three to one.'],
+    ['to be aimed at (doing) something / to aim to do something', 'быть нацеленным на что-то / стремиться сделать что-то', 'The course is aimed at beginners. We aim to finish by June.'],
+    ['nerve-wracking', 'нервный, изматывающий нервы (о ситуации)', 'Waiting for the exam results was nerve-wracking.'],
+    ['to be linked to', 'быть связанным с', 'Stress is often linked to poor sleep.'],
+    ['it’s a perfect fit', 'это идеально подходит', 'She’s a perfect fit for the role of Giselle.'],
+    ['mind-blowing / mind-boggling / it does my head in', '«взрыв мозга»: mind-blowing — потрясающе (в хорошем смысле); mind-boggling — уму непостижимо (трудно осознать); it does my head in — это сводит меня с ума, бесит (брит., разг., негативно)', 'The ending of the film was mind-blowing. This tax form is doing my head in!']
+  ],
+  Trofim: [
+    ['empathy / empathetic', 'эмпатия, сопереживание / сопереживающий, чуткий', 'A good doctor needs empathy. She’s a very empathetic listener.'],
+    ['real estate / property', 'недвижимость', 'He invests his money in real estate. Property prices keep rising.'],
+    ['a board game', 'настольная игра', 'We played board games all evening.'],
+    ['so to speak', 'так сказать', 'He’s the brain of the company, so to speak.'],
+    ['a gesture', 'жест', 'Italians use a lot of gestures when they talk.'],
+    ['assets and liabilities', 'активы и обязательства (пассивы)', 'A good investor knows the difference between assets and liabilities.'],
+    ['the sheer scale of something / sheer nonsense', 'сам масштаб чего-то, огромный масштаб / полная чепуха', 'I was shocked by the sheer scale of the project. What he said was sheer nonsense.'],
+    ['in any case', 'в любом случае', 'It might rain, but in any case we’re going to the beach.'],
+    ['wires / sockets', 'провода / розетки', 'Don’t touch the wires! Is there a socket near the bed?'],
+    ['a relation to / an attitude to', 'a relation to — связь, отношение (касательство) к чему-то; an attitude to — отношение (мнение, чувства) к', 'This has no relation to our problem. He has a positive attitude to work.'],
+    ['to be part of a big company', 'быть частью большой компании', 'Our small brand is part of a big international company.']
+  ],
+  Carolina: [
+    ['to wait for something', 'ждать что-то / кого-то', 'I’m waiting for the bus.'],
+    ['to remove stitches', 'снять швы', 'The doctor will remove my stitches next week.'],
+    ['behaviour', 'поведение', 'The children’s behaviour was very good today.'],
+    ['to handle something', 'справиться с чем-то', 'Don’t worry, I can handle it.'],
+    ['to miss somebody', 'скучать по кому-то', 'She misses her boyfriend very much.'],
+    ['to come back home', 'вернуться домой', 'What time do you come back home after work?'],
+    ['to be scared of', 'бояться чего-то', 'My little sister is scared of dogs.'],
+    ['a make-or-break situation', 'решающая ситуация (всё или ничего)', 'This interview is a make-or-break situation for me.'],
+    ['a decisive year', 'решающий год', 'This is a decisive year for my career.']
+  ]
+};
+Object.keys(OCT24_WORDS).forEach(n => { OCT24_WORDS[n] = OCT24_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
+
 const OCT12_WORDS = {
   Rustam: [
     { word: 'to irritate / to be irritated', translation: 'раздражать / раздражаться (be irritated by / with something)', example: 'His constant complaining really irritates me.' },
@@ -9232,7 +9293,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
