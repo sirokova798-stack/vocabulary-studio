@@ -1108,6 +1108,7 @@
       <button class="phr-level-btn" onclick="beginPhrasal('A2-B1')"><b>A2–B1</b><span>Everyday basics</span></button>
       <button class="phr-level-btn" onclick="beginPhrasal('B1-B2')"><b>B1–B2</b><span>Intermediate</span></button>
       <button class="phr-level-btn" onclick="beginPhrasal('B2-C1')"><b>B2–C1</b><span>Advanced</span></button>
+      <button class="phr-level-btn" onclick="beginPhrasal('look')"><b>Look + …</b><span>look at, look into, look up to… · one verb, many particles</span></button>
     </div>
   </div>
 
@@ -2960,6 +2961,53 @@ function phrSynonymsOf(correct) {
   return PHR_SYN_MAP[correct.verb + ' ' + correct.particle] || new Set();
 }
 
+// "Look + …": one verb, many particles / prepositions. The student only chooses the second part.
+const LOOK_VERBS = [
+  { verb:'look', particle:'at', ru:'смотреть на', ex:'Look at this photo — that’s me when I was five!' },
+  { verb:'look', particle:'into', ru:'изучить, расследовать (вопрос, проблему)', ex:'The police are looking into the robbery.' },
+  { verb:'look', particle:'into somebody’s eyes', ru:'смотреть кому-то в глаза (долго, нежно)', ex:'He looked into her eyes and smiled.' },
+  { verb:'look', particle:'somebody in the eye', ru:'смотреть прямо в глаза (честно, уверенно)', ex:'Look me in the eye and tell me the truth.' },
+  { verb:'look', particle:'through', ru:'просматривать (бегло — бумаги, записи); смотреть сквозь', ex:'I looked through my notes on the bus before the exam.' },
+  { verb:'look', particle:'out of', ru:'смотреть из (окна) наружу', ex:'She looked out of the window at the rain.' },
+  { verb:'look', particle:'in', ru:'заглянуть внутрь (в окно, в комнату) снаружи', ex:'He looked in the window to see if anyone was home.' },
+  { verb:'look', particle:'over', ru:'быстро проверить, просмотреть (текст, работу)', ex:'Can you look over my essay before I hand it in?' },
+  { verb:'look', particle:'over at', ru:'посмотреть в сторону кого-то / чего-то', ex:'She looked over at me and smiled.' },
+  { verb:'look', particle:'after', ru:'присматривать, заботиться о', ex:'Can you look after my cat while I’m on holiday?' },
+  { verb:'look', particle:'for', ru:'искать', ex:'I’m looking for my glasses — have you seen them?' },
+  { verb:'look', particle:'up', ru:'найти (слово, информацию в словаре, в интернете)', ex:'If you don’t know a word, look it up in the dictionary.' },
+  { verb:'look', particle:'up at', ru:'посмотреть вверх на', ex:'We lay on the grass and looked up at the stars.' },
+  { verb:'look', particle:'up to', ru:'уважать, восхищаться, брать пример с', ex:'I’ve always looked up to my older sister.' },
+  { verb:'look', particle:'down on', ru:'смотреть свысока, презирать', ex:'He looks down on people who earn less than him.' },
+  { verb:'look', particle:'down', ru:'смотреть вниз', ex:'Don’t look down if you’re afraid of heights!' },
+  { verb:'look', particle:'forward to', ru:'ждать с нетерпением', ex:'I’m really looking forward to the holidays.' },
+  { verb:'look', particle:'around', ru:'осмотреть (место); оглядеться', ex:'We spent the afternoon looking around the old town.' },
+  { verb:'look', particle:'back on', ru:'вспоминать, оглядываться (на прошлое)', ex:'When I look back on my school years, I always smile.' },
+  { verb:'look', particle:'out', ru:'осторожно! берегись!', ex:'Look out! There’s a car coming!' },
+  { verb:'look', particle:'out for', ru:'высматривать (кого-то в толпе); присматривать за', ex:'Look out for Tom — he’s wearing a red jacket.' },
+  { verb:'look', particle:'like', ru:'быть похожим на; выглядеть как', ex:'You look just like your mother.' },
+  { verb:'look', particle:'ahead', ru:'думать о будущем, планировать наперёд', ex:'It’s time to look ahead and make plans for next year.' },
+  { verb:'look', particle:'away', ru:'отвести взгляд, отвернуться', ex:'She looked away when I asked her about it.' },
+  { verb:'look', particle:'on', ru:'наблюдать со стороны (не вмешиваясь)', ex:'A crowd looked on as the firefighters put out the fire.' },
+  { verb:'look', particle:'in on', ru:'заглянуть, проведать (кого-то ненадолго)', ex:'Could you look in on my grandmother while I’m away?' }
+];
+// pairs too close to appear together as options
+const LOOK_CLOSE = [
+  ['into somebody’s eyes', 'somebody in the eye'], ['at', 'over at'], ['through', 'over'], ['out', 'out for'],
+  ['up', 'up at'], ['down', 'down on'], ['on', 'out for'], ['in', 'in on'], ['around', 'out for'], ['away', 'down']
+];
+function buildLookQuestion(correct) {
+  const close = new Set(LOOK_CLOSE.filter(g => g.includes(correct.particle)).flat());
+  const pool = LOOK_VERBS.map(l => l.particle).filter(pa => pa !== correct.particle && !close.has(pa));
+  let picks = [];
+  for (const pa of shuffle(pool)) {
+    if (picks.length === 5) break;
+    // also keep two "close" particles apart among the distractors
+    if (picks.some(x => LOOK_CLOSE.some(g => g.includes(x) && g.includes(pa)))) continue;
+    picks.push(pa);
+  }
+  return { correct, verbs: ['look'], particles: shuffle([correct.particle, ...picks]), look: true };
+}
+
 let phrQuestions = [], phrIndex = 0, phrScore = 0;
 let phrSelVerb = null, phrSelParticle = null, phrAnswered = false;
 
@@ -3007,7 +3055,9 @@ function startPhrasal() {
 
 function beginPhrasal(level) {
   const pool = level === 'all' ? PHRASAL_VERBS : PHRASAL_VERBS.filter(p => p.level === level);
-  phrQuestions = shuffle(pool).slice(0, 12).map(buildPhrQuestion);
+  phrQuestions = level === 'look'
+    ? shuffle(LOOK_VERBS).slice(0, 12).map(buildLookQuestion)
+    : shuffle(pool).slice(0, 12).map(buildPhrQuestion);
   phrIndex = 0; phrScore = 0;
   document.getElementById('phr-levels').style.display = 'none';
   document.getElementById('phr-results').style.display = 'none';
@@ -3036,7 +3086,7 @@ function renderPhrQ() {
   document.getElementById('phr-counter').textContent = (phrIndex + 1) + ' of ' + phrQuestions.length;
   document.getElementById('phr-hint').innerHTML =
     '<div class="phr-hint-ru">' + esc(phrHint(q.correct.ru)) + '</div>' +
-    '<div class="phr-hint-sub">Choose the verb + particle that mean this</div>';
+    '<div class="phr-hint-sub">' + (q.look ? 'look + … — choose the right particle or preposition' : 'Choose the verb + particle that mean this') + '</div>';
   document.getElementById('phr-feedback').innerHTML = '';
   document.getElementById('phr-next-wrap').style.display = 'none';
 
@@ -3055,6 +3105,8 @@ function renderPhrQ() {
     b.onclick = () => phrSelect('particle', p, b);
     pWrap.appendChild(b);
   });
+  // "look + …": the verb is given, so it starts selected
+  if (q.verbs.length === 1) { phrSelVerb = q.verbs[0]; vWrap.firstChild.classList.add('selected'); }
 }
 
 function phrSelect(side, value, btn) {
