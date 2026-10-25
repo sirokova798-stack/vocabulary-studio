@@ -8736,6 +8736,107 @@ const OCT24_WORDS = {
 };
 Object.keys(OCT24_WORDS).forEach(n => { OCT24_WORDS[n] = OCT24_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 
+// 25 Oct: Talk Talk Talk — speaking club vocabulary, one lesson per section
+const OCT25_SECTIONS = {
+  'Collocations & Phrases': [
+    ['at the height of one’s fame / career', 'на пике славы / карьеры', 'At the height of her fame, she was recognised everywhere she went.'],
+    ['at the top of one’s profession / game', 'на вершине своей профессии, лучший в своём деле', 'He is a surgeon at the top of his profession.'],
+    ['on the crest of a wave', 'на гребне волны, на пике успеха', 'After their third hit album, the band were riding on the crest of a wave.'],
+    ['in the fullness of time', 'со временем, в своё время (когда придёт время)', 'All your questions will be answered in the fullness of time.'],
+    ['to cover a distance', 'преодолеть расстояние', 'The runners covered a distance of 42 kilometres.'],
+    ['to cross a desert / a border', 'пересечь пустыню / границу', 'It took them three weeks to cross the desert on camels.'],
+    ['to stretch (for miles / round the block)', 'тянуться (на многие мили / вокруг квартала)', 'The queue for tickets stretched round the block.'],
+    ['to range from … to …', 'варьироваться от … до …', 'Prices range from £10 to £200.'],
+    ['to be hailed as', 'быть провозглашённым, признанным (кем-то / чем-то)', 'The film was hailed as a masterpiece.'],
+    ['to exclaim', 'воскликнуть', '“That’s amazing!” she exclaimed.'],
+    ['to be declared the winner', 'быть объявленным победителем', 'After a recount, she was declared the winner.'],
+    ['to be quoted as saying', 'по словам кого-то, «цитируют его слова»', 'The minister was quoted as saying that taxes would not rise.'],
+    ['to cut something short', 'прервать, сократить (раньше времени)', 'We had to cut our holiday short because my father was ill.'],
+    ['to stop short of doing something', 'не решиться, не дойти до того, чтобы сделать что-то', 'He criticised the plan but stopped short of calling it a failure.'],
+    ['to bring somebody up short', 'заставить кого-то резко остановиться, осечься', 'Her question brought me up short — I had no answer.'],
+    ['to be left short of something', 'остаться без чего-то, испытывать нехватку', 'After paying the rent, we were left short of money for food.'],
+    ['to suffer an accident / an injury / a defeat / a setback', 'попасть в аварию / получить травму / потерпеть поражение / неудачу', 'The team suffered a heavy defeat in the final.'],
+    ['to undergo surgery / treatment / changes', 'перенести операцию / проходить лечение / претерпевать изменения', 'The city has undergone huge changes in the last ten years.'],
+    ['to undertake a task / a project / research', 'взяться за задачу / проект / провести исследование', 'The university undertook research into the effects of social media.'],
+    ['to receive criticism / support / an award', 'подвергнуться критике / получить поддержку / награду', 'The new law received a lot of criticism.']
+  ],
+  'From the Homework Texts': [
+    ['the golden age of', 'золотой век (чего-то)', 'The 1950s were the golden age of Hollywood.'],
+    ['to make a parachute jump', 'прыгнуть с парашютом', 'For her 60th birthday, she made a parachute jump.'],
+    ['to never be the same again', 'уже никогда не быть прежним', 'After that trip, my life was never the same again.'],
+    ['the first (person) to do something', 'первый (человек), кто сделал что-то', 'She was the first woman to win the prize.'],
+    ['in particular', 'в частности, особенно', 'I love Italian food, pasta in particular.'],
+    ['to consist of', 'состоять из', 'The team consists of five engineers and a designer.'],
+    ['such a machine', 'такая машина (such a + сущ.)', 'Nobody had ever built such a machine before.'],
+    ['a letter of resignation', 'заявление об уходе (по собственному желанию)', 'He handed in his letter of resignation on Monday.'],
+    ['every little annoyance', 'каждая мелкая неприятность, любой пустяк, который раздражает', 'He complains about every little annoyance.'],
+    ['to bear in mind', 'иметь в виду, учитывать', 'Bear in mind that the shop closes at six.'],
+    ['a reference (from an employer)', 'рекомендация (от работодателя)', 'My old boss gave me an excellent reference.'],
+    ['to rant and rave', 'рвать и метать, кричать и возмущаться', 'He ranted and raved about the service, but nobody listened.'],
+    ['to cause offence / offensive', 'обидеть, задеть / оскорбительный', 'I’m sorry, I didn’t mean to cause offence. That joke was really offensive.'],
+    ['to disclose', 'раскрыть, разгласить (информацию)', 'The company refused to disclose how much he was paid.'],
+    ['truthful', 'правдивый, честный', 'Please be truthful with me — what really happened?'],
+    ['to win hands down', 'победить с лёгкостью, без труда', 'In a cooking contest, my grandmother would win hands down.'],
+    ['to take no issue with', 'не возражать против, не иметь претензий к', 'I take no issue with the price — it’s the quality I’m worried about.'],
+    ['a refuge from', 'убежище, спасение от', 'The library was a refuge from the noise of the city.'],
+    ['privileged', 'привилегированный; удостоенный чести', 'I feel privileged to have worked with such talented people.'],
+    ['a tribute to', 'дань уважения, свидетельство (заслуг)', 'The concert was a tribute to the late singer.'],
+    ['to be all too much trouble', 'быть слишком хлопотно, «слишком много возни»', 'Cooking a big dinner every night is all too much trouble.'],
+    ['to drop into one’s lap', 'свалиться с неба, достаться без усилий', 'The job offer just dropped into my lap.'],
+    ['to turn something down', 'отказаться от чего-то (предложения)', 'She turned down the offer because she didn’t want to move.'],
+    ['sustained commitment', 'постоянная, длительная приверженность (усилия)', 'Learning a language requires sustained commitment.'],
+    ['to be all the better for it', 'стать только лучше от этого', 'The film is shorter than the book, and it’s all the better for it.']
+  ],
+  'Grammar Chunks': [
+    ['to catch somebody doing something', 'застать кого-то за чем-то', 'The teacher caught him cheating in the exam.'],
+    ['to be heard / seen to do something', 'слышали / видели, как кто-то сделал что-то (пассив: be seen to + инфинитив)', 'He was seen to leave the building at midnight.'],
+    ['to lose / keep one’s temper', 'выйти из себя / сохранять самообладание', 'She lost her temper and started shouting.'],
+    ['the biggest … of its kind', 'самый большой … в своём роде', 'It is the biggest festival of its kind in Europe.'],
+    ['to be anything but', 'быть каким угодно, только не; совсем не', 'The hotel was anything but cheap.'],
+    ['a great deal more / less … than', 'гораздо больше / меньше … чем', 'This job pays a great deal more than my old one.']
+  ],
+  'Books & Films': [
+    ['when it comes to…', 'когда дело касается…', 'When it comes to horror films, I’m a real coward.'],
+    ['overrated', 'переоценённый', 'Honestly, I think the film is overrated.'],
+    ['hackneyed', 'избитый, банальный (сюжет, фраза)', 'The plot was hackneyed — I knew how it would end.'],
+    ['tedious', 'утомительно скучный, нудный', 'The second half of the book was tedious.'],
+    ['harrowing', 'душераздирающий, мучительный', 'It’s a harrowing story about life in a war zone.'],
+    ['risqué', 'рискованный, на грани приличия', 'Some of the jokes were a bit risqué for a family audience.'],
+    ['gripping', 'захватывающий', 'It’s a gripping thriller — I read it in one night.'],
+    ['disjointed', 'бессвязный, несвязный', 'The story felt disjointed, with too many jumps in time.'],
+    ['seamless', 'безупречно слитный, плавный (без «швов»)', 'The special effects were seamless.'],
+    ['immaculate', 'безупречный, идеально чистый', 'The costumes and the set were immaculate.'],
+    ['impeccable', 'безупречный (манеры, вкус, игра)', 'Her performance was impeccable.'],
+    ['flawless / faultless', 'безупречный, без единого недостатка', 'He gave a flawless performance as the king.'],
+    ['far-fetched', 'неправдоподобный, притянутый за уши', 'The ending was a bit far-fetched.'],
+    ['understated', 'сдержанный, неброский (в хорошем смысле)', 'It’s an understated film, but very powerful.'],
+    ['couldn’t take my eyes off it', 'не мог(ла) оторвать глаз', 'The dancing was so beautiful that I couldn’t take my eyes off it.'],
+    ['to strike a chord (with somebody)', 'найти отклик, задеть за живое', 'The song really struck a chord with young people.'],
+    ['to send shivers down one’s spine', 'вызвать мурашки по коже', 'The final scene sent shivers down my spine.'],
+    ['to not stand a chance against', 'не иметь ни шанса против', 'The small company didn’t stand a chance against the giants.'],
+    ['particularly worth seeing / reading', 'особенно стоит посмотреть / прочитать', 'The second episode is particularly worth seeing.'],
+    ['to grow on somebody', 'нравиться всё больше со временем', 'I didn’t like the series at first, but it grew on me.']
+  ],
+  'From the Listening': [
+    ['a sedentary lifestyle', 'сидячий образ жизни', 'Office workers often have a sedentary lifestyle.'],
+    ['to counteract', 'противодействовать, нейтрализовать', 'Regular walks can counteract the effects of sitting all day.'],
+    ['to build on (one’s ability)', 'развивать, опираться на (свои способности, успех)', 'The course helps you build on your existing skills.'],
+    ['to thrive on something', 'процветать благодаря чему-то, получать энергию от', 'She thrives on pressure and tight deadlines.'],
+    ['to get your teeth into something', 'вплотную взяться за что-то (интересное, сложное)', 'I want a project I can really get my teeth into.'],
+    ['to stretch somebody / to stretch yourself', 'бросать вызов (кому-то / себе), выходить за пределы возможностей', 'This job doesn’t stretch me — I need something harder.'],
+    ['to feel in need of a challenge', 'чувствовать потребность в вызове, в чём-то новом', 'After ten years in the same job, I felt in need of a challenge.'],
+    ['to excel at something', 'преуспевать, отличаться в чём-то', 'She excels at maths.'],
+    ['to impress others', 'производить впечатление на других', 'He’s always trying to impress others with his car.'],
+    ['like-minded people', 'единомышленники', 'At the club I met lots of like-minded people.'],
+    ['to pass on expertise', 'передавать опыт, знания', 'Retired engineers pass on their expertise to young colleagues.'],
+    ['to put something on show', 'выставить на показ, продемонстрировать', 'The students’ paintings were put on show in the hall.'],
+    ['to set something up', 'организовать, основать, наладить', 'We set up a book club last year.'],
+    ['with a view to doing something', 'с целью, с намерением сделать что-то', 'He’s learning Spanish with a view to moving to Madrid.'],
+    ['not by any stretch of the imagination', 'никоим образом, ни при каком раскладе', 'It wasn’t a good film, not by any stretch of the imagination.']
+  ]
+};
+const OCT25_WORDS = { 'Talk Talk Talk': Object.entries(OCT25_SECTIONS).flatMap(([lesson, list]) => list.map(([word, translation, example]) => ({ word, translation, example, lesson }))) };
+
 const OCT12_WORDS = {
   Rustam: [
     { word: 'to irritate / to be irritated', translation: 'раздражать / раздражаться (be irritated by / with something)', example: 'His constant complaining really irritates me.' },
@@ -9308,7 +9409,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
