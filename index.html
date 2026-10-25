@@ -2237,7 +2237,7 @@ const CTX_PRED_ADJ = new Set('awake asleep alone alive afraid aware ill glad'.sp
 const CTX_LY_ADJ =new Set('friendly lonely lovely ugly silly elderly likely early daily weekly monthly curly holy jolly costly deadly lively chilly smelly woolly'.split(' '));
 const CTX_ADV_EXTRA = new Set('rather quite very almost already still often seldom soon later yet anyway perhaps maybe abroad together apart ahead instead indoors outdoors today tomorrow yesterday tonight here there everywhere somewhere nowhere'.split(' '));
 const CTX_ADJ = new Set((
- 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired ' +
+ 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired careful bulletproof ' +
  'hungry angry tall skinny fat strong healthy big small old young lazy productive happy sad fast slow hot cold easy hard clean ' +
  'dirty quiet loud expensive cheap new tasty modern traditional ancient crowded rural suburban urban anxious confused ' +
  'disappointed embarrassed exhausted guilty lonely nervous pleased scared stressed dishonest nasty useless independent rare ' +
@@ -8239,7 +8239,21 @@ const KATYA_WORDS = [
   ['a scene', 'сцена (в фильме, книге); место события', 'The last scene of the film made me cry.'],
   ['forget it', 'забудь, неважно, не бери в голову', '“Sorry, what did you say?” — “Oh, forget it, it’s not important.”'],
   ['Swiss / Swedish', 'Swiss — швейцарский (из Switzerland, Швейцарии); Swedish — шведский (из Sweden, Швеции)', 'Swiss chocolate is famous all over the world. IKEA is a Swedish company.']
-].map(([word, translation, example]) => ({ word, translation, example, lesson: 'First Two Lessons' })));
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'First Two Lessons' }))).concat([
+  ['a brushstroke', 'мазок кистью', 'You can see every brushstroke in this painting.'],
+  ['an exhibition', 'выставка', 'We went to an exhibition of Monet’s paintings.'],
+  ['a servant / to serve', 'a servant — слуга; to serve — служить, обслуживать; подавать (еду)', 'In medieval times, rich families had many servants. Dinner is served at eight.'],
+  ['a painting / to paint / paints', 'a painting — картина; to paint — рисовать красками; paints — краски', 'She paints with watercolours. I bought a new set of paints. This painting is very old.'],
+  ['to pour (milk, tea)', 'наливать (молоко, чай)', 'Could you pour me some tea, please?'],
+  ['a waiter', 'официант', 'The waiter brought us the menu.'],
+  ['a (kitchen) sink', 'раковина (на кухне)', 'Put the dirty plates in the sink.'],
+  ['an apron', 'фартук', 'She always wears an apron when she cooks.'],
+  ['to jog', 'бегать трусцой, совершать пробежку', 'I jog in the park every morning before work.'],
+  ['intuition', 'интуиция', 'I didn’t trust him — my intuition told me something was wrong.'],
+  ['carbs, fats and protein', 'углеводы, жиры и белки (carbs — сокращение от carbohydrates)', 'A healthy meal has a good balance of carbs, fats and protein.'],
+  ['bulletproof', 'пуленепробиваемый (bulletproof coffee — кофе со сливочным маслом)', 'The president’s car has bulletproof windows.'],
+  ['careful', 'осторожный, аккуратный (be careful! — осторожно!)', 'Be careful — the plate is very hot!']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })));
 
 // New student Karina Kar — a separate name so she isn't mixed up with Karina's own French cabinet
 const KARINA_S_WORDS = [
