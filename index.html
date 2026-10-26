@@ -8835,6 +8835,20 @@ const OCT25_SECTIONS = {
     ['not by any stretch of the imagination', 'никоим образом, ни при каком раскладе', 'It wasn’t a good film, not by any stretch of the imagination.']
   ]
 };
+const OCT26_WORDS = { Trofim: [
+  ['to differ (from)', 'отличаться (от)', 'British English differs from American English in spelling.'],
+  ['like-minded people', 'единомышленники', 'At the conference I met a lot of like-minded people.'],
+  ['peers', 'сверстники, ровесники; коллеги (равные по положению)', 'Teenagers often care more about what their peers think than their parents.'],
+  ['to imply something', 'подразумевать, намекать', 'Are you implying that I’m lazy?'],
+  ['a time-waster / to eat up time', 'пустая трата времени / съедать время', 'Endless meetings are a real time-waster — they eat up half my day.'],
+  ['to choose the lesser of two evils', 'выбрать меньшее из двух зол', 'Neither option was good, so we chose the lesser of two evils.'],
+  ['temptation', 'соблазн', 'The temptation to check my phone during work is huge.'],
+  ['to resist temptation', 'устоять перед соблазном', 'I couldn’t resist the temptation and ate the whole cake.'],
+  ['to keep doing something', 'продолжать что-то делать', 'Keep practising and you’ll get better.'],
+  ['on average', 'в среднем', 'On average, people check their phones 90 times a day.'],
+  ['to fall asleep', 'заснуть', 'I fell asleep in front of the TV last night.'],
+  ['to put effort into something', 'вкладывать усилия во что-то', 'If you put more effort into your project, the results will come.']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })) };
 const OCT25_WORDS = { 'Talk Talk Talk': Object.entries(OCT25_SECTIONS).flatMap(([lesson, list]) => list.map(([word, translation, example]) => ({ word, translation, example, lesson }))) };
 
 const OCT12_WORDS = {
@@ -9409,7 +9423,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
