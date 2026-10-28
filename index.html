@@ -868,6 +868,12 @@
         <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
         <div class="mode-desc-ru">Соедини две части · прочитай подсказку · собери фразовый глагол</div>
       </div>
+      <div class="mode-card" onclick="startAdjAdv('easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">⚖️</span>
+        <div class="mode-name">Adjective or Adverb?</div>
+        <div class="mode-desc">careful or carefully? · good or well? · 15 sentences per round</div>
+        <div class="mode-desc-ru">careful или carefully? · good или well? · 15 предложений за раунд</div>
+      </div>
       <div class="mode-card" onclick="startIngEd()" style="grid-column:1/-1;">
         <span class="mode-icon">🎭</span>
         <div class="mode-name">-ing / -ed Adjectives</div>
@@ -1240,6 +1246,24 @@
 </div>
 
 <!-- ── SCREEN: -ING / -ED ADJECTIVES ── -->
+<div class="screen" id="screen-adjadv">
+  <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
+  <div class="page-title" style="font-size:1.4rem;">Adjective or Adverb?</div>
+  <div class="page-sub">Выбери правильную форму. После ответа увидишь объяснение и перевод.</div>
+  <div class="lx">
+    <div class="note">
+      <b>Прилагательное</b> описывает <b>человека или предмет</b> (какой?): <i>He is a <b>careful</b> driver.</i><br>
+      <b>Наречие</b> описывает <b>действие</b> (как?): <i>He drives <b>carefully</b>.</i><br>
+      <span class="ru">После <b>be, look, seem, feel, sound, smell, taste, become, get</b> — прилагательное: <i>She looks <b>happy</b>.</i> Без -ly: <b>fast, hard, late, early</b>. <b>good</b> → <b>well</b>.</span>
+    </div>
+    <div style="display:flex;gap:8px;margin:12px 0;">
+      <button class="btn btn-full" id="adjadv-easy" onclick="startAdjAdv('easy')">Easy · A2–B1</button>
+      <button class="btn btn-full" id="adjadv-tricky" onclick="startAdjAdv('tricky')">Tricky · B2</button>
+    </div>
+    <div class="lxq" id="adjadv-box" data-ex="adjadv"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startAdjAdv(adjAdvLevel)">New round →</button>
+  </div>
+</div>
 <div class="screen" id="screen-inged">
   <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
   <div class="page-title" style="font-size:1.4rem;">-ing / -ed Adjectives</div>
@@ -4491,6 +4515,93 @@ const ING_ED_RU = {
   convinced: ['убеждённый, уверенный', 'убедительный'],
   humiliated: ['униженный', 'унизительный']
 };
+
+// ── Adjective or adverb practice ──
+// [sentence with ___, right form, wrong form, why (ru), translation (ru)]
+const ADJ_ADV_ITEMS = {
+  easy: [
+    ['She drives very ___.', 'carefully', 'careful', 'Как она водит? — описываем действие (drives) → наречие.', 'Она водит очень осторожно.'],
+    ['He is a ___ driver.', 'careful', 'carefully', 'Какой водитель? — описываем человека (driver) → прилагательное.', 'Он осторожный водитель.'],
+    ['Please speak ___ — the baby is sleeping.', 'quietly', 'quiet', 'Как говорить? — действие (speak) → наречие.', 'Пожалуйста, говори тихо — ребёнок спит.'],
+    ['The room was very ___.', 'quiet', 'quietly', 'После was (be) — прилагательное: какая комната?', 'В комнате было очень тихо.'],
+    ['She sings ___.', 'beautifully', 'beautiful', 'Как она поёт? — действие → наречие.', 'Она красиво поёт.'],
+    ['She has a ___ voice.', 'beautiful', 'beautifully', 'Какой голос? — существительное voice → прилагательное.', 'У неё красивый голос.'],
+    ['He plays football very ___.', 'well', 'good', 'good — прилагательное, well — наречие. Как он играет? → well.', 'Он очень хорошо играет в футбол.'],
+    ['He is a ___ football player.', 'good', 'well', 'Какой игрок? — перед существительным → прилагательное good.', 'Он хороший футболист.'],
+    ['Could you speak more ___, please?', 'slowly', 'slow', 'Как говорить? — действие → наречие. Сравнительная степень: more slowly.', 'Не могли бы вы говорить помедленнее?'],
+    ['The bus was very ___ today.', 'slow', 'slowly', 'После was (be) — прилагательное.', 'Автобус сегодня ехал очень медленно (был медленным).'],
+    ['He runs very ___.', 'fast', 'fastly', 'fast — и прилагательное, и наречие. Слова «fastly» нет.', 'Он очень быстро бегает.'],
+    ['It’s a very ___ car.', 'fast', 'fastly', 'Какая машина? — прилагательное fast. «Fastly» не существует.', 'Это очень быстрая машина.'],
+    ['She answered the question ___.', 'correctly', 'correct', 'Как ответила? — действие → наречие.', 'Она правильно ответила на вопрос.'],
+    ['Your answer is ___.', 'correct', 'correctly', 'После is (be) — прилагательное.', 'Твой ответ правильный.'],
+    ['He opened the door ___.', 'slowly', 'slow', 'Как открыл? — действие → наречие.', 'Он медленно открыл дверь.'],
+    ['I’m ___ — I’ve just had dinner.', 'full', 'fully', 'После am (be) — прилагательное: какой я?', 'Я сыт — я только что поужинал.'],
+    ['They lived ___ ever after.', 'happily', 'happy', 'Как жили? — действие (lived) → наречие.', 'Они жили долго и счастливо.'],
+    ['The children are very ___ today.', 'happy', 'happily', 'После are (be) — прилагательное.', 'Дети сегодня очень счастливые.'],
+    ['She speaks English ___.', 'fluently', 'fluent', 'Как говорит? — действие → наречие.', 'Она бегло говорит по-английски.'],
+    ['Her English is ___.', 'fluent', 'fluently', 'После is (be) — прилагательное.', 'Её английский свободный (беглый).'],
+    ['He works very ___.', 'hard', 'hardly', 'hard — и прилагательное, и наречие (усердно). hardly значит «едва, почти не».', 'Он очень усердно работает.'],
+    ['The exam was ___.', 'easy', 'easily', 'После was (be) — прилагательное.', 'Экзамен был лёгким.'],
+    ['I passed the exam ___.', 'easily', 'easy', 'Как сдал? — действие → наречие.', 'Я легко сдал экзамен.'],
+    ['Drive ___! The road is icy.', 'carefully', 'careful', 'Как ехать? — действие → наречие.', 'Езжай осторожно! Дорога обледенела.'],
+    ['Be ___! The road is icy.', 'careful', 'carefully', 'После be — прилагательное.', 'Будь осторожен! Дорога обледенела.'],
+    ['She smiled ___ at me.', 'warmly', 'warm', 'Как улыбнулась? — действие → наречие.', 'Она тепло мне улыбнулась.'],
+    ['It’s ___ outside today.', 'warm', 'warmly', 'После is (be) — прилагательное.', 'Сегодня на улице тепло.'],
+    ['He came home ___ last night.', 'late', 'lately', 'late — и прилагательное, и наречие (поздно). lately значит «в последнее время».', 'Вчера он пришёл домой поздно.'],
+    ['The train was ___.', 'late', 'lately', 'После was (be) — прилагательное late (опоздавший).', 'Поезд опоздал.'],
+    ['She dances ___.', 'badly', 'bad', 'Как танцует? — действие → наречие.', 'Она плохо танцует.']
+  ],
+  tricky: [
+    ['She looks ___ today.', 'happy', 'happily', 'После look (выглядеть) — прилагательное: какая она?', 'Она сегодня выглядит счастливой.'],
+    ['This soup tastes ___.', 'delicious', 'deliciously', 'После taste (на вкус) — прилагательное.', 'Этот суп очень вкусный.'],
+    ['The flowers smell ___.', 'lovely', 'lovelily', 'lovely — прилагательное (на -ly, но не наречие). После smell — прилагательное.', 'Цветы чудесно пахнут.'],
+    ['You sound very ___. Did you sleep well?', 'calm', 'calmly', 'После sound (звучать) — прилагательное.', 'У тебя очень спокойный голос. Ты хорошо выспался?'],
+    ['I feel ___ about the mistake.', 'bad', 'badly', 'После feel (чувствовать себя) — прилагательное: I feel bad.', 'Мне неловко (плохо) из-за этой ошибки.'],
+    ['I don’t feel ___ today — I think I’ve got a cold.', 'well', 'good', 'Здесь well — прилагательное «здоровый»: I don’t feel well = мне нехорошо.', 'Мне сегодня нехорошо — кажется, я простудился.'],
+    ['I’ve been very busy ___.', 'lately', 'late', 'lately — «в последнее время». late — «поздно».', 'В последнее время я очень занят.'],
+    ['I can ___ hear you — speak up!', 'hardly', 'hard', 'hardly — «едва, почти не». hard — «усердно, сильно».', 'Я тебя почти не слышу — говори громче!'],
+    ['It was raining ___, so we stayed in.', 'hard', 'hardly', 'Как шёл дождь? — сильно = hard. hardly значит «почти не».', 'Шёл сильный дождь, поэтому мы остались дома.'],
+    ['She looked at me ___.', 'angrily', 'angry', 'Здесь look at — действие (смотреть на) → наречие: как смотрела?', 'Она сердито на меня посмотрела.'],
+    ['She looked ___.', 'angry', 'angrily', 'Здесь look = выглядеть → прилагательное: какой она выглядела?', 'Она выглядела сердитой.'],
+    ['He got ___ when he heard the news.', 'nervous', 'nervously', 'После get (становиться) — прилагательное.', 'Он занервничал, когда услышал новость.'],
+    ['He waited ___ for the results.', 'nervously', 'nervous', 'Как ждал? — действие → наречие.', 'Он нервно ждал результатов.'],
+    ['The plan seems ___.', 'reasonable', 'reasonably', 'После seem (казаться) — прилагательное.', 'План кажется разумным.'],
+    ['The hotel was ___ cheap.', 'surprisingly', 'surprising', 'Наречие описывает прилагательное cheap: насколько дешёвый?', 'Отель был на удивление дешёвым.'],
+    ['It was an ___ difficult exam.', 'extremely', 'extreme', 'Наречие описывает прилагательное difficult: насколько трудный?', 'Это был чрезвычайно трудный экзамен.'],
+    ['She is ___ beautiful.', 'incredibly', 'incredible', 'Наречие усиливает прилагательное beautiful.', 'Она невероятно красива.'],
+    ['He’s a ___ person.', 'friendly', 'friendlily', 'friendly — прилагательное (на -ly, но не наречие). Наречия «friendlily» не говорят — скажи in a friendly way.', 'Он дружелюбный человек.'],
+    ['She spoke to me in a ___ way.', 'friendly', 'friendlily', 'friendly — прилагательное, поэтому: in a friendly way (по-дружески).', 'Она говорила со мной по-дружески.'],
+    ['We have a ___ meeting on Mondays.', 'weekly', 'week', 'weekly — прилагательное (еженедельный) перед существительным.', 'По понедельникам у нас еженедельное совещание.'],
+    ['He arrived ___ for the meeting.', 'early', 'earlily', 'early — и прилагательное, и наречие. «Earlily» не существует.', 'Он пришёл на встречу рано.'],
+    ['You did ___ in the exam!', 'well', 'good', 'Как сдал? — действие (did) → наречие well. В правильной речи: you did well.', 'Ты хорошо сдал экзамен!'],
+    ['The milk smells ___ — don’t drink it.', 'bad', 'badly', 'После smell (пахнуть) — прилагательное.', 'Молоко плохо пахнет — не пей его.'],
+    ['The team played ___ and lost.', 'badly', 'bad', 'Как играли? — действие → наречие.', 'Команда плохо играла и проиграла.'],
+    ['He tried ___ but failed.', 'hard', 'hardly', 'Как старался? — изо всех сил = hard.', 'Он очень старался, но не справился.'],
+    ['I ___ ever eat meat.', 'hardly', 'hard', 'hardly ever — «почти никогда».', 'Я почти никогда не ем мясо.'],
+    ['He speaks ___ than his brother.', 'more slowly', 'slowlier', 'Сравнительная степень наречий на -ly: more + наречие → more slowly.', 'Он говорит медленнее, чем его брат.'],
+    ['She runs ___ than me.', 'faster', 'more fastly', 'fast — наречие без -ly, поэтому сравнительная степень faster.', 'Она бегает быстрее меня.'],
+    ['The situation became ___.', 'serious', 'seriously', 'После become (становиться) — прилагательное.', 'Ситуация стала серьёзной.'],
+    ['Take it ___ — it’s only a game.', 'easy', 'easily', 'Устойчивое выражение take it easy — «не переживай, расслабься».', 'Не переживай — это всего лишь игра.']
+  ]
+};
+let adjAdvLevel = 'easy';
+function startAdjAdv(level) {
+  adjAdvLevel = level;
+  const items = shuffle(ADJ_ADV_ITEMS[level].slice()).slice(0, 15).map(([q, right, wrong, why, ru]) => {
+    const opts = Math.random() < 0.5 ? [right, wrong] : [wrong, right];
+    return { q, opts, ok: [opts.indexOf(right)], note: why + '<div style="margin-top:4px;" class="ru">' + ru + '</div>' };
+  });
+  LIB_TASKS.adjadv = { type: 'choice', items };
+  const box = document.getElementById('adjadv-box');
+  delete box.dataset.ready;
+  box.innerHTML = '';
+  document.getElementById('adjadv-easy').classList.toggle('btn-primary', level === 'easy');
+  document.getElementById('adjadv-tricky').classList.toggle('btn-primary', level === 'tricky');
+  show('adjadv');
+  lxHydrate(document.getElementById('screen-adjadv'));
+  window.scrollTo(0, 0);
+  logActivity('Adjective or Adverb (начал)', level, null, items.length);
+}
 
 function startIngEd() {
   const items = shuffle(ING_ED_ITEMS.slice()).slice(0, 15).map(([q, ed, ing, right]) => {
@@ -8846,8 +8957,7 @@ const OCT28_WORDS = {
   ],
   Trofim: [
     ['to apply to take part in a case championship', 'подать заявку на участие в кейс-чемпионате (to submit an application for a case — подать заявку на кейс)', 'Our team applied to take part in a case championship organised by a big bank.'],
-    ['to pay attention to something', 'обращать внимание на что-то', 'Pay attention to the details — they matter.'],
-    ['slow → slowly, fast → fast', 'прилагательное → наречие: He is slow. → He speaks slowly / more slowly. Fast — и прилагательное, и наречие: He is fast. He speaks fast / faster. Слова «fastly» нет', 'Could you speak more slowly, please? He runs faster than me.']
+    ['to pay attention to something', 'обращать внимание на что-то', 'Pay attention to the details — they matter.']
   ],
   Carolina: [
     ['nails', 'гвозди (а также ногти)', 'I need a hammer and some nails to hang this picture.'],
@@ -9449,6 +9559,7 @@ const OCT9_WORDS = {
 
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
+  { const tr = data.students.find(s => s.name === 'Trofim'); if (tr) tr.words = tr.words.filter(w => w.word !== 'slow → slowly, fast → fast'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
   [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
