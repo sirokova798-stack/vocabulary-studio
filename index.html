@@ -8835,6 +8835,33 @@ const OCT25_SECTIONS = {
     ['not by any stretch of the imagination', 'никоим образом, ни при каком раскладе', 'It wasn’t a good film, not by any stretch of the imagination.']
   ]
 };
+// 28 Oct: Katya, Trofim, Carolina
+const OCT28_WORDS = {
+  Katya: [
+    ['side effects', 'побочные эффекты (лекарства)', 'This medicine can have side effects, like headaches.'],
+    ['dry skin', 'сухая кожа', 'In winter I have very dry skin, so I use a lot of cream.'],
+    ['to stick to a diet', 'придерживаться диеты', 'It’s hard to stick to a diet when everyone around you is eating cake.'],
+    ['dairy products', 'молочные продукты', 'Milk, cheese and yoghurt are dairy products.'],
+    ['similar to', 'похожий на (similar to — с предлогом to)', 'Your bag is very similar to mine.']
+  ],
+  Trofim: [
+    ['to apply to take part in a case championship', 'подать заявку на участие в кейс-чемпионате (to submit an application for a case — подать заявку на кейс)', 'Our team applied to take part in a case championship organised by a big bank.'],
+    ['to pay attention to something', 'обращать внимание на что-то', 'Pay attention to the details — they matter.'],
+    ['slow → slowly, fast → fast', 'прилагательное → наречие: He is slow. → He speaks slowly / more slowly. Fast — и прилагательное, и наречие: He is fast. He speaks fast / faster. Слова «fastly» нет', 'Could you speak more slowly, please? He runs faster than me.']
+  ],
+  Carolina: [
+    ['nails', 'гвозди (а также ногти)', 'I need a hammer and some nails to hang this picture.'],
+    ['planks / boards', 'доски (plank — длинная толстая доска; board — доска в целом)', 'We made a small bridge out of wooden planks.'],
+    ['my go-to (something)', 'мой любимый, проверенный (то, к чему я всегда обращаюсь)', 'Pasta is my go-to dinner when I’m tired.'],
+    ['turmeric', 'куркума', 'Add a teaspoon of turmeric to the soup.'],
+    ['a little bit of honey', 'немного мёда', 'I put a little bit of honey in my tea.'],
+    ['ground spices', 'молотые специи (grind – ground – ground; не «grinded»)', 'You can use ground spices instead of whole ones.'],
+    ['a reminder', 'напоминание', 'I set a reminder on my phone for the doctor’s appointment.'],
+    ['a jar / a can', 'a jar — стеклянная банка (варенье, мёд); a can — жестяная банка (консервы, напитки)', 'a jar of honey, a can of beans'],
+    ['frightened of / frightened by', 'frightened of — бояться (вообще): frightened of spiders; frightened by — испугаться (чего-то конкретного, что произошло)', 'She’s frightened of dogs. She was frightened by the loud noise.']
+  ]
+};
+Object.keys(OCT28_WORDS).forEach(n => { OCT28_WORDS[n] = OCT28_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 const OCT26_WORDS = { Trofim: [
   ['to differ (from)', 'отличаться (от)', 'British English differs from American English in spelling.'],
   ['like-minded people', 'единомышленники', 'At the conference I met a lot of like-minded people.'],
@@ -9423,7 +9450,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
