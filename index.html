@@ -868,6 +868,18 @@
         <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
         <div class="mode-desc-ru">Соедини две части · прочитай подсказку · собери фразовый глагол</div>
       </div>
+      <div class="mode-card" onclick="startDrill('articles', 'easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">📰</span>
+        <div class="mode-name">Articles: a / an / the / —</div>
+        <div class="mode-desc">a, an, the or no article? · explanation after every answer</div>
+        <div class="mode-desc-ru">a, an, the или без артикля? · объяснение после каждого ответа</div>
+      </div>
+      <div class="mode-card" onclick="startDrill('usedto', 'easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">🔁</span>
+        <div class="mode-name">Used to · Be used to · Get used to</div>
+        <div class="mode-desc">I used to live… · I’m used to living… · I’m getting used to living…</div>
+        <div class="mode-desc-ru">раньше делал · привык · привыкаю</div>
+      </div>
       <div class="mode-card" onclick="startAdjAdv('easy')" style="grid-column:1/-1;">
         <span class="mode-icon">⚖️</span>
         <div class="mode-name">Adjective or Adverb?</div>
@@ -1246,6 +1258,17 @@
 </div>
 
 <!-- ── SCREEN: -ING / -ED ADJECTIVES ── -->
+<div class="screen" id="screen-drill">
+  <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
+  <div class="page-title" style="font-size:1.4rem;" id="drill-title"></div>
+  <div class="page-sub">Выбери правильный вариант. После ответа всегда увидишь объяснение.</div>
+  <div class="lx">
+    <div class="note" id="drill-rule"></div>
+    <div style="display:flex;gap:8px;margin:12px 0;" id="drill-levels"></div>
+    <div class="lxq" id="drill-box" data-ex="drill"></div>
+    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startDrill(drillKey, drillLevel)">New round →</button>
+  </div>
+</div>
 <div class="screen" id="screen-adjadv">
   <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
   <div class="page-title" style="font-size:1.4rem;">Adjective or Adverb?</div>
@@ -1944,8 +1967,9 @@ function openStudent(id) {
   currentStudent = id;
   practiceLesson = null;
   document.getElementById('dash-avatar').textContent = s.name[0].toUpperCase();
-  document.getElementById('dash-name').textContent = s.name;
-  document.getElementById('header-sub').textContent = s.name + "'s vocabulary";
+  // `display` lets two students share a first name (Anastasia Lyon sees just "Anastasia")
+  document.getElementById('dash-name').textContent = s.display || s.name;
+  document.getElementById('header-sub').textContent = (s.display || s.name) + "'s vocabulary";
   document.getElementById('teacher-btn').style.display = 'none';
   switchTab('words');
   show('student');
@@ -4515,6 +4539,152 @@ const ING_ED_RU = {
   convinced: ['убеждённый, уверенный', 'убедительный'],
   humiliated: ['униженный', 'унизительный']
 };
+
+// ── Choice drills: Articles, Used to ──
+// items: [sentence with ___, right answer, why (ru)]; articles use fixed options, used-to items carry their own
+const ART_OPTS = ['a', 'an', 'the', '— (no article)'];
+const NO_ART = '— (no article)';
+const DRILLS = {
+  articles: {
+    title: 'Articles: a / an / the / —',
+    rule: '<b>a / an</b> — один из многих, впервые упоминаем, «какой-то»: <i>I saw <b>a</b> dog.</i> <b>an</b> — перед гласным <b>звуком</b>: <i>an apple, an hour</i>, но <i>a university</i>.<br>' +
+      '<b>the</b> — конкретный, понятно какой: уже упоминали, единственный в своём роде, уточнён: <i><b>The</b> dog was huge. <b>the</b> sun.</i><br>' +
+      '<span class="ru"><b>Без артикля</b> — вообще о чём-то во множественном числе или неисчисляемом: <i>I like <b>dogs</b>. <b>Water</b> is important.</i>; имена, большинство стран и городов, приёмы пищи, <i>go to school / work / bed</i>.</span>',
+    levels: { easy: 'Easy · A2–B1', tricky: 'Tricky · B2' },
+    items: {
+      easy: [
+        ['I have ___ sister and two brothers.', 'a', 'Одна сестра из многих возможных, упоминаем впервые → a.'],
+        ['She is ___ engineer.', 'an', 'Профессия → a/an. engineer начинается с гласного звука → an.'],
+        ['I’ve been waiting for ___ hour!', 'an', 'В hour буква h не читается, слово начинается с гласного звука /aʊ/ → an.'],
+        ['He goes to ___ university in Moscow.', 'a', 'university начинается со звука /j/ («ю»), это согласный звук → a, не an.'],
+        ['I saw a cat and a dog. ___ cat was black.', 'the', 'Кошку уже упомянули — теперь понятно, какая → the.'],
+        ['___ sun is very bright today.', 'the', 'Солнце одно-единственное → the.'],
+        ['I love ___ cats.', NO_ART, 'Говорим о кошках вообще (мн. число) → без артикля.'],
+        ['___ water is very important for your health.', NO_ART, 'Вода вообще, неисчисляемое → без артикля.'],
+        ['Can you close ___ window, please?', 'the', 'Понятно, какое окно — то, что здесь, в комнате → the.'],
+        ['We had ___ breakfast at eight.', NO_ART, 'Приёмы пищи (breakfast, lunch, dinner) обычно без артикля.'],
+        ['My children go to ___ school by bus.', NO_ART, 'go to school — учиться, ходить на занятия. Устойчиво, без артикля.'],
+        ['I usually go to ___ bed at eleven.', NO_ART, 'go to bed — ложиться спать. Без артикля.'],
+        ['She lives in ___ France.', NO_ART, 'Большинство стран — без артикля: France, Russia, Italy.'],
+        ['They live in ___ USA.', 'the', 'Страны со словами States, Kingdom, Republic → the USA, the UK.'],
+        ['It’s ___ interesting book.', 'an', 'Одна книга из многих + прилагательное на гласный звук (interesting) → an.'],
+        ['It’s ___ useful tool.', 'a', 'useful начинается со звука /j/ → a.'],
+        ['What’s ___ name of this street?', 'the', 'Название конкретной улицы — уточнено (of this street) → the.'],
+        ['I play ___ tennis on Sundays.', NO_ART, 'Виды спорта — без артикля: play tennis, play football.'],
+        ['She plays ___ piano beautifully.', 'the', 'Музыкальные инструменты — с the: play the piano, the guitar.'],
+        ['Is there ___ bank near here?', 'a', 'Какой-нибудь банк, любой → a.'],
+        ['I’ll meet you at ___ bank on the corner.', 'the', 'Конкретный банк, уточнён: on the corner → the.'],
+        ['He works three days ___ week.', 'a', 'Частота: three times a week, once a day → a.'],
+        ['___ Moscow is a huge city.', NO_ART, 'Города — без артикля.'],
+        ['Look at ___ moon!', 'the', 'Луна одна → the.'],
+        ['What ___ beautiful day!', 'a', 'What + a + исчисляемое в ед. числе: What a day!'],
+        ['I don’t like ___ coffee.', NO_ART, 'Кофе вообще, неисчисляемое → без артикля.'],
+        ['___ coffee you made this morning was great.', 'the', 'Конкретный кофе, уточнён: you made this morning → the.'],
+        ['He’s ___ honest man.', 'an', 'В honest h не читается → гласный звук → an.'],
+        ['We stayed in ___ hotel by the sea.', 'a', 'Какой-то отель, упоминаем впервые → a.'],
+        ['___ Thames flows through London.', 'the', 'Реки — с the: the Thames, the Volga.']
+      ],
+      tricky: [
+        ['___ life is too short to be unhappy.', NO_ART, 'Жизнь вообще (абстрактное понятие) → без артикля.'],
+        ['___ life of a ballet dancer is very hard.', 'the', 'Конкретная жизнь, уточнена: of a ballet dancer → the.'],
+        ['___ rich should pay more taxes.', 'the', 'the + прилагательное = группа людей: the rich, the poor, the elderly.'],
+        ['She is ___ best student in the class.', 'the', 'Превосходная степень → the best, the most interesting.'],
+        ['He was taken to ___ hospital after the accident.', NO_ART, 'Брит.: go to / be in hospital — как пациент, без артикля (как school, prison).'],
+        ['I went to ___ hospital to visit my grandmother.', 'the', 'Пришёл не лечиться, а в здание навестить → the hospital.'],
+        ['She’s in ___ prison for fraud.', NO_ART, 'Сидит в тюрьме как заключённая → без артикля.'],
+        ['___ Alps are beautiful in winter.', 'the', 'Горные цепи — с the: the Alps, the Urals. Одна гора — без: Everest.'],
+        ['We climbed ___ Mount Elbrus.', NO_ART, 'Отдельные горы — без артикля.'],
+        ['He’s ___ only person who understands me.', 'the', 'the only — единственный → the.'],
+        ['___ honesty is the best policy.', NO_ART, 'Абстрактное понятие вообще → без артикля.'],
+        ['___ Netherlands is famous for tulips.', 'the', 'Названия во множественном числе → the Netherlands, the Philippines.'],
+        ['I bought a dress and a skirt. ___ dress was too small.', 'the', 'Платье уже упомянуто → the.'],
+        ['She has ___ beautiful eyes.', NO_ART, 'Множественное число без конкретизации → без артикля (a нельзя с мн. числом).'],
+        ['He gave me ___ good advice.', NO_ART, 'advice — неисчисляемое, a нельзя. Можно: a piece of advice.'],
+        ['It was ___ awful weather.', NO_ART, 'weather — неисчисляемое: What awful weather! (не «an awful weather»).'],
+        ['I’ll be there in ___ half an hour.', NO_ART, 'Устойчиво: half an hour. Артикль уже стоит перед hour.'],
+        ['___ Pacific is the largest ocean.', 'the', 'Океаны и моря — с the: the Pacific, the Black Sea.'],
+        ['___ Lake Baikal is the deepest lake in the world.', NO_ART, 'Озёра со словом Lake — без артикля: Lake Baikal.'],
+        ['She speaks ___ Russian and French.', NO_ART, 'Языки — без артикля: speak Russian. Но: the Russian language.'],
+        ['___ Russians love tea.', 'the', 'the + национальность (= весь народ): the Russians, the French.'],
+        ['He became ___ president in 2020.', NO_ART, 'Единственная должность после become / elect — часто без артикля: became president.'],
+        ['I have ___ idea!', 'an', 'Одна идея из многих, гласный звук → an.'],
+        ['I have no idea where ___ keys are.', 'the', 'Конкретные ключи (мои, понятно какие) → the.'],
+        ['It’s ___ one-way street.', 'a', 'one начинается со звука /w/ → a, не an.'],
+        ['She has ___ MBA from Harvard.', 'an', 'MBA читается «эм-би-эй» — гласный звук /e/ → an.'],
+        ['___ more you practise, ___ better you get.', 'the', 'Конструкция the more…, the better… — «чем больше…, тем лучше…».'],
+        ['He plays ___ chess very well.', NO_ART, 'Игры — без артикля: play chess, play cards.'],
+        ['___ dinner we had last night was amazing.', 'the', 'Конкретный ужин, уточнён (we had last night) → the.'],
+        ['Not ___ single person came.', 'a', 'not a single — ни один → a.']
+      ]
+    }
+  },
+  usedto: {
+    title: 'Used to · Be used to · Get used to',
+    rule: '<b>used to + глагол</b> — раньше (а теперь нет): <i>I <b>used to live</b> in Moscow.</i> = Раньше я жил в Москве.<br>' +
+      '<b>be used to + -ing / сущ.</b> — привык (уже нормально): <i>I’<b>m used to living</b> alone.</i> = Я привык жить один.<br>' +
+      '<b>get used to + -ing / сущ.</b> — привыкать (процесс): <i>I’<b>m getting used to</b> the cold.</i> = Я привыкаю к холоду.<br>' +
+      '<span class="ru">Вопрос и отрицание: <i>Did you <b>use</b> to…? I didn’t <b>use</b> to…</i> (без -d).</span>',
+    levels: { easy: 'Easy', tricky: 'Tricky' },
+    items: {
+      easy: [
+        ['When I was a child, I ___ in the countryside.', 'used to live', ['used to live', 'am used to living', 'got used to living'], 'Раньше жил, а теперь нет → used to + глагол.'],
+        ['I ___ up early — I do it every day.', 'am used to getting', ['used to get', 'am used to getting', 'get used to get'], 'Уже привычно, нормально → be used to + -ing.'],
+        ['I ___ coffee, but now I prefer tea.', 'used to drink', ['used to drink', 'am used to drinking', 'was used to drink'], 'Раньше пил, сейчас нет → used to + глагол.'],
+        ['It took me a month to ___ the new job.', 'get used to', ['get used to', 'used to', 'be use to'], 'Процесс привыкания → get used to + сущ.'],
+        ['She ___ long hair, but she cut it last year.', 'used to have', ['used to have', 'is used to having', 'gets used to having'], 'Раньше была, а теперь нет → used to.'],
+        ['Don’t worry, you’ll ___ the noise.', 'get used to', ['get used to', 'used to', 'use to'], 'Привыкнешь (в будущем) → will get used to.'],
+        ['I ___ driving on the left yet. It still feels strange.', 'am not used to', ['am not used to', 'didn’t use to', 'don’t used to'], 'Ещё не привык → not be used to + -ing.'],
+        ['___ you use to play football at school?', 'Did', ['Did', 'Were', 'Are'], 'Вопрос с used to: Did you use to…? (use без -d).'],
+        ['We ___ to go on holiday abroad — we never had the money.', 'didn’t use', ['didn’t use', 'didn’t used', 'weren’t used'], 'Отрицание: didn’t use to (без -d).'],
+        ['He’s British, so he ___ rainy weather.', 'is used to', ['is used to', 'used to', 'uses to'], 'Ему это привычно → be used to + сущ.'],
+        ['There ___ be a cinema here, but now it’s a supermarket.', 'used to', ['used to', 'is used to', 'got used to'], 'Раньше был, теперь нет → there used to be.'],
+        ['I’m slowly ___ my new glasses.', 'getting used to', ['getting used to', 'used to', 'use to'], 'Привыкаю (процесс сейчас) → be getting used to.'],
+        ['My grandfather ___ smoke, but he gave up ten years ago.', 'used to', ['used to', 'was used to', 'got used to'], 'Раньше курил → used to + глагол.'],
+        ['Nurses ___ working at night.', 'are used to', ['are used to', 'used to', 'use to'], 'Для них это привычно → be used to + -ing.'],
+        ['I can’t ___ the cold winters here.', 'get used to', ['get used to', 'used to', 'be use to'], 'Не могу привыкнуть → can’t get used to.']
+      ],
+      tricky: [
+        ['After living in Moscow, I ___ to the traffic.', 'am used', ['am used', 'used', 'use'], 'Привык (сейчас нормально) → be used to + сущ.'],
+        ['When I moved to London, I couldn’t ___ to driving on the left.', 'get used', ['get used', 'use', 'used'], 'Не мог привыкнуть (процесс) → get used to + -ing.'],
+        ['She ___ to living alone, but she didn’t like it at first.', 'got used', ['got used', 'used', 'was use'], 'Со временем привыкла → got used to + -ing.'],
+        ['I ___ to working from home now — I love it.', 'have got used', ['have got used', 'used', 'use'], 'Уже привык к настоящему моменту → have got used to.'],
+        ['I’m used to ___ in big cities.', 'living', ['living', 'live', 'lived'], 'После be used to — to здесь предлог, значит -ing: used to living.'],
+        ['I used to ___ in a big city.', 'live', ['live', 'living', 'lived'], 'used to + инфинитив (без -ing): used to live.'],
+        ['You’ll soon get used to ___ up early.', 'getting', ['getting', 'get', 'got'], 'get used to + -ing: get used to getting up.'],
+        ['He never ___ to be so quiet — what happened?', 'used', ['used', 'was used', 'got used'], 'never used to — раньше никогда не был → used to + глагол.'],
+        ['At first the spicy food was hard, but I ___ to it.', 'got used', ['got used', 'used', 'was using'], 'Привыкла со временем → got used to.'],
+        ['I wasn’t ___ to such hot weather, so I felt ill.', 'used', ['used', 'use', 'using'], 'Не был привычен → wasn’t used to + сущ.'],
+        ['Did she ___ to work in a bank?', 'use', ['use', 'used', 'using'], 'Вопрос с did: Did she use to…? (use без -d).'],
+        ['Living abroad is hard, but you ___ to it.', 'get used', ['get used', 'used', 'are use'], 'Общая истина: со временем привыкаешь → you get used to it.'],
+        ['I’ll never ___ to these early meetings.', 'get used', ['get used', 'use', 'be use'], 'Никогда не привыкну → will never get used to.'],
+        ['We ___ to see each other every weekend when we were at school.', 'used', ['used', 'were used', 'got used'], 'Раньше регулярно делали → used to + глагол.'],
+        ['She is used to ___ criticism — she’s a politician.', 'receiving', ['receiving', 'receive', 'received'], 'be used to + -ing: used to receiving.']
+      ]
+    }
+  }
+};
+let drillKey = 'articles', drillLevel = 'easy';
+function startDrill(key, level) {
+  drillKey = key; drillLevel = level;
+  const d = DRILLS[key];
+  document.getElementById('drill-title').textContent = d.title;
+  document.getElementById('drill-rule').innerHTML = d.rule;
+  document.getElementById('drill-levels').innerHTML = Object.entries(d.levels).map(([lv, label]) =>
+    '<button class="btn btn-full' + (lv === level ? ' btn-primary' : '') + '" onclick="startDrill(\'' + key + '\', \'' + lv + '\')">' + label + '</button>').join('');
+  const items = shuffle(d.items[level].slice()).slice(0, 15).map(it => {
+    const [q, right, own, why] = it.length === 4 ? it : [it[0], it[1], null, it[2]];
+    const opts = own ? shuffle(own.slice()) : ART_OPTS.slice();
+    return { q, opts, ok: [opts.indexOf(right)], note: why };
+  });
+  LIB_TASKS.drill = { type: 'choice', items };
+  const box = document.getElementById('drill-box');
+  delete box.dataset.ready;
+  box.innerHTML = '';
+  show('drill');
+  lxHydrate(document.getElementById('screen-drill'));
+  window.scrollTo(0, 0);
+  logActivity(d.title + ' (начал)', level, null, items.length);
+}
 
 // ── Adjective or adverb practice ──
 // [sentence with ___, right form, wrong form, why (ru), translation (ru)]
@@ -8946,8 +9116,28 @@ const OCT25_SECTIONS = {
     ['not by any stretch of the imagination', 'никоим образом, ни при каком раскладе', 'It wasn’t a good film, not by any stretch of the imagination.']
   ]
 };
-// 1 Nov: Rustam, Katya, Yuliya
+// 1 Nov: Rustam, Katya, Yuliya, Milana, Anastasia Lyon, Anastasia
 const NOV1_WORDS = {
+  Milana: [
+    ['to propose to somebody', 'сделать предложение (руки и сердца) кому-то', 'He proposed to her on the beach at sunset.'],
+    ['to be married to somebody', 'быть замужем за / женатым на (to, не «with»)', 'She has been married to Tom for ten years.'],
+    ['to agree with somebody', 'соглашаться с кем-то (I don’t agree with you — я с тобой не согласен; не «I am not agree»)', 'I don’t agree with you — I think the film was great.'],
+    ['a regular', 'завсегдатай, постоянный посетитель (по-французски habitué; в английском тоже есть, но звучит книжно)', 'He’s a regular at this café — the waiters know his order.']
+  ],
+  'Anastasia Lyon': [
+    ['to share a flat / a flatmate', 'снимать квартиру вместе с кем-то / сосед по квартире', 'I share a flat with two other students. My flatmate is from Spain.'],
+    ['a period building / a historic building', 'старинное здание (с историей и красивыми деталями, «не старое и обшарпанное»). Ancient — древний (тысячи лет), не подходит', 'I live in a beautiful period building with high ceilings in the centre of Lyon.'],
+    ['at the same time', 'в то же время; одновременно', 'I can’t cook and talk on the phone at the same time.'],
+    ['versatile / to be good with your hands', 'разносторонний, «мастер на все руки» (умеет многое) / рукастый, умеет всё починить', 'She’s really versatile — she can sing, dance and act. My dad is good with his hands — he can fix anything.'],
+    ['to knock on the door', 'стучать в дверь', 'Someone is knocking on the door.'],
+    ['disposable plates', 'одноразовые тарелки', 'We used disposable plates at the picnic.'],
+    ['to cheat in an exam', 'списывать на экзамене (брит. cheat in an exam, амер. cheat on an exam; cheat on somebody — изменять кому-то)', 'He was caught cheating in the exam.']
+  ],
+  Anastasia: [
+    ['keep – kept – kept', 'держать, хранить (неправильный глагол)', 'I kept all her letters.'],
+    ['washing powder / a washing machine', 'стиральный порошок / стиральная машина', 'We’ve run out of washing powder. The washing machine is broken.'],
+    ['to keep doing something', 'продолжать что-то делать', 'Keep going — you’re almost there! He kept talking during the film.']
+  ],
   Rustam: [
     ['to stay the night / to stay over (at somebody’s place)', 'ночевать (у кого-то). A sleepover — ночёвка у друзей (обычно у детей и подростков)', 'It was late, so I stayed the night at my parents’ place.'],
     ['a con man', 'мошенник, аферист', 'The con man took all her savings and disappeared.'],
@@ -9580,6 +9770,13 @@ const OCT9_WORDS = {
   KATYA_WORDS.forEach(w => {
     if (!katyaExisting.has(w.word.toLowerCase())) katya.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
   });
+
+  // ── Anastasia Lyon (new 1 Nov 2026; lives in Lyon, a different person from Anastasia 4321) ──
+  let anaLyon = data.students.find(s => s.name === 'Anastasia Lyon');
+  if (!anaLyon) { anaLyon = { id: uid(), name: 'Anastasia Lyon', words: [], quizHistory: [] }; data.students.push(anaLyon); }
+  if (!anaLyon.quizHistory) anaLyon.quizHistory = [];
+  anaLyon.pin = '9090';
+  anaLyon.display = 'Anastasia';
 
   // ── Karina Kar ──
   let karinaS = data.students.find(s => s.name === 'Karina Kar');
