@@ -9214,7 +9214,7 @@ const NOV1_WORDS = {
     ['to talk somebody into / out of something', 'уговорить кого-то сделать / отговорить от чего-то', 'She talked me into buying the dress. My friends talked me out of quitting.']
   ]
 };
-Object.keys(NOV1_WORDS).forEach(n => { NOV1_WORDS[n] = NOV1_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Lesson 1 Nov' })); });
+Object.keys(NOV1_WORDS).forEach(n => { NOV1_WORDS[n] = NOV1_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: n === 'Anastasia Lyon' ? 'Lesson 30 Oct' : 'Lesson 1 Nov' })); });
 // 28 Oct: Katya, Trofim, Carolina
 const OCT28_WORDS = {
   Katya: [
@@ -9822,6 +9822,7 @@ const OCT9_WORDS = {
   if (!anaLyon.quizHistory) anaLyon.quizHistory = [];
   anaLyon.pin = '9090';
   anaLyon.display = 'Anastasia';
+  anaLyon.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = 'Lesson 30 Oct'; });
 
   // ── Karina Kar ──
   let karinaS = data.students.find(s => s.name === 'Karina Kar');
