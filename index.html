@@ -9215,7 +9215,7 @@ const NOV1_WORDS = {
   ]
 };
 // students whose lesson was actually on another day
-const NOV1_DATES = { 'Anastasia Lyon': 'Lesson 30 Oct', Katya: 'Lesson 30 Oct' };
+const NOV1_DATES = { 'Anastasia Lyon': 'Lesson 30 Oct', Katya: 'Lesson 30 Oct', Milana: 'Lesson 31 Oct', Anastasia: 'Lesson 31 Oct' };
 Object.keys(NOV1_WORDS).forEach(n => { NOV1_WORDS[n] = NOV1_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: NOV1_DATES[n] || 'Lesson 1 Nov' })); });
 // 28 Oct: Katya, Trofim, Carolina
 const OCT28_WORDS = {
@@ -9840,6 +9840,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   { const tr = data.students.find(s => s.name === 'Trofim'); if (tr) tr.words = tr.words.filter(w => w.word !== 'slow → slowly, fast → fast'); }
+  Object.entries(NOV1_DATES).forEach(([n, l]) => { const st = data.students.find(s => s.name === n); if (st) st.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = l; }); });
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
   [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
