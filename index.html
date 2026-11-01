@@ -9214,7 +9214,9 @@ const NOV1_WORDS = {
     ['to talk somebody into / out of something', 'уговорить кого-то сделать / отговорить от чего-то', 'She talked me into buying the dress. My friends talked me out of quitting.']
   ]
 };
-Object.keys(NOV1_WORDS).forEach(n => { NOV1_WORDS[n] = NOV1_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: n === 'Anastasia Lyon' ? 'Lesson 30 Oct' : 'Lesson 1 Nov' })); });
+// students whose lesson was actually on another day
+const NOV1_DATES = { 'Anastasia Lyon': 'Lesson 30 Oct', Katya: 'Lesson 30 Oct' };
+Object.keys(NOV1_WORDS).forEach(n => { NOV1_WORDS[n] = NOV1_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: NOV1_DATES[n] || 'Lesson 1 Nov' })); });
 // 28 Oct: Katya, Trofim, Carolina
 const OCT28_WORDS = {
   Katya: [
@@ -9811,6 +9813,7 @@ const OCT9_WORDS = {
   katya.pin = '1212';
   katya.words.forEach(w => { if (w.lesson === 'First Lesson') w.lesson = 'First Two Lessons'; if (w.lesson === 'Lesson 24 Oct' || w.lesson === 'Lesson 22 Oct') w.lesson = 'First Two Lessons'; });
   katya.words = katya.words.filter(w => w.word !== 'to shrug');
+  katya.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = 'Lesson 30 Oct'; });
   const katyaExisting = new Set(katya.words.map(w => w.word.toLowerCase()));
   KATYA_WORDS.forEach(w => {
     if (!katyaExisting.has(w.word.toLowerCase())) katya.words.push({ id: uid(), word: w.word, translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
