@@ -9122,9 +9122,43 @@ const NOV1_WORDS = {
     ['to propose to somebody', 'сделать предложение (руки и сердца) кому-то', 'He proposed to her on the beach at sunset.'],
     ['to be married to somebody', 'быть замужем за / женатым на (to, не «with»)', 'She has been married to Tom for ten years.'],
     ['to agree with somebody', 'соглашаться с кем-то (I don’t agree with you — я с тобой не согласен; не «I am not agree»)', 'I don’t agree with you — I think the film was great.'],
-    ['a regular', 'завсегдатай, постоянный посетитель (по-французски habitué; в английском тоже есть, но звучит книжно)', 'He’s a regular at this café — the waiters know his order.']
+    ['to get rid of something', 'избавиться от чего-то', 'I need to get rid of all these old clothes.'],
+    ['to be an expert in one field', 'хорошо разбираться в одной области, быть специалистом в одной сфере', 'She’s an expert in one field — computer graphics — but she knows a little about everything.'],
+    ['handsome', 'красивый (о мужчине)', 'Her boyfriend is tall and very handsome.'],
+    ['a nerd', 'ботаник, зануда (увлечённый учёбой или компьютерами)', 'At school he was called a nerd because he loved maths.'],
+    ['to giggle / to cackle', 'хихикать / громко, резко гоготать (как ведьма)', 'The girls giggled at the back of the class. The witch cackled loudly.'],
+    ['an insult / to insult somebody', 'оскорбление / оскорбить кого-то', 'That’s an insult! How dare you insult my mother?'],
+    ['chips / French fries', 'картошка фри (брит. chips, амер. French fries)', 'I’ll have a burger and chips, please.'],
+    ['Ireland / Irish', 'Ирландия / ирландский, ирландец', 'She’s from Ireland — she’s Irish.'],
+    ['unpleasant / disagreeable', 'неприятный (disagreeable — как французское désagréable; есть в английском, но звучит формально, чаще о людях)', 'There was an unpleasant smell in the kitchen. He’s a disagreeable old man.'],
+    ['familiar to / familiar with', 'знакомый кому-то / знаком с чем-то (не путай с similar to — похожий на)', 'Your face looks familiar to me. Are you familiar with this program?'],
+    ['to give off positive energy', 'излучать позитивную энергию', 'He always gives off very positive energy.'],
+    ['surgery', 'операция; хирургия', 'She had surgery on her knee last year.'],
+    ['superficial', 'поверхностный', 'He’s a bit superficial — he only cares about looks.'],
+    ['a moustache', 'усы (амер. mustache)', 'My grandfather had a big grey moustache.'],
+    ['it rings a bell', 'что-то знакомое, где-то слышал', 'His name rings a bell, but I can’t remember where I heard it.'],
+    ['it’s spot on', 'точно, в самую точку', 'Your description of him is spot on!'],
+    ['a slave / slavery', 'раб / рабство', 'Slavery was abolished in Britain in 1833.'],
+    ['rumours', 'слухи (амер. rumors)', 'There are rumours that the school is closing.'],
+    ['separated', 'живущие раздельно (о супругах, ещё не в разводе)', 'Her parents are separated but not divorced.'],
+    ['to befriend somebody', 'подружиться с кем-то', 'She befriended a girl from her new class.'],
+    ['electrical equipment', 'электрооборудование', 'Don’t touch the electrical equipment with wet hands.'],
+    ['mysterious', 'загадочный, таинственный', 'A mysterious man was standing outside the house.'],
+    ['a neighbourhood', 'район (где живёшь), окрестности', 'I live in a quiet neighbourhood.'],
+    ['to go for a walk', 'пойти погулять', 'Let’s go for a walk in the park.'],
+    ['to learn to drive', 'учиться водить машину', 'I want to learn to drive next summer.'],
+    ['What is it called?', 'Как это называется? (не «How is it called?»)', 'What is this thing called in English?'],
+    ['to turn into vs to become', 'turn into + сущ. — превратиться в (полностью изменить форму или суть, часто неожиданно): The caterpillar turned into a butterfly. become — стать (профессия, состояние, прилагательное): She became a doctor. It became cold. Не говори «she turned into a doctor»', 'The party turned into a disaster. He became famous after the film.'],
+    ['It takes me an hour to get to university', 'у меня уходит час, чтобы добраться до университета', 'It takes me an hour to get to university by bus.'],
+    ['a wardrobe', 'шкаф для одежды', 'Hang your coat in the wardrobe.'],
+    ['I’m a foodie', 'я гурман, обожаю вкусно поесть', 'I’m a foodie — I love trying new restaurants.'],
+    ['Brussels sprouts', 'брюссельская капуста (в разговоре просто sprouts)', 'Most children hate Brussels sprouts.'],
+    ['a technical drawing', 'чертёж (draft — черновик, не подходит)', 'We have to hand in a big technical drawing on Friday.'],
+    ['sink – sank – sunk', 'тонуть (неправильный глагол; не «sung» — это от sing)', 'The Titanic sank in 1912.'],
+    ['a priest', 'священник', 'The priest married them in a small church.']
   ],
   'Anastasia Lyon': [
+    ['a regular', 'завсегдатай, постоянный посетитель (по-французски habitué; в английском тоже есть, но звучит книжно)', 'He’s a regular at this café — the waiters know his order.'],
     ['to share a flat / a flatmate', 'снимать квартиру вместе с кем-то / сосед по квартире', 'I share a flat with two other students. My flatmate is from Spain.'],
     ['a period building / a historic building', 'старинное здание (с историей и красивыми деталями, «не старое и обшарпанное»). Ancient — древний (тысячи лет), не подходит', 'I live in a beautiful period building with high ceilings in the centre of Lyon.'],
     ['at the same time', 'в то же время; одновременно', 'I can’t cook and talk on the phone at the same time.'],
@@ -9791,6 +9825,7 @@ const OCT9_WORDS = {
   // ── Lesson words of 9 Oct 2026, several students ──
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   { const tr = data.students.find(s => s.name === 'Trofim'); if (tr) tr.words = tr.words.filter(w => w.word !== 'slow → slowly, fast → fast'); }
+  { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
   [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
