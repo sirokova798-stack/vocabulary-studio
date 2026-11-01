@@ -841,83 +841,7 @@
 
   <div id="tab-practice" style="display:none;">
 
-    <!-- General practice modes — always available -->
-    <div class="section-label">General practice</div>
-    <div class="mode-grid" style="margin-bottom:22px;">
-      <div class="mode-card" onclick="startGap()">
-        <span class="mode-icon">📝</span>
-        <div class="mode-name">Fill the Gap</div>
-        <div class="mode-desc">Choose your level · complete the sentence · get an explanation</div>
-        <div class="mode-desc-ru">Выбери уровень · заполни пропуск · получи объяснение</div>
-      </div>
-      <div class="mode-card" onclick="startOffice()">
-        <span class="mode-icon">📺</span>
-        <div class="mode-name">The Office</div>
-        <div class="mode-desc">Watch a real clip · vocabulary challenge · authentic English</div>
-        <div class="mode-desc-ru">Посмотри реальный отрывок · задание на лексику · живой английский</div>
-      </div>
-      <div class="mode-card" onclick="openDialogueScreen()" style="grid-column:1/-1;">
-        <span class="mode-icon">💬</span>
-        <div class="mode-name">Dialogue Practice</div>
-        <div class="mode-desc">Real-life situations · translate the line · compare with the model answer</div>
-        <div class="mode-desc-ru">Реальные ситуации · переведи реплику · сравни с образцом</div>
-      </div>
-      <div class="mode-card" onclick="startPhrasal()" style="grid-column:1/-1;">
-        <span class="mode-icon">🔗</span>
-        <div class="mode-name">Phrasal Verbs</div>
-        <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
-        <div class="mode-desc-ru">Соедини две части · прочитай подсказку · собери фразовый глагол</div>
-      </div>
-      <div class="mode-card" onclick="startDrill('articles', 'easy')" style="grid-column:1/-1;">
-        <span class="mode-icon">📰</span>
-        <div class="mode-name">Articles: a / an / the / —</div>
-        <div class="mode-desc">a, an, the or no article? · explanation after every answer</div>
-        <div class="mode-desc-ru">a, an, the или без артикля? · объяснение после каждого ответа</div>
-      </div>
-      <div class="mode-card" onclick="startDrill('usedto', 'easy')" style="grid-column:1/-1;">
-        <span class="mode-icon">🔁</span>
-        <div class="mode-name">Used to · Be used to · Get used to</div>
-        <div class="mode-desc">I used to live… · I’m used to living… · I’m getting used to living…</div>
-        <div class="mode-desc-ru">раньше делал · привык · привыкаю</div>
-      </div>
-      <div class="mode-card" onclick="startAdjAdv('easy')" style="grid-column:1/-1;">
-        <span class="mode-icon">⚖️</span>
-        <div class="mode-name">Adjective or Adverb?</div>
-        <div class="mode-desc">careful or carefully? · good or well? · 15 sentences per round</div>
-        <div class="mode-desc-ru">careful или carefully? · good или well? · 15 предложений за раунд</div>
-      </div>
-      <div class="mode-card" onclick="startIngEd()" style="grid-column:1/-1;">
-        <span class="mode-icon">🎭</span>
-        <div class="mode-name">-ing / -ed Adjectives</div>
-        <div class="mode-desc">bored or boring? · choose the right adjective · 15 sentences per round</div>
-        <div class="mode-desc-ru">bored или boring? · выбери правильное прилагательное · 15 предложений за раунд</div>
-      </div>
-      <div class="mode-card" onclick="startWordForm()" style="grid-column:1/-1;">
-        <span class="mode-icon">🔤</span>
-        <div class="mode-name">Word Formation</div>
-        <div class="mode-desc">Use of English · change the word in capitals to fit the sentence</div>
-        <div class="mode-desc-ru">Use of English · измени слово из заглавных букв, чтобы оно подошло</div>
-      </div>
-      <div class="mode-card" onclick="startGrammar()" style="grid-column:1/-1;">
-        <span class="mode-icon">🎓</span>
-        <div class="mode-name">B1 Grammar</div>
-        <div class="mode-desc">Use of English · pick a topic or take a mixed exam · transformations, open cloze & multiple choice</div>
-        <div class="mode-desc-ru">Грамматика · выбери тему или смешанный экзамен · трансформации, open cloze и выбор ответа</div>
-      </div>
-      <div class="mode-card" onclick="startLibrary()" style="grid-column:1/-1;">
-        <span class="mode-icon">📖</span>
-        <div class="mode-name">Grammar Library</div>
-        <div class="mode-desc">Справочник · все правила на русском · нажми на тему и читай объяснение с примерами</div>
-      </div>
-      <div class="mode-card" id="mode-a1" onclick="startA1()" style="grid-column:1/-1;display:none;">
-        <span class="mode-icon">🌱</span>
-        <div class="mode-name">A1 Practice</div>
-        <div class="mode-desc">For beginners · build sentences & choose the right word · to be, this/that, can</div>
-        <div class="mode-desc-ru">Для начинающих · собери предложение и выбери слово · to be, this/that, can</div>
-      </div>
-    </div>
-
-    <div class="section-label" style="margin-top:4px;">Your words</div>
+    <div class="section-label">Your words</div>
     <div id="practice-empty" class="empty-state" style="display:none;padding:28px 0;">
       <div class="empty-icon">🌱</div>
       <div class="empty-title">Not enough words yet</div>
@@ -946,6 +870,74 @@
           <div class="mode-desc-ru">Твои слова · спрятаны в живых предложениях · выбери нужное</div>
         </div>
       </div>
+    </div>
+    <div style="height:22px;"></div>
+
+    <div class="section-label">Grammar & practice</div>
+    <div class="mode-grid" style="margin-bottom:14px;">
+      <div class="mode-card" id="mode-a1" onclick="startA1()" style="grid-column:1/-1;display:none;">
+        <span class="mode-icon">🌱</span>
+        <div class="mode-name">A1 Practice</div>
+        <div class="mode-desc">For beginners · build sentences & choose the right word · to be, this/that, can</div>
+        <div class="mode-desc-ru">Для начинающих · собери предложение и выбери слово · to be, this/that, can</div>
+      </div>
+      <div class="mode-card" onclick="startLibrary()" style="grid-column:1/-1;">
+        <span class="mode-icon">📖</span>
+        <div class="mode-name">Grammar Library</div>
+        <div class="mode-desc">Справочник · все правила на русском · нажми на тему и читай объяснение с примерами</div>
+      </div>
+      <div class="mode-card" onclick="openDialogueScreen()" style="grid-column:1/-1;">
+        <span class="mode-icon">💬</span>
+        <div class="mode-name">Dialogue Practice</div>
+        <div class="mode-desc">Real-life situations · translate the line · compare with the model answer</div>
+        <div class="mode-desc-ru">Реальные ситуации · переведи реплику · сравни с образцом</div>
+      </div>
+      <div class="mode-card" onclick="startPhrasal()" style="grid-column:1/-1;">
+        <span class="mode-icon">🔗</span>
+        <div class="mode-name">Phrasal Verbs</div>
+        <div class="mode-desc">Match the two halves · read the Russian hint · build the right phrasal verb</div>
+        <div class="mode-desc-ru">Соедини две части · прочитай подсказку · собери фразовый глагол</div>
+      </div>
+      <div class="mode-card" onclick="startIngEd()" style="grid-column:1/-1;">
+        <span class="mode-icon">🎭</span>
+        <div class="mode-name">-ing / -ed Adjectives</div>
+        <div class="mode-desc">bored or boring? · choose the right adjective · 15 sentences per round</div>
+        <div class="mode-desc-ru">bored или boring? · выбери правильное прилагательное · 15 предложений за раунд</div>
+      </div>
+      <div class="mode-card" style="grid-column:1/-1;" onclick="startGap()">
+        <span class="mode-icon">📝</span>
+        <div class="mode-name">Fill the Gap</div>
+        <div class="mode-desc">Choose your level · complete the sentence · get an explanation</div>
+        <div class="mode-desc-ru">Выбери уровень · заполни пропуск · получи объяснение</div>
+      </div>
+      <div class="mode-card" onclick="startWordForm()" style="grid-column:1/-1;">
+        <span class="mode-icon">🔤</span>
+        <div class="mode-name">Word Formation</div>
+        <div class="mode-desc">Use of English · change the word in capitals to fit the sentence</div>
+        <div class="mode-desc-ru">Use of English · измени слово из заглавных букв, чтобы оно подошло</div>
+      </div>
+      <div class="mode-card" onclick="startDrill('usedto', 'easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">🔁</span>
+        <div class="mode-name">Used to · Be used to · Get used to</div>
+        <div class="mode-desc">I used to live… · I’m used to living… · I’m getting used to living…</div>
+        <div class="mode-desc-ru">раньше делал · привык · привыкаю</div>
+      </div>
+      <div class="mode-card" onclick="startDrill('articles', 'easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">📰</span>
+        <div class="mode-name">Articles: a / an / the / —</div>
+        <div class="mode-desc">a, an, the or no article? · explanation after every answer</div>
+        <div class="mode-desc-ru">a, an, the или без артикля? · объяснение после каждого ответа</div>
+      </div>
+      <div class="mode-card" onclick="startAdjAdv('easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">⚖️</span>
+        <div class="mode-name">Adjective or Adverb?</div>
+        <div class="mode-desc">careful or carefully? · good or well? · 15 sentences per round</div>
+        <div class="mode-desc-ru">careful или carefully? · good или well? · 15 предложений за раунд</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
+      <button class="btn" style="font-size:.85rem;padding:8px 14px;" onclick="startGrammar()">🎓 B1 Grammar</button>
+      <button class="btn" style="font-size:.85rem;padding:8px 14px;" onclick="startOffice()">📺 The Office</button>
     </div>
   </div>
 
