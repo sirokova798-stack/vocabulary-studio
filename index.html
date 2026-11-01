@@ -8946,6 +8946,40 @@ const OCT25_SECTIONS = {
     ['not by any stretch of the imagination', 'никоим образом, ни при каком раскладе', 'It wasn’t a good film, not by any stretch of the imagination.']
   ]
 };
+// 1 Nov: Rustam, Katya, Yuliya
+const NOV1_WORDS = {
+  Rustam: [
+    ['to stay the night / to stay over (at somebody’s place)', 'ночевать (у кого-то). A sleepover — ночёвка у друзей (обычно у детей и подростков)', 'It was late, so I stayed the night at my parents’ place.'],
+    ['a con man', 'мошенник, аферист', 'The con man took all her savings and disappeared.'],
+    ['to have difficulty (in) doing something', 'с трудом делать что-то, испытывать трудности', 'I have difficulty remembering names.'],
+    ['to look forward to doing something', 'с нетерпением ждать (после to — форма -ing)', 'I’m looking forward to seeing you next week.'],
+    ['to listen to podcasts', 'слушать подкасты', 'I listen to podcasts on my way to work.']
+  ],
+  Katya: [
+    ['to buy a gym membership', 'купить абонемент в спортзал', 'I bought a gym membership, but I’ve only been twice.'],
+    ['a dermatologist', 'дерматолог', 'If your skin is very dry, see a dermatologist.'],
+    ['harmful / harmless', 'вредный / безвредный', 'Smoking is harmful to your health. Don’t worry, this spider is harmless.'],
+    ['I want to watch this movie', 'я хочу посмотреть этот фильм', 'I want to watch this movie — everyone says it’s great.'],
+    ['cost – cost – cost', 'стоить (неправильный глагол, все три формы одинаковые)', 'My new phone cost a lot of money.'],
+    ['put – put – put', 'класть, положить (неправильный глагол, все три формы одинаковые)', 'I put my keys on the table.'],
+    ['hide – hid – hidden', 'прятать, прятаться (неправильный глагол)', 'The cat hid under the bed.'],
+    ['to scroll through Instagram / the internet', 'листать Инстаграм / интернет', 'I spent an hour scrolling through Instagram last night.'],
+    ['buckwheat / porridge', 'гречка / каша (buckwheat porridge — гречневая каша)', 'I have porridge for breakfast every morning.'],
+    ['to rely on', 'полагаться на, рассчитывать на', 'You can always rely on me.'],
+    ['to take a photo', 'сфотографировать, сделать фото', 'Can you take a photo of us, please?'],
+    ['to go on a trip', 'поехать в поездку, путешествие', 'We’re going on a trip to the mountains next week.']
+  ],
+  Yuliya: [
+    ['self-conscious', 'стеснительный, неуверенный (переживает, как выглядит в глазах других)', 'She feels self-conscious about her accent.'],
+    ['a wide range of vocabulary', 'богатый (широкий) словарный запас', 'To get a high score, you need a wide range of vocabulary.'],
+    ['insecure', 'неуверенный в себе', 'He feels insecure when he has to speak in public.'],
+    ['shameless', 'бесстыжий, бессовестный', 'It was a shameless lie.'],
+    ['a script', 'сценарий; текст (роли)', 'The actors read the script together for the first time.'],
+    ['courageous', 'смелый, отважный', 'It was a courageous decision to leave her job.'],
+    ['to talk somebody into / out of something', 'уговорить кого-то сделать / отговорить от чего-то', 'She talked me into buying the dress. My friends talked me out of quitting.']
+  ]
+};
+Object.keys(NOV1_WORDS).forEach(n => { NOV1_WORDS[n] = NOV1_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Lesson 1 Nov' })); });
 // 28 Oct: Katya, Trofim, Carolina
 const OCT28_WORDS = {
   Katya: [
@@ -9561,7 +9595,7 @@ const OCT9_WORDS = {
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   { const tr = data.students.find(s => s.name === 'Trofim'); if (tr) tr.words = tr.words.filter(w => w.word !== 'slow → slowly, fast → fast'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
