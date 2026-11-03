@@ -9108,6 +9108,12 @@ const OCT25_SECTIONS = {
     ['not by any stretch of the imagination', 'никоим образом, ни при каком раскладе', 'It wasn’t a good film, not by any stretch of the imagination.']
   ]
 };
+// 3 Nov: Anastasia Lyon
+const NOV3_WORDS = { 'Anastasia Lyon': [
+  ['long-haul / short-haul (flight)', '/ˌlɒŋ ˈhɔːl/ — дальнемагистральный, дальний рейс; /ˌʃɔːt ˈhɔːl/ — ближнемагистральный, короткий рейс', 'I can’t sleep on long-haul flights. Lyon to London is a short-haul flight.'],
+  ['the current situation', 'текущая ситуация, нынешнее положение дел', 'Given the current situation, we should postpone the trip.'],
+  ['dawn / dusk (at dawn, at dusk)', 'рассвет / сумерки, закат (на рассвете, в сумерках)', 'We left at dawn and arrived at dusk.']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })) };
 // 1 Nov: Rustam, Katya, Yuliya, Milana, Anastasia Lyon, Anastasia
 const NOV1_WORDS = {
   Milana: [
@@ -9836,7 +9842,7 @@ const OCT9_WORDS = {
   Object.entries(NOV1_DATES).forEach(([n, l]) => { const st = data.students.find(s => s.name === n); if (st) st.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = l; }); });
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
