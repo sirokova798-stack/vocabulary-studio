@@ -2277,7 +2277,7 @@ const CTX_PRED_ADJ = new Set('awake asleep alone alive afraid aware ill glad'.sp
 const CTX_LY_ADJ =new Set('friendly lonely lovely ugly silly elderly likely early daily weekly monthly curly holy jolly costly deadly lively chilly smelly woolly'.split(' '));
 const CTX_ADV_EXTRA = new Set('rather quite very almost already still often seldom soon later yet anyway perhaps maybe abroad together apart ahead instead indoors outdoors today tomorrow yesterday tonight here there everywhere somewhere nowhere'.split(' '));
 const CTX_ADJ = new Set((
- 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired careful bulletproof ' +
+ 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired careful bulletproof crunchy chewy salty sour spicy bitter raw disgusting ' +
  'hungry angry tall skinny fat strong healthy big small old young lazy productive happy sad fast slow hot cold easy hard clean ' +
  'dirty quiet loud expensive cheap new tasty modern traditional ancient crowded rural suburban urban anxious confused ' +
  'disappointed embarrassed exhausted guilty lonely nervous pleased scared stressed dishonest nasty useless independent rare ' +
@@ -9109,7 +9109,31 @@ const OCT25_SECTIONS = {
   ]
 };
 // 7 Nov: Milana
-const NOV7_WORDS = { Milana: [
+const NOV7_WORDS = { Katya: [
+  ['to put a dish in the oven', 'поставить блюдо в духовку', 'Put the dish in the oven for forty minutes.'],
+  ['familiar with', 'знакомый с чем-то (be familiar with — быть знакомым с)', 'Are you familiar with this song?'],
+  ['to listen to', 'слушать (кого-то / что-то, с предлогом to)', 'I listen to music on my way to work.'],
+  ['to wait for', 'ждать (кого-то / что-то, с предлогом for)', 'I’m waiting for the bus.'],
+  ['to depend on', 'зависеть от (с предлогом on)', 'It depends on the weather.'],
+  ['dumplings', 'пельмени, клёцки', 'My grandmother makes the best dumplings.'],
+  ['to run out of time', 'не успевать, когда заканчивается время', 'I ran out of time and couldn’t finish the test.'],
+  ['to have a sleepover', 'устроить ночёвку (у друзей, дома с друзьями)', 'My daughter is having a sleepover with her friends on Friday.'],
+  ['drink – drank – drunk', 'пить (неправильный глагол)', 'I drank two cups of coffee this morning.'],
+  ['candy floss', 'сахарная вата', 'The children ate candy floss at the fair.'],
+  ['to be into something / I’m not into something', 'увлекаться чем-то, нравится / мне это не очень нравится', 'She’s really into yoga. I’m not into horror films.'],
+  ['crunchy', 'хрустящий', 'I love crunchy apples.'],
+  ['chewy', 'тягучий, который долго жуёшь', 'These sweets are really chewy.'],
+  ['salty', 'солёный', 'The soup is too salty.'],
+  ['sour', 'кислый', 'Lemons are very sour.'],
+  ['spicy', 'острый (о еде)', 'I can’t eat spicy food — it burns my mouth.'],
+  ['bitter', 'горький', 'Black coffee without sugar is bitter.'],
+  ['a snack', 'перекус, закуска', 'I usually have a snack at four o’clock.'],
+  ['raw', 'сырой (не приготовленный)', 'Sushi is often made with raw fish.'],
+  ['disgusting', 'отвратительный', 'This milk has gone off — it smells disgusting!'],
+  ['to taste like', 'на вкус как', 'This tea tastes like honey.'],
+  ['to smell something', 'нюхать, чувствовать запах чего-то', 'Can you smell something burning?'],
+  ['herring', 'селёдка', 'In Russia, people often eat herring with potatoes.']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })), Milana: [
   ['to manage to do something', 'суметь, справиться (сделать что-то)', 'I managed to pass all my exams with flying colours.'],
   ['fall – fell – fallen', 'падать (неправильный глагол)', 'She fell off her bike and hurt her knee.'],
   ['feel – felt – felt', 'чувствовать (неправильный глагол)', 'I felt really tired after work yesterday.'],
