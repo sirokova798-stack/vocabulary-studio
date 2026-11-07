@@ -5252,6 +5252,13 @@ const A1_DATA = {
   ]},
   // Vlad's own vocabulary; `prompt` is the Russian sentence he builds in English
   vlad: { label: 'My words', type: 'jumble', items: [
+    { answer: 'I listen to music every day.', prompt: 'Я слушаю музыку каждый день.', ru: 'listen to — слушать' },
+    { answer: 'We go for a walk in the evening.', prompt: 'Вечером мы идём гулять.', ru: 'go for a walk — пойти погулять' },
+    { answer: 'My father is a driver.', prompt: 'Мой папа — водитель.', ru: 'a driver — водитель' },
+    { answer: 'I grow peppers at home.', prompt: 'Я выращиваю перец дома.', ru: 'grow — выращивать' },
+    { answer: 'I have syrniki for breakfast.', prompt: 'На завтрак я ем сырники.', ru: 'have … for breakfast' },
+    { answer: 'I go to bed at midnight.', prompt: 'Я ложусь спать в полночь.', ru: 'at midnight — в полночь' },
+    { answer: 'This is very important.', prompt: 'Это очень важно.', ru: 'important — важный' },
     { answer: 'I usually wake up at seven.', prompt: 'Я обычно просыпаюсь в семь.', ru: 'usually — перед глаголом' },
     { answer: 'I go to bed at eleven.', prompt: 'Я ложусь спать в одиннадцать.', ru: 'go to bed — ложиться спать' },
     { answer: 'I am late for work.', prompt: 'Я опаздываю на работу.', ru: 'I am late' },
@@ -9109,6 +9116,49 @@ const OCT25_SECTIONS = {
   ]
 };
 // 7 Nov: Milana
+const NOV7B_WORDS = {
+  Vlad: [
+    ['to listen to', 'слушать', 'I listen to music every day.'],
+    ['to go for a walk', 'пойти погулять', 'We go for a walk in the evening.'],
+    ['a driver', 'водитель', 'My father is a driver.'],
+    ['to grow', 'выращивать (to grow peppers — выращивать перец, to grow a tree — вырастить дерево)', 'I grow peppers on my windowsill.'],
+    ['to plant seeds / to put seeds in the ground', 'сажать семена / положить семена в землю', 'I put the seeds in the ground and water them.'],
+    ['to cook / to have syrniki for breakfast', 'готовить / есть сырники на завтрак', 'I have syrniki for breakfast.'],
+    ['important', 'важный', 'This is very important.'],
+    ['at midnight', 'в полночь', 'I go to bed at midnight.']
+  ],
+  Lyosha: [
+    ['to manage to do something', 'суметь, справиться (сделать что-то)', 'I managed to finish the work on time.'],
+    ['10 degrees below zero / minus 10', 'минус 10 (10 градусов ниже нуля)', 'It’s 10 degrees below zero today. = It’s minus 10 today.'],
+    ['before / until', 'before — до, перед (что-то происходит раньше этого момента); until — до, пока не (действие продолжается вплоть до этого момента)', 'Call me before you leave. I’ll wait here until you come back.'],
+    ['still', 'всё ещё', 'I’m still at work.']
+  ],
+  Rustam: [
+    ['fibre', 'клетчатка', 'Vegetables and whole grains contain a lot of fibre.'],
+    ['beetroot', 'свёкла', 'Borscht is made with beetroot.'],
+    ['a plate', 'тарелка', 'Put the food on a plate.']
+  ],
+  Milana: [
+    ['curious', 'любопытный', 'She’s very curious — she asks questions all the time.'],
+    ['an aunt / an uncle', 'тётя / дядя', 'My aunt and uncle live in Italy.'],
+    ['to gesture', 'жестикулировать', 'Italians often gesture when they speak.'],
+    ['poor', 'бедный', 'Poor people often can’t afford good healthcare.'],
+    ['Venus', 'Венера', 'Venus is the hottest planet in the solar system.'],
+    ['to suggest doing something', 'предложить что-то сделать (после suggest — форма -ing)', 'She suggested going to the cinema.'],
+    ['to store something', 'хранить что-то', 'We store old boxes in the garage.'],
+    ['free space', 'свободное место', 'I’ve got some free space for the boxes in my room.'],
+    ['bedding', 'постельное бельё', 'I change the bedding once a week.'],
+    ['a walk-in wardrobe', 'гардеробная', 'Her dream is a flat with a walk-in wardrobe.'],
+    ['an age gap', 'разница в возрасте', 'There’s a ten-year age gap between them.'],
+    ['a nightmare', 'кошмар', 'I had a nightmare last night. The traffic was a nightmare!'],
+    ['to get along well with somebody', 'хорошо ладить с кем-то', 'I get along well with my sister.'],
+    ['responsible for', 'ответственный за', 'She’s responsible for the whole project.'],
+    ['invisible', 'невидимый', 'Air is invisible.'],
+    ['to be a spoiled kid', 'быть избалованным ребёнком', 'He was a spoiled kid who always got what he wanted.'],
+    ['to miss somebody', 'скучать по кому-то', 'I miss my grandmother very much.']
+  ]
+};
+Object.keys(NOV7B_WORDS).forEach(n => { NOV7B_WORDS[n] = NOV7B_WORDS[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 const NOV7_WORDS = { Katya: [
   ['to put a dish in the oven', 'поставить блюдо в духовку', 'Put the dish in the oven for forty minutes.'],
   ['familiar with', 'знакомый с чем-то (be familiar with — быть знакомым с)', 'Are you familiar with this song?'],
@@ -9882,7 +9932,7 @@ const OCT9_WORDS = {
   Object.entries(NOV1_DATES).forEach(([n, l]) => { const st = data.students.find(s => s.name === n); if (st) st.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = l; }); });
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
