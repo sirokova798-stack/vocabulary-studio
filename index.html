@@ -826,8 +826,8 @@
     </div>
   </div>
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('words')">Words</button>
-    <button class="tab" onclick="switchTab('practice')">Practise</button>
+    <button class="tab active" data-tab="practice" onclick="switchTab('practice')">Practise</button>
+    <button class="tab" data-tab="words" onclick="switchTab('words')">Words</button>
   </div>
 
   <div id="tab-words">
@@ -1967,7 +1967,7 @@ function openStudent(id) {
   document.getElementById('dash-name').textContent = s.display || s.name;
   document.getElementById('header-sub').textContent = (s.display || s.name) + "'s vocabulary";
   document.getElementById('teacher-btn').style.display = 'none';
-  switchTab('words');
+  switchTab('practice');
   show('student');
 }
 
@@ -1978,8 +1978,8 @@ function switchTab(tab) {
   ['words','practice','add'].forEach(t => {
     document.getElementById('tab-' + t).style.display = t === tab ? '' : 'none';
   });
-  document.querySelectorAll('#screen-student .tab').forEach((el, i) => {
-    el.classList.toggle('active', ['words','practice','add'][i] === tab);
+  document.querySelectorAll('#screen-student .tab').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
   });
   const data = db();
   const s = data.students.find(x => x.id === currentStudent);
