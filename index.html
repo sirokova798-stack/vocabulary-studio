@@ -2277,7 +2277,7 @@ const CTX_PRED_ADJ = new Set('awake asleep alone alive afraid aware ill glad'.sp
 const CTX_LY_ADJ =new Set('friendly lonely lovely ugly silly elderly likely early daily weekly monthly curly holy jolly costly deadly lively chilly smelly woolly'.split(' '));
 const CTX_ADV_EXTRA = new Set('rather quite very almost already still often seldom soon later yet anyway perhaps maybe abroad together apart ahead instead indoors outdoors today tomorrow yesterday tonight here there everywhere somewhere nowhere'.split(' '));
 const CTX_ADJ = new Set((
- 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired careful bulletproof crunchy chewy salty sour spicy bitter raw disgusting ' +
+ 'calm confident relaxed serious proud bored excited focused defensive honest trustworthy aloof foolish sincere comfortable tired careful bulletproof convenient overpriced underrated gloomy formal crunchy chewy salty sour spicy bitter raw disgusting ' +
  'hungry angry tall skinny fat strong healthy big small old young lazy productive happy sad fast slow hot cold easy hard clean ' +
  'dirty quiet loud expensive cheap new tasty modern traditional ancient crowded rural suburban urban anxious confused ' +
  'disappointed embarrassed exhausted guilty lonely nervous pleased scared stressed dishonest nasty useless independent rare ' +
@@ -9116,6 +9116,48 @@ const OCT25_SECTIONS = {
   ]
 };
 // 7 Nov: Milana
+// 9 Nov: Katya — shopping & returns
+const NOV9_WORDS = { Katya: [
+  ['a customer', 'покупатель, клиент', 'The shop assistant was very polite to every customer.'],
+  ['a consumer', 'потребитель', 'Consumers are buying more and more online.'],
+  ['recent', 'недавний', 'A recent study shows that people return a lot of clothes.'],
+  ['social media', 'соцсети', 'I spend too much time on social media.'],
+  ['per cent', 'процент', 'Thirty per cent of online purchases are returned.'],
+  ['the environment', 'окружающая среда', 'Fast fashion is bad for the environment.'],
+  ['almost', 'почти', 'I’ve almost finished my homework.'],
+  ['a billion', 'миллиард', 'Billions of clothes end up in landfill every year.'],
+  ['a tonne', 'тонна', 'The shop throws away a tonne of clothes every week.'],
+  ['goods', 'товары', 'Many returned goods can’t be sold again.'],
+  ['landfill', 'свалка', 'A lot of returned clothes end up in landfill.'],
+  ['to process a return', 'обработать возврат', 'It takes the shop a week to process a return.'],
+  ['to refold', 'заново сложить', 'Staff have to refold every returned sweater.'],
+  ['to relabel', 'переклеить этикетку', 'Returned goods have to be relabelled before they go back on sale.'],
+  ['resell – resold – resold', 'перепродать (неправильный глагол)', 'The shop couldn’t resell the dress because it was damaged.'],
+  ['to charge somebody for something', 'брать с кого-то плату за что-то', 'Some shops charge customers for returns.'],
+  ['however', 'однако', 'Online shopping is convenient. However, it’s bad for the environment.'],
+  ['instead', 'вместо этого', 'I didn’t buy a new dress. I wore my old one instead.'],
+  ['to describe', 'описывать', 'Can you describe the man you saw?'],
+  ['to suggest', 'предлагать (идею)', 'What do you suggest?'],
+  ['a solution (to)', 'решение (проблемы)', 'We need to find a solution to this problem.'],
+  ['a receipt', 'чек', 'You can’t return it without a receipt.'],
+  ['properly', 'как следует, нормально', 'I didn’t try the jeans on properly, so they don’t fit.'],
+  ['a wallet', 'кошелёк', 'I left my wallet at home.'],
+  ['a changing room', 'примерочная', 'The changing rooms are at the back of the shop.'],
+  ['convenient', 'удобный', 'Online shopping is very convenient.'],
+  ['a purchase', 'покупка', 'This coat was my best purchase this year.'],
+  ['overpriced', 'слишком дорогой', 'The food in this café is overpriced.'],
+  ['underrated', 'недооценённый', 'I think this film is really underrated.'],
+  ['gloomy', 'мрачный, хмурый', 'It’s a gloomy, rainy day.'],
+  ['a wardrobe', 'гардероб, шкаф для одежды', 'My wardrobe is full of clothes I never wear.'],
+  ['to try something on', 'примерить что-то', 'Can I try these trousers on?'],
+  ['a remedy (for)', 'средство (от чего-либо)', 'Honey and lemon is a good remedy for a sore throat.'],
+  ['formal', 'официальный, строгий', 'You need formal clothes for the interview.'],
+  ['a mood', 'настроение', 'I’m in a good mood today.'],
+  ['cool', 'классный', 'That’s a really cool jacket!'],
+  ['once a year', 'раз в год', 'I buy new shoes once a year.'],
+  ['wear – wore – worn', 'носить (одежду; неправильный глагол)', 'I wore my new dress to the party.'],
+  ['Neither do I. / Me neither.', 'Я тоже нет.', '“I don’t like shopping.” — “Neither do I.” / “Me neither.”']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Shopping & Returns' })) };
 const NOV7B_WORDS = {
   Yuliya: [
     ['subconscious / subconsciously', 'подсознательный / подсознательно', 'Subconsciously, I always compare myself to my sister.']
@@ -9935,7 +9977,7 @@ const OCT9_WORDS = {
   Object.entries(NOV1_DATES).forEach(([n, l]) => { const st = data.students.find(s => s.name === n); if (st) st.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = l; }); });
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
