@@ -2027,7 +2027,9 @@ function sayText(text) {
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(t);
   const voices = speechSynthesis.getVoices();
-  u.voice = voices.find(v => v.lang === 'en-GB') || voices.find(v => /^en/.test(v.lang)) || null;
+  // prefer the natural-sounding "Premium" / "Enhanced" voices (iPhone: Settings → Accessibility → Spoken Content → Voices)
+  const gb = voices.filter(v => v.lang.replace('_', '-') === 'en-GB');
+  u.voice = gb.find(v => /premium/i.test(v.name)) || gb.find(v => /enhanced|natural|neural/i.test(v.name)) || gb[0] || voices.find(v => /^en/.test(v.lang)) || null;
   u.lang = u.voice ? u.voice.lang : 'en-GB';
   u.rate = 0.85;
   speechSynthesis.speak(u);
