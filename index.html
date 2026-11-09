@@ -999,6 +999,10 @@
     <button class="btn btn-ghost btn-sm" onclick="fcPrev()">← Previous</button>
     <button class="btn btn-primary btn-sm" onclick="fcNext()">Next →</button>
   </div>
+  <div id="fc-listen" style="display:none;text-align:center;margin-top:12px;">
+    <button class="btn btn-ghost btn-sm" onclick="sayText(fcWords[fcIndex].word)">🔊 Word</button>
+    <button class="btn btn-ghost btn-sm" id="fc-listen-ex" onclick="sayText(fcWords[fcIndex].example)">🔊 Example</button>
+  </div>
   <div id="fc-mode-toggle" style="text-align:center;margin-top:18px;">
     <button class="btn btn-ghost btn-sm" id="fc-review-btn" onclick="fcStartReview()" style="display:none;font-size:0.78rem;">Review unknowns only</button>
   </div>
@@ -1993,12 +1997,13 @@ function renderWords() {
   list.innerHTML = '';
   if (!s || !s.words.length) { empty.style.display = ''; return; }
   empty.style.display = 'none';
+  const listen = canListen();
   [...s.words].reverse().forEach(w => {
     const el = document.createElement('div');
     el.className = 'word-item';
     el.innerHTML =
       (w.lesson ? '<div class="lesson-badge">' + esc(w.lesson) + '</div>' : '') +
-      '<div class="word-en">' + esc(w.word) + '</div>' +
+      '<div class="word-en">' + esc(w.word) + (listen ? ' <button class="btn btn-ghost btn-sm" style="padding:2px 8px;font-size:.85rem;" data-say="' + esc(w.word) + '" onclick="sayText(this.dataset.say)">🔊</button>' : '') + '</div>' +
       (w.ipa ? '<div class="word-ipa">' + esc(w.ipa) + '</div>' : '') +
       '<div class="word-ru">🇷🇺 ' + esc(w.translation) + '</div>' +
       (w.example ? '<div class="word-ex">"' + esc(w.example) + '"</div>' : '') +
@@ -2008,6 +2013,26 @@ function renderWords() {
 }
 
 const A1_STUDENTS = ['Misha', 'Vlad'];
+
+// 🔊 Listen buttons (the device's own text-to-speech, British voice if there is one) — only these students for now
+const LISTEN_STUDENTS = ['Misha'];
+function canListen() {
+  const s = db().students.find(x => x.id === currentStudent);
+  return !!(s && LISTEN_STUDENTS.includes(s.name) && window.speechSynthesis);
+}
+function sayText(text) {
+  if (!text || !window.speechSynthesis) return;
+  // read "sour / sweet (кислый)" as "sour, sweet"
+  const t = text.replace(/\([^)]*\)/g, '').replace(/\s*[\/–]\s*/g, ', ').replace(/[“”"]/g, '').trim();
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t);
+  const voices = speechSynthesis.getVoices();
+  u.voice = voices.find(v => v.lang === 'en-GB') || voices.find(v => /^en/.test(v.lang)) || null;
+  u.lang = u.voice ? u.voice.lang : 'en-GB';
+  u.rate = 0.85;
+  speechSynthesis.speak(u);
+}
+if (window.speechSynthesis) speechSynthesis.getVoices();
 
 function renderPractice() {
   const data = db();
@@ -2145,6 +2170,8 @@ function renderFC() {
   document.getElementById('fc-lesson-label').textContent = label;
   document.getElementById('fc-counter').textContent = (fcIndex + 1) + ' of ' + fcWords.length;
   document.getElementById('fc-progress').style.width = ((fcIndex + 1) / fcWords.length * 100) + '%';
+  document.getElementById('fc-listen').style.display = canListen() ? '' : 'none';
+  document.getElementById('fc-listen-ex').style.display = w.example ? '' : 'none';
   const card = document.getElementById('flashcard');
   card.classList.remove('flipped'); fcFlipped = false;
 }
