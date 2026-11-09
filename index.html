@@ -9124,7 +9124,7 @@ const NOV9L_WORDS = { Lyosha: [
   ['fizzy drinks', 'газированные напитки', 'Fizzy drinks contain a lot of sugar.'],
   ['sour', 'кислый', 'This apple is very sour.'],
   ['bitter', 'горький', 'Dark chocolate is a bit bitter.'],
-  ['plain water', 'обычная вода (без добавок)', 'I only drink plain water during training.'],
+  ['still water', 'вода без газа (sparkling water — газированная)', 'Still or sparkling water? — Still, please.'],
   ['a liquid', 'жидкость', 'You should drink a lot of liquid when you’re ill.'],
   ['a glass of', 'стакан (чего-то)', 'I drink a glass of water every morning.'],
   ['daily', 'ежедневно, ежедневный', 'Daily exercise is good for your health.'],
@@ -10017,6 +10017,7 @@ const OCT9_WORDS = {
   // skips a word if the student already has it (ignoring "to", articles and notes in brackets)
   { const tr = data.students.find(s => s.name === 'Trofim'); if (tr) tr.words = tr.words.filter(w => w.word !== 'slow → slowly, fast → fast'); }
   Object.entries(NOV1_DATES).forEach(([n, l]) => { const st = data.students.find(s => s.name === n); if (st) st.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = l; }); });
+  { const ly = data.students.find(s => s.name === 'Lyosha'); if (ly) ly.words = ly.words.filter(w => w.word !== 'plain water'); }
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
   [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
