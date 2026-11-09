@@ -7865,7 +7865,7 @@ const MISHA_WORDS = [
   { word: 'dish', translation: 'блюдо', example: 'Pizza is my favourite dish.', lesson: 'First Words' },
   { word: 'voice', translation: 'голос', example: 'She has a nice voice.', lesson: 'First Words' },
   { word: 'amazing', translation: 'потрясающий', example: 'The film is amazing.', lesson: 'First Words' },
-  { word: 'difficult', translation: 'трудный', example: 'English is difficult.', lesson: 'First Words' },
+  { word: 'difficult', translation: 'трудный', example: 'This exercise is difficult, but I can do it!', lesson: 'First Words' },
   { word: 'yet', translation: 'ещё (в отрицании)', example: 'I am not ready yet.', lesson: 'First Words' },
   { word: 'beautifully', translation: 'красиво', example: 'She sings beautifully.', lesson: 'First Words' },
   { word: 'pilot', translation: 'пилот', example: 'He is a pilot.', lesson: 'First Words' },
@@ -9864,6 +9864,7 @@ const OCT9_WORDS = {
   if (!misha.quizHistory) misha.quizHistory = [];
   misha.pin = '1111';
   const mishaExisting = new Set(misha.words.map(w => w.word.toLowerCase()));
+  misha.words.forEach(w => { if (w.word === 'difficult') w.example = 'This exercise is difficult, but I can do it!'; });
   MISHA_WORDS.forEach(w => {
     if (!mishaExisting.has(w.word.toLowerCase())) {
       misha.words.push({ id: uid(), word: w.word, ipa: w.ipa, translation: w.translation, example: w.example, lesson: w.lesson || '', by: 'teacher' });
