@@ -9117,6 +9117,48 @@ const OCT25_SECTIONS = {
 };
 // 7 Nov: Milana
 // 9 Nov: Katya — shopping & returns
+// 9 Nov: Lyosha — food & health
+const NOV9L_WORDS = { Lyosha: [
+  ['instant coffee', 'растворимый кофе', 'I drink instant coffee at work because it’s quick.'],
+  ['to brew (tea / coffee)', 'заваривать (чай / кофе)', 'Let the tea brew for three minutes.'],
+  ['fizzy drinks', 'газированные напитки', 'Fizzy drinks contain a lot of sugar.'],
+  ['sour', 'кислый', 'This apple is very sour.'],
+  ['bitter', 'горький', 'Dark chocolate is a bit bitter.'],
+  ['plain water', 'обычная вода (без добавок)', 'I only drink plain water during training.'],
+  ['a liquid', 'жидкость', 'You should drink a lot of liquid when you’re ill.'],
+  ['a glass of', 'стакан (чего-то)', 'I drink a glass of water every morning.'],
+  ['daily', 'ежедневно, ежедневный', 'Daily exercise is good for your health.'],
+  ['tasty', 'вкусный', 'This soup is really tasty.'],
+  ['nonsense', 'ерунда, чушь', 'That’s nonsense — coffee doesn’t make you taller.'],
+  ['fibre', 'клетчатка', 'Vegetables are full of fibre.'],
+  ['turkey', 'индейка', 'Turkey is a good source of protein.'],
+  ['supplements', 'БАДы, добавки', 'Do you take any vitamin supplements?'],
+  ['used to do something', 'раньше (делал что-то, а теперь нет)', 'I used to take supplements, but I stopped.'],
+  ['to have a nap', 'вздремнуть', 'I have a nap after lunch on Sundays.'],
+  ['to contradict', 'противоречить', 'These two studies contradict each other.'],
+  ['to improve', 'улучшать', 'Sleep improves your memory.'],
+  ['to reduce', 'снижать', 'Exercise reduces stress.'],
+  ['to prevent', 'предотвращать', 'Washing your hands helps prevent disease.'],
+  ['to include', 'включать (в себя)', 'A healthy diet includes fruit and vegetables.'],
+  ['to disappear', 'исчезать', 'My headache disappeared after a walk.'],
+  ['a disease', 'болезнь', 'Smoking causes many diseases.'],
+  ['heart disease', 'болезни сердца', 'Too much salt can lead to heart disease.'],
+  ['high blood pressure', 'высокое давление', 'My father has high blood pressure.'],
+  ['the immune system', 'иммунная система', 'Vitamin C supports the immune system.'],
+  ['the liver', 'печень', 'Alcohol damages the liver.'],
+  ['the heart', 'сердце', 'Running is good for the heart.'],
+  ['muscles', 'мышцы', 'My muscles hurt after the gym.'],
+  ['a tooth / teeth', 'зуб / зубы', 'Brush your teeth twice a day.'],
+  ['bones', 'кости', 'Milk is good for your bones.'],
+  ['blood', 'кровь', 'The doctor took a blood test.'],
+  ['calcium', 'кальций', 'Cheese contains a lot of calcium.'],
+  ['a magazine', 'журнал', 'I read an article about sleep in a magazine.'],
+  ['in two weeks', 'через две недели', 'I’m going on holiday in two weeks.'],
+  ['to talk to somebody / to speak English', 'разговаривать с кем-то / говорить по-английски', 'I talked to my boss yesterday. Do you speak English?'],
+  ['snowfall / rainfall / waterfall', 'снегопад / осадки (дождь) / водопад', 'There was heavy snowfall last night. We swam under a waterfall.'],
+  ['to stay', 'оставаться', 'I stayed at home all weekend.'],
+  ['to come back', 'вернуться', 'When are you coming back?']
+].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Food & Health' })) };
 const NOV9_WORDS = { Katya: [
   ['a customer', 'покупатель, клиент', 'The shop assistant was very polite to every customer.'],
   ['a consumer', 'потребитель', 'Consumers are buying more and more online.'],
@@ -9977,7 +10019,7 @@ const OCT9_WORDS = {
   Object.entries(NOV1_DATES).forEach(([n, l]) => { const st = data.students.find(s => s.name === n); if (st) st.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = l; }); });
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
