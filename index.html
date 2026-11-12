@@ -934,6 +934,18 @@
         <div class="mode-desc">careful or carefully? · good or well? · 15 sentences per round</div>
         <div class="mode-desc-ru">careful или carefully? · good или well? · 15 предложений за раунд</div>
       </div>
+      <div class="mode-card" onclick="startDrill('saytell', 'easy')" style="grid-column:1/-1;">
+        <span class="mode-icon">🗣️</span>
+        <div class="mode-name">Say · Tell · Speak · Talk</div>
+        <div class="mode-desc">said or told? speak or talk? · explanation after every answer</div>
+        <div class="mode-desc-ru">said или told? speak или talk? · объяснение после каждого ответа</div>
+      </div>
+      <div class="mode-card" onclick="startQuestions('all')" style="grid-column:1/-1;">
+        <span class="mode-icon">❓</span>
+        <div class="mode-name">Ask a Question</div>
+        <div class="mode-desc">Read the sentence · ask about the highlighted part · type your question</div>
+        <div class="mode-desc-ru">Прочитай предложение · задай вопрос к выделенной части · напиши вопрос</div>
+      </div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
       <button class="btn" style="font-size:.85rem;padding:8px 14px;" onclick="startGrammar()">🎓 B1 Grammar</button>
@@ -1255,6 +1267,27 @@
 </div>
 
 <!-- ── SCREEN: -ING / -ED ADJECTIVES ── -->
+<div class="screen" id="screen-questions">
+  <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
+  <div class="page-title" style="font-size:1.4rem;">Ask a Question</div>
+  <div class="page-sub">Задай вопрос к <b>выделенной</b> части предложения. Напиши вопрос и нажми Check.</div>
+  <div class="lx">
+    <div class="note">
+      Порядок слов в вопросе: <b>вопросительное слово + вспомогательный глагол + подлежащее + глагол</b>.<br>
+      <i>Tom lives in <b>London</b>. → <b>Where does</b> Tom <b>live</b>?</i> &nbsp; <i>They went <b>yesterday</b>. → <b>When did</b> they <b>go</b>?</i><br>
+      <span class="ru">Если спрашиваем <b>о подлежащем</b> (кто? что?) — без do / does / did: <i><b>Tom</b> called me. → <b>Who called</b> you?</i> Если в предложении I / we — в вопросе you.</span>
+    </div>
+    <div id="qa-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;"></div>
+    <div id="qa-counter" style="text-align:right;font-size:.8rem;color:var(--muted);margin-bottom:8px;"></div>
+    <div class="card" id="qa-sentence" style="font-size:1.15rem;line-height:1.5;margin-bottom:12px;"></div>
+    <input type="text" id="qa-input" class="input" autocomplete="off" autocapitalize="sentences" placeholder="Type your question…" style="width:100%;box-sizing:border-box;padding:12px 14px;font-size:1rem;border:1px solid var(--border, #ddd);border-radius:12px;" onkeydown="if (event.key === 'Enter') qaCheck()">
+    <div id="qa-feedback" style="margin-top:12px;"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <button class="btn btn-primary btn-full" id="qa-check" onclick="qaCheck()">Check</button>
+      <button class="btn btn-primary btn-full" id="qa-next" style="display:none;" onclick="qaNext()">Next →</button>
+    </div>
+  </div>
+</div>
 <div class="screen" id="screen-drill">
   <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
   <div class="page-title" style="font-size:1.4rem;" id="drill-title"></div>
@@ -4656,6 +4689,60 @@ const DRILLS = {
       ]
     }
   },
+  saytell: {
+    title: 'Say · Tell · Speak · Talk',
+    rule: '<b>say</b> + что-то (слова): <i>say hello, say sorry</i>. С человеком — только через <b>to</b>: <i>say something <b>to</b> somebody</i> (не «say me»).<br>' +
+      '<b>tell</b> + кому (всегда человек): <i>tell me, tell her</i>. Устойчиво: <b>tell</b> a story / a lie / the truth / a joke / the time.<br>' +
+      '<b>speak</b> — языки (<i>speak English</i>); официально или «в одну сторону» (<i>speak at a conference, Can I speak to the manager?</i>).<br>' +
+      '<span class="ru"><b>talk</b> — разговор между людьми: <i>talk <b>to / with</b> somebody <b>about</b> something</i>.</span>',
+    levels: { easy: 'Easy', tricky: 'Tricky' },
+    items: {
+      easy: [
+        ['She ___ me that she was tired.', 'told', ['told', 'said', 'spoke'], 'После tell сразу идёт человек (told me). После say человек без to не ставится.<div class="ru">Она сказала мне, что устала.</div>'],
+        ['He ___ “Good morning” and left.', 'said', ['said', 'told', 'spoke'], 'Передаём точные слова → say.<div class="ru">Он сказал «Доброе утро» и ушёл.</div>'],
+        ['Do you ___ French?', 'speak', ['speak', 'say', 'tell'], 'Языки → speak.<div class="ru">Ты говоришь по-французски?</div>'],
+        ['Can you ___ me the time, please?', 'tell', ['tell', 'say', 'speak'], 'tell somebody the time — сказать кому-то, который час.<div class="ru">Не подскажешь, который час?</div>'],
+        ['Don’t ___ lies!', 'tell', ['tell', 'say', 'speak', 'talk'], 'Устойчиво: tell lies / the truth / a story / a joke.<div class="ru">Не ври!</div>'],
+        ['Could I ___ to the manager, please?', 'speak', ['speak', 'say', 'tell'], 'Вежливая просьба поговорить с кем-то официальным → speak to.<div class="ru">Могу я поговорить с менеджером?</div>'],
+        ['What did you ___? I didn’t hear.', 'say', ['say', 'tell', 'speak'], 'Спрашиваем о словах, без человека → say.<div class="ru">Что ты сказал? Я не расслышал.</div>'],
+        ['My grandmother ___ me a story every night.', 'told', ['told', 'said', 'spoke'], 'tell a story — рассказывать историю.<div class="ru">Бабушка каждый вечер рассказывала мне историю.</div>'],
+        ['She ___ three languages.', 'speaks', ['speaks', 'says', 'tells', 'talks'], 'Языки → speak.<div class="ru">Она говорит на трёх языках.</div>'],
+        ['___ sorry to your brother!', 'Say', ['Say', 'Tell', 'Speak'], 'Устойчиво: say sorry / say hello / say goodbye.<div class="ru">Извинись перед братом!</div>'],
+        ['He ___ me his name.', 'told', ['told', 'said', 'spoke'], 'tell + человек + что: told me his name.<div class="ru">Он сказал мне своё имя.</div>'],
+        ['Please ___ the truth.', 'tell', ['tell', 'say', 'speak'], 'Устойчиво: tell the truth — говорить правду.<div class="ru">Пожалуйста, скажи правду.</div>'],
+        ['I need to ___ to you about something important.', 'talk', ['talk', 'say', 'tell'], 'talk to somebody about something — поговорить с кем-то о чём-то.<div class="ru">Мне нужно поговорить с тобой о чём-то важном.</div>'],
+        ['She ___ goodbye and closed the door.', 'said', ['said', 'told', 'spoke'], 'Устойчиво: say goodbye.<div class="ru">Она попрощалась и закрыла дверь.</div>'],
+        ['Can you ___ more slowly, please?', 'speak', ['speak', 'say', 'tell'], 'Как человек говорит (медленно, громко) → speak.<div class="ru">Можешь говорить помедленнее?</div>'],
+        ['He ___ a funny joke.', 'told', ['told', 'said', 'spoke'], 'Устойчиво: tell a joke — рассказать шутку.<div class="ru">Он рассказал смешную шутку.</div>'],
+        ['They ___ that the shop was closed.', 'said', ['said', 'told', 'spoke'], 'said that… — без человека. С человеком было бы told us that…<div class="ru">Они сказали, что магазин закрыт.</div>'],
+        ['___ me about your weekend!', 'Tell', ['Tell', 'Say', 'Speak'], 'tell somebody about something — рассказать кому-то о чём-то.<div class="ru">Расскажи мне о своих выходных!</div>'],
+        ['What language do they ___ in Brazil?', 'speak', ['speak', 'say', 'tell'], 'Языки → speak.<div class="ru">На каком языке говорят в Бразилии?</div>'],
+        ['I ___ “thank you” to the waiter.', 'said', ['said', 'told', 'spoke'], 'say something to somebody — сказать что-то кому-то (с to).<div class="ru">Я сказал официанту «спасибо».</div>']
+      ],
+      tricky: [
+        ['She ___ to me that she was leaving.', 'said', ['said', 'told', 'spoke'], 'said to me — с to. «told to me» неверно: tell me — без to.<div class="ru">Она сказала мне, что уходит.</div>'],
+        ['We had a long ___ about our plans.', 'talk', ['talk', 'say', 'tell'], 'a talk — разговор (существительное): have a talk about something.<div class="ru">У нас был долгий разговор о наших планах.</div>'],
+        ['He ___ me to close the window.', 'told', ['told', 'said', 'spoke'], 'tell somebody to do something — велеть, попросить кого-то сделать.<div class="ru">Он велел мне закрыть окно.</div>'],
+        ['Can you ___ the difference between these two words?', 'tell', ['tell', 'say', 'speak'], 'tell the difference — различать, видеть разницу.<div class="ru">Ты видишь разницу между этими двумя словами?</div>'],
+        ['Who ___ at the conference yesterday?', 'spoke', ['spoke', 'said', 'told'], 'speak at a conference — выступать на конференции.<div class="ru">Кто выступал вчера на конференции?</div>'],
+        ['He ___ his son not to touch the stove.', 'told', ['told', 'said', 'spoke'], 'tell somebody not to do something — велеть не делать.<div class="ru">Он сказал сыну не трогать плиту.</div>'],
+        ['___ of the devil!', 'Speak', ['Speak', 'Say', 'Tell'], 'Устойчиво: Speak of the devil! — Лёгок на помине!<div class="ru">Лёгок на помине!</div>'],
+        ['“I’m fine,” she ___.', 'said', ['said', 'told', 'spoke'], 'Прямая речь, без человека → say.<div class="ru">«Я в порядке», — сказала она.</div>'],
+        ['I can’t ___ which twin is which.', 'tell', ['tell', 'say', 'speak'], 'tell — различить, понять: can’t tell which is which.<div class="ru">Я не могу различить близнецов.</div>'],
+        ['It goes without ___ that safety comes first.', 'saying', ['saying', 'telling', 'speaking'], 'Устойчиво: It goes without saying — само собой разумеется.<div class="ru">Само собой разумеется, безопасность на первом месте.</div>'],
+        ['Generally ___, people here are friendly.', 'speaking', ['speaking', 'saying', 'telling', 'talking'], 'Устойчиво: generally speaking — вообще говоря.<div class="ru">Вообще говоря, люди здесь дружелюбные.</div>'],
+        ['We ___ for hours on the phone last night.', 'talked', ['talked', 'said', 'told'], 'Разговор между людьми → talk.<div class="ru">Вчера вечером мы часами разговаривали по телефону.</div>'],
+        ['She ___ the children to be quiet.', 'told', ['told', 'said', 'spoke'], 'tell somebody to do something — велеть кому-то.<div class="ru">Она велела детям вести себя тихо.</div>'],
+        ['They ___ him into buying a new car.', 'talked', ['talked', 'said', 'told', 'spoke'], 'talk somebody into doing something — уговорить кого-то.<div class="ru">Они уговорили его купить новую машину.</div>'],
+        ['To ___ the truth, I don’t like coffee.', 'tell', ['tell', 'say', 'speak'], 'Устойчиво: To tell the truth — по правде говоря.<div class="ru">По правде говоря, я не люблю кофе.</div>'],
+        ['He ___ that he would call me later.', 'said', ['said', 'told', 'spoke'], 'said that… — без человека. told me that… — с человеком.<div class="ru">Он сказал, что позвонит мне позже.</div>'],
+        ['Could you ___ up? I can’t hear you.', 'speak', ['speak', 'say', 'tell'], 'speak up — говорить громче.<div class="ru">Можешь говорить громче? Я тебя не слышу.</div>'],
+        ['Stop ___ nonsense!', 'talking', ['talking', 'telling', 'speaking'], 'Устойчиво: talk nonsense — нести чушь.<div class="ru">Хватит нести чушь!</div>'],
+        ['I’ve ___ you a hundred times!', 'told', ['told', 'said', 'spoken'], 'tell + человек: I’ve told you. Say здесь нужно было бы с to.<div class="ru">Я тебе сто раз говорил!</div>'],
+        ['She isn’t ___ to me after our argument.', 'speaking', ['speaking', 'saying', 'telling'], 'not be speaking to somebody — не разговаривать с кем-то (после ссоры).<div class="ru">Она не разговаривает со мной после нашей ссоры.</div>']
+      ]
+    }
+  },
   usedto: {
     title: 'Used to · Be used to · Get used to',
     rule: '<b>used to + глагол</b> — раньше (а теперь нет): <i>I <b>used to live</b> in Moscow.</i> = Раньше я жил в Москве.<br>' +
@@ -4701,6 +4788,112 @@ const DRILLS = {
     }
   }
 };
+// ── Ask a Question: sentence with a **highlighted** part → type the question ──
+// [sentence, accepted questions (first one is shown as the answer), why (ru), topic]
+const QA_TOPICS = { all: 'All', ps: 'Present Simple', past: 'Past Simple', pc: 'Present Continuous', modal: 'can / will', be: 'to be', subj: 'Who? What? (подлежащее)' };
+const QA_ITEMS = [
+  ['Tom lives in **London**.', ['Where does Tom live?'], 'Present Simple, he / she → <b>does</b> + глагол без -s: Where <b>does</b> Tom <b>live</b>?', 'ps'],
+  ['She works **at a bank**.', ['Where does she work?'], 'Present Simple, she → <b>does</b> + work (без -s).', 'ps'],
+  ['They get up **at seven**.', ['What time do they get up?', 'When do they get up?'], 'Present Simple, they → <b>do</b>. Время → What time…? или When…?', 'ps'],
+  ['He plays **tennis** on Sundays.', ['What does he play on Sundays?', 'What does he play?'], 'Present Simple, he → <b>does</b> + play.', 'ps'],
+  ['I go to the gym **three times a week**.', ['How often do you go to the gym?'], 'Как часто → How often. I в ответе → you в вопросе.', 'ps'],
+  ['Anna likes **chocolate**.', ['What does Anna like?'], 'Present Simple, she → <b>does</b> + like (без -s).', 'ps'],
+  ['The film starts **at eight**.', ['What time does the film start?', 'When does the film start?'], 'Present Simple, it → <b>does</b> + start.', 'ps'],
+  ['We go to school **by bus**.', ['How do you go to school?', 'How do you get to school?'], 'Как (каким способом) → How. We → you.', 'ps'],
+  ['It costs **ten pounds**.', ['How much does it cost?'], 'Сколько стоит → How much. it → <b>does</b> + cost.', 'ps'],
+  ['She has **two** children.', ['How many children does she have?', 'How many children has she got?'], 'Сколько (исчисляемые) → How many + существительное.', 'ps'],
+  ['I prefer **the blue one**.', ['Which one do you prefer?', 'Which do you prefer?'], 'Какой из (выбор) → Which. I → you.', 'ps'],
+  ['They went to the cinema **yesterday**.', ['When did they go to the cinema?'], 'Past Simple → <b>did</b> + глагол в начальной форме: When <b>did</b> they <b>go</b>? (не went)', 'past'],
+  ['She bought **a new dress**.', ['What did she buy?'], 'Past Simple → <b>did</b> + buy (не bought).', 'past'],
+  ['He came home late **because he missed the bus**.', ['Why did he come home late?'], 'Почему → Why. Past Simple → <b>did</b> + come.', 'past'],
+  ['We stayed **in a small hotel**.', ['Where did you stay?'], 'Past Simple → <b>did</b> + stay. We → you.', 'past'],
+  ['I met **Ben** at the party.', ['Who did you meet at the party?', 'Who did you meet?'], 'Ben — не подлежащее (подлежащее — I), поэтому нужен <b>did</b>.', 'past'],
+  ['The trip took **five hours**.', ['How long did the trip take?'], 'Сколько времени → How long. Past Simple → <b>did</b> + take.', 'past'],
+  ['They moved to Spain **two years ago**.', ['When did they move to Spain?'], 'Past Simple → <b>did</b> + move (без -ed).', 'past'],
+  ['Lucy was born **in 1995**.', ['When was Lucy born?', 'What year was Lucy born?', 'In what year was Lucy born?'], 'was born — это форма be, поэтому без did: When <b>was</b> Lucy born?', 'past'],
+  ['She is reading **a book**.', ['What is she reading?'], 'Present Continuous → <b>is / are</b> перед подлежащим: What <b>is</b> she reading?', 'pc'],
+  ['They are waiting **for the bus**.', ['What are they waiting for?', 'Who are they waiting for?'], 'Предлог (for) остаётся в конце вопроса: What are they waiting <b>for</b>?', 'pc'],
+  ['He is crying **because he is tired**.', ['Why is he crying?'], 'Present Continuous → <b>is</b> + he + crying.', 'pc'],
+  ['I am talking **to my sister**.', ['Who are you talking to?'], 'Предлог (to) в конце. I am → are you.', 'pc'],
+  ['We are going **to the park**.', ['Where are you going?'], 'Present Continuous. We → you: Where <b>are</b> you going?', 'pc'],
+  ['I can swim **very well**.', ['How well can you swim?'], 'can встаёт перед подлежащим: How well <b>can</b> you swim?', 'modal'],
+  ['She can speak **three** languages.', ['How many languages can she speak?'], 'How many + существительное + <b>can</b> + she + speak.', 'modal'],
+  ['They will arrive **tomorrow**.', ['When will they arrive?'], 'will встаёт перед подлежащим: When <b>will</b> they arrive?', 'modal'],
+  ['He will stay **for two weeks**.', ['How long will he stay?'], 'Как долго → How long + <b>will</b> + he + stay.', 'modal'],
+  ['You can park **behind the house**.', ['Where can I park?', 'Where can we park?'], 'can + подлежащее. You в ответе → I в вопросе.', 'modal'],
+  ['It will cost **about fifty euros**.', ['How much will it cost?'], 'How much + <b>will</b> + it + cost.', 'modal'],
+  ['The keys are **on the table**.', ['Where are the keys?'], 'to be: are встаёт перед подлежащим, без do.', 'be'],
+  ['Emma is **twenty-five**.', ['How old is Emma?'], 'Возраст → How old + <b>is</b>.', 'be'],
+  ['The weather was **terrible**.', ['What was the weather like?', 'How was the weather?'], 'Какой (описание) → What … like? или How was…?', 'be'],
+  ['This bag is **Lucy’s**.', ['Whose bag is this?', 'Whose is this bag?', 'Whose bag is it?'], 'Чей → Whose + существительное.', 'be'],
+  ['**Tom** called me.', ['Who called you?'], 'Спрашиваем о подлежащем (кто?) → без did: Who <b>called</b> you?', 'subj'],
+  ['**Sam** broke the window.', ['Who broke the window?'], 'Вопрос к подлежащему → без did, глагол в прошедшем: Who <b>broke</b>…?', 'subj'],
+  ['**The noise** woke me up.', ['What woke you up?'], 'Вопрос к подлежащему (что?) → без did: What <b>woke</b> you up?', 'subj'],
+  ['**My sister** lives in Paris.', ['Who lives in Paris?'], 'Вопрос к подлежащему → без does, глагол с -s: Who <b>lives</b>…?', 'subj'],
+  ['**Something strange** happened yesterday.', ['What happened yesterday?', 'What happened?'], 'Вопрос к подлежащему → без did: What <b>happened</b>?', 'subj'],
+  ['**Ben** knows the answer.', ['Who knows the answer?'], 'Вопрос к подлежащему → без does: Who <b>knows</b>…?', 'subj']
+];
+let qaList = [], qaIndex = 0, qaScore = 0, qaTopic = 'all', qaDone = false;
+function qaNorm(t) {
+  t = (t || '').toLowerCase().replace(/[’‘`]/g, "'").replace(/[?.!,]/g, ' ');
+  const c = { "what's": 'what is', "where's": 'where is', "who's": 'who is', "how's": 'how is', "isn't": 'is not', "aren't": 'are not',
+    "wasn't": 'was not', "weren't": 'were not', "don't": 'do not', "doesn't": 'does not', "didn't": 'did not', "can't": 'can not',
+    'cannot': 'can not', "won't": 'will not' };
+  return t.split(/\s+/).filter(Boolean).map(w => c[w] || w).join(' ');
+}
+function qaMark(sentence) { return esc(sentence).replace(/\*\*(.+?)\*\*/g, '<mark style="background:#e8dcc0;padding:1px 4px;border-radius:4px;font-weight:600;">$1</mark>'); }
+function startQuestions(topic) {
+  qaTopic = topic;
+  const pool = QA_ITEMS.filter(it => topic === 'all' || it[3] === topic);
+  qaList = shuffle(pool.slice()).slice(0, 10);
+  qaIndex = 0; qaScore = 0;
+  document.getElementById('qa-filters').innerHTML = Object.entries(QA_TOPICS).map(([k, label]) =>
+    '<button class="btn btn-sm' + (k === topic ? ' btn-primary' : ' btn-ghost') + '" onclick="startQuestions(\'' + k + '\')">' + label + '</button>').join('');
+  show('questions');
+  qaRender();
+  window.scrollTo(0, 0);
+  logActivity('Ask a Question (начал)', QA_TOPICS[topic], null, qaList.length);
+}
+function qaRender() {
+  const fb = document.getElementById('qa-feedback'), inp = document.getElementById('qa-input');
+  if (qaIndex >= qaList.length) {
+    document.getElementById('qa-sentence').innerHTML = '<div style="text-align:center;"><div style="font-size:2rem;">' + (qaScore >= qaList.length * 0.8 ? '🏆' : '💪') + '</div><b>' + qaScore + ' / ' + qaList.length + '</b></div>';
+    inp.style.display = 'none'; fb.innerHTML = '';
+    document.getElementById('qa-check').style.display = 'none';
+    const nx = document.getElementById('qa-next'); nx.style.display = ''; nx.textContent = 'New round →';
+    document.getElementById('qa-counter').textContent = '';
+    logActivity('Ask a Question', QA_TOPICS[qaTopic], qaScore, qaList.length);
+    return;
+  }
+  qaDone = false;
+  document.getElementById('qa-counter').textContent = (qaIndex + 1) + ' of ' + qaList.length;
+  document.getElementById('qa-sentence').innerHTML = qaMark(qaList[qaIndex][0]);
+  inp.style.display = ''; inp.value = ''; inp.disabled = false; fb.innerHTML = '';
+  document.getElementById('qa-check').style.display = '';
+  const nx = document.getElementById('qa-next'); nx.style.display = 'none'; nx.textContent = 'Next →';
+  inp.focus();
+}
+function qaCheck() {
+  if (qaDone) return;
+  const inp = document.getElementById('qa-input');
+  if (!inp.value.trim()) { inp.focus(); return; }
+  const [, answers, why] = qaList[qaIndex];
+  const ok = answers.some(a => qaNorm(a) === qaNorm(inp.value));
+  if (ok) qaScore++;
+  qaDone = true; inp.disabled = true;
+  document.getElementById('qa-feedback').innerHTML = '<div class="note">' +
+    (ok ? '<b style="color:var(--sage, #5a8a5e);">✓ Верно!</b>'
+        : '<b style="color:#b5544c;">✗ Сравни:</b><br>Твой вопрос: <i>' + esc(inp.value) + '</i><br>Правильно: <b>' + esc(answers[0]) + '</b>') +
+    (answers.length > 1 ? '<div class="ru" style="margin-top:4px;">Можно и так: ' + answers.slice(1).map(esc).join(' · ') + '</div>' : '') +
+    '<div style="margin-top:6px;">' + why + '</div></div>';
+  document.getElementById('qa-check').style.display = 'none';
+  document.getElementById('qa-next').style.display = '';
+}
+function qaNext() {
+  if (qaIndex >= qaList.length) { startQuestions(qaTopic); return; }
+  qaIndex++; qaRender();
+}
+
 let drillKey = 'articles', drillLevel = 'easy';
 function startDrill(key, level) {
   drillKey = key; drillLevel = level;
