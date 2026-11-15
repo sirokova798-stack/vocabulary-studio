@@ -9359,7 +9359,23 @@ const OCT25_SECTIONS = {
 // 15 Nov: Talk Talk Talk, Katya, Anastasia, Trofim
 const NOV15B_WORDS = {
   'Talk Talk Talk': [
-    ['a crescent moon / a crescent', 'полумесяц / серп, полукруг', 'There was a beautiful crescent moon in the sky last night.']
+    ['a crescent moon / a crescent', 'полумесяц / серп, полукруг', 'There was a beautiful crescent moon in the sky last night.'],
+    ['to obey', 'подчиняться, слушаться', 'Soldiers have to obey orders.'],
+    ['to feel sorry for somebody / to feel compassion for somebody', 'сочувствовать, сострадать кому-то', 'I really feel sorry for him — he’s had a terrible year.'],
+    ['spot on', 'точно, в самую точку', 'Your analysis is spot on.'],
+    ['it rings true', 'звучит правдиво, похоже на правду', 'Her story rings true — I believe her.'],
+    ['there is an element of truth in that', 'в этом есть доля правды', 'There is an element of truth in that, but it’s not the whole story.'],
+    ['you’re making a sweeping statement', 'ты делаешь огульное обобщение', 'Saying all teenagers are lazy — you’re making a sweeping statement.'],
+    ['that’s way too simplistic', 'это слишком упрощённо', 'Blaming social media for everything is way too simplistic.'],
+    ['that’s a complete fallacy', 'это полное заблуждение', 'The idea that we only use 10% of our brain is a complete fallacy.'],
+    ['that’s patently not true', 'это совершенно очевидно неправда', 'He says nobody reads books any more, but that’s patently not true.'],
+    ['to trot out trite phrases', 'повторять избитые фразы', 'Politicians just trot out trite phrases instead of answering the question.'],
+    ['a rather vacuous comment', 'довольно пустой, бессодержательный комментарий', 'It was a rather vacuous comment that added nothing to the discussion.'],
+    ['profound', 'глубокий (о мысли, чувстве, влиянии)', 'The book had a profound effect on me.'],
+    ['to declutter your mind / a cluttered room', 'разгрузить голову, навести порядок в мыслях / захламлённая комната', 'A long walk helps me declutter my mind. I can’t work in a cluttered room.'],
+    ['to have a clear vision', 'иметь чёткое видение', 'A good leader has a clear vision of the future.'],
+    ['torture', 'пытка, мучение', 'Sitting through that meeting was torture!'],
+    ['a short-sighted person', 'близорукий человек; недальновидный человек', 'As a short-sighted person, I can’t read the board without my glasses.']
   ].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Lesson 15 Nov' })),
   Katya: [
     ['a mole', 'родинка', 'She has a small mole on her cheek.']
@@ -10273,6 +10289,7 @@ const OCT9_WORDS = {
     data.students.push(talk);
   }
   if (!talk.quizHistory) talk.quizHistory = [];
+  talk.words = talk.words.filter(w => w.word !== 'it strikes a chord with me');
   talk.pin = '8255';
   // The combined 'suit / match / go with / fit' card was split into four separate cards — remove the old one
   talk.words = talk.words.filter(w => w.word.toLowerCase() !== 'suit / match / go with / fit');
