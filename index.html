@@ -9388,7 +9388,7 @@ const NOV15_WORDS = { Katya: [
     ['to give someone increased self-confidence', 'придавать кому-то больше уверенности в себе', 'Karate gave him increased self-confidence.'],
     ['training requires ongoing commitment and hard work', 'тренировки требуют постоянной самоотдачи и упорного труда', 'Training requires ongoing commitment and hard work.'],
     ['to push yourself to the limit', 'выкладываться на пределе возможностей', 'In the final, she pushed herself to the limit.']
-  ].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Sport & Character' })),
+  ].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Sports · Lesson 15 Nov' })),
   ...[
     ['martial arts', 'боевые искусства', 'Karate and judo are martial arts.'],
     ['to talk to somebody', 'разговаривать с кем-то', 'Can you talk to me for a minute?'],
@@ -9406,7 +9406,7 @@ const NOV15_WORDS = { Katya: [
     ['a stall', 'прилавок, ларёк (на рынке)', 'The man is standing near the stall.'],
     ['to commute to university', 'ездить в университет (каждый день)', 'I commute to university by metro.'],
     ['How long does it take you to get to university?', 'Сколько времени у тебя занимает дорога до университета?', 'How long does it take you to get to university? — About forty minutes.']
-  ].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Lesson 15 Nov' }))
+  ].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Sports · Lesson 15 Nov' }))
 ] };
 // 9 Nov: Katya — shopping & returns
 // 9 Nov: Lyosha — food & health
@@ -10282,6 +10282,7 @@ const OCT9_WORDS = {
   katya.pin = '1212';
   katya.words.forEach(w => { if (w.lesson === 'First Lesson') w.lesson = 'First Two Lessons'; if (w.lesson === 'Lesson 24 Oct' || w.lesson === 'Lesson 22 Oct') w.lesson = 'First Two Lessons'; });
   katya.words = katya.words.filter(w => w.word !== 'to shrug');
+  katya.words.forEach(w => { if (w.lesson === 'Sport & Character' || w.lesson === 'Lesson 15 Nov') w.lesson = 'Sports · Lesson 15 Nov'; });
   katya.words.forEach(w => { if (w.lesson === 'Lesson 1 Nov') w.lesson = 'Lesson 30 Oct'; });
   const katyaExisting = new Set(katya.words.map(w => w.word.toLowerCase()));
   KATYA_WORDS.forEach(w => {
