@@ -1035,7 +1035,7 @@
       <div class="quiz-word" id="quiz-word"></div>
       <div class="quiz-ipa" id="quiz-ipa"></div>
       <button class="btn btn-ghost btn-sm" id="quiz-listen" style="display:none;margin:6px 0;" onclick="sayText(document.getElementById('quiz-word').textContent)">🔊 Listen</button>
-      <div class="quiz-prompt">WHAT IS THE RUSSIAN TRANSLATION?</div>
+      <div class="quiz-prompt" id="quiz-prompt">WHAT IS THE RUSSIAN TRANSLATION?</div>
     </div>
     <div class="quiz-options" id="quiz-options"></div>
     <div id="quiz-feedback"></div>
@@ -1585,6 +1585,16 @@ try {
   fbdb = firebase.firestore();
 } catch (e) { fbdb = null; }
 
+// "iPhone · Safari", "Windows · Chrome" — just the device type and browser, nothing personal
+function deviceLabel() {
+  const ua = navigator.userAgent;
+  const dev = /iPhone/.test(ua) ? 'iPhone' : /iPad|Macintosh.*Mobile/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) ? 'iPad'
+    : /Android/.test(ua) ? (/Mobile/.test(ua) ? 'Android phone' : 'Android tablet') : /Windows/.test(ua) ? 'Windows'
+    : /Macintosh/.test(ua) ? 'Mac' : /Linux/.test(ua) ? 'Linux' : 'other';
+  const br = /YaBrowser/.test(ua) ? 'Yandex' : /Edg\//.test(ua) ? 'Edge' : /OPR\//.test(ua) ? 'Opera' : /Firefox|FxiOS/.test(ua) ? 'Firefox'
+    : /Chrome|CriOS/.test(ua) ? 'Chrome' : /Safari/.test(ua) ? 'Safari' : '';
+  return br ? dev + ' · ' + br : dev;
+}
 function logActivity(mode, detail, score, total) {
   try {
     if (!fbdb || !currentStudent) return;
@@ -1599,7 +1609,8 @@ function logActivity(mode, detail, score, total) {
       score: (score === undefined || score === null) ? null : score,
       total: (total === undefined || total === null) ? null : total,
       ts: Date.now(),
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
+      device: deviceLabel()
     }).catch(function(){});
   } catch (e) {}
 }
@@ -2041,7 +2052,7 @@ function renderWords() {
       (w.lesson ? '<div class="lesson-badge">' + esc(w.lesson) + '</div>' : '') +
       '<div class="word-en">' + esc(w.word) + (listen ? ' <button class="btn btn-ghost btn-sm" style="padding:2px 8px;font-size:.85rem;" data-say="' + esc(w.word) + '" onclick="sayText(this.dataset.say)">🔊</button>' : '') + '</div>' +
       (w.ipa ? '<div class="word-ipa">' + esc(w.ipa) + '</div>' : '') +
-      '<div class="word-ru">🇷🇺 ' + esc(w.translation) + '</div>' +
+      '<div class="word-ru">' + (s.defs ? '' : '🇷🇺 ') + esc(w.translation) + '</div>' +
       (w.example ? '<div class="word-ex">"' + esc(w.example) + '"</div>' : '') +
       (isTeacher ? '<button class="word-delete" title="Delete" onclick="promptDelete(\'' + w.id + '\')">✕</button>' : '');
     list.appendChild(el);
@@ -2203,6 +2214,7 @@ function fmtIpa(v) {
   return t ? '/' + t + '/' : '';
 }
 
+function fcDefs() { const s = db().students.find(x => x.id === currentStudent); return !!(s && s.defs); }
 function renderFC() {
   const w = fcWords[fcIndex];
   if (fcDir === 'ru') {
@@ -2215,7 +2227,7 @@ function renderFC() {
     document.getElementById('fc-word').textContent = w.word;
     document.getElementById('fc-ipa').textContent = fmtIpa(w.ipa);
     document.getElementById('fc-ipa').style.display = w.ipa ? '' : 'none';
-    document.getElementById('fc-translation').textContent = '🇷🇺 ' + w.translation;
+    document.getElementById('fc-translation').textContent = (fcDefs() ? '' : '🇷🇺 ') + w.translation;
     document.getElementById('fc-example').textContent = w.example ? '"' + w.example + '"' : '';
     document.querySelector('#screen-flashcards .fc-tap-hint span:last-child').textContent = 'Tap to reveal translation';
   }
@@ -2922,7 +2934,7 @@ function answerCtx(btn, isCorrect, q) {
   document.getElementById('ctx-feedback').innerHTML =
     '<div class="ctx-fb">' +
       '<div class="ctx-fb-sentence">' + q.word.example + '</div>' +
-      '<div class="ctx-fb-ru">🇷🇺 ' + q.word.translation + '</div>' +
+      '<div class="ctx-fb-ru">' + (fcDefs() ? '' : '🇷🇺 ') + q.word.translation + '</div>' +
       (canListenMore() ? '<div style="margin-top:8px;"><button class="btn btn-ghost btn-sm" data-say="' + esc(q.word.word) + '" onclick="sayText(this.dataset.say)">🔊 Word</button> <button class="btn btn-ghost btn-sm" data-say="' + esc(q.word.example) + '" onclick="sayText(this.dataset.say)">🔊 Sentence</button></div>' : '') +
     '</div>';
   document.getElementById('ctx-next-wrap').style.display = '';
@@ -5807,7 +5819,7 @@ function renderQ() {
     .sort(() => Math.random() - 0.5)
     .map(w => w.translation);
 
-  const poolList = (DISTRACTOR_POOL[pos] || DISTRACTOR_POOL.general)
+  const poolList = s.defs ? [] : (DISTRACTOR_POOL[pos] || DISTRACTOR_POOL.general)
     .filter(t => t.toLowerCase() !== correctTrans)
     .sort(() => Math.random() - 0.5);
 
@@ -5831,6 +5843,7 @@ function renderQ() {
   ].sort(() => Math.random() - 0.5);
 
   document.getElementById('quiz-word').textContent = correct.word;
+  document.getElementById('quiz-prompt').textContent = s.defs ? 'WHAT DOES IT MEAN?' : 'WHAT IS THE RUSSIAN TRANSLATION?';
   document.getElementById('quiz-listen').style.display = canListenMore() ? '' : 'none';
   const ipaEl = document.getElementById('quiz-ipa');
   ipaEl.textContent = correct.ipa || '';
@@ -5998,6 +6011,7 @@ function renderActivityList() {
         '<span style="color:var(--muted);font-size:0.78rem;min-width:38px;">' + t + '</span>' +
         '<span style="font-weight:600;min-width:80px;">' + esc(r.student) + '</span>' +
         '<span>' + esc(r.mode) + (r.detail ? ' <span style="color:var(--muted);">· ' + esc(r.detail) + '</span>' : '') + '</span>' +
+        (r.device ? '<span style="color:var(--muted);font-size:0.75rem;">' + esc(r.device) + '</span>' : '') +
         '<span style="margin-left:auto;">' + score + '</span>' +
       '</div>';
     });
@@ -8778,6 +8792,62 @@ const KATYA_WORDS = [
   ['draw – drew – drawn', 'рисовать (карандашом, ручкой; неправильный глагол). Красками — to paint', 'My son drew a picture of our cat.']
 ].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })));
 
+// Karina Kar: English definitions shown instead of translations
+const KARINA_KAR_DEFS = {
+ "to be comfortable in your own skin": "to feel relaxed and confident about who you are",
+ "to feel secure within yourself": "to feel safe and confident inside, without needing approval from others",
+ "to rely on (yourself)": "to trust and depend on yourself",
+ "to gain clarity": "to start to understand something clearly",
+ "to miss out on something": "to lose the chance to do or enjoy something",
+ "to panic at the idea of": "to feel sudden fear just thinking about something",
+ "in moments of solitude": "at times when you are alone, often by choice",
+ "to nourish": "to give what is needed to grow and stay healthy (things that nourish you = things that make you feel full of energy)",
+ "to be drawn to": "to feel attracted to someone or something",
+ "to enjoy your own company": "to like spending time alone",
+ "to engage in": "to take part in an activity (engage in self-talk = talk to yourself)",
+ "a sign of": "something that shows that something else exists or is true",
+ "to stigmatise": "to treat someone or something as shameful",
+ "to boost your self-esteem": "to make yourself feel more confident and valued",
+ "to tackle (a problem / everyday tasks)": "to start dealing with something difficult",
+ "a cycle of negative thoughts": "bad thoughts that keep repeating and feeding each other",
+ "compassionate": "showing kindness and understanding to people who are suffering",
+ "a facet of your life": "one part or side of your life",
+ "verbalised thoughts": "thoughts expressed in words",
+ "internalised": "accepted deep inside you as your own belief",
+ "to be predictive of": "to show what is likely to happen in the future",
+ "to regulate the tone": "to control how something sounds (e.g. kind or harsh)",
+ "distanced self-talk": "talking to yourself using “you” or your own name instead of “I”",
+ "to give yourself a (quick) pep talk": "to say encouraging things to yourself",
+ "to dwell on something": "to keep thinking about something unpleasant",
+ "to beat yourself up": "to blame and criticise yourself too much",
+ "to cut yourself some slack": "to be less strict with yourself",
+ "to give yourself credit (for)": "to recognise what you have done well",
+ "to blow something out of proportion": "to make something seem much more serious than it is",
+ "to overthink": "to think about something too much, so that it becomes a problem",
+ "what really matters": "the things that are truly important",
+ "to gain confidence": "to become more confident",
+ "to jot down": "to write something quickly",
+ "to put effort into something": "to work hard on something",
+ "to acquire a habit": "to start doing something regularly, until it becomes a habit",
+ "to sleep on it": "to wait until the next day before making a decision",
+ "hair (always singular)": "the strands that grow on your head; uncountable: my hair is…",
+ "to make braids": "to twist three pieces of hair together",
+ "a reminder of": "something that makes you remember someone or something",
+ "comprehensive vs comprehensible": "comprehensive = complete, including everything; comprehensible = easy to understand",
+ "compatible": "able to exist or work well together",
+ "to add to (happiness)": "to increase something",
+ "odd": "strange or unusual",
+ "it makes a real difference": "it has an important, positive effect",
+ "a study": "a piece of scientific research",
+ "a threat": "something that could cause harm or danger",
+ "stop to do vs stop doing": "stop to do = stop in order to do something; stop doing = not do something any more",
+ "to be wired": "to be so excited or nervous that you can’t relax or sleep",
+ "to binge-watch": "to watch many episodes of a series one after another",
+ "isolated": "alone, far from other people",
+ "altitude vs attitude": "altitude = height above sea level; attitude = the way you think or feel about something",
+ "riveting": "so interesting that you can’t stop paying attention"
+};
+
 // New student Karina Kar — a separate name so she isn't mixed up with Karina's own French cabinet
 const KARINA_S_WORDS = [
   ...[
@@ -10437,7 +10507,7 @@ const OCT9_WORDS = {
   let diana = data.students.find(s => s.name === 'Diana');
   if (!diana) { diana = { id: uid(), name: 'Diana', words: [], quizHistory: [] }; data.students.push(diana); }
   if (!diana.quizHistory) diana.quizHistory = [];
-  diana.pin = '3434';
+  diana.pin = 'closed';  // access closed 16 Nov 2026 (4-digit pad can't match)
   // transcriptions added later — fill them in on devices that already have the words
   diana.words.forEach(w => { if (!w.ipa && DIANA_IPA[w.word]) w.ipa = DIANA_IPA[w.word]; });
   const dianaExisting = new Set(diana.words.map(w => w.word.toLowerCase()));
@@ -10500,6 +10570,13 @@ const OCT9_WORDS = {
       st.words.push({ id: uid(), word: w.word, ipa: w.ipa || '', translation: w.translation, example: w.example, lesson: w.lesson, by: 'teacher' });
     });
   });
+
+  // Karina Kar asked for English definitions instead of Russian translations
+  const karinaKar = data.students.find(s => s.name === 'Karina Kar');
+  if (karinaKar) {
+    karinaKar.defs = true;
+    karinaKar.words.forEach(w => { if (KARINA_KAR_DEFS[w.word]) w.translation = KARINA_KAR_DEFS[w.word]; });
+  }
 
   save(data);
 })(); // v2
