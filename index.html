@@ -1599,7 +1599,7 @@ function logActivity(mode, detail, score, total) {
   try {
     if (!fbdb || !currentStudent) return;
     // local test copies (Claude's checks, file://) must not land in the real activity log
-    if (!/vercel\.app$|englishsounds\.com$/.test(location.hostname)) return;
+    if (!/vercel\.app$|english-sounds.com$/.test(location.hostname)) return;
     const s = db().students.find(x => x.id === currentStudent);
     if (!s) return;
     fbdb.collection('activity').add({
