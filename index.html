@@ -922,6 +922,12 @@
         <div class="mode-desc">I used to live… · I’m used to living… · I’m getting used to living…</div>
         <div class="mode-desc-ru">раньше делал · привык · привыкаю</div>
       </div>
+      <div class="mode-card" onclick="startIngInf('choose')" style="grid-column:1/-1;">
+        <span class="mode-icon">🧩</span>
+        <div class="mode-name">-ing or to? Verb Patterns</div>
+        <div class="mode-desc">enjoy doing · decide to do · stop doing / stop to do · ⚡ Verb Sorter game</div>
+        <div class="mode-desc-ru">-ing или to + глагол? · правила, 3 уровня и игра на скорость</div>
+      </div>
       <div class="mode-card" onclick="startDrill('articles', 'easy')" style="grid-column:1/-1;">
         <span class="mode-icon">📰</span>
         <div class="mode-name">Articles: a / an / the / —</div>
@@ -1299,6 +1305,53 @@
     <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startDrill(drillKey, drillLevel)">New round →</button>
   </div>
 </div>
+<div class="screen" id="screen-inginf">
+  <button class="back-btn" onclick="iiStopSorter(); show('student'); switchTab('practice');">← Back to practice</button>
+  <div class="page-title" style="font-size:1.4rem;">-ing or to? Verb Patterns</div>
+  <div class="page-sub">Выбери или напиши правильную форму. После ответа всегда увидишь объяснение.</div>
+  <div class="lx">
+    <div class="note" style="border-left:4px solid #c9a227;">⚠️ <b>Sometimes more than one option is correct.</b> <span class="ru">Иногда верны оба варианта — тогда засчитывается любой из них.</span></div>
+    <details class="note" style="margin-top:10px;">
+      <summary style="cursor:pointer;font-weight:600;">📘 Rules · Правила (нажми, чтобы открыть)</summary>
+      <div style="margin-top:8px;line-height:1.6;">
+        <b>1. Verb + -ing:</b> enjoy, mind, avoid, finish, keep, consider, suggest, admit, deny, miss, practise, imagine, risk, can’t stand, can’t help, give up, put off, carry on, feel like — <i>I enjoy <b>cooking</b>.</i><br>
+        <b>2. Verb + to:</b> want, decide, hope, plan, agree, refuse, promise, manage, afford, offer, learn, expect, seem, pretend, fail, tend, arrange, deserve, would like / love / prefer — <i>We decided <b>to travel</b>.</i><br>
+        <b>3. Verb + somebody + to:</b> ask, tell, advise, allow, encourage, persuade, remind, teach, want somebody to — <i>She asked me <b>to help</b>.</i> <span class="ru">Но <b>make / let</b> somebody <b>do</b> — без to: <i>She made me <b>laugh</b>.</i></span><br>
+        <b>4. Both, same meaning:</b> like, love, hate, prefer, start, begin, continue — <i>It started <b>raining / to rain</b>.</i><br>
+        <b>5. Both, different meaning:</b><br>
+        &nbsp;• <b>remember / forget to do</b> — не забыть сделать; <b>remember / forget doing</b> — помнить, как было<br>
+        &nbsp;• <b>stop doing</b> — перестать; <b>stop to do</b> — остановиться, чтобы сделать<br>
+        &nbsp;• <b>try to do</b> — стараться; <b>try doing</b> — попробовать как способ<br>
+        &nbsp;• <b>regret doing</b> — жалеть о сделанном; <b>regret to tell / inform</b> — с сожалением сообщить<br>
+        &nbsp;• <b>go on doing</b> — продолжать то же; <b>go on to do</b> — перейти к следующему<br>
+        &nbsp;• <b>mean to do</b> — намереваться; <b>mean doing</b> — означать<br>
+        &nbsp;• <b>need doing</b> — нуждается в том, чтобы это сделали: <i>The car needs <b>washing</b>.</i><br>
+        <b>6. Preposition + -ing:</b> interested in, good at, instead of, before / after, without, thank you for, look forward to, be used to, it’s worth, there’s no point in — <i>I’m good at <b>drawing</b>.</i><br>
+        <b>7. Adjective + to, purpose:</b> happy to, easy to, too … to, … enough to; зачем? → to: <i>I came <b>to help</b>.</i><br>
+        <b>8. -ing as the subject:</b> <i><b>Swimming</b> is good for you.</i>
+      </div>
+    </details>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;" id="ii-levels"></div>
+    <div id="ii-task">
+      <div class="lxq" id="inginf-box" data-ex="inginf"></div>
+      <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startIngInf(iiLevel)">New round →</button>
+    </div>
+    <div id="ii-sorter" style="display:none;text-align:center;">
+      <div class="note" style="text-align:left;">⚡ <b>Verb Sorter.</b> <span class="ru">Глагол появляется — выбери, что после него: <b>-ing</b>, <b>to</b> или <b>оба</b>. У тебя 60 секунд!</span></div>
+      <div style="display:flex;justify-content:space-between;margin:12px 0 4px;font-weight:600;"><span id="ss-time">60 s</span><span id="ss-streak"></span><span id="ss-score">0</span></div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="ss-bar" style="height:100%;width:100%;background:var(--sage);transition:width 1s linear;"></div></div>
+      <div id="ss-verb" style="font-size:2rem;font-weight:700;margin:26px 0 18px;min-height:2.6rem;"></div>
+      <div id="ss-btns" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <button class="btn" onclick="iiSort('ing')">+ -ing</button>
+        <button class="btn" onclick="iiSort('to')">+ to</button>
+        <button class="btn" onclick="iiSort('both')">both</button>
+      </div>
+      <div id="ss-fb" style="min-height:3.2rem;margin-top:12px;font-size:0.92rem;"></div>
+      <button class="btn btn-primary btn-full" id="ss-start" onclick="iiStartSorter()">Start ⚡</button>
+    </div>
+  </div>
+</div>
+
 <div class="screen" id="screen-adjadv">
   <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
   <div class="page-title" style="font-size:1.4rem;">Adjective or Adverb?</div>
@@ -4999,6 +5052,194 @@ const ADJ_ADV_ITEMS = {
     ['Take it ___ — it’s only a game.', 'easy', 'easily', 'Устойчивое выражение take it easy — «не переживай, расслабься».', 'Не переживай — это всего лишь игра.']
   ]
 };
+// ── -ing or to? Verb Patterns ──
+const II_NOTE = '<div class="lxq-hint" style="font-size:0.78rem;margin-top:2px;">⚠️ Sometimes more than one option is correct</div>';
+const II_BOTH = ' <b>Оба варианта верны.</b>';
+// choose: [sentence, options, correct options, why]
+const II_CHOOSE = [
+  ['Anna enjoys ___ for her friends.', ['cooking', 'to cook'], ['cooking'], 'enjoy + -ing.'],
+  ['We decided ___ to Italy in May.', ['to travel', 'travelling'], ['to travel'], 'decide + to.'],
+  ['Tom is really good at ___.', ['drawing', 'to draw'], ['drawing'], 'После предлога (at) всегда -ing.'],
+  ['I’m looking forward to ___ you!', ['seeing', 'see'], ['seeing'], 'look forward to — здесь to предлог, поэтому -ing.'],
+  ['My teacher encouraged me ___ more.', ['to read', 'reading'], ['to read'], 'encourage somebody to do.'],
+  ['She made me ___.', ['laugh', 'to laugh', 'laughing'], ['laugh'], 'make somebody do — без to.'],
+  ['Let me ___ you.', ['help', 'to help', 'helping'], ['help'], 'let somebody do — без to.'],
+  ['This film is worth ___.', ['watching', 'to watch'], ['watching'], 'be worth + -ing.'],
+  ['I love ___ in the sea.', ['swimming', 'to swim'], ['swimming', 'to swim'], 'love + -ing или to, смысл почти одинаковый.' + II_BOTH],
+  ['It started ___ in the afternoon.', ['raining', 'to rain'], ['raining', 'to rain'], 'start + -ing или to.' + II_BOTH],
+  ['I prefer ___ at home in the evenings.', ['staying', 'to stay'], ['staying', 'to stay'], 'prefer + -ing или to.' + II_BOTH],
+  ['They continued ___ after the break.', ['working', 'to work'], ['working', 'to work'], 'continue + -ing или to.' + II_BOTH],
+  ['I hate ___ up early.', ['getting', 'to get'], ['getting', 'to get'], 'hate + -ing или to.' + II_BOTH],
+  ['She began ___ English at school.', ['learning', 'to learn'], ['learning', 'to learn'], 'begin + -ing или to.' + II_BOTH],
+  ['Would you like ___ some tea?', ['to have', 'having'], ['to have'], 'would like + to. (Просто like — оба варианта.)'],
+  ['I would love ___ Japan one day.', ['to visit', 'visiting'], ['to visit'], 'would love + to.'],
+  ['He keeps ___ the same mistake.', ['making', 'to make'], ['making'], 'keep + -ing — постоянно, снова и снова.'],
+  ['I can’t afford ___ a new car.', ['to buy', 'buying'], ['to buy'], 'afford + to.'],
+  ['She finished ___ her essay at midnight.', ['writing', 'to write'], ['writing'], 'finish + -ing.'],
+  ['They agreed ___ us at the station.', ['to meet', 'meeting'], ['to meet'], 'agree + to.'],
+  ['Do you mind ___ the window?', ['opening', 'to open'], ['opening'], 'mind + -ing.'],
+  ['I hope ___ you soon.', ['to see', 'seeing'], ['to see'], 'hope + to.'],
+  ['He suggested ___ a taxi.', ['taking', 'to take'], ['taking'], 'suggest + -ing (или suggest that we take…), но не «suggest to take».'],
+  ['We managed ___ the last train.', ['to catch', 'catching'], ['to catch'], 'manage + to — суметь.'],
+  ['I can’t help ___ when I see this photo.', ['smiling', 'to smile'], ['smiling'], 'can’t help + -ing — не могу не…'],
+  ['She promised ___ me every day.', ['to call', 'calling'], ['to call'], 'promise + to.'],
+  ['He gave up ___ last year.', ['smoking', 'to smoke'], ['smoking'], 'give up + -ing — бросить.'],
+  ['She refused ___ the offer.', ['to accept', 'accepting'], ['to accept'], 'refuse + to.'],
+  ['Instead of ___ TV, let’s go for a walk.', ['watching', 'to watch'], ['watching'], 'После предлога (instead of) — -ing.'],
+  ['He left without ___ goodbye.', ['saying', 'to say'], ['saying'], 'После предлога (without) — -ing.'],
+  ['I came here ___ you.', ['to help', 'helping', 'for helping'], ['to help'], 'Цель (зачем?) → to.'],
+  ['This recipe is easy ___.', ['to follow', 'following'], ['to follow'], 'Прилагательное + to: easy to follow.'],
+  ['___ regularly keeps you fit.', ['Swimming', 'To swim'], ['Swimming'], 'В роли подлежащего обычно -ing: Swimming keeps you fit.'],
+  ['There’s no point in ___ about it.', ['worrying', 'to worry'], ['worrying'], 'there’s no point in + -ing.'],
+  ['I’m thinking of ___ a new language.', ['learning', 'to learn'], ['learning'], 'После предлога (of) — -ing.'],
+  ['Can you remind me ___ some milk?', ['to buy', 'buying'], ['to buy'], 'remind somebody to do.'],
+  ['She tends ___ up early.', ['to get', 'getting'], ['to get'], 'tend + to — обычно, как правило.'],
+  ['I really miss ___ time with my grandparents.', ['spending', 'to spend'], ['spending'], 'miss + -ing — скучать по чему-то.'],
+  ['Imagine ___ on a beach right now!', ['lying', 'to lie'], ['lying'], 'imagine + -ing.'],
+  ['He’s too tired ___ out tonight.', ['to go', 'going'], ['to go'], 'too + прилагательное + to.'],
+  ['She practises ___ the piano every day.', ['playing', 'to play'], ['playing'], 'practise + -ing.'],
+  ['My parents allowed me ___ to the party.', ['to go', 'going'], ['to go'], 'allow somebody to do.'],
+  ['We arranged ___ at six.', ['to meet', 'meeting'], ['to meet'], 'arrange + to.'],
+  ['He’s considering ___ abroad.', ['studying', 'to study'], ['studying'], 'consider + -ing.']
+];
+// type: [sentence, verb, accepted answers, why]
+const II_TYPE = [
+  ['She managed ___ a great job.', 'find', ['to find'], 'manage + to.'],
+  ['I enjoy ___ new places.', 'explore', ['exploring'], 'enjoy + -ing.'],
+  ['He’s interested in ___ films.', 'make', ['making'], 'После предлога (in) — -ing.'],
+  ['They began ___ the house.', 'paint', ['painting', 'to paint'], 'begin + -ing или to — оба верны.'],
+  ['Please stop ___ — I’m trying to sleep!', 'talk', ['talking'], 'stop doing — перестать.'],
+  ['I forgot ___ the door, so I went back.', 'lock', ['to lock'], 'forget to do — забыть сделать.'],
+  ['Would you mind ___ me?', 'help', ['helping'], 'mind + -ing.'],
+  ['She wants ___ a doctor.', 'become', ['to become'], 'want + to.'],
+  ['Let’s avoid ___ in the rush hour.', 'drive', ['driving'], 'avoid + -ing.'],
+  ['I’m used to ___ alone.', 'live', ['living'], 'be used to + -ing (to — предлог).'],
+  ['He asked me ___ him a hand.', 'give', ['to give'], 'ask somebody to do.'],
+  ['I like ___ books in the evening.', 'read', ['reading', 'to read'], 'like + -ing или to — оба верны.'],
+  ['We’re planning ___ a party.', 'have', ['to have'], 'plan + to.'],
+  ['Do you feel like ___ out?', 'go', ['going'], 'feel like + -ing — хотеть, быть в настроении.'],
+  ['My car needs ___.', 'wash', ['washing', 'to be washed'], 'need doing = need to be done — оба верны.'],
+  ['He admitted ___ the last piece of cake.', 'eat', ['eating', 'having eaten'], 'admit + -ing (или having eaten).'],
+  ['I can’t stand ___ in queues.', 'wait', ['waiting'], 'can’t stand + -ing — терпеть не могу.'],
+  ['She learnt ___ when she was five.', 'swim', ['to swim'], 'learn + to.'],
+  ['Thank you for ___ me.', 'invite', ['inviting'], 'После предлога (for) — -ing.'],
+  ['They seem ___ very happy together.', 'be', ['to be'], 'seem + to.'],
+  ['I’d prefer ___ at home tonight.', 'stay', ['to stay'], 'would prefer + to.'],
+  ['He carried on ___ after the break.', 'work', ['working'], 'carry on + -ing — продолжать.'],
+  ['Don’t forget ___ me when you arrive.', 'text', ['to text'], 'forget to do — забыть сделать.'],
+  ['She offered ___ me to the station.', 'drive', ['to drive'], 'offer + to.'],
+  ['I’m looking forward to ___ on holiday.', 'go', ['going'], 'look forward to + -ing.'],
+  ['It’s no use ___ — the shop is closed.', 'complain', ['complaining'], 'it’s no use + -ing — бесполезно.'],
+  ['He continued ___ even when it got dark.', 'play', ['playing', 'to play'], 'continue + -ing или to — оба верны.'],
+  ['My teacher advised me ___ more often.', 'practise', ['to practise'], 'advise somebody to do.']
+];
+// meaning: [sentence (with hint), options, correct options, why]
+const II_MEANING = [
+  ['I stopped ___ coffee. <span class="ru">(больше не пью)</span>', ['drinking', 'to drink'], ['drinking'], 'stop doing — перестать делать.'],
+  ['On the way home, I stopped ___ some bread. <span class="ru">(остановился, чтобы купить)</span>', ['to buy', 'buying'], ['to buy'], 'stop to do — остановиться, чтобы сделать.'],
+  ['Remember ___ the lights before you leave. <span class="ru">(не забудь сделать)</span>', ['to switch off', 'switching off'], ['to switch off'], 'remember to do — не забыть сделать (в будущем).'],
+  ['I remember ___ him at a party years ago. <span class="ru">(помню, как это было)</span>', ['meeting', 'to meet'], ['meeting'], 'remember doing — помнить о том, что было.'],
+  ['I’ll never forget ___ the sea for the first time. <span class="ru">(воспоминание)</span>', ['seeing', 'to see'], ['seeing'], 'forget doing — о воспоминании.'],
+  ['Don’t forget ___ your keys! <span class="ru">(не забудь сделать)</span>', ['to take', 'taking'], ['to take'], 'forget to do — забыть сделать.'],
+  ['I tried ___ the window, but it was stuck. <span class="ru">(старался, но не вышло)</span>', ['to open', 'opening'], ['to open'], 'try to do — стараться.'],
+  ['If you can’t sleep, try ___ a warm bath. <span class="ru">(попробуй как способ)</span>', ['having', 'to have'], ['having'], 'try doing — попробовать как эксперимент.'],
+  ['I regret ___ so much time on my phone. <span class="ru">(жалею о прошлом)</span>', ['spending', 'to spend'], ['spending'], 'regret doing — жалеть о том, что сделал.'],
+  ['We regret ___ you that the flight is delayed. <span class="ru">(с сожалением сообщаем)</span>', ['to inform', 'informing'], ['to inform'], 'regret to inform / tell — официально: с сожалением сообщаем.'],
+  ['After the break, he went on ___ about his trip. <span class="ru">(продолжил то же самое)</span>', ['talking', 'to talk'], ['talking'], 'go on doing — продолжать то же самое.'],
+  ['After university, she went on ___ a famous architect. <span class="ru">(затем стала)</span>', ['to become', 'becoming'], ['to become'], 'go on to do — перейти к следующему этапу.'],
+  ['Sorry, I didn’t mean ___ you. <span class="ru">(не хотел)</span>', ['to upset', 'upsetting'], ['to upset'], 'mean to do — намереваться, хотеть.'],
+  ['A new job means ___ to a new city. <span class="ru">(означает)</span>', ['moving', 'to move'], ['moving'], 'mean doing — означать.'],
+  ['The garden needs ___. <span class="ru">(его нужно полить)</span>', ['watering', 'to water'], ['watering'], 'need doing = нуждается в том, чтобы это сделали (= needs to be watered).'],
+  ['She needs ___ more water. <span class="ru">(ей нужно)</span>', ['to drink', 'drinking'], ['to drink'], 'need to do — человеку нужно что-то сделать.']
+];
+// sorter: [verb, 'ing' | 'to' | 'both', short note]
+const II_SORT = [
+  ...'enjoy,mind,avoid,finish,keep,consider,suggest,admit,deny,miss,practise,imagine,risk,can’t stand,can’t help,give up,put off,carry on,feel like,look forward to,be worth,there’s no point in'.split(',').map(v => [v, 'ing', v + ' + -ing']),
+  ...'want,decide,hope,plan,agree,refuse,promise,manage,afford,offer,learn,expect,seem,pretend,fail,tend,arrange,deserve,would like,choose,threaten'.split(',').map(v => [v, 'to', v + ' + to']),
+  ...'like,love,hate,prefer,start,begin,continue'.split(',').map(v => [v, 'both', v + ': оба, смысл тот же']),
+  ...'remember,forget,stop,try,regret,go on,mean'.split(',').map(v => [v, 'both', v + ': оба, но смысл меняется'])
+];
+const II_LEVELS = { choose: '1 · Choose', type: '2 · Type it', meaning: '3 · Meaning change', sorter: '⚡ Verb Sorter' };
+let iiLevel = 'choose';
+function startIngInf(level) {
+  iiLevel = level;
+  iiStopSorter();
+  document.getElementById('ii-levels').innerHTML = Object.entries(II_LEVELS).map(([k, label]) =>
+    '<button class="btn btn-full' + (k === level ? ' btn-primary' : '') + '" onclick="startIngInf(\'' + k + '\')">' + label + '</button>').join('');
+  const sorter = level === 'sorter';
+  document.getElementById('ii-task').style.display = sorter ? 'none' : '';
+  document.getElementById('ii-sorter').style.display = sorter ? '' : 'none';
+  show('inginf');
+  window.scrollTo(0, 0);
+  if (sorter) { iiResetSorter(); logActivity('-ing or to (начал)', 'Verb Sorter', null, null); return; }
+  let ex;
+  if (level === 'type') {
+    ex = { type: 'gap', items: shuffle(II_TYPE.slice()).slice(0, 12).map(([q, hint, ok, why]) => ({ q: q + II_NOTE, hint, ok, note: why })) };
+  } else {
+    const src = level === 'meaning' ? II_MEANING : II_CHOOSE;
+    ex = { type: 'choice', items: shuffle(src.slice()).slice(0, 15).map(([q, opts, right, why]) => {
+      const o = shuffle(opts.slice());
+      return { q: q + II_NOTE, opts: o, ok: right.map(r => o.indexOf(r)), note: why };
+    }) };
+  }
+  LIB_TASKS.inginf = ex;
+  const box = document.getElementById('inginf-box');
+  delete box.dataset.ready; box.innerHTML = '';
+  lxHydrate(document.getElementById('screen-inginf'));
+  logActivity('-ing or to (начал)', II_LEVELS[level], null, ex.items.length);
+}
+let ssTimer = null, ssLeft = 60, ssScore = 0, ssStreak = 0, ssBestStreak = 0, ssTotal = 0, ssDeck = [], ssCur = null, ssLock = false;
+function iiStopSorter() { if (ssTimer) { clearInterval(ssTimer); ssTimer = null; } }
+function iiResetSorter() {
+  ssLeft = 60; ssScore = 0; ssStreak = 0; ssBestStreak = 0; ssTotal = 0; ssCur = null;
+  document.getElementById('ss-time').textContent = '60 s';
+  document.getElementById('ss-score').textContent = '0';
+  document.getElementById('ss-streak').textContent = '';
+  document.getElementById('ss-bar').style.width = '100%';
+  let best = 0; try { best = +localStorage.getItem('ss-best') || 0; } catch (e) {}
+  document.getElementById('ss-verb').textContent = best ? '🏅 Best: ' + best : '';
+  document.getElementById('ss-fb').innerHTML = '';
+  document.getElementById('ss-btns').style.visibility = 'hidden';
+  const st = document.getElementById('ss-start'); st.style.display = ''; st.textContent = 'Start ⚡';
+}
+function iiStartSorter() {
+  iiResetSorter();
+  ssDeck = shuffle(II_SORT.slice());
+  document.getElementById('ss-start').style.display = 'none';
+  document.getElementById('ss-btns').style.visibility = '';
+  iiNextVerb();
+  ssTimer = setInterval(() => {
+    ssLeft--;
+    document.getElementById('ss-time').textContent = ssLeft + ' s';
+    document.getElementById('ss-bar').style.width = (ssLeft / 60 * 100) + '%';
+    if (ssLeft <= 0) iiEndSorter();
+  }, 1000);
+}
+function iiNextVerb() {
+  if (!ssDeck.length) ssDeck = shuffle(II_SORT.slice());
+  ssCur = ssDeck.pop(); ssLock = false;
+  document.getElementById('ss-verb').textContent = ssCur[0] + ' …';
+}
+function iiSort(choice) {
+  if (!ssCur || ssLock || !ssTimer) return;
+  ssLock = true; ssTotal++;
+  const ok = choice === ssCur[1];
+  if (ok) { ssScore++; ssStreak++; ssBestStreak = Math.max(ssBestStreak, ssStreak); } else ssStreak = 0;
+  document.getElementById('ss-score').textContent = ssScore;
+  document.getElementById('ss-streak').textContent = ssStreak >= 3 ? '🔥 ' + ssStreak : '';
+  document.getElementById('ss-fb').innerHTML = (ok ? '<b style="color:#3f7a4f;">✓</b> ' : '<b style="color:#a14a3b;">✗</b> ') + esc(ssCur[2]);
+  setTimeout(iiNextVerb, ok ? 350 : 1100);
+}
+function iiEndSorter() {
+  iiStopSorter(); ssCur = null;
+  let best = 0; try { best = +localStorage.getItem('ss-best') || 0; if (ssScore > best) localStorage.setItem('ss-best', ssScore); } catch (e) {}
+  document.getElementById('ss-btns').style.visibility = 'hidden';
+  document.getElementById('ss-verb').innerHTML = (ssScore > best ? '🏆 New record! ' : '⏱ ') + ssScore + ' / ' + ssTotal;
+  document.getElementById('ss-fb').innerHTML = ssBestStreak >= 3 ? 'Лучшая серия: 🔥 ' + ssBestStreak : '';
+  const st = document.getElementById('ss-start'); st.style.display = ''; st.textContent = 'Play again ⚡';
+  logActivity('-ing or to', 'Verb Sorter', ssScore, ssTotal);
+}
+
 let adjAdvLevel = 'easy';
 function startAdjAdv(level) {
   adjAdvLevel = level;
