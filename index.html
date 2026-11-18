@@ -5197,45 +5197,15 @@ function startIngInf(level) {
   logActivity('-ing or to (начал)', II_LEVELS[level], null, ex.items.length);
 }
 // ⚡ sprint games: [prompt, right button, note shown after the answer]
-const UT_SPRINT = [
-  ['When I was a child, I ___ climb trees every day.', 'used', 'I used to climb — раньше лазил, теперь нет.'],
-  ['She’s a nurse, so she ___ working at night.', 'be', 'She’s used to working — для неё это привычно.'],
-  ['It took me months to ___ the cold winters.', 'get', 'to get used to — привыкнуть (со временем).'],
-  ['There ___ be a cinema here, but now it’s a café.', 'used', 'There used to be — раньше был.'],
-  ['Don’t worry, you’ll soon ___ the new job.', 'get', 'You’ll get used to — привыкнешь.'],
-  ['I ___ getting up early — I do it every day.', 'be', 'I’m used to getting up — уже привычно.'],
-  ['My grandfather ___ smoke, but he gave up.', 'used', 'He used to smoke — раньше курил.'],
-  ['I can’t ___ driving on the left!', 'get', 'can’t get used to — не могу привыкнуть.'],
-  ['He’s British, so he ___ rainy weather.', 'be', 'He’s used to rainy weather — ему привычно.'],
-  ['We ___ go to the seaside every summer.', 'used', 'We used to go — раньше ездили.'],
-  ['I’m slowly ___ my new glasses.', 'get', 'I’m getting used to — привыкаю.'],
-  ['Did you ___ have long hair?', 'used', 'Did you use to…? — раньше у тебя были…?'],
-  ['I ___ living alone now — I love it.', 'get', 'I’ve got used to living alone — уже привык (процесс завершён).'],
-  ['They ___ the noise of the city — they’ve lived here for years.', 'be', 'They’re used to the noise — им привычно.'],
-  ['She ___ be very shy, but now she loves public speaking.', 'used', 'She used to be shy — раньше была застенчивой.'],
-  ['You’ll never ___ these early meetings!', 'get', 'You’ll never get used to — никогда не привыкнешь.'],
-  ['I wasn’t ___ such spicy food, so it was hard at first.', 'be', 'I wasn’t used to — мне было непривычно.'],
-  ['We didn’t ___ have a car.', 'used', 'We didn’t use to have — раньше у нас не было.'],
-  ['After a week in Italy, I started to ___ the late dinners.', 'get', 'to get used to — привыкать.'],
-  ['Teachers ___ answering lots of questions.', 'be', 'Teachers are used to answering — им привычно.'],
-  ['This street ___ be very quiet.', 'used', 'It used to be quiet — раньше была тихой.'],
-  ['Moving abroad is hard, but you ___ it.', 'get', 'You get used to it — со временем привыкаешь.'],
-  ['I ___ the cold — I grew up in Siberia.', 'be', 'I’m used to the cold — мне привычно.'],
-  ['Where did you ___ live before you moved here?', 'used', 'Where did you use to live? — где ты раньше жил?'],
-  ['At first the new phone was confusing, but I ___ it quickly.', 'get', 'I got used to it — быстро привык.'],
-  ['My dad ___ cooking for the whole family — he does it every Sunday.', 'be', 'He’s used to cooking — ему привычно.'],
-  ['I ___ hate vegetables, but now I love them.', 'used', 'I used to hate — раньше не любил.'],
-  ['How long did it take you to ___ working from home?', 'get', 'to get used to working — привыкнуть.'],
-  ['She ___ being on stage — she’s been dancing since she was five.', 'be', 'She’s used to being on stage — ей привычно.'],
-  ['We ___ play board games every evening when I was little.', 'used', 'We used to play — раньше играли.']
-];
+// [sentence, index of the right option, note, options in the right form for this sentence]
+const UT_SPRINT = [["When I was a child, I ___ climb trees every day.", 0, "I used to climb — раньше лазил, теперь нет.", ["used to", "was used to", "got used to"]], ["She’s a nurse, so she ___ working at night.", 1, "She’s used to working — для неё это привычно.", ["used to", "is used to", "gets used to"]], ["It took me months to ___ the cold winters.", 2, "to get used to — привыкнуть (со временем).", ["use to", "be used to", "get used to"]], ["There ___ be a cinema here, but now it’s a café.", 0, "There used to be — раньше был.", ["used to", "is used to", "gets used to"]], ["Don’t worry, you’ll soon ___ the new job.", 2, "You’ll get used to — привыкнешь.", ["use to", "are used to", "get used to"]], ["I ___ getting up early — I’ve done it for years.", 1, "I’m used to getting up — уже привычно.", ["use to", "am used to", "get used to"]], ["My grandfather ___ smoke, but he gave up.", 0, "He used to smoke — раньше курил.", ["used to", "was used to", "got used to"]], ["I can’t ___ driving on the left!", 2, "can’t get used to — не могу привыкнуть.", ["use to", "be used to", "get used to"]], ["He’s British, so he ___ rainy weather.", 1, "He’s used to rainy weather — ему привычно.", ["used to", "is used to", "gets used to"]], ["We ___ go to the seaside every summer when I was a child.", 0, "We used to go — раньше ездили.", ["used to", "were used to", "got used to"]], ["I’m slowly ___ my new glasses.", 2, "I’m getting used to — привыкаю (сейчас, постепенно).", ["using to", "used to", "getting used to"]], ["Did you ___ have long hair?", 0, "Did you use to…? — раньше у тебя были…? (use без -d)", ["use to", "be used to", "get used to"]], ["I ___ living alone now — I love it.", 2, "I’ve got used to living alone — уже привык.", ["used to", "have used to", "have got used to"]], ["They ___ the noise of the city — they’ve lived here for years.", 1, "They’re used to the noise — им привычно.", ["used to", "are used to", "get used to"]], ["She ___ be very shy, but now she loves public speaking.", 0, "She used to be shy — раньше была застенчивой.", ["used to", "was used to", "got used to"]], ["You’ll never ___ these early meetings!", 2, "You’ll never get used to — никогда не привыкнешь.", ["use to", "are used to", "get used to"]], ["I wasn’t ___ such spicy food, so it was hard at first.", 1, "I wasn’t used to — мне было непривычно.", ["use to", "used to", "getting used to"]], ["We didn’t ___ have a car.", 0, "We didn’t use to have — без -d после didn’t.", ["use to", "used to", "get used to"]], ["After a week in Italy, I started to ___ the late dinners.", 2, "to get used to — привыкать.", ["use to", "be used to", "get used to"]], ["Teachers ___ answering lots of questions.", 1, "Teachers are used to answering — им привычно.", ["used to", "are used to", "gets used to"]], ["This street ___ be very quiet.", 0, "It used to be quiet — раньше была тихой.", ["used to", "is used to", "gets used to"]], ["Moving abroad is hard, but you ___ it.", 2, "You get used to it — со временем привыкаешь.", ["used to", "use to", "get used to"]], ["I ___ the cold — I grew up in Siberia.", 1, "I’m used to the cold — мне привычно.", ["used to", "am used to", "get used to"]], ["Where did you ___ live before you moved here?", 0, "Where did you use to live? — где ты раньше жил?", ["use to", "be used to", "get used to"]], ["At first the new phone was confusing, but I ___ it quickly.", 2, "I got used to it — быстро привык.", ["used to", "was used to", "got used to"]], ["My dad ___ cooking for the whole family — he does it every Sunday.", 1, "He’s used to cooking — ему привычно.", ["used to", "is used to", "gets used to"]], ["I ___ hate vegetables, but now I love them.", 0, "I used to hate — раньше не любил.", ["used to", "was used to", "got used to"]], ["How long did it take you to ___ working from home?", 2, "to get used to working — привыкнуть.", ["use to", "be used to", "get used to"]], ["She ___ being on stage — she’s been dancing since she was five.", 1, "She’s used to being on stage — ей привычно.", ["used to", "is used to", "gets used to"]], ["We ___ play board games every evening when I was little.", 0, "We used to play — раньше играли.", ["used to", "were used to", "got used to"]]];
 const SPRINTS = {
   verbs: { name: 'Verb Sorter', deck: II_SORT, log: '-ing or to',
     intro: '⚡ <b>Verb Sorter.</b> <span class="ru">Глагол появляется — выбери, что после него: <b>-ing</b>, <b>to</b> или <b>оба</b>. У тебя 60 секунд!</span>',
     btns: [['ing', '+ -ing'], ['to', '+ to'], ['both', 'both']], big: true },
   usedto: { name: 'Used to Sprint', deck: UT_SPRINT, log: 'Used to · Be used to · Get used to',
-    intro: '⚡ <b>Used to Sprint.</b> <span class="ru">Появляется предложение — выбери, что нужно: <b>used to</b> (раньше), <b>be used to</b> (привык) или <b>get used to</b> (привыкать). Форму (am / was / got / getting) не выбираем — только смысл. У тебя 60 секунд!</span>',
-    btns: [['used', 'used to'], ['be', 'be used to'], ['get', 'get used to']], big: false }
+    intro: '⚡ <b>Used to Sprint.</b> <span class="ru">Появляется предложение — выбери, что нужно: <b>used to</b> (раньше), <b>be used to</b> (привык) или <b>get used to</b> (привыкать). Варианты уже в правильной форме для каждого предложения. У тебя 60 секунд!</span>',
+    btns: null, big: false }
 };
 let ssCfg = SPRINTS.verbs, ssKey = 'verbs';
 function ssMount(key, parent) {
@@ -5244,7 +5214,7 @@ function ssMount(key, parent) {
   parent.appendChild(box);
   box.style.display = '';
   document.getElementById('ss-intro').innerHTML = ssCfg.intro;
-  document.getElementById('ss-btns').innerHTML = ssCfg.btns.map(([k, l]) => '<button class="btn" onclick="iiSort(\'' + k + '\')">' + l + '</button>').join('');
+  if (ssCfg.btns) document.getElementById('ss-btns').innerHTML = ssCfg.btns.map(([k, l]) => '<button class="btn" onclick="iiSort(\'' + k + '\')">' + l + '</button>').join('');
   document.getElementById('ss-verb').style.fontSize = ssCfg.big ? '2rem' : '1.25rem';
   iiResetSorter();
 }
@@ -5281,6 +5251,8 @@ function iiNextVerb() {
   if (!ssDeck.length) ssDeck = shuffle(ssCfg.deck.slice());
   ssCur = ssDeck.pop(); ssLock = false;
   document.getElementById('ss-verb').textContent = ssCfg.big ? ssCur[0] + ' …' : ssCur[0];
+  // per-sentence options (already in the right form for this subject)
+  if (ssCur[3]) document.getElementById('ss-btns').innerHTML = ssCur[3].map((o, k) => '<button class="btn" onclick="iiSort(' + k + ')">' + esc(o) + '</button>').join('');
 }
 function iiSort(choice) {
   if (!ssCur || ssLock || !ssTimer) return;
