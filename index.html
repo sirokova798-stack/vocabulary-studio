@@ -1295,14 +1295,14 @@
   </div>
 </div>
 <div class="screen" id="screen-drill">
-  <button class="back-btn" onclick="show('student'); switchTab('practice');">← Back to practice</button>
+  <button class="back-btn" onclick="iiStopSorter(); show('student'); switchTab('practice');">← Back to practice</button>
   <div class="page-title" style="font-size:1.4rem;" id="drill-title"></div>
   <div class="page-sub">Выбери правильный вариант. После ответа всегда увидишь объяснение.</div>
   <div class="lx">
     <div class="note" id="drill-rule"></div>
     <div style="display:flex;gap:8px;margin:12px 0;" id="drill-levels"></div>
     <div class="lxq" id="drill-box" data-ex="drill"></div>
-    <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startDrill(drillKey, drillLevel)">New round →</button>
+    <button class="btn btn-primary btn-full" style="margin-top:14px;" id="drill-new" onclick="startDrill(drillKey, drillLevel)">New round →</button>
   </div>
 </div>
 <div class="screen" id="screen-inginf">
@@ -1337,15 +1337,11 @@
       <button class="btn btn-primary btn-full" style="margin-top:14px;" onclick="startIngInf(iiLevel)">New round →</button>
     </div>
     <div id="ii-sorter" style="display:none;text-align:center;">
-      <div class="note" style="text-align:left;">⚡ <b>Verb Sorter.</b> <span class="ru">Глагол появляется — выбери, что после него: <b>-ing</b>, <b>to</b> или <b>оба</b>. У тебя 60 секунд!</span></div>
+      <div class="note" style="text-align:left;" id="ss-intro"></div>
       <div style="display:flex;justify-content:space-between;margin:12px 0 4px;font-weight:600;"><span id="ss-time">60 s</span><span id="ss-streak"></span><span id="ss-score">0</span></div>
       <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;"><div id="ss-bar" style="height:100%;width:100%;background:var(--sage);transition:width 1s linear;"></div></div>
       <div id="ss-verb" style="font-size:2rem;font-weight:700;margin:26px 0 18px;min-height:2.6rem;"></div>
-      <div id="ss-btns" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-        <button class="btn" onclick="iiSort('ing')">+ -ing</button>
-        <button class="btn" onclick="iiSort('to')">+ to</button>
-        <button class="btn" onclick="iiSort('both')">both</button>
-      </div>
+      <div id="ss-btns" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;"></div>
       <div id="ss-fb" style="min-height:3.2rem;margin-top:12px;font-size:0.92rem;"></div>
       <button class="btn btn-primary btn-full" id="ss-start" onclick="iiStartSorter()">Start ⚡</button>
     </div>
@@ -4816,7 +4812,7 @@ const DRILLS = {
       '<b>be used to + -ing / сущ.</b> — привык (уже нормально): <i>I’<b>m used to living</b> alone.</i> = Я привык жить один.<br>' +
       '<b>get used to + -ing / сущ.</b> — привыкать (процесс): <i>I’<b>m getting used to</b> the cold.</i> = Я привыкаю к холоду.<br>' +
       '<span class="ru">Вопрос и отрицание: <i>Did you <b>use</b> to…? I didn’t <b>use</b> to…</i> (без -d).</span>',
-    levels: { easy: 'Easy', tricky: 'Tricky' },
+    levels: { easy: 'Easy', tricky: 'Tricky', sprint: '⚡ Sprint' },
     items: {
       easy: [
         ['When I was a child, I ___ in the countryside.', 'used to live', ['used to live', 'am used to living', 'got used to living'], 'Раньше жил, а теперь нет → used to + глагол.'],
@@ -4969,6 +4965,18 @@ function startDrill(key, level) {
   document.getElementById('drill-rule').innerHTML = d.rule;
   document.getElementById('drill-levels').innerHTML = Object.entries(d.levels).map(([lv, label]) =>
     '<button class="btn btn-full' + (lv === level ? ' btn-primary' : '') + '" onclick="startDrill(\'' + key + '\', \'' + lv + '\')">' + label + '</button>').join('');
+  iiStopSorter();
+  const sprint = level === 'sprint';
+  document.getElementById('drill-box').style.display = sprint ? 'none' : '';
+  document.getElementById('drill-new').style.display = sprint ? 'none' : '';
+  const sb = document.getElementById('ii-sorter');
+  if (sprint) {
+    show('drill'); window.scrollTo(0, 0);
+    ssMount(key, document.querySelector('#screen-drill .lx'));
+    logActivity(d.title + ' (начал)', 'Sprint', null, null);
+    return;
+  }
+  if (sb.closest('#screen-drill')) sb.style.display = 'none';
   const items = shuffle(d.items[level].slice()).slice(0, 15).map(it => {
     const [q, right, own, why] = it.length === 4 ? it : [it[0], it[1], null, it[2]];
     const opts = own ? shuffle(own.slice()) : ART_OPTS.slice();
@@ -5171,7 +5179,7 @@ function startIngInf(level) {
   document.getElementById('ii-sorter').style.display = sorter ? '' : 'none';
   show('inginf');
   window.scrollTo(0, 0);
-  if (sorter) { iiResetSorter(); logActivity('-ing or to (начал)', 'Verb Sorter', null, null); return; }
+  if (sorter) { ssMount('verbs', document.querySelector('#screen-inginf .lx')); logActivity('-ing or to (начал)', 'Verb Sorter', null, null); return; }
   let ex;
   if (level === 'type') {
     ex = { type: 'gap', items: shuffle(II_TYPE.slice()).slice(0, 12).map(([q, hint, ok, why]) => ({ q: q + II_NOTE, hint, ok, note: why })) };
@@ -5188,15 +5196,69 @@ function startIngInf(level) {
   lxHydrate(document.getElementById('screen-inginf'));
   logActivity('-ing or to (начал)', II_LEVELS[level], null, ex.items.length);
 }
+// ⚡ sprint games: [prompt, right button, note shown after the answer]
+const UT_SPRINT = [
+  ['When I was a child, I ___ climb trees every day.', 'used', 'I used to climb — раньше лазил, теперь нет.'],
+  ['She’s a nurse, so she ___ working at night.', 'be', 'She’s used to working — для неё это привычно.'],
+  ['It took me months to ___ the cold winters.', 'get', 'to get used to — привыкнуть (со временем).'],
+  ['There ___ be a cinema here, but now it’s a café.', 'used', 'There used to be — раньше был.'],
+  ['Don’t worry, you’ll soon ___ the new job.', 'get', 'You’ll get used to — привыкнешь.'],
+  ['I ___ getting up early — I do it every day.', 'be', 'I’m used to getting up — уже привычно.'],
+  ['My grandfather ___ smoke, but he gave up.', 'used', 'He used to smoke — раньше курил.'],
+  ['I can’t ___ driving on the left!', 'get', 'can’t get used to — не могу привыкнуть.'],
+  ['He’s British, so he ___ rainy weather.', 'be', 'He’s used to rainy weather — ему привычно.'],
+  ['We ___ go to the seaside every summer.', 'used', 'We used to go — раньше ездили.'],
+  ['I’m slowly ___ my new glasses.', 'get', 'I’m getting used to — привыкаю.'],
+  ['Did you ___ have long hair?', 'used', 'Did you use to…? — раньше у тебя были…?'],
+  ['I ___ living alone now — I love it.', 'get', 'I’ve got used to living alone — уже привык (процесс завершён).'],
+  ['They ___ the noise of the city — they’ve lived here for years.', 'be', 'They’re used to the noise — им привычно.'],
+  ['She ___ be very shy, but now she loves public speaking.', 'used', 'She used to be shy — раньше была застенчивой.'],
+  ['You’ll never ___ these early meetings!', 'get', 'You’ll never get used to — никогда не привыкнешь.'],
+  ['I wasn’t ___ such spicy food, so it was hard at first.', 'be', 'I wasn’t used to — мне было непривычно.'],
+  ['We didn’t ___ have a car.', 'used', 'We didn’t use to have — раньше у нас не было.'],
+  ['After a week in Italy, I started to ___ the late dinners.', 'get', 'to get used to — привыкать.'],
+  ['Teachers ___ answering lots of questions.', 'be', 'Teachers are used to answering — им привычно.'],
+  ['This street ___ be very quiet.', 'used', 'It used to be quiet — раньше была тихой.'],
+  ['Moving abroad is hard, but you ___ it.', 'get', 'You get used to it — со временем привыкаешь.'],
+  ['I ___ the cold — I grew up in Siberia.', 'be', 'I’m used to the cold — мне привычно.'],
+  ['Where did you ___ live before you moved here?', 'used', 'Where did you use to live? — где ты раньше жил?'],
+  ['At first the new phone was confusing, but I ___ it quickly.', 'get', 'I got used to it — быстро привык.'],
+  ['My dad ___ cooking for the whole family — he does it every Sunday.', 'be', 'He’s used to cooking — ему привычно.'],
+  ['I ___ hate vegetables, but now I love them.', 'used', 'I used to hate — раньше не любил.'],
+  ['How long did it take you to ___ working from home?', 'get', 'to get used to working — привыкнуть.'],
+  ['She ___ being on stage — she’s been dancing since she was five.', 'be', 'She’s used to being on stage — ей привычно.'],
+  ['We ___ play board games every evening when I was little.', 'used', 'We used to play — раньше играли.']
+];
+const SPRINTS = {
+  verbs: { name: 'Verb Sorter', deck: II_SORT, log: '-ing or to',
+    intro: '⚡ <b>Verb Sorter.</b> <span class="ru">Глагол появляется — выбери, что после него: <b>-ing</b>, <b>to</b> или <b>оба</b>. У тебя 60 секунд!</span>',
+    btns: [['ing', '+ -ing'], ['to', '+ to'], ['both', 'both']], big: true },
+  usedto: { name: 'Used to Sprint', deck: UT_SPRINT, log: 'Used to · Be used to · Get used to',
+    intro: '⚡ <b>Used to Sprint.</b> <span class="ru">Появляется предложение — выбери, что нужно: <b>used to</b> (раньше), <b>be used to</b> (привык) или <b>get used to</b> (привыкать). Форму (am / was / got / getting) не выбираем — только смысл. У тебя 60 секунд!</span>',
+    btns: [['used', 'used to'], ['be', 'be used to'], ['get', 'get used to']], big: false }
+};
+let ssCfg = SPRINTS.verbs, ssKey = 'verbs';
+function ssMount(key, parent) {
+  ssKey = key; ssCfg = SPRINTS[key];
+  const box = document.getElementById('ii-sorter');
+  parent.appendChild(box);
+  box.style.display = '';
+  document.getElementById('ss-intro').innerHTML = ssCfg.intro;
+  document.getElementById('ss-btns').innerHTML = ssCfg.btns.map(([k, l]) => '<button class="btn" onclick="iiSort(\'' + k + '\')">' + l + '</button>').join('');
+  document.getElementById('ss-verb').style.fontSize = ssCfg.big ? '2rem' : '1.25rem';
+  iiResetSorter();
+}
 let ssTimer = null, ssLeft = 60, ssScore = 0, ssStreak = 0, ssBestStreak = 0, ssTotal = 0, ssDeck = [], ssCur = null, ssLock = false;
 function iiStopSorter() { if (ssTimer) { clearInterval(ssTimer); ssTimer = null; } }
+let ssGen = 0;
 function iiResetSorter() {
+  ssGen++;
   ssLeft = 60; ssScore = 0; ssStreak = 0; ssBestStreak = 0; ssTotal = 0; ssCur = null;
   document.getElementById('ss-time').textContent = '60 s';
   document.getElementById('ss-score').textContent = '0';
   document.getElementById('ss-streak').textContent = '';
   document.getElementById('ss-bar').style.width = '100%';
-  let best = 0; try { best = +localStorage.getItem('ss-best') || 0; } catch (e) {}
+  let best = 0; try { best = +localStorage.getItem('ss-best-' + ssKey) || 0; } catch (e) {}
   document.getElementById('ss-verb').textContent = best ? '🏅 Best: ' + best : '';
   document.getElementById('ss-fb').innerHTML = '';
   document.getElementById('ss-btns').style.visibility = 'hidden';
@@ -5204,7 +5266,7 @@ function iiResetSorter() {
 }
 function iiStartSorter() {
   iiResetSorter();
-  ssDeck = shuffle(II_SORT.slice());
+  ssDeck = shuffle(ssCfg.deck.slice());
   document.getElementById('ss-start').style.display = 'none';
   document.getElementById('ss-btns').style.visibility = '';
   iiNextVerb();
@@ -5216,9 +5278,9 @@ function iiStartSorter() {
   }, 1000);
 }
 function iiNextVerb() {
-  if (!ssDeck.length) ssDeck = shuffle(II_SORT.slice());
+  if (!ssDeck.length) ssDeck = shuffle(ssCfg.deck.slice());
   ssCur = ssDeck.pop(); ssLock = false;
-  document.getElementById('ss-verb').textContent = ssCur[0] + ' …';
+  document.getElementById('ss-verb').textContent = ssCfg.big ? ssCur[0] + ' …' : ssCur[0];
 }
 function iiSort(choice) {
   if (!ssCur || ssLock || !ssTimer) return;
@@ -5228,16 +5290,17 @@ function iiSort(choice) {
   document.getElementById('ss-score').textContent = ssScore;
   document.getElementById('ss-streak').textContent = ssStreak >= 3 ? '🔥 ' + ssStreak : '';
   document.getElementById('ss-fb').innerHTML = (ok ? '<b style="color:#3f7a4f;">✓</b> ' : '<b style="color:#a14a3b;">✗</b> ') + esc(ssCur[2]);
-  setTimeout(iiNextVerb, ok ? 350 : 1100);
+  const gen = ssGen;   // skip if the game was reset while the answer was showing
+  setTimeout(() => { if (gen === ssGen && ssTimer) iiNextVerb(); }, ok ? 350 : 1100);
 }
 function iiEndSorter() {
   iiStopSorter(); ssCur = null;
-  let best = 0; try { best = +localStorage.getItem('ss-best') || 0; if (ssScore > best) localStorage.setItem('ss-best', ssScore); } catch (e) {}
+  let best = 0; try { best = +localStorage.getItem('ss-best-' + ssKey) || 0; if (ssScore > best) localStorage.setItem('ss-best-' + ssKey, ssScore); } catch (e) {}
   document.getElementById('ss-btns').style.visibility = 'hidden';
   document.getElementById('ss-verb').innerHTML = (ssScore > best ? '🏆 New record! ' : '⏱ ') + ssScore + ' / ' + ssTotal;
   document.getElementById('ss-fb').innerHTML = ssBestStreak >= 3 ? 'Лучшая серия: 🔥 ' + ssBestStreak : '';
   const st = document.getElementById('ss-start'); st.style.display = ''; st.textContent = 'Play again ⚡';
-  logActivity('-ing or to', 'Verb Sorter', ssScore, ssTotal);
+  logActivity(ssCfg.log, ssCfg.name, ssScore, ssTotal);
 }
 
 let adjAdvLevel = 'easy';
