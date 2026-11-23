@@ -9804,6 +9804,23 @@ const NOV23_ANASTASIA = { Anastasia: [
   ['to get your blood tested', 'сдать анализ крови; сделать так, чтобы кровь проверили', 'I need to get my blood tested before my next appointment.']
 ] };
 Object.keys(NOV23_ANASTASIA).forEach(n => { NOV23_ANASTASIA[n] = NOV23_ANASTASIA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
+// 23 Nov: Milana's vocabulary
+const NOV23_MILANA = { Milana: [
+  ['indifferent / indifference; an air of indifference / an indifferent vibe', 'безразличный / безразличие; безразличный вид, атмосфера безразличия / безразличный вайб (разг.)', 'He often gives off an air of indifference, as if nothing matters to him. More casually: He gives off an indifferent vibe.'],
+  ['anxious / anxiety', 'тревожный, испытывающий тревогу / тревога, тревожность', 'She felt anxious before the interview. Her anxiety eased once it began.'],
+  ['to ghost somebody (informal)', 'внезапно прекратить общение с кем-либо, перестать отвечать без объяснения (разг.)', 'He ghosted her after their second date and never replied to her messages.'],
+  ['sincere', 'искренний; sincerity — искренность', 'Her apology sounded sincere. I appreciated the sincerity of her apology.'],
+  ['Generation Y / Millennials', 'поколение Y, миллениалы (границы поколения могут различаться в разных источниках)', 'Many Millennials grew up as the internet was becoming widely used.'],
+  ['to admit doing something', 'признаться, что сделал что-либо (после admit — форма -ing)', 'She admitted making a mistake. He admitted telling a lie.'],
+  ['an offensive joke', 'оскорбительная шутка', 'He made an offensive joke and immediately regretted it.'],
+  ['far – farther / further – farthest / furthest', 'далёкий / дальше / самый дальний. Farther обычно о физическом расстоянии; further — также «дальнейший, дополнительный» и часто о переносном расстоянии. Further/furthest тоже возможны о расстоянии.', 'We walked farther than we planned. For further information, contact the office. That was the farthest I had ever travelled.'],
+  ['to spend all one’s money on shopping / to spend all one’s money shopping', 'потратить все свои деньги на покупки / на шопинг', 'I spent all my money on shopping. I spent all my money shopping.'],
+  ['to play truant / to skip lessons (from school)', 'прогуливать уроки (брит. play truant; также skip lessons / skip classes)', 'He played truant and spent the day at the beach. She skipped classes to go shopping.'],
+  ['to store something', 'хранить что-либо: clothes in a wardrobe, food in a cupboard or freezer, files on a computer or in the cloud', 'We store winter clothes in the loft, food in the freezer and files in the cloud.'],
+  ['storage', 'хранение; место для хранения; хранилище (для данных)', 'The flat has very little storage. I keep my photos in cloud storage.'],
+  ['to clarify / “Let me clarify something”', 'прояснить, уточнить / «Позвольте кое-что уточнить» — естественная фраза', 'Let me clarify something: the meeting starts at ten, not eleven.']
+] };
+Object.keys(NOV23_MILANA).forEach(n => { NOV23_MILANA[n] = NOV23_MILANA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 // 23 Nov: Carolina's vocabulary
 const NOV23_CAROLINA = { Carolina: [
   ['an oven bag / a roasting bag', 'пакет для запекания (термостойкий пакет для духовки)', 'Put the chicken in an oven bag with the vegetables and roast it.'],
@@ -10946,7 +10963,7 @@ const OCT9_WORDS = {
   { const ly = data.students.find(s => s.name === 'Lyosha'); if (ly) ly.words = ly.words.filter(w => w.word !== 'plain water'); }
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_ANASTASIA, NOV23_CAROLINA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_ANASTASIA, NOV23_CAROLINA, NOV23_MILANA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
