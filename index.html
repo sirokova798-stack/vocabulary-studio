@@ -9797,6 +9797,22 @@ const NOV23_YULIYA = { Yuliya: [
   ['to tend to do something', 'иметь склонность / обычно делать что-либо', 'I tend to lose track of time when I’m reading.']
 ] };
 Object.keys(NOV23_YULIYA).forEach(n => { NOV23_YULIYA[n] = NOV23_YULIYA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
+// 23 Nov: Carolina's vocabulary
+const NOV23_CAROLINA = { Carolina: [
+  ['an oven bag / a roasting bag', 'пакет для запекания (термостойкий пакет для духовки)', 'Put the chicken in an oven bag with the vegetables and roast it.'],
+  ['a sheep / sheep', 'овца / овцы (форма множественного числа не меняется)', 'There was one sheep in the field, and now there are three sheep.'],
+  ['to scold somebody', 'отчитывать, ругать кого-то', 'I scolded my dog for chewing my shoe.'],
+  ['a hoof / hooves', 'копыто / копыта (множественное число от hoof)', 'The horse hurt one of its hooves.'],
+  ['an apron', '/ˈeɪ.prən/ — фартук', 'She tied on her apron before she started baking.'],
+  ['certain people', 'определённые люди, некоторые люди', 'Certain people prefer working in the morning.'],
+  ['to melt', 'таять (melt – melted – melted)', 'The snow has melted.'],
+  ['undercooked / overcooked', 'недостаточно приготовленный / переваренный, пережаренный', 'The rice was undercooked, but the vegetables were overcooked.'],
+  ['to put something in the oven', 'поставить что-либо в духовку', 'Put the cake in the oven and bake it for 25 minutes.'],
+  ['every two hours', 'каждые два часа', 'The bus leaves every two hours.'],
+  ['to listen to somebody', 'слушать кого-то (listen всегда употребляется с to)', 'I always listen to my grandmother when she gives me advice.'],
+  ['to set an alarm clock', 'заводить будильник', 'I set an alarm clock for six every morning.']
+] };
+Object.keys(NOV23_CAROLINA).forEach(n => { NOV23_CAROLINA[n] = NOV23_CAROLINA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 // 16 Nov: words from Karina's paper notes (several students)
 const NOV16_WORDS = {
   Ekaterina: [
@@ -10923,7 +10939,7 @@ const OCT9_WORDS = {
   { const ly = data.students.find(s => s.name === 'Lyosha'); if (ly) ly.words = ly.words.filter(w => w.word !== 'plain water'); }
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_CAROLINA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
