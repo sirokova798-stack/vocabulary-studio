@@ -9800,7 +9800,6 @@ Object.keys(NOV23_YULIYA).forEach(n => { NOV23_YULIYA[n] = NOV23_YULIYA[n].map((
 // 23 Nov: Carolina's vocabulary
 const NOV23_CAROLINA = { Carolina: [
   ['an oven bag / a roasting bag', 'пакет для запекания (термостойкий пакет для духовки)', 'Put the chicken in an oven bag with the vegetables and roast it.'],
-  ['a sheep / sheep', 'овца / овцы (форма множественного числа не меняется)', 'There was one sheep in the field, and now there are three sheep.'],
   ['to scold somebody', 'отчитывать, ругать кого-то', 'I scolded my dog for chewing my shoe.'],
   ['a hoof / hooves', 'копыто / копыта (множественное число от hoof)', 'The horse hurt one of its hooves.'],
   ['an apron', '/ˈeɪ.prən/ — фартук', 'She tied on her apron before she started baking.'],
@@ -10720,6 +10719,7 @@ const OCT9_WORDS = {
   }
   if (!carolina.quizHistory) carolina.quizHistory = [];
   carolina.pin = '1357';
+  carolina.words = carolina.words.filter(w => w.word !== 'a sheep / sheep' && !w.word.startsWith('to shepherd /'));
   const carolinaExisting = new Set(carolina.words.map(w => w.word.toLowerCase()));
   CAROLINA_WORDS.forEach(w => {
     if (!carolinaExisting.has(w.word.toLowerCase())) {
