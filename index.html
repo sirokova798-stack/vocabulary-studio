@@ -9797,6 +9797,13 @@ const NOV23_YULIYA = { Yuliya: [
   ['to tend to do something', 'иметь склонность / обычно делать что-либо', 'I tend to lose track of time when I’m reading.']
 ] };
 Object.keys(NOV23_YULIYA).forEach(n => { NOV23_YULIYA[n] = NOV23_YULIYA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
+// 23 Nov: Anastasia (HSE)
+const NOV23_ANASTASIA = { Anastasia: [
+  ['in hospital / in the hospital', 'В британском английском: in hospital — в больнице как пациент; in the hospital — внутри здания больницы. В американском английском обычно говорят in the hospital и о пациенте.', 'Her grandfather is in hospital after an operation. I left my bag in the hospital, so I went back to get it.'],
+  ['a draft / to draft something', 'черновик, набросок / составить черновик', 'I’ve written the first draft of my essay. She drafted a reply but hasn’t sent it yet.'],
+  ['to get your blood tested', 'сдать анализ крови; сделать так, чтобы кровь проверили', 'I need to get my blood tested before my next appointment.']
+] };
+Object.keys(NOV23_ANASTASIA).forEach(n => { NOV23_ANASTASIA[n] = NOV23_ANASTASIA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 // 23 Nov: Carolina's vocabulary
 const NOV23_CAROLINA = { Carolina: [
   ['an oven bag / a roasting bag', 'пакет для запекания (термостойкий пакет для духовки)', 'Put the chicken in an oven bag with the vegetables and roast it.'],
@@ -10939,7 +10946,7 @@ const OCT9_WORDS = {
   { const ly = data.students.find(s => s.name === 'Lyosha'); if (ly) ly.words = ly.words.filter(w => w.word !== 'plain water'); }
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_CAROLINA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_ANASTASIA, NOV23_CAROLINA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
