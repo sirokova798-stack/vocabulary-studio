@@ -9821,6 +9821,16 @@ const NOV23_MILANA = { Milana: [
   ['to clarify / “Let me clarify something”', 'прояснить, уточнить / «Позвольте кое-что уточнить» — естественная фраза', 'Let me clarify something: the meeting starts at ten, not eleven.']
 ] };
 Object.keys(NOV23_MILANA).forEach(n => { NOV23_MILANA[n] = NOV23_MILANA[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
+// 23 Nov: Anastasia Lyon — new words from the latest lesson
+const NOV23_ANASTASIA_LYON = { 'Anastasia Lyon': [
+  ['to speak up', 'говорить громче, чтобы тебя услышали; также — высказаться, не промолчать', 'She spoke up so everyone at the back could hear. He finally spoke up about the problem.'],
+  ['to say something out loud', 'произнести что-либо вслух', 'She said the new words out loud to practise their pronunciation.'],
+  ['to speak in a low voice', 'говорить тихим голосом', 'He spoke in a low voice so he wouldn’t wake the baby.'],
+  ['brusque', 'резкий, отрывистый, суховатый (о манере речи или поведении)', 'His reply sounded brusque, but he was simply in a hurry.'],
+  ['abruptly', 'резко, внезапно (об окончании или изменении действия)', 'The conversation ended abruptly when the train arrived.'],
+  ['a myth', 'миф; распространённое, но ошибочное представление', 'It’s a myth that lightning never strikes the same place twice.']
+] };
+Object.keys(NOV23_ANASTASIA_LYON).forEach(n => { NOV23_ANASTASIA_LYON[n] = NOV23_ANASTASIA_LYON[n].map(([word, translation, example]) => ({ word, translation, example, lesson: 'Latest Lesson' })); });
 // 23 Nov: Carolina's vocabulary
 const NOV23_CAROLINA = { Carolina: [
   ['an oven bag / a roasting bag', 'пакет для запекания (термостойкий пакет для духовки)', 'Put the chicken in an oven bag with the vegetables and roast it.'],
@@ -10963,7 +10973,7 @@ const OCT9_WORDS = {
   { const ly = data.students.find(s => s.name === 'Lyosha'); if (ly) ly.words = ly.words.filter(w => w.word !== 'plain water'); }
   { const mi = data.students.find(s => s.name === 'Milana'); if (mi) mi.words = mi.words.filter(w => w.word !== 'a regular'); }
   const normWord = s => s.toLowerCase().replace(/\([^)]*\)/g, '').replace(/^(to|a|an|the)\s+/, '').replace(/\s+/g, ' ').trim();
-  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_ANASTASIA, NOV23_CAROLINA, NOV23_MILANA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
+  [OCT9_WORDS, OCT12_WORDS, OCT16_WORDS, OCT19_WORDS, OCT24_WORDS, OCT25_WORDS, OCT26_WORDS, OCT28_WORDS, NOV1_WORDS, NOV3_WORDS, NOV3_TROFIM, NOV7_WORDS, NOV7B_WORDS, NOV9_WORDS, NOV9L_WORDS, NOV15_WORDS, NOV15B_WORDS, NOV16_WORDS, YULIA_OWN, NOV18_WORDS, NOV18B_WORDS, NOV23_YULIYA, NOV23_ANASTASIA, NOV23_ANASTASIA_LYON, NOV23_CAROLINA, NOV23_MILANA, M5_WORDS].flatMap(Object.entries).forEach(([name, list]) => {
     const st = data.students.find(s => s.name === name);
     if (!st) return;
     // replaced cards: 'to clock' was a mishearing of 'to clog'; labels card now shows both options
